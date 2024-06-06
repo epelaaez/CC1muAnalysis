@@ -2,9 +2,6 @@
 .DS_Store
 .vscode/
 
-# don't commit figures
-Figs/
-
 # c++/root generated
 *.d
 *.so
