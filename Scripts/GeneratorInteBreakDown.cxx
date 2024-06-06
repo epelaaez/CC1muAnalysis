@@ -206,7 +206,7 @@ void GeneratorInteBreakDown() {
             textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
 
             gPad->RedrawAxis();
-            PlotCanvas->SaveAs("./Figs/InteBreakdown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
+            PlotCanvas->SaveAs("./Figs/InteBreakDown/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;
         } // End of the loop over the samples grabing the plots	
     } // End of the loop over the plots

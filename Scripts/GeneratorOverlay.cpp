@@ -146,7 +146,7 @@ void GeneratorOverlay() {
 
         PlotCanvas->cd();
         leg->Draw();
-        PlotCanvas->SaveAs("./Figs/Overlay_"+PlotNames[iPlot]+".png");
+        PlotCanvas->SaveAs("./Figs/Overlay/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
 
     } // End of the loop over the plots
