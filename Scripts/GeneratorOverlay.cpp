@@ -130,9 +130,12 @@ void GeneratorOverlay() {
             Histos[iSample]->GetYaxis()->SetTickSize(0);
             Histos[iSample]->GetYaxis()->CenterTitle();	
 
-            double imax = TMath::Max(Histos[iSample]->GetMaximum(),Histos[0]->GetMaximum());			
-            Histos[iSample]->GetYaxis()->SetRangeUser(0.,1.1*imax);
-            Histos[0]->GetYaxis()->SetRangeUser(0.,1.1*imax);			
+            double imax = TMath::Max(Histos[iSample]->GetMaximum(),Histos[0]->GetMaximum());
+
+            double YAxisRange = 1.15*imax;
+            if (PlotNames[iPlot] == "TrueLeadingProtonMomentumPlot") { YAxisRange *= 1.05; };
+            Histos[iSample]->GetYaxis()->SetRangeUser(0.,YAxisRange);
+            Histos[0]->GetYaxis()->SetRangeUser(0.,YAxisRange);			
 
             PlotCanvas->cd();
             Histos[iSample]->Draw("hist same");
