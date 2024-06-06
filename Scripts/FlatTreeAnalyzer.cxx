@@ -70,14 +70,14 @@ void FlatTreeAnalyzer::Loop() {
     //--------------------------------------------------//
 
     TrueMuonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonCosThetaPlot",";cos(#theta_{#mu})",10,-1.,1.);
-        TrueLeadingProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonCosThetaPlot",";cos(#theta_{#vec{p}_{L}})",10,-1.,1.);
-        TrueRecoilProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonCosThetaPlot",";cos(#theta_{#vec{p}_{R}})",10,-1.,1.);
-        TrueLeadingProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonMomentumPlot",";|#vec{p}_{L}|",10,0.3,1);
-        TrueRecoilProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonMomentumPlot",";|#vec{p}_{R}|",10,0.3,1);
-        TrueMuonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonMomentumPlot",";|#vec{p}_{#mu}|",10,0.1,1.2);
-        TrueCosOpeningAngleProtonsPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleProtonsPlot",";cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",10,-1.,1.);
-        TrueCosOpeningAngleMuonTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleMuonTotalProtonPlot",";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",10,-1.,1.);
-        TrueTransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueTransverseMomentumPlot",";#delta P_{T}",10,0.,1.);
+    TrueLeadingProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonCosThetaPlot",";cos(#theta_{#vec{p}_{L}})",10,-1.,1.);
+    TrueRecoilProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonCosThetaPlot",";cos(#theta_{#vec{p}_{R}})",10,-1.,1.);
+    TrueLeadingProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonMomentumPlot",";|#vec{p}_{L}|",10,0.3,1);
+    TrueRecoilProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonMomentumPlot",";|#vec{p}_{R}|",10,0.3,1);
+    TrueMuonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonMomentumPlot",";|#vec{p}_{#mu}|",10,0.1,1.2);
+    TrueCosOpeningAngleProtonsPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleProtonsPlot",";cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",10,-1.,1.);
+    TrueCosOpeningAngleMuonTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleMuonTotalProtonPlot",";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",10,-1.,1.);
+    TrueTransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueTransverseMomentumPlot",";#delta P_{T}",10,0.,1.);
 
     //--------------------------------------------------//
 
@@ -109,7 +109,7 @@ void FlatTreeAnalyzer::Loop() {
     //----------------------------------------//	
         
     double weight = fScaleFactor*Units*A*Weight;
-        if (fOutputFile == "GiBUU") { weight = weight/105.; } // To increase the stats, the GiBUU sample has been produced in 105 samples
+    if (fOutputFile == "GiBUU") { weight = weight/105.; } // To increase the stats, the GiBUU sample has been produced in 105 samples
 
     //----------------------------------------//	
 
@@ -119,7 +119,7 @@ void FlatTreeAnalyzer::Loop() {
     if (cc != 1) { continue; } // make sure that we have only CC interactions		
 
     int ProtonTagging = 0, ChargedPionTagging = 0, NeutralPionTagging = 0, MuonTagging = 0;
-        int ElectronTagging = 0, PhotonTagging = 0;
+    int ElectronTagging = 0, PhotonTagging = 0;
     vector <int> ProtonID; ProtonID.clear();
     vector <int> MuonID; MuonID.clear();
 
@@ -133,39 +133,39 @@ void FlatTreeAnalyzer::Loop() {
 
         if (pdg[i] == 13 && (pf > 0.1 && pf < 1.2)) {
 
-        MuonTagging ++;
-        MuonID.push_back(i);
+            MuonTagging ++;
+            MuonID.push_back(i);
 
         }
 
         if (pdg[i] == 2212 && (pf > 0.3 && pf < 1.) ) {
 
-        ProtonTagging ++;
-        ProtonID.push_back(i);
+            ProtonTagging ++;
+            ProtonID.push_back(i);
 
         }
 
         if (fabs(pdg[i]) == 211 && pf > 0.07)  {
 
-        ChargedPionTagging ++;
+            ChargedPionTagging ++;
 
         }
 
         if (pdg[i] == 111)  {
 
-        NeutralPionTagging ++;
+            NeutralPionTagging ++;
 
         }
 
         if (fabs(pdg[i]) == 11)  {
 
-        ElectronTagging ++;
+            ElectronTagging ++;
 
         }
 
         if (fabs(pdg[i]) == 22)  {
 
-        PhotonTagging ++;
+            PhotonTagging ++;
 
         }
 
@@ -205,39 +205,39 @@ void FlatTreeAnalyzer::Loop() {
 
     //----------------------------------------//
 
-        // Create momentum vectors and helper
-        TVector3 Muon(px[MuonID[0]], py[MuonID[0]], pz[MuonID[0]]);
-        TVector3 LeadingProton(px[ProtonID[0]], py[ProtonID[0]], pz[ProtonID[0]]);
-        TVector3 RecoilProton(px[ProtonID[1]], py[ProtonID[1]], pz[ProtonID[1]]);
-        TwoPTools Helper(Muon, LeadingProton, RecoilProton);
+    // Create momentum vectors and helper
+    TVector3 Muon(px[MuonID[0]], py[MuonID[0]], pz[MuonID[0]]);
+    TVector3 LeadingProton(px[ProtonID[0]], py[ProtonID[0]], pz[ProtonID[0]]);
+    TVector3 RecoilProton(px[ProtonID[1]], py[ProtonID[1]], pz[ProtonID[1]]);
+    TwoPTools Helper(Muon, LeadingProton, RecoilProton);
 
     //----------------------------------------//
 
     // filling in the histo regardless of interaction mode
 
-        TrueMuonCosThetaPlot[0]->Fill(CosLep,weight);
-        TrueLeadingProtonCosThetaPlot[0]->Fill(Helper.ReturnLeadingProtonCosTheta(),weight);
-        TrueRecoilProtonCosThetaPlot[0]->Fill(Helper.ReturnRecoilProtonCosTheta(),weight);
-        TrueLeadingProtonMomentumPlot[0]->Fill(Helper.ReturnLeadingProtonMomentum(),weight);
-        TrueRecoilProtonMomentumPlot[0]->Fill(Helper.ReturnRecoilProtonMomentum(),weight);
-        TrueMuonMomentumPlot[0]->Fill(Helper.ReturnMuonMomentum(),weight);
-        TrueCosOpeningAngleProtonsPlot[0]->Fill(Helper.ReturnCosOpeningAngleProtons(),weight);
-        TrueCosOpeningAngleMuonTotalProtonPlot[0]->Fill(Helper.ReturnCosOpeningAngleMuonTotalProton(),weight);
-        TrueTransverseMomentumPlot[0]->Fill(Helper.ReturnTransverseMomentum(),weight);
+    TrueMuonCosThetaPlot[0]->Fill(CosLep,weight);
+    TrueLeadingProtonCosThetaPlot[0]->Fill(Helper.ReturnLeadingProtonCosTheta(),weight);
+    TrueRecoilProtonCosThetaPlot[0]->Fill(Helper.ReturnRecoilProtonCosTheta(),weight);
+    TrueLeadingProtonMomentumPlot[0]->Fill(Helper.ReturnLeadingProtonMomentum(),weight);
+    TrueRecoilProtonMomentumPlot[0]->Fill(Helper.ReturnRecoilProtonMomentum(),weight);
+    TrueMuonMomentumPlot[0]->Fill(Helper.ReturnMuonMomentum(),weight);
+    TrueCosOpeningAngleProtonsPlot[0]->Fill(Helper.ReturnCosOpeningAngleProtons(),weight);
+    TrueCosOpeningAngleMuonTotalProtonPlot[0]->Fill(Helper.ReturnCosOpeningAngleMuonTotalProton(),weight);
+    TrueTransverseMomentumPlot[0]->Fill(Helper.ReturnTransverseMomentum(),weight);
 
     //----------------------------------------//
 
     // filling in the histo based on the interaction mode
 
     TrueMuonCosThetaPlot[genie_mode]->Fill(CosLep,weight);
-        TrueLeadingProtonCosThetaPlot[genie_mode]->Fill(Helper.ReturnLeadingProtonCosTheta(),weight);
-        TrueRecoilProtonCosThetaPlot[genie_mode]->Fill(Helper.ReturnRecoilProtonCosTheta(),weight);
-        TrueLeadingProtonMomentumPlot[genie_mode]->Fill(Helper.ReturnLeadingProtonMomentum(),weight);
-        TrueRecoilProtonMomentumPlot[genie_mode]->Fill(Helper.ReturnRecoilProtonMomentum(),weight);
-        TrueMuonMomentumPlot[genie_mode]->Fill(Helper.ReturnMuonMomentum(),weight);
-        TrueCosOpeningAngleProtonsPlot[genie_mode]->Fill(Helper.ReturnCosOpeningAngleProtons(),weight);
-        TrueCosOpeningAngleMuonTotalProtonPlot[genie_mode]->Fill(Helper.ReturnCosOpeningAngleMuonTotalProton(),weight);
-        TrueTransverseMomentumPlot[genie_mode]->Fill(Helper.ReturnTransverseMomentum(),weight);
+    TrueLeadingProtonCosThetaPlot[genie_mode]->Fill(Helper.ReturnLeadingProtonCosTheta(),weight);
+    TrueRecoilProtonCosThetaPlot[genie_mode]->Fill(Helper.ReturnRecoilProtonCosTheta(),weight);
+    TrueLeadingProtonMomentumPlot[genie_mode]->Fill(Helper.ReturnLeadingProtonMomentum(),weight);
+    TrueRecoilProtonMomentumPlot[genie_mode]->Fill(Helper.ReturnRecoilProtonMomentum(),weight);
+    TrueMuonMomentumPlot[genie_mode]->Fill(Helper.ReturnMuonMomentum(),weight);
+    TrueCosOpeningAngleProtonsPlot[genie_mode]->Fill(Helper.ReturnCosOpeningAngleProtons(),weight);
+    TrueCosOpeningAngleMuonTotalProtonPlot[genie_mode]->Fill(Helper.ReturnCosOpeningAngleMuonTotalProton(),weight);
+    TrueTransverseMomentumPlot[genie_mode]->Fill(Helper.ReturnTransverseMomentum(),weight);
 
     //----------------------------------------//
     

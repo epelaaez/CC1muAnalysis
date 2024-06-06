@@ -74,7 +74,7 @@ void GeneratorInteBreakDown() {
     // Plots to overlay
 
     std::vector<TString> PlotNames;
-    // std::vector<TString> YAxisLabel;
+    std::vector<TString> YAxisLabel;
 
     //------------------------------//
 
@@ -83,26 +83,39 @@ void GeneratorInteBreakDown() {
     // 1D
 
     PlotNames.push_back("TrueMuonCosThetaPlot");
-    PlotNames.push_back("TrueLeadingProtonCosThetaPlot");
-    PlotNames.push_back("TrueRecoilProtonCosThetaPlot");
-    PlotNames.push_back("TrueLeadingProtonMomentumPlot");
-    PlotNames.push_back("TrueRecoilProtonMomentumPlot");
-    PlotNames.push_back("TrueMuonMomentumPlot");
-    PlotNames.push_back("TrueCosOpeningAngleProtonsPlot");
-    PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
-    PlotNames.push_back("TrueTransverseMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos#theta_{#mu}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
-    // PlotNames.push_back("TrueFineBinMuonCosThetaPlot"); YAxisLabel.push_back("#frac{d#sigma}{dcos#theta_{#mu}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-    // PlotNames.push_back("TrueFineBinThetaVisPlot"); YAxisLabel.push_back("#frac{d#sigma}{d#theta_{vis}} #left[10^{-38} #frac{cm^{2}}{deg Ar}#right]");
-    // PlotNames.push_back("TrueFineBinEvPlot"); YAxisLabel.push_back("#frac{d#sigma}{dE_{v}} #left[10^{-38} #frac{cm^{2}}{GeV Ar}#right]");
+    PlotNames.push_back("TrueLeadingProtonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueRecoilProtonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueLeadingProtonMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d|#vec{p}_{L}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueRecoilProtonMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d|#vec{p}_{R}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueMuonMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d|#vec{p}_{#mu}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueCosOpeningAngleProtonsPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueTransverseMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     //------------------------------//
 
     const int NPlots = PlotNames.size();
-    // const int NLabels = YAxisLabel.size();
+    const int NLabels = YAxisLabel.size();
 
     // sanity check
-    // if ( NPlots != NLabels) { cout << "Inconsistent number of plots and labels! Aborting !" << endl; return; }
+    if ( NPlots != NLabels) { cout << "Inconsistent number of plots and labels! Aborting !" << endl; return; }
 
     //------------------------------//	
 
@@ -163,8 +176,8 @@ void GeneratorInteBreakDown() {
                 Histos[iprocess]->GetYaxis()->SetLabelFont(FontStyle);
                 Histos[iprocess]->GetYaxis()->SetNdivisions(6);
                 Histos[iprocess]->GetYaxis()->SetLabelSize(TextSize);
-                Histos[iprocess]->GetYaxis()->SetTitle("Cross Section [10^{-38} cm^{2}/Ar]");
-                // Histos[iprocess]->GetYaxis()->SetTitle(YAxisLabel.at(iPlot));
+                // Histos[iprocess]->GetYaxis()->SetTitle("Cross Section [10^{-38} cm^{2}/Ar]");
+                Histos[iprocess]->GetYaxis()->SetTitle(YAxisLabel.at(iPlot));
                 Histos[iprocess]->GetYaxis()->SetTitleSize(TextSize);
                 Histos[iprocess]->GetYaxis()->SetTitleOffset(1.25);
                 Histos[iprocess]->GetYaxis()->SetTickSize(0);
