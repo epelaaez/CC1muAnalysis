@@ -134,7 +134,7 @@ void FlatTreeAnalyzer::Loop() {
         //----------------------------------------//	
             
         double weight = fScaleFactor*Units*A*Weight;
-        if (fOutputFile == "GiBUU") { weight = weight/105.; } // To increase the stats, the GiBUU sample has been produced in 105 samples
+        if (fOutputFile.Contains("GiBUU")) { weight = weight/105.; } // To increase the stats, the GiBUU sample has been produced in 105 samples
 
         //----------------------------------------//	
 
@@ -290,7 +290,7 @@ void FlatTreeAnalyzer::Loop() {
                 TMath::Abs(Mode) == 17 || TMath::Abs(Mode) == 22 || TMath::Abs(Mode) == 23
                 ) { 
                     NoFSIgenie_mode = 3; 
-                    if (fOutputFile == "GiBUU") { RESMode[Mode]++; NoFSICounterRESEventsPassedSelection++; }
+                    if (fOutputFile.Contains("GiBUU")) { RESMode[Mode]++; NoFSICounterRESEventsPassedSelection++; }
                 } // RES
             else if (TMath::Abs(Mode) == 21 || TMath::Abs(Mode) == 26) { NoFSIgenie_mode = 4; } // DIS
             else if (TMath::Abs(Mode) == 16) { NoFSIgenie_mode = 5;} // COH
@@ -345,7 +345,7 @@ void FlatTreeAnalyzer::Loop() {
     std::cout << "Success percentage in selecting COH events = " << 
     double(CounterCOHEventsPassedSelection)/ double(CounterEventsPassedSelection)*100. << " %" << std::endl; std::cout << std::endl;	
 
-    if (fOutputFile == "GiBUU") {
+    if (fOutputFile.Contains("GiBUU")) {
         std::cout << "Mode percentage for RES events" << std::endl;
         std::cout << "10: " << double(RESMode[10]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
         std::cout << "11: " << double(RESMode[11]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;

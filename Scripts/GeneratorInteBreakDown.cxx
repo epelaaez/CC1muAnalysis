@@ -60,6 +60,9 @@ void GeneratorInteBreakDown() {
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU.root"); 
     Labels.push_back("GiBUU");
 
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    Labels.push_back("GiBUU_NoFSI");
+
     const int NSamples = Names.size();
     const int NColors = Colors.size();
     const int NProcesses = Process.size();

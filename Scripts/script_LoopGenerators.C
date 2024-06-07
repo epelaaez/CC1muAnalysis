@@ -9,6 +9,7 @@
     WhichSample.push_back("14_1000180400_CC_v3_4_0_G18_10a_02_11a.flat"); WhichName.push_back("GENIE_G18");
     WhichSample.push_back("14_1000180400_CC_v3_4_0_AR23_20i_00_000.flat"); WhichName.push_back("GENIE_AR23");
     WhichSample.push_back("GiBUU.flat"); WhichName.push_back("GiBUU");
+    WhichSample.push_back("GiBUU_noFSI.flat"); WhichName.push_back("GiBUU_NoFSI");
 
     //----------------------------------------//
 

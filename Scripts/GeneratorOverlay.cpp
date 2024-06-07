@@ -48,7 +48,7 @@ void GeneratorOverlay() {
 
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU.root"); 
     Labels.push_back("GiBUU");
-    Colors.push_back(kGreen+1);			
+    Colors.push_back(kGreen+1);
 
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);
