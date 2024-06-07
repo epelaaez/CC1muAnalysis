@@ -16,13 +16,13 @@
 \newcommand{\vtp}{\vec{p}_{\text{sum}}}
 \newcommand{\vdp}{\vec{\delta P_T}}
 
-\setlength{\parindent}{0pt}
+%\setlength{\parindent}{0pt}
 
 \begin{document}
 
 \maketitle
 
-Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
+\noindent Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
 
 \section{Signal definition}
 
@@ -68,7 +68,7 @@ Finally, the momentum transverse to the direction of the neutrino beam, which we
 \end{align}
 For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We plot the differential cross sections of these variables against for the given generators in Figure~\ref{fig:angles-transverse-momentum}. We can also see the cross section by event type for $|\vdp|$ for the NuWro and GENIE AR23 generators in Figure~\ref{fig:inte-breakdown-dpt}.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} \\
@@ -77,7 +77,7 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
     \label{fig:angles-transverse-momentum}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueTransverseMomentumPlot.png}}
     \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueTransverseMomentumPlot.png}}
@@ -85,5 +85,18 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
     \label{fig:inte-breakdown-dpt}
 \end{figure}
 
+\section{Pre-FSI events}
+
+To investigate why the percentage of MEC events for some generators is low, we performed event selection before any final state interactions took place. For both GENIE tunes, NEUT, and NuWro, we got 100\% MEC events pre-FSI. For GiBUU, only 4.1\% MEC versus 76.2\% RES and 16\% DIS events pre-FSI. The plots for GiBUU and NuWro are shown in Figure~\ref{fig:pre-fsi-inte-breakdown}. 
+
+Since GiBUU is the outlier, we checked the specific interaction mode for the RES events. WE got that 10 has 39.3\%, 11 has 34.7\%, 12 has 0.0136\%, 13 has 26 \%, and 27, 22, and 23 all have zero percent of the RES events.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PreFSI/InteBreakDown_GiBUU_TrueNoFSIMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueNoFSIMuonMomentumPlot.png}}
+    \caption{Event interaction breakdown pre final state interactions}
+    \label{fig:pre-fsi-inte-breakdown}
+\end{figure}
 
 \end{document}
