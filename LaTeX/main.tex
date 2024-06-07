@@ -20,6 +20,8 @@
 
 \maketitle
 
+\noindent Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
+
 \section{Signal definition}
 
 We choose charged-current muon neutrino interactions that result in one muon, two protons, no charged pions (with $P_{\pi} > 70$ MeV/c), no neutral pions or heavier mesons, and any number of neutrons. These interactions are denoted as CC1$\mu$2p0$\pi$. We require the momentum of the muon and protons to be in the following ranges (in MeV/c):
@@ -34,7 +36,9 @@ The following generators are used to create events, which are then discriminated
 \section{Variables definition}
 
 Given the vectors for the leading proton $\vlp$, recoil proton $\vrp$, and muon $\vm$, we 
-define several variables. First, the opening angle between the protons in the lab frame,
+define several variables. First, we define the momenta and opening angle of each variable, denoted as $|\vec p|$ and $\cos(\theta_{\vec p})$. 
+
+First, the opening angle between the protons in the lab frame,
 given by 
 \begin{align}
     \cos\left(\theta_{\vlp,\vrp}\right) = \frac{\vlp \cdot \vrp}{|\vlp||\vrp|}.
