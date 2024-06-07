@@ -18,11 +18,10 @@
 #include <stdlib.h>
 
 #include "Constants.h"
+#include "../Utils/Tools.cxx"
 
 using namespace std;
 using namespace Constants;
-
-TString to_string_with_precision(double a_value, const int n);
 
 void GeneratorInteBreakDown() {
 
@@ -36,6 +35,8 @@ void GeneratorInteBreakDown() {
     double TextSize = 0.06;			
 
     TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+
+    Tools tools;
 
     //------------------------------//
 
@@ -106,6 +107,9 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{dcos#theta_{#mu}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
@@ -133,6 +137,16 @@ void GeneratorInteBreakDown() {
 
     PlotNames.push_back("TrueTransverseMomentumPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueDeltaAlphaTPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Double differential
+    PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     //------------------------------//
 
@@ -213,8 +227,8 @@ void GeneratorInteBreakDown() {
                 Histos[0]->Draw("hist same");	
 
                 double frac = Histos[iprocess]->Integral("width")/Histos[0]->Integral("width") * 100.;
-                TString LegLabel = Process[iprocess] + " (" + to_string_with_precision(frac,1) + "%)";
-                if (iprocess == 0) { LegLabel = "Total (" + to_string_with_precision(frac,1) + "%)"; }
+                TString LegLabel = Process[iprocess] + " (" + tools.to_string_with_precision(frac,1) + "%)";
+                if (iprocess == 0) { LegLabel = "Total (" + tools.to_string_with_precision(frac,1) + "%)"; }
                 TLegendEntry* legColor = leg->AddEntry(Histos[iprocess],LegLabel,"l");
                 legColor->SetTextColor( Colors.at(iprocess) ); 
 
@@ -237,10 +251,3 @@ void GeneratorInteBreakDown() {
         } // End of the loop over the samples grabing the plots	
     } // End of the loop over the plots
 } // End of the program
-
-TString to_string_with_precision(double a_value, const int n = 3) {
-    std::ostringstream out;
-    out.precision(n);
-    out << std::fixed << a_value;
-    return TString(out.str());
-}

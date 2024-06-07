@@ -23,16 +23,25 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     fRecoilProtonCosTheta = RecoilProtonVector.CosTheta();
 
     // Opening angle variables
-    // fCosOpeningAngleProtons = (LeadingProtonVector.Dot(RecoilProtonVector)) / (fLeadingProtonMomentum * fRecoilProtonMomentum);
     TVector3 TotalProtonVector = LeadingProtonVector + RecoilProtonVector;
-    double fTotalProtonMomentum = TotalProtonVector.Mag();
-    // fCosOpeningAngleMuonTotalProton = (TotalProtonVector.Dot(MuonVector)) / (fMuonMomentum * fTotalProtonMomentum);
-
     fCosOpeningAngleProtons = std::cos(LeadingProtonVector.Angle(RecoilProtonVector));
     fCosOpeningAngleMuonTotalProton = std::cos(MuonVector.Angle(TotalProtonVector));
 
+    // Transverse vectors
+    TVector3 MuonVectorTrans(MuonVector.X(), MuonVector.Y(), 0);
+    TVector3 TotalProtonVectorTrans(TotalProtonVector.X(), TotalProtonVector.Y(), 0);
+    TVector3 DeltaPVectorTrans = MuonVectorTrans + TotalProtonVectorTrans;
+
     // Transverse momentum variable
-    fTransverseMomentum = (TotalProtonVector + MuonVector).Perp();
+    fTransverseMomentum = DeltaPVectorTrans.Mag();
+
+    // Transverse momentum angular orientation with respect to transverse muon
+    fDeltaAlphaT = TMath::ACos(
+        (-MuonVectorTrans).Dot(DeltaPVectorTrans) / 
+        (MuonVectorTrans.Mag() * DeltaPVectorTrans.Mag())
+    ) * (180. / TMath::Pi()) ;
+    if (fDeltaAlphaT > 180.) { fDeltaAlphaT -= 180.; }
+	if (fDeltaAlphaT < 0.) { fDeltaAlphaT += 180.; }
 }
 
 double TwoPTools::ReturnMuonMomentum() {
@@ -65,6 +74,10 @@ double TwoPTools::ReturnCosOpeningAngleMuonTotalProton() {
 
 double TwoPTools::ReturnTransverseMomentum() {
     return fTransverseMomentum;
+}
+
+double TwoPTools::ReturnDeltaAlphaT() {
+    return fDeltaAlphaT;
 }
 
 #endif

@@ -21,6 +21,7 @@ class TwoPTools {
         double fCosOpeningAngleProtons;
         double fCosOpeningAngleMuonTotalProton;
         double fTransverseMomentum;
+        double fDeltaAlphaT;
 
     public:
         // Default constructor
@@ -38,6 +39,7 @@ class TwoPTools {
         double ReturnCosOpeningAngleProtons();
         double ReturnCosOpeningAngleMuonTotalProton();
         double ReturnTransverseMomentum();
+        double ReturnDeltaAlphaT();
 };
 
 #endif

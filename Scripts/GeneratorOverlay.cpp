@@ -50,6 +50,10 @@ void GeneratorOverlay() {
     Labels.push_back("GiBUU");
     Colors.push_back(kGreen+1);
 
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    Labels.push_back("GiBUU NoFSI");
+    Colors.push_back(kGreen+1);
+
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);
 
@@ -68,6 +72,7 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSICosOpeningAngleProtonsPlot");
     PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
+    PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
@@ -79,6 +84,11 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleProtonsPlot");
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
+    PlotNames.push_back("TrueDeltaAlphaTPlot");
+
+    // Double differential
+    PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
 
     const int NPlots = PlotNames.size();
 
@@ -117,8 +127,14 @@ void GeneratorOverlay() {
         std::vector<TH1D*> Histos; Histos.resize(NSamples);
 
         for (int iSample = 0; iSample < NSamples; iSample++) {	
-
-            Histos[iSample] = (TH1D*)(Files[iSample]->Get(PlotNames[iPlot]));
+            // Exclude normal GiBUU in pre-FSI plots and exclude pre-FSI plots in final state plots
+            if (PlotNames[iPlot].Contains("NoFSI") && Labels[iSample]=="GiBUU") { continue; } 
+            if (!PlotNames[iPlot].Contains("NoFSI") && Labels[iSample]=="GiBUU NoFSI") { continue; }
+            
+            // For pre-FSI plots, use GiBUU NoFSI's final state variables
+            TString PlotName = PlotNames[iPlot];
+            if (PlotNames[iPlot].Contains("NoFSI") && Labels[iSample]=="GiBUU NoFSI") { PlotName.ReplaceAll("NoFSI",""); }
+            Histos[iSample] = (TH1D*)(Files[iSample]->Get(PlotName));
 
             Histos[iSample]->SetLineWidth(4);
             Histos[iSample]->SetLineColor( Colors.at(iSample) );	

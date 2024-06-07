@@ -13,11 +13,27 @@
 using namespace std;
 
 namespace Constants {
-    std::vector< std::vector<double> > TwoDArrayNBinsThetaVisInECalSlices{ 
-        {0.,10.,20.,30.,40.,50.,60.,70.,80.,90.,115.,180.},
-        {0.,5.,10.,15.,20.,25.,30.,40.,50.,60.,180.},
-        {0.,5.,10.,15.,20.,30.,180.}
-    };	
+    // Variables for double differential analysis
+    static const int TwoDNBinsMuonCosTheta = 2; 
+    std::vector<double> TwoDArrayNBinsMuonCosTheta{0.0,0.5,1.0};
+
+    static const int TwoDNBinsTransverseMomentum = 11;
+    std::vector<double> TwoDArrayTransverseMomentum{0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2};
+
+    static const int TwoDNBinsDeltaAlphaT = 9;
+    std::vector<double> TwoDArrayDeltaAlphaT{0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
+
+    std::vector<std::vector<double>> TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices{
+        {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1,1.2},
+        {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1,1.2},
+    };
+    static const TString LabelXAxisTwoDTransverseMomentumInMuonCosTheta = ";#deltap_{T} [bin #]";
+
+    std::vector<std::vector<double>> TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices{
+        {0.,20.,40.,60.,80.,100.,120.,140.,160.,180.},
+        {0.,20.,40.,60.,80.,100.,120.,140.,160.,180.},
+    };
+    static const TString LabelXAxisTwoDDeltaAlphaTInMuonCosTheta = ";#delta #alpha_{T} [bin #]";
 
     static std::map<TString,TString> LatexLabel = {
         { "MuonCosThetaPlot",  "All events" },
