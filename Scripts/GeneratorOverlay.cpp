@@ -59,6 +59,17 @@ void GeneratorOverlay() {
 
     std::vector<TString> PlotNames;
 
+    // Pre FSI
+    PlotNames.push_back("TrueNoFSILeadingProtonCosThetaPlot");
+    PlotNames.push_back("TrueNoFSIRecoilProtonCosThetaPlot");
+    PlotNames.push_back("TrueNoFSILeadingProtonMomentumPlot");
+    PlotNames.push_back("TrueNoFSIRecoilProtonMomentumPlot");
+    PlotNames.push_back("TrueNoFSIMuonMomentumPlot");
+    PlotNames.push_back("TrueNoFSICosOpeningAngleProtonsPlot");
+    PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
+    PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
+
+    // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
     PlotNames.push_back("TrueLeadingProtonCosThetaPlot");
     PlotNames.push_back("TrueRecoilProtonCosThetaPlot");
@@ -149,7 +160,9 @@ void GeneratorOverlay() {
 
         PlotCanvas->cd();
         leg->Draw();
-        PlotCanvas->SaveAs("./Figs/Overlay/Overlay_"+PlotNames[iPlot]+".png");
+            
+        TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
+        PlotCanvas->SaveAs("./Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
 
     } // End of the loop over the plots

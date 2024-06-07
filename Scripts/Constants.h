@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef Constants_h
+#define Constants_h
 
 #include "TString.h"
 #include "TMath.h"

@@ -78,10 +78,32 @@ void GeneratorInteBreakDown() {
 
     //------------------------------//
 
+    // Pre FSI
+    PlotNames.push_back("TrueNoFSILeadingProtonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIRecoilProtonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSILeadingProtonMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d|#vec{p}_{L}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIRecoilProtonMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d|#vec{p}_{R}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIMuonMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d|#vec{p}_{#mu}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSICosOpeningAngleProtonsPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Post FSI
-
-    // 1D
-
     PlotNames.push_back("TrueMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{dcos#theta_{#mu}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
@@ -206,7 +228,8 @@ void GeneratorInteBreakDown() {
             textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
 
             gPad->RedrawAxis();
-            PlotCanvas->SaveAs("./Figs/InteBreakDown/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
+            TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
+            PlotCanvas->SaveAs("./Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;
         } // End of the loop over the samples grabing the plots	
     } // End of the loop over the plots
