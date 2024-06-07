@@ -112,6 +112,13 @@ void FlatTreeAnalyzer::Loop() {
     int CounterDISEventsPassedSelection = 0;
     int CounterCOHEventsPassedSelection = 0;
 
+    // Counters for pre-FSI RES events
+    int RESMode[24];
+    for (int i = 0; i < 24; i++) {
+        RESMode[i] = 0;
+    }
+    int NoFSICounterRESEventsPassedSelection = 0;
+
     //----------------------------------------//
     
     // Loop over the events
@@ -281,7 +288,10 @@ void FlatTreeAnalyzer::Loop() {
                 TMath::Abs(Mode) == 10 ||
                 TMath::Abs(Mode) == 11 || TMath::Abs(Mode) == 12 || TMath::Abs(Mode) == 13 ||
                 TMath::Abs(Mode) == 17 || TMath::Abs(Mode) == 22 || TMath::Abs(Mode) == 23
-                ) { NoFSIgenie_mode = 3; } // RES
+                ) { 
+                    NoFSIgenie_mode = 3; 
+                    if (fOutputFile == "GiBUU") { RESMode[Mode]++; NoFSICounterRESEventsPassedSelection++; }
+                } // RES
             else if (TMath::Abs(Mode) == 21 || TMath::Abs(Mode) == 26) { NoFSIgenie_mode = 4; } // DIS
             else if (TMath::Abs(Mode) == 16) { NoFSIgenie_mode = 5;} // COH
             else { continue; } 
@@ -334,6 +344,17 @@ void FlatTreeAnalyzer::Loop() {
 
     std::cout << "Success percentage in selecting COH events = " << 
     double(CounterCOHEventsPassedSelection)/ double(CounterEventsPassedSelection)*100. << " %" << std::endl; std::cout << std::endl;	
+
+    if (fOutputFile == "GiBUU") {
+        std::cout << "Mode percentage for RES events" << std::endl;
+        std::cout << "10: " << double(RESMode[10]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+        std::cout << "11: " << double(RESMode[11]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+        std::cout << "12: " << double(RESMode[12]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+        std::cout << "13: " << double(RESMode[13]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+        std::cout << "17: " << double(RESMode[17]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+        std::cout << "22: " << double(RESMode[22]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+        std::cout << "23: " << double(RESMode[23]) / double(NoFSICounterRESEventsPassedSelection)*100. << " %" << std::endl;
+    }
 
     //----------------------------------------//	
     //----------------------------------------//	
