@@ -16,15 +16,17 @@
 \newcommand{\vtp}{\vec{p}_{\text{sum}}}
 \newcommand{\vdp}{\vec{\delta P_T}}
 
+\setlength{\parindent}{0pt}
+
 \begin{document}
 
 \maketitle
 
-\noindent Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
+Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
 
 \section{Signal definition}
 
-We choose charged-current muon neutrino interactions that result in one muon, two protons, no charged pions (with $P_{\pi} > 70$ MeV/c), no neutral pions or heavier mesons, and any number of neutrons. These interactions are denoted as CC1$\mu$2p0$\pi$. We require the momentum of the muon and protons to be in the following ranges (in MeV/c):
+We choose charged-current muon neutrino interactions that result in one muon, two protons, no charged pions with $P_{\pi} > 70$ MeV/c, no neutral pions or heavier mesons, and any number of neutrons. These interactions are denoted as CC1$\mu$2p0$\pi$. We require the momentum of the muon and protons to be in the following ranges (in MeV/c):
 \begin{align}
     100 < P_P < 1200 \qquad 300 < P_\mu < 1000
 \end{align}
@@ -36,9 +38,21 @@ The following generators are used to create events, which are then discriminated
 \section{Variables definition}
 
 Given the vectors for the leading proton $\vlp$, recoil proton $\vrp$, and muon $\vm$, we 
-define several variables. First, we define the momenta and opening angle of each variable, denoted as $|\vec p|$ and $\cos(\theta_{\vec p})$. 
+define several variables. First, we define the momenta and opening angle of each variable, denoted as $|\vec p|$ and $\cos(\theta_{\vec p})$, with the appropriate index for each momentum vector. These variables are plotted in Figure~\ref{fig:momenta-cos-theta}.
 
-First, the opening angle between the protons in the lab frame,
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueLeadingProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueLeadingProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueRecoilProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
+    \caption{Cross sections for momenta and angles of individual particles}
+    \label{fig:momenta-cos-theta}
+\end{figure}
+
+We also define variables relating the multiple momentum vectors. First, the opening angle between the protons in the lab frame,
 given by 
 \begin{align}
     \cos\left(\theta_{\vlp,\vrp}\right) = \frac{\vlp \cdot \vrp}{|\vlp||\vrp|}.
@@ -59,7 +73,7 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/Overlay_TrueTransverseMomentumPlot.png}}
-    \caption{Differential cross sections for opening angles and transverse momentum.}
+    \caption{Cross sections for opening angles and transverse momentum.}
     \label{fig:angles-transverse-momentum}
 \end{figure}
 
