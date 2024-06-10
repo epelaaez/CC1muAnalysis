@@ -574,4 +574,41 @@ void Tools::Reweight2D(TH2D* h, double SF = 1.) {
 
 //----------------------------------------//
 
+std::tuple<int, vector<double>, vector<int>, vector<int>, vector<int>> Tools::FlattenNDBins(vector<double> SliceDiscriminators, vector<vector<double>> SliceBinning) {
+	int NSlices = 1;
+	vector<double> SerialVectorRanges;
+	vector<int> SerialVectorBins;
+	vector<int> SerialVectorLowBin;
+	vector<int> SerialVectorHighBin;
+
+	int BinCounter = 1;
+
+	// For the discriminator, how many slices do we have?
+	int SliceDiscrimSize = SliceDiscriminators.size() - 1;
+	NSlices *= SliceDiscrimSize; 
+
+	for (int iSliceDiscrimSize = 0; iSliceDiscrimSize < SliceDiscrimSize; iSliceDiscrimSize++) {
+		// Accessing the vector<double> with the bin ranges
+		int SliceDiscrimValue = SliceBinning.at(iSliceDiscrimSize).size();
+
+		// Storing the number of bins for a specific slice					
+		SerialVectorBins.push_back(SliceDiscrimValue-1);
+		for (int iBin = 0; iBin < SliceDiscrimValue; iBin++) {
+			double BinValue = SliceBinning.at(iSliceDiscrimSize).at(iBin);
+			// First bin number for a given slice
+			if (iBin == 0) { SerialVectorLowBin.push_back(BinCounter); }
+			// Last bin number for a given slice
+			if (iBin == SliceDiscrimValue-2) { SerialVectorHighBin.push_back(BinCounter); }	
+			// Storing the binning for a specific slice
+			SerialVectorRanges.push_back(BinValue);
+			// Increase the global bin counter
+			// But not for the last bin
+			if (iBin != SliceDiscrimValue-1) { BinCounter++; }
+
+		} // End of the loop over the bins of a given slice
+	} // End of the loop over the slices of the discriminator
+
+	return {NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin};
+}
+
 #endif

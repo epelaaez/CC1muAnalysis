@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <tuple>
 
 #include "TString.h"
 #include "TMath.h"
@@ -49,7 +50,9 @@ class Tools {
 		
 		TH1D* GetHistoBins(TH1D* h,int LowBin,int HighBin,double ScaleFactor,std::vector<double> Binning, TString Name);	
 		TH2D* Get2DHistoBins(TH2D* h,int LowBin,int HighBin,double ScaleFactor,std::vector<double> Binning, bool Scale);	
-		std::vector< std::vector<double> > CollapseMatrixIntoArray(std::vector< std::vector< std::vector<double> > > Matrix);			
+		std::vector< std::vector<double> > CollapseMatrixIntoArray(std::vector< std::vector< std::vector<double> > > Matrix);
+
+		std::tuple<int, vector<double>, vector<int>, vector<int>, vector<int>> FlattenNDBins(vector<double> SliceDiscriminators, vector<vector<double>> SliceBinning);
 
 		double MuonMass; // MeV
 		double ProtonMass; // MeV

@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <vector>
 #include <map>
+#include <tuple>
 
 using namespace std;
 
@@ -57,6 +58,13 @@ namespace Constants {
         { "CosOpeningAngleProtonsPlot",  "All events" },	
         { "CosOpeningAngleMuonTotalProtonPlot",  "All events" },	
         { "TransverseMomentumPlot",  "All events" },	
+    };
+
+    static std::map<TString, std::tuple<vector<double>, vector<vector<double>>>> PlotNameToDiscriminator = {
+        {"TrueSerialTransverseMomentum_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices}},
+        {"TrueSerialDeltaAlphaT_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices}},
+        {"TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices}},
+        {"TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices}}
     };
 }
 
