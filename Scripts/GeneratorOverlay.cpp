@@ -31,11 +31,19 @@ void GeneratorOverlay() {
     std::vector<TString> Names; std::vector<TString> Labels; std::vector<int> Colors;
     
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
-    Labels.push_back("GENIE G18");
+    Labels.push_back("GENIE AR23");
     Colors.push_back(kBlue+8);
 
+    // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
+    // Labels.push_back("GENIE AR23 Emp2015");
+    // Colors.push_back(kBlue+16);
+
+    // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Nieves2016.root"); 
+    // Labels.push_back("GENIE AR23 Nieves2016");
+    // Colors.push_back(kBlue+24);
+
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_G18.root"); 
-    Labels.push_back("GENIE AR23");
+    Labels.push_back("GENIE G18");
     Colors.push_back(kBlue+2);
 
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_NuWro.root"); 
@@ -89,6 +97,8 @@ void GeneratorOverlay() {
     // Double differential
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
 
     const int NPlots = PlotNames.size();
 

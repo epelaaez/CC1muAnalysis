@@ -47,10 +47,18 @@ void GeneratorInteBreakDown() {
     std::vector<int> Colors{kBlack,kBlue,kRed+1,kOrange+7,kGreen+1,kMagenta+1};
 
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
-    Labels.push_back("GENIE_G18");
+    Labels.push_back("GENIE_AR23");
+
+    // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
+    // Labels.push_back("GENIE_AR23_Emp2015");
+    // Colors.push_back(kBlue+16);
+
+    // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Nieves2016.root"); 
+    // Labels.push_back("GENIE_AR23_Nieves2016");
+    // Colors.push_back(kBlue+24);
 
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_G18.root"); 
-    Labels.push_back("GENIE_AR23");
+    Labels.push_back("GENIE_G18");
 
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_NuWro.root"); 
     Labels.push_back("NuWro");
@@ -147,6 +155,12 @@ void GeneratorInteBreakDown() {
 
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     //------------------------------//
 
