@@ -8,7 +8,7 @@
 \usepackage{float}
 
 \title{CC1mu2p0pi Analysis}
-\author{Emilio Pelaez Cisneros}
+\author{Emilio Peláez Cisneros}
 
 \newcommand{\vm}{\vec{p}_\mu}
 \newcommand{\vlp}{\vec{p}_L}
@@ -118,6 +118,22 @@ We plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot.png}}
     \caption{Double differential plots, all in $\cos(\theta_{\vec{p}_{\mu}})$}
     \label{fig:double-differential-cos-mu}
+\end{figure}
+
+We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers. These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighted appropriately. Note that the plots for the $1 < \cos(\theta_{\vec{p}_{\mu}}) < 1.5$
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
+    \caption{Sliced double differential plots}
+    \label{fig:sliced-double-differential-cos-mu}
 \end{figure}
 
 \end{document}
