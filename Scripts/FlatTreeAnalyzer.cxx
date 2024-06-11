@@ -85,6 +85,11 @@ void FlatTreeAnalyzer::Loop() {
     TH1D* TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot[NInte];
     TH1D* TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[NInte];
 
+    TH1D* TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot[NInte];
+    TH1D* TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot[NInte];
+    TH1D* TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot[NInte];
+    TH1D* TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[NInte];
+
     // Loop over the interaction processes
 
     for (int inte = 0; inte < NInte; inte++) {
@@ -134,6 +139,32 @@ void FlatTreeAnalyzer::Loop() {
         );
         TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[inte] = new TH1D(
             InteractionLabels[inte]+"TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot",
+            LabelXAxisTwoDCosOpeningMuonTotalProtonInMuonCosTheta,
+            tools.Return2DNBins(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices),
+            &tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)[0]
+        );
+
+        // Double differential pre-FSI
+        TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot[inte] = new TH1D(
+            InteractionLabels[inte]+"TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot",
+            LabelXAxisTwoDTransverseMomentumInMuonCosTheta,
+            tools.Return2DNBins(TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices),
+            &tools.Return2DBinIndices(TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices)[0]
+        );
+        TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot[inte] = new TH1D(
+            InteractionLabels[inte]+"TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot",
+            LabelXAxisTwoDDeltaAlphaTInMuonCosTheta,
+            tools.Return2DNBins(TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices),
+            &tools.Return2DBinIndices(TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices)[0]
+        );
+        TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot[inte] = new TH1D(
+            InteractionLabels[inte]+"TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot",
+            LabelXAxisTwoDCosOpeningAngleProtonsInMuonCosTheta,
+            tools.Return2DNBins(TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices),
+            &tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices)[0]
+        );
+        TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[inte] = new TH1D(
+            InteractionLabels[inte]+"TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot",
             LabelXAxisTwoDCosOpeningMuonTotalProtonInMuonCosTheta,
             tools.Return2DNBins(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices),
             &tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)[0]
@@ -430,6 +461,48 @@ void FlatTreeAnalyzer::Loop() {
             TrueNoFSICosOpeningAngleMuonTotalProtonPlot[NoFSIgenie_mode]->Fill(NoFSICosOpeningAngleMuonTotalProton,weight);
             TrueNoFSITransverseMomentumPlot[NoFSIgenie_mode]->Fill(NoFSITransverseMomentum,weight);
             TrueNoFSIDeltaAlphaTPlot[NoFSIgenie_mode]->Fill(NoFSIDeltaAlphaT,weight);
+
+            // Check for underflow/overflow for double differential plots
+            if (NoFSITransverseMomentum < TwoDArrayTransverseMomentum[0]) { NoFSITransverseMomentum = (TwoDArrayTransverseMomentum[0] + TwoDArrayTransverseMomentum[1]) / 2.; }
+            else if (NoFSITransverseMomentum > TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum]) { NoFSITransverseMomentum = (TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum] + TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum - 1]) / 2.; }
+
+            if (NoFSIDeltaAlphaT < TwoDArrayDeltaAlphaT[0]) { NoFSIDeltaAlphaT = (TwoDArrayDeltaAlphaT[0] + TwoDArrayDeltaAlphaT[1]) / 2.; }
+            else if (NoFSIDeltaAlphaT > TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT]) { NoFSIDeltaAlphaT = (TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT] + TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT - 1]) / 2.; }
+
+            // Double differential indices
+            int NoFSIMuonCosThetaTwoDIndex = tools.ReturnIndex(CosLep, TwoDArrayNBinsMuonCosTheta);
+            int NoFSISerialTransverseMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+                TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices,
+                NoFSIMuonCosThetaTwoDIndex,
+                NoFSITransverseMomentum
+            );
+            int NoFSISerialDeltaAlphaTInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+                TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices,
+                NoFSIMuonCosThetaTwoDIndex,
+                NoFSIDeltaAlphaT
+            );
+            int NoFSISerialCosOpeningAngleProtonsInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+                TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices,
+                NoFSIMuonCosThetaTwoDIndex,
+                NoFSICosOpeningAngleProtons
+            );
+            int NoFSISerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+                TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices,
+                NoFSIMuonCosThetaTwoDIndex,
+                NoFSICosOpeningAngleMuonTotalProton
+            );
+
+            // Fill in the histograms for double differential plots
+            TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot[0]->Fill(NoFSISerialTransverseMomentumInMuonCosThetaIndex,weight);
+            TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot[0]->Fill(NoFSISerialDeltaAlphaTInMuonCosThetaIndex,weight);
+            TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot[0]->Fill(NoFSISerialCosOpeningAngleProtonsInMuonCosThetaIndex,weight);
+            TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[0]->Fill(NoFSISerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex,weight);
+
+            TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialTransverseMomentumInMuonCosThetaIndex,weight);
+            TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialDeltaAlphaTInMuonCosThetaIndex,weight);
+            TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialCosOpeningAngleProtonsInMuonCosThetaIndex,weight);
+            TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex,weight);
+
         } // End pre-FSI particles check
         else { continue; }
     } // End of the loop over the events

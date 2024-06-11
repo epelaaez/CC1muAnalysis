@@ -64,9 +64,9 @@ void SerialGeneratorOverlay() {
     Labels.push_back("GiBUU");
     Colors.push_back(kGreen+1);
 
-    // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
-    // Labels.push_back("GiBUU NoFSI");
-    // Colors.push_back(kGreen+1);
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    Labels.push_back("GiBUU NoFSI");
+    Colors.push_back(kGreen+1);
 
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);
@@ -79,7 +79,7 @@ void SerialGeneratorOverlay() {
     std::vector<TString> XAxisLabel;
     std::vector<TString> YAxisLabel;
 
-    // We only look at double differential plots here
+    // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     XAxisLabel.push_back("#delta P_{T}");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
@@ -93,6 +93,23 @@ void SerialGeneratorOverlay() {
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Double differential pre FSI
+    PlotNames.push_back("TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#delta P_{T}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#delta #alpha_{T}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
@@ -111,14 +128,15 @@ void SerialGeneratorOverlay() {
     // Loop over the plots to be compared
 
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
-        TString PlotName = PlotNames[iPlot];
         std::vector<std::vector<TH1D*>> Histos;
         std::vector<TH1D*> TruePlots; TruePlots.resize(NSamples);
 
         //------------------------------//
         
         // Flatten out double differential bins
-        auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator[PlotName];
+        TString PlotNameDuplicate = PlotNames[iPlot];
+        TString GeneralPlotName = PlotNameDuplicate.ReplaceAll("NoFSI","");
+        auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator[GeneralPlotName];
         auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
         
         int StartIndex = 0;
@@ -127,6 +145,11 @@ void SerialGeneratorOverlay() {
 
         // Load true plots
         for (int iSample = 0; iSample < NSamples; iSample++) {
+            TString PlotName = PlotNames[iPlot];
+
+            // For pre-FSI plots, use GiBUU NoFSI's final state variables
+            if (PlotName.Contains("NoFSI") && Labels[iSample]=="GiBUU NoFSI") { PlotName.ReplaceAll("NoFSI",""); }
+
             TruePlots[iSample] = (TH1D*)(Files[iSample]->Get(PlotName));
         }
 
@@ -140,14 +163,14 @@ void SerialGeneratorOverlay() {
 
         // Loop over the slices
         for (int iSlice = 0; iSlice < NSlices; iSlice++) {
-            TString SlicePlotName = PlotName + "_" + TString(std::to_string(iSlice));
+            TString SlicePlotName = PlotNames[iPlot] + "_" + TString(std::to_string(iSlice));
             double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
 
             // Get number of bins
             int SliceNBins = SerialVectorBins.at(iSlice);
             std::vector<double> SerialSliceBinning;
 
-            for (int iBin = 0; iBin < SliceNBins + 1; iBin++) { 
+            for (int iBin = 0; iBin < SliceNBins + 1; iBin++) {
                 double value = SerialVectorRanges.at(StartIndex + iBin);
                 SerialSliceBinning.push_back(value);
             } // End of the number of bins and the bin ranges declaration
@@ -168,6 +191,10 @@ void SerialGeneratorOverlay() {
             leg->SetTextFont(FontStyle);
 
             for (int iSample = 0; iSample < NSamples; iSample++) {
+                // Exclude normal GiBUU in pre-FSI plots and exclude pre-FSI plots in final state plots
+                if (PlotNames[iPlot].Contains("NoFSI") && Labels[iSample]=="GiBUU") { continue; } 
+                if (!PlotNames[iPlot].Contains("NoFSI") && Labels[iSample]=="GiBUU NoFSI") { continue; }
+
                 Histos[iSlice][iSample] = tools.GetHistoBins(
                     TruePlots[iSample],
                     SerialVectorLowBin.at(iSlice),
@@ -201,6 +228,7 @@ void SerialGeneratorOverlay() {
                 double imax = TMath::Max(Histos[iSlice][iSample]->GetMaximum(),Histos[iSlice][0]->GetMaximum());
 
                 double YAxisRange = 1.15*imax;
+                if (PlotNames[iPlot].Contains("NoFSI")) { YAxisRange *= 1.15; };
                 Histos[iSlice][iSample]->GetYaxis()->SetRangeUser(0.,YAxisRange);
                 Histos[iSlice][0]->GetYaxis()->SetRangeUser(0.,YAxisRange);			
 
@@ -216,7 +244,7 @@ void SerialGeneratorOverlay() {
             TLatex *textSlice = new TLatex();
             textSlice->SetTextFont(FontStyle);
             textSlice->SetTextSize(TextSize);
-            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[PlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
+            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[GeneralPlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
             PlotCanvas->SaveAs("./Figs/Overlay/Serial/"+SlicePlotName+".png");
