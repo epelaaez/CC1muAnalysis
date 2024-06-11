@@ -76,12 +76,25 @@ void SerialGeneratorOverlay() {
     // Plots to overlay
 
     std::vector<TString> PlotNames;
+    std::vector<TString> XAxisLabel;
+    std::vector<TString> YAxisLabel;
 
     // We only look at double differential plots here
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#delta P_{T}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#delta #alpha_{T}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     const int NPlots = PlotNames.size();
 
@@ -128,6 +141,7 @@ void SerialGeneratorOverlay() {
         // Loop over the slices
         for (int iSlice = 0; iSlice < NSlices; iSlice++) {
             TString SlicePlotName = PlotName + "_" + TString(std::to_string(iSlice));
+            double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
 
             // Get number of bins
             int SliceNBins = SerialVectorBins.at(iSlice);
@@ -140,16 +154,17 @@ void SerialGeneratorOverlay() {
 
             // Declare canvas and legend
             TString CanvasName = "Canvas_" + SlicePlotName;
-            TCanvas* PlotCanvas = new TCanvas(CanvasName,CanvasName,205,34,1024,768);
+            TCanvas* PlotCanvas = new TCanvas(CanvasName,CanvasName,205,34,1124,768);
 
-            PlotCanvas->SetTopMargin(0.12);
-            PlotCanvas->SetLeftMargin(0.15);
-            PlotCanvas->SetBottomMargin(0.15);		
+            PlotCanvas->SetTopMargin(0.13);
+            PlotCanvas->SetLeftMargin(0.17);
+            PlotCanvas->SetRightMargin(0.05);
+            PlotCanvas->SetBottomMargin(0.16);
 
             TLegend* leg = new TLegend(0.2,0.7,0.75,0.83);
             leg->SetBorderSize(0);
             leg->SetNColumns(2);
-            leg->SetTextSize(TextSize*0.8);	
+            leg->SetTextSize(TextSize*0.8);
             leg->SetTextFont(FontStyle);
 
             for (int iSample = 0; iSample < NSamples; iSample++) {
@@ -157,7 +172,7 @@ void SerialGeneratorOverlay() {
                     TruePlots[iSample],
                     SerialVectorLowBin.at(iSlice),
                     SerialVectorHighBin.at(iSlice),
-                    1, // NOTE: change scale factor
+                    SliceWidth,
                     SerialSliceBinning,
                     Labels[iSample]
                 );
@@ -168,6 +183,7 @@ void SerialGeneratorOverlay() {
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelFont(FontStyle);
                 Histos[iSlice][iSample]->GetXaxis()->SetNdivisions(8);
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelSize(TextSize);
+                Histos[iSlice][iSample]->GetXaxis()->SetTitle(XAxisLabel.at(iPlot));
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleSize(TextSize);
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleOffset(1.1);
                 Histos[iSlice][iSample]->GetXaxis()->CenterTitle();
@@ -176,11 +192,11 @@ void SerialGeneratorOverlay() {
                 Histos[iSlice][iSample]->GetYaxis()->SetLabelFont(FontStyle);
                 Histos[iSlice][iSample]->GetYaxis()->SetNdivisions(6);
                 Histos[iSlice][iSample]->GetYaxis()->SetLabelSize(TextSize);
-                Histos[iSlice][iSample]->GetYaxis()->SetTitle("Cross Section [10^{-38} cm^{2}/Ar]");
+                Histos[iSlice][iSample]->GetYaxis()->SetTitle(YAxisLabel.at(iPlot));
                 Histos[iSlice][iSample]->GetYaxis()->SetTitleSize(TextSize);
                 Histos[iSlice][iSample]->GetYaxis()->SetTitleOffset(1.3);
                 Histos[iSlice][iSample]->GetYaxis()->SetTickSize(0);
-                Histos[iSlice][iSample]->GetYaxis()->CenterTitle();	
+                Histos[iSlice][iSample]->GetYaxis()->CenterTitle();
 
                 double imax = TMath::Max(Histos[iSlice][iSample]->GetMaximum(),Histos[iSlice][0]->GetMaximum());
 
@@ -196,7 +212,13 @@ void SerialGeneratorOverlay() {
             }
             PlotCanvas->cd();
             leg->Draw();
-                
+
+            TLatex *textSlice = new TLatex();
+            textSlice->SetTextFont(FontStyle);
+            textSlice->SetTextSize(TextSize);
+            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1) + " < " + PlotNameToSliceLabel[PlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice], 1);
+            textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
+
             PlotCanvas->SaveAs("./Figs/Overlay/Serial/"+SlicePlotName+".png");
             delete PlotCanvas;
 

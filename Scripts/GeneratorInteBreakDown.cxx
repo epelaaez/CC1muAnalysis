@@ -120,7 +120,7 @@ void GeneratorInteBreakDown() {
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
-    YAxisLabel.push_back("#frac{d#sigma}{dcos#theta_{#mu}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueLeadingProtonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
