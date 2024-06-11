@@ -216,7 +216,7 @@ void SerialGeneratorOverlay() {
             TLatex *textSlice = new TLatex();
             textSlice->SetTextFont(FontStyle);
             textSlice->SetTextSize(TextSize);
-            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1) + " < " + PlotNameToSliceLabel[PlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice], 1);
+            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[PlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
             PlotCanvas->SaveAs("./Figs/Overlay/Serial/"+SlicePlotName+".png");
