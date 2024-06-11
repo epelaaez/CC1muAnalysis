@@ -120,7 +120,7 @@ We plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
     \label{fig:double-differential-cos-mu}
 \end{figure}
 
-We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers. These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighted appropriately. Note that the plots for the $1 < \cos(\theta_{\vec{p}_{\mu}}) < 1.5$ slice have more events in general, as it can be seen by the scale of the vertical axis. 
+We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers. These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighed appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice. Note that the plots for the $1 < \cos(\theta_{\vec{p}_{\mu}}) < 1.5$ slice have more events in general, as it can be seen by the scale of the vertical axis. 
 
 \begin{figure}
     \centering
@@ -134,6 +134,22 @@ We also slice the double differential plots into two plots each, so that we have
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
     \caption{Sliced double differential plots}
     \label{fig:sliced-double-differential-cos-mu}
+\end{figure}
+
+We also performed the same double differential analysis but for the events before final state interactions. These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}. Only the plots for the two opening angles are shown here for compactness. 
+
+\begin{figure}
+    \centering
+    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
+    \caption{Sliced double differential plots for pre-FSI events}
+    \label{fig:sliced-double-differential-cos-mu-no-fsi}
 \end{figure}
 
 \end{document}
