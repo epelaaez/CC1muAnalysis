@@ -245,35 +245,39 @@ void FlatTreeAnalyzer::Loop() {
             }
         } // End of the loop over the final state particles
 
-        // Loop over pre-FSI particles
+        // Tags for pre-FSI particles
         int NoFSIProtonTagging = 0, NoFSIChargedPionTagging = 0, NoFSINeutralPionTagging = 0;
         int NoFSIMuonTagging = 0, NoFSIElectronTagging = 0, NoFSIPhotonTagging = 0;
         vector <int> NoFSIProtonID; NoFSIProtonID.clear();
         vector <int> NoFSIMuonID; NoFSIMuonID.clear();
 
-        for (int i = 0; i < nvertp; i++) {
-            double NoFSIpf = TMath::Sqrt(px_vert[i]*px_vert[i] + py_vert[i]*py_vert[i] + pz_vert[i]*pz_vert[i]);
-            if (pdg_vert[i] == 13 && (NoFSIpf > 0.1 && NoFSIpf < 1.2)) {
-                NoFSIMuonTagging++;
-                NoFSIMuonID.push_back(i);
-            }
-            if (pdg_vert[i] == 2212 && (NoFSIpf > 0.3 && NoFSIpf < 1.)) {
-                NoFSIProtonTagging++;
-                NoFSIProtonID.push_back(i);
-            }
-            if (fabs(pdg_vert[i]) == 211 && NoFSIpf > 0.07)  {
-                NoFSIChargedPionTagging++;
-            }
-            if (pdg_vert[i] == 111)  {
-                NoFSINeutralPionTagging++;
-            }
-            if (fabs(pdg_vert[i]) == 11)  {
-                NoFSIElectronTagging++;
-            }
-            if (fabs(pdg_vert[i]) == 22)  {
-                NoFSIPhotonTagging++;
-            }
-        } // End of loop over pre-FSI particles
+        // Loop over pre FSI variables for non-MEC files
+        if (!fOutputFile.Contains("MEC")) {
+            // Loop over pre FSI variables
+            for (int i = 0; i < nvertp; i++) {
+                double NoFSIpf = TMath::Sqrt(px_vert[i]*px_vert[i] + py_vert[i]*py_vert[i] + pz_vert[i]*pz_vert[i]);
+                if (pdg_vert[i] == 13 && (NoFSIpf > 0.1 && NoFSIpf < 1.2)) {
+                    NoFSIMuonTagging++;
+                    NoFSIMuonID.push_back(i);
+                }
+                if (pdg_vert[i] == 2212 && (NoFSIpf > 0.3 && NoFSIpf < 1.)) {
+                    NoFSIProtonTagging++;
+                    NoFSIProtonID.push_back(i);
+                }
+                if (fabs(pdg_vert[i]) == 211 && NoFSIpf > 0.07)  {
+                    NoFSIChargedPionTagging++;
+                }
+                if (pdg_vert[i] == 111)  {
+                    NoFSINeutralPionTagging++;
+                }
+                if (fabs(pdg_vert[i]) == 11)  {
+                    NoFSIElectronTagging++;
+                }
+                if (fabs(pdg_vert[i]) == 22)  {
+                    NoFSIPhotonTagging++;
+                }
+            } // End of loop over pre-FSI particles
+        }
 
 
         // Check if signal definition for final state particles is satisfied
@@ -405,7 +409,8 @@ void FlatTreeAnalyzer::Loop() {
             NoFSIProtonTagging == 2 &&
             NoFSIChargedPionTagging == 0 &&
             NoFSINeutralPionTagging == 0 && 
-            NoFSIMuonTagging == 1
+            NoFSIMuonTagging == 1 &&
+            !fOutputFile.Contains("MEC") // pre-FSI variables only for non-MEC files
         ) {
             // Classify events based on interaction type
             int NoFSIgenie_mode = -1.;
