@@ -16,7 +16,8 @@
 
     // Samples with only MEC events
     WhichSample.push_back("14_1000180400_CCMEC_v3_4_2_AR23_20i_00_000.flat"); WhichName.push_back("GENIE_AR23_MEC");
-    WhichSample.push_back("14_1000180400_CCMEC_v3_4_2_G18_02a_00_000.flat"); WhichName.push_back("GENIE_G18_MEC");
+    WhichSample.push_back("14_1000180400_CCMEC_v3_4_2_G18_02a_00_000.flat"); WhichName.push_back("GENIE_G18_Emp_MEC");
+    WhichSample.push_back("14_1000180400_CCMEC_v3_4_2_G18_10a_00_000.flat"); WhichName.push_back("GENIE_G18_Nie_MEC");
 
     //----------------------------------------//
 

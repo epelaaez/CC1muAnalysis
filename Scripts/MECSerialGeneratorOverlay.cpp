@@ -40,9 +40,13 @@ void MECSerialGeneratorOverlay() {
     Labels.push_back("GENIE AR23");
     Colors.push_back(kBlue+2);
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_G18_MEC.root"); 
-    Labels.push_back("GENIE G18");
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_G18_Emp_MEC.root"); 
+    Labels.push_back("GENIE G18 Empirical");
     Colors.push_back(kRed+1);
+
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_G18_Nie_MEC.root"); 
+    Labels.push_back("GENIE G18 Nieves");
+    Colors.push_back(kOrange+7);
 
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);
