@@ -276,8 +276,9 @@ void GeneratorInteBreakDown() {
             textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
 
             gPad->RedrawAxis();
+            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
             TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
-            PlotCanvas->SaveAs("./Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
+            PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;
         } // End of the loop over the samples grabing the plots	
     } // End of the loop over the plots

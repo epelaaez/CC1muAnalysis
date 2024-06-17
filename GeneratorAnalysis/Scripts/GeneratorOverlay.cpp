@@ -192,9 +192,10 @@ void GeneratorOverlay() {
 
         PlotCanvas->cd();
         leg->Draw();
-            
+        
+        TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
         TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
-        PlotCanvas->SaveAs("./Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");
+        PlotCanvas->SaveAs(dir+"/Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
 
     } // End of the loop over the plots

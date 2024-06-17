@@ -201,7 +201,8 @@ void MECSerialGeneratorOverlay() {
             TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[PlotNameDuplicate] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
-            PlotCanvas->SaveAs("./Figs/Overlay/MEC/Serial/"+SlicePlotName+".png");
+            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            PlotCanvas->SaveAs(dir+"/Figs/Overlay/MEC/Serial/"+SlicePlotName+".png");
             delete PlotCanvas;
 
             // Update starting index to move to next slice

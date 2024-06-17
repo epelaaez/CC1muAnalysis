@@ -96,7 +96,8 @@ void Selection()
         PlotCanvas->cd();
         Histogram->Draw("hist same");
 
-        PlotCanvas->SaveAs("./Figs/"+PlotNames[i]+".png");
+        TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+        PlotCanvas->SaveAs(dir+"/CAFAna/Figs/"+PlotNames[i]+".png");
         delete PlotCanvas;
     }
 }

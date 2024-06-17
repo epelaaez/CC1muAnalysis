@@ -1,4 +1,4 @@
-# SBND Event Selection
+# CAFAna analysis
 
 CAFAna is used to perform event selection on flat `caf` files. The specific event selection is one muon, two protons, and no pions. 
 
