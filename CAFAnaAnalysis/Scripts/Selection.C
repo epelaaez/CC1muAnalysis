@@ -65,7 +65,7 @@ void Selection()
                 bPrimaryEnergy, // Use 20 bins from 0.0 to 3.0 GeV
                 NuLoader,       // Associate this Spectrum with the NuLoader object (and its target CAF)
                 kTrueEnergy,    // The TruthVar to plot
-                kIsSignal,      // The TruthCut to use (signal definition)
+                kTruthIsSignal, // The TruthCut to use (signal definition)
                 kNoSpillCut     // The SpillCut to use (none)
             );  
 
@@ -74,7 +74,7 @@ void Selection()
                 bPrimaryEnergy, // Use 20 bins from 0.0 to 3.0 GeV
                 NuLoader,       // Associate this Spectrum with the NuLoader object (and its target CAF)
                 kTrueEnergy,    // The TruthVar to plot
-                kIsSignal,      // The TruthCut to use (signal definition)
+                kTruthIsSignal, // The TruthCut to use (signal definition)
                 kNoSpillCut,    // The SpillCut to use (none)
                 kIsNuMuCC       // The Cut to use (true nu mu CC slices)
             );  
