@@ -1,8 +1,2 @@
 # dev
-.DS_Store
 .vscode/
-
-# c++/root generated
-*.d
-*.so
-*.pcm

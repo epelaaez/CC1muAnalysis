@@ -1,0 +1,18 @@
+# virtual environment/vscode
+.venv/
+settings.json
+.DS_Store
+.vscode/
+
+# python stuff
+__pycache__/
+.ipynb_checkpoints/
+
+# c++/root generated
+*.d
+*.so
+*.pcm
+Selection_C_ACLiC*.h
+
+# sbnana local build
+v09_75_03/

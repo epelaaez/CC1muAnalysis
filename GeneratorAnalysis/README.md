@@ -1,4 +1,4 @@
-# CC1muAnalysis
+# Generator analysis
 
 Events simulated with different generators (GENIE, GiBUU, etc.) are analyzed and different single and double differential plots are created. 
 
