@@ -23,7 +23,7 @@ Although the goal is to perform all the analysis within the C++ framework, there
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install uproot numpy pandas matplotlib scipy
+pip install uproot numpy pandas matplotlib scipy lz4 xxhash
 ```
 
 And run the [`event_selection.ipynb`](https://github.com/epelaaez/CC1muAnalysis/blob/main/CAFAnaAnalysis/src/event_selection.ipynb) notebook in this environment.
