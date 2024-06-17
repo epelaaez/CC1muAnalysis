@@ -6,6 +6,8 @@
 
 // std includes.
 #include <vector>
+#include <limits>
+#include <tuple>
 
 namespace ana
 {
@@ -17,12 +19,12 @@ namespace ana
     const float fFVZMax =  500.00-50.;
     const float fFVZMin =    0.00+10.;
 
-    const std::map<int, float> PDGToThreshold = {
-        {13, 0.175}, // Muon
-        {2212, 0.3}, // Proton
-        {211, 0.07}, // Pi plus
-        {-211, 0.07}, // Pi minus
-        {111, 0.0} // Pi zero
+    const std::map<int, std::tuple<float, float>> PDGToThreshold = {
+        {13, {0.1, 1.2}}, // Muon
+        {2212, {0.3, 1.}}, // Proton
+        {211, {0.07, std::numeric_limits<float>::max()}}, // Pi plus
+        {-211, {0.07, std::numeric_limits<float>::max()}}, // Pi minus
+        {111, {0.0, std::numeric_limits<float>::max()}} // Pi zero
     };
 
     ////////////// 
@@ -68,11 +70,11 @@ namespace ana
     }
 
     // Check multiplicity of particles in a given pdg
-    int iCountMultParticle(const caf::SRTrueInteractionProxy* nu, int pdg, float threshold) {
+    int iCountMultParticle(const caf::SRTrueInteractionProxy* nu, int pdg, float lb, float up) {
         int count = 0;
         for (auto const& prim : nu->prim) {
             float totp = std::sqrt(std::pow(prim.startp.x, 2) + std::pow(prim.startp.y, 2) + std::pow(prim.startp.z, 2));
-            if ((prim.pdg == pdg) && (totp > threshold)) {
+            if ((prim.pdg == pdg) && (totp > lb) && (totp < up)) {
                 count++;
             }
         }
@@ -104,11 +106,12 @@ namespace ana
         return (
             bIsInFV(&nu->position) && // check position is in fiducial volume
             nu->iscc && // check it is charged current interaction
-            nu->pdg == 14 && // check particle is muon
-            iCountMultParticle(nu, 2212, PDGToThreshold.at(2212)) == 2 && // check for two protons
-            iCountMultParticle(nu, 211, PDGToThreshold.at(211)) == 0 && // no positively charged pions
-            iCountMultParticle(nu, -211, PDGToThreshold.at(-211)) == 0 && // no negatively charged pions
-            iCountMultParticle(nu, 111, 0) == 0 // no neutral pions
+            nu->pdg == 14 && // check neutrino is muon neutrino
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 && // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 2 && // check for two protons
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 && // no positively charged pions
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pions
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0 // no neutral pions
         );
     });
 
