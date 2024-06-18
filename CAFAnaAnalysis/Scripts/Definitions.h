@@ -6,6 +6,7 @@
 
 // std includes.
 #include <vector>
+#include <algorithm>
 #include <limits>
 #include <tuple>
 
@@ -99,19 +100,24 @@ namespace ana
         }
 
         for (auto const& pfp : slc -> reco.pfp) {
-            float fMuAverage = 0;
-            float fPrAverage  = 0;
+            float fMuAverage = 0.;
+            float fPrAverage  = 0.;
             for (int i = 0; i < 3; i++) {
                 fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
                 fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
             }
+            
+            // Check start point is in FV and assign momentum based on end point
+            if (!bIsInFV(&pfp.trk.start)) continue;
+            float fMomentum = bIsInFV(&pfp.trk.end) ? pfp.trk.rangeP.p_muon : pfp.trk.mcsP.fwdP_muon;
+            
             if (
                 fMuAverage < fMuCutMuScore && 
                 fPrAverage > fMuCutPrScore && 
                 pfp.trk.len > fMuCutLength &&
                 pfp.trk.len == fMaxTrkLen && 
-                pfp.trk.rangeP.p_muon > lb && 
-                pfp.trk.rangeP.p_muon < ub
+                fMomentum > lb && 
+                fMomentum < ub
             ) return {true, pfp.id};
         }
         return {false, -1};
@@ -126,14 +132,19 @@ namespace ana
         std::vector<int> ProtonIDs;
         for (auto const& pfp : slc -> reco.pfp) {
             if (pfp.id == MuonID) continue; // skip pfp tagged as muon
-            float fPrAverage  = 0;
+            float fPrAverage  = 0.;
             for (int i = 0; i < 3; i++) {
                 fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
             }
+
+            // Check full track is in FV
+            if (!(bIsInFV(&pfp.trk.start) && bIsInFV(&pfp.trk.end))) continue;
+            float fMomentum = pfp.trk.rangeP.p_proton;
+
             if (
                 fPrAverage < fPrCutPrScore && 
-                pfp.trk.rangeP.p_proton > lb &&
-                pfp.trk.rangeP.p_proton < ub
+                fMomentum > lb &&
+                fMomentum < ub
             ) ProtonIDs.push_back(pfp.id);
         }
         return {ProtonIDs.size() == 2, ProtonIDs};
@@ -146,7 +157,10 @@ namespace ana
 
         for (auto const& pfp : slc -> reco.pfp) {
             if (std::find(TaggedIDs.begin(), TaggedIDs.end(), pfp.id) != TaggedIDs.end()) continue;
-            if (pfp.trk.rangeP.p_pion > lb && pfp.trk.rangeP.p_pion < ub) return false; // tag pion
+            if (!(bIsInFV(&pfp.trk.start) && bIsInFV(&pfp.trk.end))) continue;
+
+            float fMomentum = pfp.trk.rangeP.p_pion;
+            if (fMomentum > lb && fMomentum < ub) return false; // tag pion
         }
         return true;
     }
