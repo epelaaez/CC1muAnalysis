@@ -42,42 +42,38 @@ void Selection()
                 NuLoader,                    // Associate this Spectrum with the NuLoader object (and its target CAF)
                 kPrimaryEnergy,              // The Var to plot.
                 kNoSpillCut,                 // The SpillCut to use (none in this case).
-                kIsNuMuCC );                 // The Cut to use (only true nu mu CC slices).
-
-    // Let's do the same as above, but add a SpillCut to see how many nu mu CC slices survive a simple CRT hit veto.
-    Spectrum sNuEnergyNoCRT( "Neutrino Energy [GeV]",     // A label for the Spectrum.
-                bPrimaryEnergy,              // Use 20 bins from 0.0 to 3.0 GeV
-                NuLoader,                    // Associate this Spectrum with the NuLoader object (and its target CAF)
-                kPrimaryEnergy,              // The Var to plot.
-                kCRTHitVeto,                 // Use a simple CRT Hit SpillCut.
-                kIsNuMuCC );                 // The Cut to use (only true nu mu CC slices).
-
-    // Create a simple Spectrum showing the length of all tracks in all slices with a nu mu CC interaction.
-    Spectrum sTrackLen( "Track Length [cm]",         // A label for the Spectrum.
-                bTrackLength,                // Use 20 bins from 0.0 to 3.0 GeV
-                NuLoader,                    // Associate this Spectrum with the NuLoader object (and its target CAF)
-                kAllTrkLen,                  // The Var to plot.
-                kNoSpillCut,                 // The SpillCut to use (none in this case).
-                kIsNuMuCC );                 // The Cut to use (only true nu mu CC slices).
+                kRecoIsSignal                // The Cut to use (none).
+            );
 
     // Create a simple Spectrum showing the primary neutrino energy of MC events that match signal definition.
-    Spectrum sNuEnergySignal( "True Neutrino Energy [GeV]",
-                bPrimaryEnergy, // Use 20 bins from 0.0 to 3.0 GeV
-                NuLoader,       // Associate this Spectrum with the NuLoader object (and its target CAF)
-                kTrueEnergy,    // The TruthVar to plot
-                kTruthIsSignal, // The TruthCut to use (signal definition)
-                kNoSpillCut     // The SpillCut to use (none)
-            );  
-
-    // Create a simple Spectrum showing the primary neutrino energy of slices truth matched to signal definition.
-    Spectrum sNuEnergySignalTruthMatched( "True Neutrino Energy [GeV]",
+    Spectrum sNuEnergyTrueSignal( "True Neutrino Energy [GeV]",
                 bPrimaryEnergy, // Use 20 bins from 0.0 to 3.0 GeV
                 NuLoader,       // Associate this Spectrum with the NuLoader object (and its target CAF)
                 kTrueEnergy,    // The TruthVar to plot
                 kTruthIsSignal, // The TruthCut to use (signal definition)
                 kNoSpillCut,    // The SpillCut to use (none)
-                kIsNuMuCC       // The Cut to use (true nu mu CC slices)
+                kNoCut          // The Cut to use (none)
             );  
+
+    // Create a simple Spectrum showing the primary neutrino energy of slices truth matched to signal definition.
+    Spectrum sNuEnergyRecoSignal( "True Neutrino Energy [GeV]",
+                bPrimaryEnergy, // Use 20 bins from 0.0 to 3.0 GeV
+                NuLoader,       // Associate this Spectrum with the NuLoader object (and its target CAF)
+                kTrueEnergy,    // The TruthVar to plot
+                kNoTruthCut,    // The TruthCut to use (none)
+                kNoSpillCut,    // The SpillCut to use (none)
+                kRecoIsSignal   // The Cut to use (reco signal definition)
+            );
+
+    // Create a simple Spectrum showing the primary neutrino energy of slices truth matched to signal definition.
+    Spectrum sNuEnergyBackgroundSignal( "True Neutrino Energy [GeV]",
+                bPrimaryEnergy, // Use 20 bins from 0.0 to 3.0 GeV
+                NuLoader,       // Associate this Spectrum with the NuLoader object (and its target CAF)
+                kTrueEnergy,    // The TruthVar to plot
+                kTruthNoSignal, // The TruthCut to use (signal definition)
+                kNoSpillCut,    // The SpillCut to use (none)
+                kRecoIsSignal   // The Cut to use (reco signal definition)
+            );
 
     // Now that each Spectrum is defined, use the Go() method to populate the Spectrum objects.
     NuLoader.Go();
@@ -85,13 +81,9 @@ void Selection()
     // Write out the Spectrum objects to a TCanvas
     std::vector<Spectrum> Spectra{
         sNuEnergy,
-        sNuEnergyNoCRT,
-        sTrackLen,
     };
     std::vector<TString> PlotNames{
-        "sNuEnergy",
-        "sNuEnergyNoCRT",
-        "sTrackLen",
+        "PrimaryEnergyInSignalDefinition",
     };
     const int nSpectra = Spectra.size();
 
@@ -114,8 +106,9 @@ void Selection()
 
     // We want to plot some Spectrum objects overlaid with each other
     TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
-    TH1D* Histo1 = sNuEnergySignal.ToTH1(TargetPOT);
-    TH1D* Histo2 = sNuEnergySignalTruthMatched.ToTH1(TargetPOT);
+    TH1D* Histo1 = sNuEnergyTrueSignal.ToTH1(TargetPOT);
+    TH1D* Histo2 = sNuEnergyRecoSignal.ToTH1(TargetPOT);
+    TH1D* Histo3 = sNuEnergyBackgroundSignal.ToTH1(TargetPOT);
 
     PlotCanvas->SetTopMargin(0.13);
     PlotCanvas->SetLeftMargin(0.17);
@@ -128,17 +121,23 @@ void Selection()
     leg->SetMargin(0.2);
     leg->SetFillColor(0);
 
-    TLegendEntry* legColor1 = leg->AddEntry(Histo1,"all","l");
+    TLegendEntry* legColor1 = leg->AddEntry(Histo1,"true","l");
     legColor1->SetTextColor(602); // blue
     Histo1->SetLineColor(602);
-    TLegendEntry* legColor2 = leg->AddEntry(Histo2,"truth matched","l");
+
+    TLegendEntry* legColor2 = leg->AddEntry(Histo2,"reco","l");
     legColor2->SetTextColor(797); // orange
     Histo2->SetLineColor(797);  
+
+    TLegendEntry* legColor3 = leg->AddEntry(Histo3,"bkg","l");
+    legColor3->SetTextColor(417); // green
+    Histo3->SetLineColor(417);
 
     PlotCanvas->cd();
     Histo1->Draw("hist same");
     Histo2->Draw("hist same");
+    Histo3->Draw("hist same");
     leg->Draw();
-    PlotCanvas->SaveAs(dir+"/Figs/CAFAna/EnergyTruthMatch.png");
+    PlotCanvas->SaveAs(dir+"/Figs/CAFAna/SignalDefinitionEnergy.png");
     delete PlotCanvas;
 }

@@ -36,18 +36,11 @@ namespace ana
     // Simple Vars
     //////////////
 
-    // Truth index
-    const Var kTruthIndex = SIMPLEVAR(truth.index);
-
-    // The SIMPLEVAR preprocessor macro allows us to shorthand for the following, traditional way of defining a Var:
-    /*
-    const Var kTruthIndex([](const caf::SRSliceProxy* slc) -> float {
-        return slc->truth.index;
-    });
-    */
-
     // Primary energy
     const Var kPrimaryEnergy = SIMPLEVAR(truth.E);
+
+    // True energy
+    const TruthVar kTrueEnergy = SIMPLETRUTHVAR(E);
 
     // Longest track in a slice
     const Var kLongestTrkLen([](const caf::SRSliceProxy* slc) -> float {
@@ -57,9 +50,6 @@ namespace ana
         }
         return len;
     });
-
-    // True energy
-    const TruthVar kTrueEnergy = SIMPLETRUTHVAR(E);
 
     ////////////
     // MultiVars
@@ -90,35 +80,25 @@ namespace ana
         int count = 0;
         for (auto const& prim : nu->prim) {
             float totp = std::sqrt(std::pow(prim.startp.x, 2) + std::pow(prim.startp.y, 2) + std::pow(prim.startp.z, 2));
-            if ((prim.pdg == pdg) && (totp > lb) && (totp < up)) {
+            if (prim.pdg == pdg && totp > lb && totp < up) {
                 count++;
             }
         }
         return count;
     }
 
-    //////////////
-    // Simple Cuts
-    //////////////
-
-    // Select slices originating from a neutrino
-    const Cut kIsNuSlice = ( kTruthIndex >= 0.f );
-
-    // Select only slices that are nu mu CC in origin.
-    const Cut kIsNuMuCC([](const caf::SRSliceProxy* slc) {
-        return ( kIsNuSlice(slc) && slc->truth.iscc && ( slc->truth.pdg == 14 || slc->truth.pdg == -14 ) );
-    });
-
-    // Check fmatch is in beam
-    const Cut kIsInBeam([](const caf::SRSliceProxy* slc) {
-        return ((slc->fmatch.time > 0.) && (slc->fmatch.time < 1.800));
-    });
-
     // Looks for a muon track and gets its PID
     std::tuple<bool, int> bOneMuon(const caf::SRSliceProxy* slc) {
+        // Momentum range for muons
+        float lb = std::get<0>(PDGToThreshold.at(13)); 
+        float ub = std::get<1>(PDGToThreshold.at(13));
+
         float fMaxTrkLen = -1.;
         for (auto const& pfp : slc -> reco.pfp) {
-            if (pfp.trk.len > fMaxTrkLen) fMaxTrkLen = pfp.trk.len; // update max len
+            if (pfp.trk.len > fMaxTrkLen) fMaxTrkLen = pfp.trk.len;
+        }
+
+        for (auto const& pfp : slc -> reco.pfp) {
             float fMuAverage = 0;
             float fPrAverage  = 0;
             for (int i = 0; i < 3; i++) {
@@ -126,17 +106,23 @@ namespace ana
                 fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
             }
             if (
-                (fMuAverage < fMuCutMuScore) && 
-                (fPrAverage > fMuCutPrScore) && 
-                (pfp.trk.len > fMuCutLength) &&
-                (pfp.trk.len == fMaxTrkLen)
-            ) { return {true, pfp.id}; }
+                fMuAverage < fMuCutMuScore && 
+                fPrAverage > fMuCutPrScore && 
+                pfp.trk.len > fMuCutLength &&
+                pfp.trk.len == fMaxTrkLen && 
+                pfp.trk.rangeP.p_muon > lb && 
+                pfp.trk.rangeP.p_muon < ub
+            ) return {true, pfp.id};
         }
         return {false, -1};
     }
 
     // Look for protons and get their PIDs
     std::tuple<bool, std::vector<int>> bTwoProtons(const caf::SRSliceProxy* slc, int MuonID) {
+        // Momentum range for protons
+        float lb = std::get<0>(PDGToThreshold.at(2212)); 
+        float ub = std::get<1>(PDGToThreshold.at(2212));
+
         std::vector<int> ProtonIDs;
         for (auto const& pfp : slc -> reco.pfp) {
             if (pfp.id == MuonID) continue; // skip pfp tagged as muon
@@ -144,18 +130,76 @@ namespace ana
             for (int i = 0; i < 3; i++) {
                 fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
             }
-            if (fPrAverage < fPrCutPrScore) ProtonIDs.push_back(pfp.id);
+            if (
+                fPrAverage < fPrCutPrScore && 
+                pfp.trk.rangeP.p_proton > lb &&
+                pfp.trk.rangeP.p_proton < ub
+            ) ProtonIDs.push_back(pfp.id);
         }
         return {ProtonIDs.size() == 2, ProtonIDs};
     }
 
+    bool bNoChargedPions(const caf::SRSliceProxy* slc, std::vector<int> TaggedIDs) {
+        // Momentum range for charged pions
+        float lb = std::get<0>(PDGToThreshold.at(211)); 
+        float ub = std::get<1>(PDGToThreshold.at(211));
+
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (std::find(TaggedIDs.begin(), TaggedIDs.end(), pfp.id) != TaggedIDs.end()) continue;
+            if (pfp.trk.rangeP.p_pion > lb && pfp.trk.rangeP.p_pion < ub) return false; // tag pion
+        }
+        return true;
+    }
+
+    bool bNoShowers(const caf::SRSliceProxy* slc, std::vector<int> TaggedIDs) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (std::find(TaggedIDs.begin(), TaggedIDs.end(), pfp.id) != TaggedIDs.end()) continue;
+            if (pfp.trackScore > 0.0 && pfp.trackScore < 0.5) return false;
+        }
+        return true;
+    }
+
+    //////////////
+    // Simple Cuts
+    //////////////
+
+    // Check fmatch is in beam
+    const Cut kIsInBeam([](const caf::SRSliceProxy* slc) {
+        return ((slc->fmatch.time > 0.) && (slc->fmatch.time < 1.800));
+    });
+
     // Check reconstructed event is signal
     const Cut kRecoIsSignal([](const caf::SRSliceProxy* slc) {
+        std::vector<int> TaggedIDs;
+
+        // Check neutrino vertex is in fiducial volume
+        if (!bIsInFV(&slc->vertex)) return false;
+
+        // Reject cosmic events
+        if (!(
+            slc->nu_score > 0.4 &&     // check how neutrino like slice is
+            slc->fmatch.score < 7.0 && // check flash match score
+            slc->fmatch.time > 0. &&   // check flash is in beam
+            slc->fmatch.time < 1.8
+        )) return false; 
+
+        // Check there is one muon in signal
         auto [OneMuon, MuonID] = bOneMuon(slc);
         if (!OneMuon) return false;
+        TaggedIDs.push_back(MuonID);
+
+        // Check there are two protons in signal
         auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
         if (!TwoProtons) return false;
-        if (!(slc->reco.pfp.size() != 3)) return false;
+        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
+
+        // Check there are no charged pions
+        if (!bNoChargedPions(slc, TaggedIDs)) return false;
+
+        // // Check there are no shower-like objects (neutral pions)
+        if (!bNoShowers(slc, TaggedIDs)) return false;
+
+        // Signal definition satisifed
         return true;
     });
 
@@ -174,6 +218,10 @@ namespace ana
             iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pions
             iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
         );
+    });
+
+    const TruthCut kTruthNoSignal([](const caf::SRTrueInteractionProxy* nu) {
+        return !kTruthIsSignal(nu);
     });
 
     ////////////
