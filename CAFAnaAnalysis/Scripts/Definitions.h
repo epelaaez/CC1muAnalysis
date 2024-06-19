@@ -13,24 +13,24 @@
 namespace ana
 {
     // Constants
-    const float fFVXMax =  199.15-10.;
-    const float fFVXMin = -199.15+10.;
-    const float fFVYMax =  200.00-10.;
-    const float fFVYMin = -200.00+10.;
-    const float fFVZMax =  500.00-50.;
-    const float fFVZMin =    0.00+10.;
+    const float fFVXMax =  199.15f-10.f;
+    const float fFVXMin = -199.15f+10.f;
+    const float fFVYMax =  200.00f-10.f;
+    const float fFVYMin = -200.00f+10.f;
+    const float fFVZMax =  500.00f-50.f;
+    const float fFVZMin =    0.00f+10.f;
 
-    const float fMuCutMuScore = 30.;
-    const float fMuCutPrScore = 60.;
-    const float fMuCutLength  = 50.;
-    const float fPrCutPrScore = 100.;
+    const float fMuCutMuScore = 30.0f;
+    const float fMuCutPrScore = 60.0f;
+    const float fMuCutLength  = 50.0f;
+    const float fPrCutPrScore = 100.0f;
 
     const std::map<int, std::tuple<float, float>> PDGToThreshold = {
-        {13, {0.1, 1.2}}, // Muon
-        {2212, {0.3, 1.}}, // Proton
-        {211, {0.07, std::numeric_limits<float>::max()}}, // Pi plus
-        {-211, {0.07, std::numeric_limits<float>::max()}}, // Pi minus
-        {111, {0.0, std::numeric_limits<float>::max()}} // Pi zero
+        {13, {0.1f, 1.2f}}, // Muon
+        {2212, {0.3f, 1.f}}, // Proton
+        {211, {0.07f, std::numeric_limits<float>::max()}}, // Pi plus
+        {-211, {0.07f, std::numeric_limits<float>::max()}}, // Pi minus
+        {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
     };
 
     ////////////// 
@@ -100,12 +100,22 @@ namespace ana
         }
 
         for (auto const& pfp : slc -> reco.pfp) {
-            float fMuAverage = 0.;
-            float fPrAverage  = 0.;
+            float fMuAverage = 0.0f;
+            float fPrAverage = 0.0f;
+            int iMuCount = 0;
+            int iPrCount = 0;
             for (int i = 0; i < 3; i++) {
-                fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
-                fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                if (!std::isnan(pfp.trk.chi2pid[i].chi2_muon)) {
+                    fMuAverage += pfp.trk.chi2pid[i].chi2_muon;
+                    iMuCount++;
+                }
+                if (!std::isnan(pfp.trk.chi2pid[i].chi2_proton)) {
+                    fPrAverage += pfp.trk.chi2pid[i].chi2_proton;
+                    iPrCount++;
+                }
             }
+            fMuAverage = (iMuCount != 0) ? fMuAverage / iMuCount : fMuAverage;
+            fPrAverage = (iPrCount != 0) ? fPrAverage / iPrCount : fPrAverage;
             
             // Check start point is in FV and assign momentum based on end point
             if (!bIsInFV(&pfp.trk.start)) continue;
@@ -132,10 +142,16 @@ namespace ana
         std::vector<int> ProtonIDs;
         for (auto const& pfp : slc -> reco.pfp) {
             if (pfp.id == MuonID) continue; // skip pfp tagged as muon
-            float fPrAverage  = 0.;
+
+            float fPrAverage  = 0.0f;
+            int iPrCount = 0;
             for (int i = 0; i < 3; i++) {
-                fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                if (!std::isnan(pfp.trk.chi2pid[i].chi2_proton)) {
+                    fPrAverage += pfp.trk.chi2pid[i].chi2_proton;
+                    iPrCount++;
+                }
             }
+            fPrAverage = (iPrCount != 0) ? fPrAverage / iPrCount : fPrAverage;
 
             // Check full track is in FV
             if (!(bIsInFV(&pfp.trk.start) && bIsInFV(&pfp.trk.end))) continue;
