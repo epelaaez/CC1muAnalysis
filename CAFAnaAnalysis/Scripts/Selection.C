@@ -139,5 +139,16 @@ void Selection()
     Histo3->Draw("hist same");
     leg->Draw();
     PlotCanvas->SaveAs(dir+"/Figs/CAFAna/SignalDefinitionEnergy.png");
+
+    double TrueEvents = Histo1->Integral();
+    double RecoEvents = Histo2->Integral();
+    double BkgEvents  = Histo3->Integral();
+
+    std::cout << "True events: " << TrueEvents << std::endl;
+    std::cout << "Reconstructed events: " << RecoEvents << std::endl;
+    std::cout << "Background events: " << BkgEvents << std::endl;
+    std::cout << "Efficiency (reco / total): " << RecoEvents / TrueEvents << std::endl;
+    std::cout << "Purity (1 - bkg / reco): " << 1 - (BkgEvents / RecoEvents) << std::endl;
+
     delete PlotCanvas;
 }

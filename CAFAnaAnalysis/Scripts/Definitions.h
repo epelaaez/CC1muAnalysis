@@ -27,7 +27,7 @@ namespace ana
 
     const std::map<int, std::tuple<float, float>> PDGToThreshold = {
         {13, {0.1f, 1.2f}}, // Muon
-        {2212, {0.3f, 1.f}}, // Proton
+        {2212, {0.3f, 1.0f}}, // Proton
         {211, {0.07f, std::numeric_limits<float>::max()}}, // Pi plus
         {-211, {0.07f, std::numeric_limits<float>::max()}}, // Pi minus
         {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
@@ -94,28 +94,28 @@ namespace ana
         float lb = std::get<0>(PDGToThreshold.at(13)); 
         float ub = std::get<1>(PDGToThreshold.at(13));
 
-        float fMaxTrkLen = -1.;
-        for (auto const& pfp : slc -> reco.pfp) {
-            if (pfp.trk.len > fMaxTrkLen) fMaxTrkLen = pfp.trk.len;
-        }
+        std::vector<int> CandidateMuons;
+        std::vector<int> CandidateMuonsTrkLen;
+        bool bSkipPFP = false;
 
         for (auto const& pfp : slc -> reco.pfp) {
             float fMuAverage = 0.0f;
             float fPrAverage = 0.0f;
-            int iMuCount = 0;
-            int iPrCount = 0;
             for (int i = 0; i < 3; i++) {
-                if (!std::isnan(pfp.trk.chi2pid[i].chi2_muon)) {
-                    fMuAverage += pfp.trk.chi2pid[i].chi2_muon;
-                    iMuCount++;
+                // Skip events with Nan's or 0's in chi squared values
+                if (
+                    std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                    pfp.trk.chi2pid[i].chi2_muon == 0. ||
+                    std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                    pfp.trk.chi2pid[i].chi2_proton == 0.
+                ) {
+                    bSkipPFP = true;
+                    break;
                 }
-                if (!std::isnan(pfp.trk.chi2pid[i].chi2_proton)) {
-                    fPrAverage += pfp.trk.chi2pid[i].chi2_proton;
-                    iPrCount++;
-                }
+                fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
             }
-            fMuAverage = (iMuCount != 0) ? fMuAverage / iMuCount : fMuAverage;
-            fPrAverage = (iPrCount != 0) ? fPrAverage / iPrCount : fPrAverage;
+            if (bSkipPFP) continue;
             
             // Check start point is in FV and assign momentum based on end point
             if (!bIsInFV(&pfp.trk.start)) continue;
@@ -125,12 +125,26 @@ namespace ana
                 fMuAverage < fMuCutMuScore && 
                 fPrAverage > fMuCutPrScore && 
                 pfp.trk.len > fMuCutLength &&
-                pfp.trk.len == fMaxTrkLen && 
                 fMomentum > lb && 
                 fMomentum < ub
-            ) return {true, pfp.id};
+            ) {
+                CandidateMuons.push_back(pfp.id);
+                CandidateMuonsTrkLen.push_back(pfp.trk.len);
+            }
         }
-        return {false, -1};
+
+        // Choose candidate muon with longest track
+        if (CandidateMuons.size() == 0) return {false, -1};
+
+        float fLongestTrack = CandidateMuonsTrkLen.at(0);
+        int iMuonIndex = CandidateMuons.at(0);
+        for (std::size_t i = 1; i < CandidateMuons.size(); i++) {
+            if (CandidateMuonsTrkLen.at(i) > fLongestTrack) {
+                fLongestTrack = CandidateMuonsTrkLen.at(i);
+                iMuonIndex = CandidateMuons.at(i);
+            }
+        }
+        return {true, iMuonIndex};
     }
 
     // Look for protons and get their PIDs
@@ -144,14 +158,20 @@ namespace ana
             if (pfp.id == MuonID) continue; // skip pfp tagged as muon
 
             float fPrAverage  = 0.0f;
-            int iPrCount = 0;
+            bool bSkipPFP = false;
+
             for (int i = 0; i < 3; i++) {
-                if (!std::isnan(pfp.trk.chi2pid[i].chi2_proton)) {
-                    fPrAverage += pfp.trk.chi2pid[i].chi2_proton;
-                    iPrCount++;
+                // Skip events with Nan's or 0's in chi squared values
+                if (
+                    std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                    pfp.trk.chi2pid[i].chi2_muon == 0.
+                ) {
+                    bSkipPFP = true;
+                    break;
                 }
+                fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
             }
-            fPrAverage = (iPrCount != 0) ? fPrAverage / iPrCount : fPrAverage;
+            if (bSkipPFP) continue;
 
             // Check full track is in FV
             if (!(bIsInFV(&pfp.trk.start) && bIsInFV(&pfp.trk.end))) continue;
@@ -184,7 +204,8 @@ namespace ana
     bool bNoShowers(const caf::SRSliceProxy* slc, std::vector<int> TaggedIDs) {
         for (auto const& pfp : slc -> reco.pfp) {
             if (std::find(TaggedIDs.begin(), TaggedIDs.end(), pfp.id) != TaggedIDs.end()) continue;
-            if (pfp.trackScore > 0.0 && pfp.trackScore < 0.5) return false;
+            if (pfp.trackScore == -5.f) continue; // clear cosmic
+            if (pfp.trackScore < 0.5) return false;
         }
         return true;
     }
