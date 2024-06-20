@@ -34,6 +34,7 @@ void Selection()
     // Create the binning schemes for the Vars we wish to plot.
     const Binning bPrimaryEnergy = Binning::Simple(20, 0, 3.0);
     const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
+    const Binning bDeltaAlphaBins = Binning::Simple(20, 0.0, 180.0);
 
     // We now create overlaid plots for several reconstructed variables and three lines:
     //     1. all selected reconstructed events
@@ -58,6 +59,18 @@ void Selection()
     // Recoil proton angle
     Vars.push_back(kRecoilProtonCosTheta); VarBins.push_back(bAngleBins);
     PlotNames.push_back("RecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
+
+    // Opening angle between protons
+    Vars.push_back(kCosOpeningAngleProtons); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("CosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
+
+    // Opening angle between muon and total proton
+    Vars.push_back(kCosOpeningAngleMuonTotalProton); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
+
+    // Delta alpha transverse
+    Vars.push_back(kDeltaAlphaT); VarBins.push_back(bDeltaAlphaBins);
+    PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
 
     // Spectrum with all true signal events
     Spectrum TrueSignals("TrueSignals", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut, kNoCut);
@@ -124,6 +137,7 @@ void Selection()
             double RecoEvents = RecoHisto->Integral();
             double BkgEvents  = RecoBkgHisto->Integral();
 
+            std::cout << std::endl;
             std::cout << "True events: " << TrueEvents << std::endl;
             std::cout << "Reconstructed events: " << RecoEvents << std::endl;
             std::cout << "Background events: " << BkgEvents << std::endl;

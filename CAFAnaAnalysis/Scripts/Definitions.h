@@ -1,11 +1,13 @@
 // SBNAna includes.
 #include "sbnanaobj/StandardRecord/Proxy/SRProxy.h"
 #include "sbnanaobj/StandardRecord/SRVector3D.h"
+#include "sbnanaobj/StandardRecord/SRTrack.h"
 #include "sbnana/CAFAna/Core/Var.h"
 #include "sbnana/CAFAna/Core/Cut.h"
 
 // Root includes.
 #include "TVector3.h"
+#include "TMath.h"
 
 // std includes.
 #include <vector>
@@ -201,11 +203,28 @@ namespace ana
 
     // Gets position vectors given the particle IDs
     std::tuple<TVector3, TVector3, TVector3> GetVectors(const caf::SRSliceProxy* slc, int MuonID, int ProtonID1, int ProtonID2) {
-        TVector3 Muon; TVector3 LeadingProton; TVector3 RecoilProton;
+        TVector3 Muon(1, 1, 1); 
+        TVector3 LeadingProton(1, 1, 1); 
+        TVector3 RecoilProton(1, 1, 1);
+        
         for (auto const& pfp : slc -> reco.pfp) {
-            if (pfp.id == MuonID) Muon.SetXYZ(pfp.trk.start.x, pfp.trk.start.y, pfp.trk.start.z);
-            if (pfp.id == ProtonID1) LeadingProton.SetXYZ(pfp.trk.start.x, pfp.trk.start.y, pfp.trk.start.z);
-            if (pfp.id == ProtonID2) RecoilProton.SetXYZ(pfp.trk.start.x, pfp.trk.start.y, pfp.trk.start.z);
+            if (pfp.id == MuonID) {
+                Muon.SetTheta(TMath::ACos(pfp.trk.costh));
+                Muon.SetPhi(pfp.trk.phi);
+                if (bIsInFV(&pfp.trk.end)) {
+                    Muon.SetMag(pfp.trk.rangeP.p_muon);
+                } else {
+                    Muon.SetMag(pfp.trk.mcsP.fwdP_muon);
+                }
+            } else if (pfp.id == ProtonID1) {
+                LeadingProton.SetTheta(TMath::ACos(pfp.trk.costh));
+                LeadingProton.SetPhi(pfp.trk.phi);
+                LeadingProton.SetMag(pfp.trk.rangeP.p_proton);
+            } else if (pfp.id == ProtonID2) {
+                RecoilProton.SetTheta(TMath::ACos(pfp.trk.costh));
+                RecoilProton.SetPhi(pfp.trk.phi);
+                RecoilProton.SetMag(pfp.trk.rangeP.p_proton);
+            }
         }
         return {Muon, LeadingProton, RecoilProton};
     }
@@ -220,7 +239,7 @@ namespace ana
         auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
         auto [Muon, LeadingProton, RecoilProton] = GetVectors(slc, MuonID, ProtonIDs.at(0), ProtonIDs.at(1));
 
-        // Use TwoPTools class
+        // Use helper class
         TwoPTools Helper(Muon, LeadingProton, RecoilProton);
 
         double MuonCosTheta = Helper.ReturnMuonCosTheta();
@@ -267,6 +286,20 @@ namespace ana
     // Recoil proton angle
     const Var kRecoilProtonCosTheta([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(2);
+    });
+
+    // Opening angle between protons
+    const Var kCosOpeningAngleProtons([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(3);
+    });
+
+    // Opening angle between muon and total proton
+    const Var kCosOpeningAngleMuonTotalProton([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(4);
+    });
+
+    const Var kDeltaAlphaT([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(5);
     });
 
     //////////////

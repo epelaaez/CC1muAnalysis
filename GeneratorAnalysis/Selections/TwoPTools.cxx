@@ -11,9 +11,7 @@ using namespace std;
 
 TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3 RecoilProtonVector) {
     // Swap lead and recoil protons to make sure lead has higher magnitude
-    if (RecoilProtonVector.Mag() > LeadingProtonVector.Mag()) { 
-        std::swap(LeadingProtonVector, RecoilProtonVector); 
-    }
+    if (RecoilProtonVector.Mag() > LeadingProtonVector.Mag()) std::swap(LeadingProtonVector, RecoilProtonVector); 
 
     // Momenta and theta variables
     fMuonMomentum = MuonVector.Mag();
