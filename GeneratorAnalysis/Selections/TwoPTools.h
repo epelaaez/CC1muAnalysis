@@ -14,6 +14,7 @@
 class TwoPTools {
     private: 
         double fMuonMomentum;
+        double fMuonCosTheta;
         double fLeadingProtonMomentum;
         double fLeadingProtonCosTheta;
         double fRecoilProtonMomentum;
@@ -32,6 +33,7 @@ class TwoPTools {
 
         // Getter functions
         double ReturnMuonMomentum();
+        double ReturnMuonCosTheta();
         double ReturnLeadingProtonMomentum();
         double ReturnLeadingProtonCosTheta();
         double ReturnRecoilProtonMomentum();

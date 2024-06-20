@@ -17,6 +17,7 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
 
     // Momenta and theta variables
     fMuonMomentum = MuonVector.Mag();
+    fMuonCosTheta = MuonVector.CosTheta();
     fLeadingProtonMomentum = LeadingProtonVector.Mag();
     fLeadingProtonCosTheta = LeadingProtonVector.CosTheta();
     fRecoilProtonMomentum = RecoilProtonVector.Mag();
@@ -46,6 +47,10 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
 
 double TwoPTools::ReturnMuonMomentum() {
     return fMuonMomentum;
+}
+
+double TwoPTools::ReturnMuonCosTheta() {
+    return fMuonCosTheta;
 }
 
 double TwoPTools::ReturnLeadingProtonMomentum() {

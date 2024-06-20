@@ -4,11 +4,17 @@
 #include "sbnana/CAFAna/Core/Var.h"
 #include "sbnana/CAFAna/Core/Cut.h"
 
+// Root includes.
+#include "TVector3.h"
+
 // std includes.
 #include <vector>
 #include <algorithm>
 #include <limits>
 #include <tuple>
+
+// Analysis includes.
+#include "../../GeneratorAnalysis/Selections/TwoPTools.cxx"
 
 namespace ana
 {
@@ -33,42 +39,13 @@ namespace ana
         {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
     };
 
-    ////////////// 
-    // Simple Vars
-    //////////////
-
-    // Primary energy
-    const Var kPrimaryEnergy = SIMPLEVAR(truth.E);
-
-    // True energy
-    const TruthVar kTrueEnergy = SIMPLETRUTHVAR(E);
-
-    // Longest track in a slice
-    const Var kLongestTrkLen([](const caf::SRSliceProxy* slc) -> float {
-        float len(-5.f);
-        for (auto const& pfp : slc->reco.pfp) {
-            if (pfp.trk.len > len) len = pfp.trk.len;
-        }
-        return len;
-    });
-
-    ////////////
-    // MultiVars
-    ////////////
-
-    // All track lengths from each slice
-    const MultiVar kAllTrkLen([](const caf::SRSliceProxy* slc) -> std::vector<double> {
-        std::vector<double> len;
-        for (auto const& pfp : slc->reco.pfp) len.push_back(pfp.trk.len);
-        return len;
-    });
-
     //////////////
     // Functions
     //////////////
 
     // Check vector is in fiducial volume
     bool bIsInFV(const caf::Proxy<caf::SRVector3D>* data) {
+        if (std::isnan(data->x) || std::isnan(data->y) || std::isnan(data->z)) return false;
         return (
             (data->x > fFVXMin) && (data->x < fFVXMax) &&
             (data->y > fFVYMin) && (data->y < fFVYMax) &&
@@ -119,8 +96,16 @@ namespace ana
             
             // Check start point is in FV and assign momentum based on end point
             if (!bIsInFV(&pfp.trk.start)) continue;
-            float fMomentum = bIsInFV(&pfp.trk.end) ? pfp.trk.rangeP.p_muon : pfp.trk.mcsP.fwdP_muon;
+
+            float fMomentum;
+            if (!bIsInFV(&pfp.trk.end)) {
+                if (std::isnan(pfp.trk.mcsP.fwdP_muon)) continue;
+                fMomentum = pfp.trk.mcsP.fwdP_muon;
+            } else {
+                fMomentum = pfp.trk.rangeP.p_muon;
+            }
             
+            if (std::isnan(pfp.trk.len)) continue;
             if (
                 fMuAverage < fMuCutMuScore && 
                 fPrAverage > fMuCutPrScore && 
@@ -210,8 +195,103 @@ namespace ana
         return true;
     }
 
+    ////////////
+    // MultiVars
+    ////////////
+
+    // Gets position vectors given the particle IDs
+    std::tuple<TVector3, TVector3, TVector3> GetVectors(const caf::SRSliceProxy* slc, int MuonID, int ProtonID1, int ProtonID2) {
+        TVector3 Muon; TVector3 LeadingProton; TVector3 RecoilProton;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.id == MuonID) Muon.SetXYZ(pfp.trk.start.x, pfp.trk.start.y, pfp.trk.start.z);
+            if (pfp.id == ProtonID1) LeadingProton.SetXYZ(pfp.trk.start.x, pfp.trk.start.y, pfp.trk.start.z);
+            if (pfp.id == ProtonID2) RecoilProton.SetXYZ(pfp.trk.start.x, pfp.trk.start.y, pfp.trk.start.z);
+        }
+        return {Muon, LeadingProton, RecoilProton};
+    }
+
+    // Contains all variables we are interested in
+    const MultiVar kVars([](const caf::SRSliceProxy* slc) -> std::vector<double> {
+        std::vector<double> vars; 
+
+        // Get IDs for tagged particles
+        std::vector<int> TaggedIDs;
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        auto [Muon, LeadingProton, RecoilProton] = GetVectors(slc, MuonID, ProtonIDs.at(0), ProtonIDs.at(1));
+
+        // Use TwoPTools class
+        TwoPTools Helper(Muon, LeadingProton, RecoilProton);
+
+        double MuonCosTheta = Helper.ReturnMuonCosTheta();
+        vars.push_back(MuonCosTheta);
+
+        double LeadingProtonCosTheta = Helper.ReturnLeadingProtonCosTheta();
+        vars.push_back(LeadingProtonCosTheta);
+
+        double RecoilProtonCosTheta = Helper.ReturnRecoilProtonCosTheta();
+        vars.push_back(RecoilProtonCosTheta);
+
+        double CosOpeningAngleProtons = Helper.ReturnCosOpeningAngleProtons();
+        vars.push_back(CosOpeningAngleProtons);
+
+        double CosOpeningAngleMuonTotalProton = Helper.ReturnCosOpeningAngleMuonTotalProton();
+        vars.push_back(CosOpeningAngleMuonTotalProton);
+
+        double DeltaAlphaT = Helper.ReturnDeltaAlphaT();
+        vars.push_back(DeltaAlphaT);
+
+        return vars;
+    });
+
+    ////////////// 
+    // Vars
     //////////////
-    // Simple Cuts
+
+    // Primary energy
+    const Var kPrimaryEnergy = SIMPLEVAR(truth.E);
+
+    // True energy
+    const TruthVar kTrueEnergy = SIMPLETRUTHVAR(E);
+
+    // Muon angle
+    const Var kMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(0);
+    });
+
+    // Leading proton angle
+    const Var kLeadingProtonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(1);
+    });
+
+    // Recoil proton angle
+    const Var kRecoilProtonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(2);
+    });
+
+    //////////////
+    // Truth Cuts
+    //////////////
+
+    const TruthCut kTruthIsSignal([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) && // check position is in fiducial volume
+            nu->iscc &&               // check it is charged current interaction
+            nu->pdg == 14 &&          // check neutrino is muon neutrino
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 2 && // check for two protons
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pions
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pions
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kTruthNoSignal([](const caf::SRTrueInteractionProxy* nu) {
+        return !kTruthIsSignal(nu);
+    });
+
+    //////////////
+    // Cuts
     //////////////
 
     // Check fmatch is in beam
@@ -254,37 +334,11 @@ namespace ana
         return true;
     });
 
-    //////////////
-    // Truth Cuts
-    //////////////
-
-    const TruthCut kTruthIsSignal([](const caf::SRTrueInteractionProxy* nu) {
-        return (
-            bIsInFV(&nu->position) && // check position is in fiducial volume
-            nu->iscc &&               // check it is charged current interaction
-            nu->pdg == 14 &&          // check neutrino is muon neutrino
-            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
-            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 2 && // check for two protons
-            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pions
-            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pions
-            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
-        );
+    const Cut kRecoIsTrueReco([](const caf::SRSliceProxy* slc) {
+        return (kRecoIsSignal(slc) && kTruthIsSignal(&slc->truth));
     });
 
-    const TruthCut kTruthNoSignal([](const caf::SRTrueInteractionProxy* nu) {
-        return !kTruthIsSignal(nu);
-    });
-
-    ////////////
-    // SpillCuts
-    ////////////
-  
-    // A simple CRT hit veto.
-    const SpillCut kCRTHitVeto([](const caf::SRSpillProxy* sr){
-        for (auto const& crtHit: sr->crt_hits) {
-            auto thistime = crtHit.time - 1600.; // manually shift to bring beam spill start to zero
-            if (thistime > -0.1 && thistime < 1.8 && crtHit.pe > 100) return false;
-        }
-        return true;
+    const Cut kRecoIsBackground([](const caf::SRSliceProxy* slc) {
+        return (kRecoIsSignal(slc) && kTruthNoSignal(&slc->truth));
     });
 }

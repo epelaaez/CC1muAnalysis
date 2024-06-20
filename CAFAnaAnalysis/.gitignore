@@ -12,7 +12,7 @@ __pycache__/
 *.d
 *.so
 *.pcm
-Selection_C_ACLiC*.h
+Selection_C_ACLiC*
 
 # sbnana local build
 v09_75_03/
