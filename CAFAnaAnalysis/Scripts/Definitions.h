@@ -260,6 +260,18 @@ namespace ana
         double DeltaAlphaT = Helper.ReturnDeltaAlphaT();
         vars.push_back(DeltaAlphaT);
 
+        double TransverseMomentum = Helper.ReturnTransverseMomentum();
+        vars.push_back(TransverseMomentum);
+
+        double MuonMomentum = Helper.ReturnMuonMomentum();
+        vars.push_back(MuonMomentum);
+
+        double LeadingProtonMomentum = Helper.ReturnLeadingProtonMomentum();
+        vars.push_back(LeadingProtonMomentum);
+
+        double RecoilProtonMomentum = Helper.ReturnRecoilProtonMomentum();
+        vars.push_back(RecoilProtonMomentum);
+
         return vars;
     });
 
@@ -298,8 +310,29 @@ namespace ana
         return kVars(slc).at(4);
     });
 
+    // Delta alpha transverse
     const Var kDeltaAlphaT([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(5);
+    });
+
+    // Transverse momentum
+    const Var kTransverseMomentum([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(6);
+    });
+
+    // Muon momentum
+    const Var kMuonMomentum([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(7);
+    });
+
+    // Leading proton momentum
+    const Var kLeadingProtonMomentum([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(8);
+    });
+
+    // Muon momentum
+    const Var kRecoilProtonMomentum([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(9);
     });
 
     //////////////

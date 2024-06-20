@@ -35,6 +35,9 @@ void Selection()
     const Binning bPrimaryEnergy = Binning::Simple(20, 0, 3.0);
     const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
     const Binning bDeltaAlphaBins = Binning::Simple(20, 0.0, 180.0);
+    const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
+    const Binning bMuonMomentumBins = Binning::Simple(20, 0.1, 1.2);
+    const Binning bProtonMomentumBins = Binning::Simple(20, 0.3, 1.0);
 
     // We now create overlaid plots for several reconstructed variables and three lines:
     //     1. all selected reconstructed events
@@ -71,6 +74,22 @@ void Selection()
     // Delta alpha transverse
     Vars.push_back(kDeltaAlphaT); VarBins.push_back(bDeltaAlphaBins);
     PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
+
+    // Transverse momentum
+    Vars.push_back(kTransverseMomentum); VarBins.push_back(bTransverseMomentumBins);
+    PlotNames.push_back("TransverseMomentum"); VarLabels.push_back("#delta P_{T}");
+
+    // Muon momentum 
+    Vars.push_back(kMuonMomentum); VarBins.push_back(bMuonMomentumBins);
+    PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
+
+    // Leading proton momentum 
+    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
+
+    // Recoil proton momentum 
+    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     // Spectrum with all true signal events
     Spectrum TrueSignals("TrueSignals", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut, kNoCut);
