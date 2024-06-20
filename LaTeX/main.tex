@@ -206,12 +206,12 @@ Using the reconstructed event data, we can perform a \verb|Cut| that checks the 
     \item That there are no other reconstructed tracks with momentum in the allowed range for charged pions
     \item That there are no reconstructed particles with a positive \verb|trackScore| less than 0.5, so we don't allow any neutral pions
 \end{enumerate}
-Using these two discriminators on simulated events, we can get the true signal events, the reconstructed events that satisfy the signal definition, and background events that were reconstructed to satisfy the signal definition but are not true signal events. This is shown in Figure~\ref{fig:truth-match-signal-def}.
+Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events. This is shown in Figure~\ref{fig:truth-match-signal-def}, where the variable plotted is $\cos(\theta_{\vec{p}_{\mu}})$.
 
 \begin{figure}
     \centering
-    \includegraphics[width=5in]{Figs/CAFAna/SignalDefinitionEnergy.png}
-    \caption{True, reconstructed, and background events for 2p0pi signal}
+    \includegraphics[width=5in]{Figs/CAFAna/MuonCosTheta.png}
+    \caption{Reconstructed signal and background events for 2p0pi signal}
     \label{fig:truth-match-signal-def}
 \end{figure}
 
