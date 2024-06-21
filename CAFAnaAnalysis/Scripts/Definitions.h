@@ -15,8 +15,12 @@
 #include <limits>
 #include <tuple>
 
-// Analysis includes.
+// Generator analysis includes.
 #include "../../GeneratorAnalysis/Selections/TwoPTools.cxx"
+#include "../../GeneratorAnalysis/Utils/Tools.cxx"
+#include "../../GeneratorAnalysis/Scripts/Constants.h"
+
+using namespace Constants;
 
 namespace ana
 {
@@ -335,6 +339,72 @@ namespace ana
         return kVars(slc).at(9);
     });
 
+    ////////////////////////////////
+    // Double differential variables
+    ////////////////////////////////
+
+    Tools tools; // tools for double differential variables
+
+    // All variables are in muon cos theta
+
+    // Transverse momentum
+    const Var kTransverseMomentumInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fTransverseMomentum = kTransverseMomentum(slc);
+
+        if (fTransverseMomentum < TwoDArrayTransverseMomentum[0]) { fTransverseMomentum = (TwoDArrayTransverseMomentum[0] + TwoDArrayTransverseMomentum[1]) / 2.; }
+        else if (fTransverseMomentum > TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum]) { fTransverseMomentum = (TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum] + TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialTransverseMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fTransverseMomentum
+        );
+        return SerialTransverseMomentumInMuonCosThetaIndex;
+    });
+
+    // Delta alpha transverse
+    const Var kDeltaAlphaTInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fDeltaAlphaT = kDeltaAlphaT(slc);
+
+        if (fDeltaAlphaT < TwoDArrayDeltaAlphaT[0]) { fDeltaAlphaT = (TwoDArrayDeltaAlphaT[0] + TwoDArrayDeltaAlphaT[1]) / 2.; }
+        else if (fDeltaAlphaT > TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT]) { fDeltaAlphaT = (TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT] + TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialDeltaAlphaTInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fDeltaAlphaT
+        );
+        return SerialDeltaAlphaTInMuonCosThetaIndex;
+    });
+
+    // Opening angle between protons
+    const Var kCosOpeningAngleProtonsInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fCosOpeningAngleProtons = kCosOpeningAngleProtons(slc);
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialCosOpeningAngleProtonsInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fCosOpeningAngleProtons
+        );
+        return SerialCosOpeningAngleProtonsInMuonCosThetaIndex;
+    });
+
+    // Opening angle betwen muon and total proton
+    const Var kCosOpeningAngleMuonTotalProtonInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fCosOpeningAngleMuonTotalProton = kCosOpeningAngleMuonTotalProton(slc);
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fCosOpeningAngleMuonTotalProton
+        );
+        return SerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex;
+    });
+
     //////////////
     // Truth Cuts
     //////////////
@@ -354,6 +424,14 @@ namespace ana
 
     const TruthCut kTruthNoSignal([](const caf::SRTrueInteractionProxy* nu) {
         return !kTruthIsSignal(nu);
+    });
+
+    const TruthCut kValidEnergyTruthCut([](const caf::SRTrueInteractionProxy* nu) {
+        return !std::isnan(nu->E);
+    });
+
+    const TruthCut kTruthIsSignalAndEnergy([](const caf::SRTrueInteractionProxy* nu) {
+        return (kTruthIsSignal(nu) && kValidEnergyTruthCut(nu));
     });
 
     //////////////
@@ -445,8 +523,12 @@ namespace ana
     //     5. No charged pions cut
     //     6. No neutral pions cut
 
+    const Cut kValidEnergyCut([](const caf::SRSliceProxy* slc) {
+        return !std::isnan(slc->truth.E);
+    });
+
     const Cut kFirstCut([](const caf::SRSliceProxy* slc) {
-        return (kCosmicCut(slc));
+        return (kCosmicCut(slc) && kValidEnergyCut(slc));
     });
     const Cut kFirstCutTrue([](const caf::SRSliceProxy* slc) {
         return (kCosmicCut(slc) && kTruthIsSignal(&slc->truth));

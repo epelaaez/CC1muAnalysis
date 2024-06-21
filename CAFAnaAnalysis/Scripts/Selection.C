@@ -21,6 +21,7 @@
 
 using namespace std;
 using namespace ana;
+using namespace Constants;
 
 void Selection()
 {
@@ -38,6 +39,22 @@ void Selection()
     const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
     const Binning bMuonMomentumBins = Binning::Simple(20, 0.1, 1.2);
     const Binning bProtonMomentumBins = Binning::Simple(20, 0.3, 1.0);
+
+    // Double differential bins
+    Tools tools; // tools for double differential bins
+
+    const Binning bTransverseMomentumInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices)
+    );
+    const Binning bDeltaAlphaTInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices)
+    );
+    const Binning bCosOpeningAngleProtonsInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices)
+    );
+    const Binning bCosOpeningAngleMuonTotalProtonInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)
+    );
 
     // We now create overlaid plots for several reconstructed variables and three lines:
     //     1. all selected reconstructed events
@@ -91,6 +108,22 @@ void Selection()
     Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
+    // Serial transverse momentum in muon cos theta
+    Vars.push_back(kTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
+    PlotNames.push_back("TransverseMomentumInMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
+
+    // Delta alpha transverse in muon cos theta
+    Vars.push_back(kDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
+    PlotNames.push_back("DeltaAlphaTInMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
+
+    // Opening angle between protons in muon cos theta
+    Vars.push_back(kCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
+    PlotNames.push_back("CosOpeningAngleProtonsInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
+    
+    // Opening angle between muon and protons in muon cos theta
+    Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
+    PlotNames.push_back("CosOpeningAngleMuonTotalProtonInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
+
     // Construct all spectra
     std::vector<std::tuple<
         std::unique_ptr<Spectrum>,
@@ -108,13 +141,13 @@ void Selection()
     // These spectra are going to use the primary energy as a variable
 
     // Spectrum with all events
-    Spectrum sAllEvents("AllEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kNoTruthCut, kNoSpillCut);
+    Spectrum sAllEvents("AllEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kValidEnergyTruthCut, kNoSpillCut);
     // Spectrum with all reco events
-    Spectrum sAllRecoEvents("AllRecoEvents", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kNoCut);
+    Spectrum sAllRecoEvents("AllRecoEvents", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kValidEnergyCut);
     // Spectrum with all true signal events
-    Spectrum sAllTrueEvents("AllTrueEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut);
+    Spectrum sAllTrueEvents("AllTrueEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignalAndEnergy, kNoSpillCut);
     // Spectrum with all true signal events that were reconstructed
-    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut, kNoCut);
+    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignalAndEnergy, kNoSpillCut, kNoCut);
     // Spectrum with first cut (cosmic)
     Spectrum sFirstCut("FirstCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCut);
     Spectrum sFirstCutTrue("FirstCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCutTrue);
