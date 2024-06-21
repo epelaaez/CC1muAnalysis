@@ -365,20 +365,24 @@ namespace ana
         return ((slc->fmatch.time > 0.) && (slc->fmatch.time < 1.800));
     });
 
-    // Check reconstructed event is signal
-    const Cut kRecoIsSignal([](const caf::SRSliceProxy* slc) {
-        std::vector<int> TaggedIDs;
-
-        // Check neutrino vertex is in fiducial volume
-        if (!bIsInFV(&slc->vertex)) return false;
-
-        // Reject cosmic events
-        if (!(
+    const Cut kCosmicCut([](const caf::SRSliceProxy* slc) {
+        return (
             slc->nu_score > 0.4 &&     // check how neutrino like slice is
             slc->fmatch.score < 7.0 && // check flash match score
             slc->fmatch.time > 0. &&   // check flash is in beam
             slc->fmatch.time < 1.8
-        )) return false; 
+        );
+    });
+
+    // Check reconstructed event is signal
+    const Cut kRecoIsSignal([](const caf::SRSliceProxy* slc) {
+        std::vector<int> TaggedIDs;
+
+        // Reject cosmic events
+        if (!kCosmicCut(slc)) return false; 
+
+        // Check neutrino vertex is in fiducial volume
+        if (!bIsInFV(&slc->vertex)) return false;
 
         // Check there is one muon in signal
         auto [OneMuon, MuonID] = bOneMuon(slc);
@@ -430,5 +434,106 @@ namespace ana
 
     const Cut kTrueSignal([](const caf::SRSliceProxy* slc) {
         return (kNoInvalidVariables(slc) && kTruthIsSignal(&slc->truth));
+    });
+
+    // These cuts cumulatively reconstruct kRecoIsSignal, to compute cut
+    // efficiencies and purity. The cuts are applied in the following order:
+    //     1. Cosmic cut
+    //     2. Neutrino vertex in fiducial volume cut
+    //     3. One muon cut
+    //     4. Two protons cut
+    //     5. No charged pions cut
+    //     6. No neutral pions cut
+
+    const Cut kFirstCut([](const caf::SRSliceProxy* slc) {
+        return (kCosmicCut(slc));
+    });
+    const Cut kFirstCutTrue([](const caf::SRSliceProxy* slc) {
+        return (kCosmicCut(slc) && kTruthIsSignal(&slc->truth));
+    });
+
+    const Cut kSecondCut([](const caf::SRSliceProxy* slc) {
+        return (kFirstCut(slc) && bIsInFV(&slc->vertex));
+    });
+    const Cut kSecondCutTrue([](const caf::SRSliceProxy* slc) {
+        return (kFirstCut(slc) && bIsInFV(&slc->vertex) && kTruthIsSignal(&slc->truth));
+    });
+
+    const Cut kThirdCut([](const caf::SRSliceProxy* slc) {
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        return (OneMuon && kSecondCut(slc));
+    });
+    const Cut kThirdCutTrue([](const caf::SRSliceProxy* slc) {
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        return (OneMuon && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+    });
+
+    const Cut kFourthCut([](const caf::SRSliceProxy* slc) {
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        if (!OneMuon) return false;
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        
+        return (TwoProtons && kSecondCut(slc)); 
+    });
+    const Cut kFourthCutTrue([](const caf::SRSliceProxy* slc) {
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        if (!OneMuon) return false;
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        
+        return (TwoProtons && kSecondCut(slc) && kTruthIsSignal(&slc->truth)); 
+    });
+
+    const Cut kFifthCut([](const caf::SRSliceProxy* slc) {
+        std::vector<int> TaggedIDs;
+
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        if (!OneMuon) return false;
+        TaggedIDs.push_back(MuonID);
+
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        if (!TwoProtons) return false;
+        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
+
+        return (bNoChargedPions(slc, TaggedIDs) && kSecondCut(slc));
+    });
+    const Cut kFifthCutTrue([](const caf::SRSliceProxy* slc) {
+        std::vector<int> TaggedIDs;
+
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        if (!OneMuon) return false;
+        TaggedIDs.push_back(MuonID);
+
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        if (!TwoProtons) return false;
+        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
+
+        return (bNoChargedPions(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+    });
+
+    const Cut kSixthCut([](const caf::SRSliceProxy* slc) {
+        std::vector<int> TaggedIDs;
+
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        if (!OneMuon) return false;
+        TaggedIDs.push_back(MuonID);
+
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        if (!TwoProtons) return false;
+        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
+
+        return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc));
+    });
+    const Cut kSixthCutTrue([](const caf::SRSliceProxy* slc) {
+        std::vector<int> TaggedIDs;
+
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        if (!OneMuon) return false;
+        TaggedIDs.push_back(MuonID);
+
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        if (!TwoProtons) return false;
+        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
+
+        return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
     });
 }

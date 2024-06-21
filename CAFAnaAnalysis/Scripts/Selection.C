@@ -91,9 +91,6 @@ void Selection()
     Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
-    // Spectrum with all true signal events
-    Spectrum TrueSignals("TrueSignals", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut, kNoCut);
-
     // Construct all spectra
     std::vector<std::tuple<
         std::unique_ptr<Spectrum>,
@@ -106,6 +103,40 @@ void Selection()
         auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsBackground); 
         Spectra.push_back({std::move(RecoSignals), std::move(RecoTrueSignals), std::move(RecoBkgSignals)});
     }
+
+    // We now create spectra that will help us get the efficiency and purity data for each of the cuts
+    // These spectra are going to use the primary energy as a variable
+
+    // Spectrum with all events
+    Spectrum sAllEvents("AllEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kNoTruthCut, kNoSpillCut);
+    // Spectrum with all reco events
+    Spectrum sAllRecoEvents("AllRecoEvents", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kNoCut);
+    // Spectrum with all true signal events
+    Spectrum sAllTrueEvents("AllTrueEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut);
+    // Spectrum with all true signal events that were reconstructed
+    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignal, kNoSpillCut, kNoCut);
+    // Spectrum with first cut (cosmic)
+    Spectrum sFirstCut("FirstCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCut);
+    Spectrum sFirstCutTrue("FirstCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCutTrue);
+    // Spectrum with second cut (cosmic and vertex FV)
+    Spectrum sSecondCut("SecondCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSecondCut);
+    Spectrum sSecondCutTrue("SecondCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSecondCutTrue);
+    // Spectrum with second cut (cosmic, vertex FV, and one muon)
+    Spectrum sThirdCut("ThirdCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kThirdCut);
+    Spectrum sThirdCutTrue("ThirdCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kThirdCutTrue);
+    // Spectrum with second cut (cosmic, vertex FV, one muon, and two protons)
+    Spectrum sFourthCut("FourthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFourthCut);
+    Spectrum sFourthCutTrue("FourthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFourthCutTrue);
+    // Spectrum with second cut (cosmic, vertex FV, one muon, two protons, and no charged pions)
+    Spectrum sFifthCut("FifthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFifthCut);
+    Spectrum sFifthCutTrue("FifthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFifthCutTrue);
+    // Spectrum with second cut (cosmic, vertex FV, one muon, two protons, no charged pions, and no neutral pions)
+    Spectrum sSixthCut("SixthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSixthCut);
+    Spectrum sSixthCutTrue("SixthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSixthCutTrue);
+    // Spectrum with overall signal definition to sanity check it matches
+    Spectrum sRecoSignal("RecoSignal", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kRecoIsSignal); 
+    Spectrum sRecoTrueSignal("RecoTrueSignal", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kRecoIsTrueReco); 
+
     NuLoader.Go();
 
     // Loop over variables
@@ -148,20 +179,74 @@ void Selection()
 
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/"+PlotNames[i]+".png");
         delete PlotCanvas;
-
-        if (i == (Vars.size() - 1)) {
-            // We can get efficienty and purity data with last histograms
-            TH1D* TrueHisto = TrueSignals.ToTH1(TargetPOT);
-            double TrueEvents = TrueHisto->Integral();
-            double RecoEvents = RecoHisto->Integral();
-            double BkgEvents  = RecoBkgHisto->Integral();
-
-            std::cout << std::endl;
-            std::cout << "True events: " << TrueEvents << std::endl;
-            std::cout << "Reconstructed events: " << RecoEvents << std::endl;
-            std::cout << "Background events: " << BkgEvents << std::endl;
-            std::cout << "Efficiency (reco / total): " << RecoEvents / TrueEvents << std::endl;
-            std::cout << "Purity (1 - bkg / reco): " << 1 - (BkgEvents / RecoEvents) << std::endl;
-        }
     }
+
+    // Get histograms for all cuts
+    TH1D* AllEventsHisto = sAllEvents.ToTH1(TargetPOT);
+    TH1D* AllRecoEventsHisto = sAllRecoEvents.ToTH1(TargetPOT);
+    TH1D* AllTrueEventsHisto = sAllTrueEvents.ToTH1(TargetPOT);
+    TH1D* AllTrueRecoEventsHisto = sAllTrueRecoEvents.ToTH1(TargetPOT);
+
+    TH1D* FirstCutHisto = sFirstCut.ToTH1(TargetPOT);
+    TH1D* FirstCutTrueHisto = sFirstCutTrue.ToTH1(TargetPOT);
+
+    TH1D* SecondCutHisto = sSecondCut.ToTH1(TargetPOT);
+    TH1D* SecondCutTrueHisto = sSecondCutTrue.ToTH1(TargetPOT);
+
+    TH1D* ThirdCutHisto = sThirdCut.ToTH1(TargetPOT);
+    TH1D* ThirdCutTrueHisto = sThirdCutTrue.ToTH1(TargetPOT);
+
+    TH1D* FourthCutHisto = sFourthCut.ToTH1(TargetPOT);
+    TH1D* FourthCutTrueHisto = sFourthCutTrue.ToTH1(TargetPOT);
+
+    TH1D* FifthCutHisto = sFifthCut.ToTH1(TargetPOT);
+    TH1D* FifthCutTrueHisto = sFifthCutTrue.ToTH1(TargetPOT);
+
+    TH1D* SixthCutHisto = sSixthCut.ToTH1(TargetPOT);
+    TH1D* SixthCutTrueHisto = sSixthCutTrue.ToTH1(TargetPOT);
+
+    TH1D* RecoSignalHisto = sRecoSignal.ToTH1(TargetPOT);
+    TH1D* RecoTrueSignalHisto = sRecoTrueSignal.ToTH1(TargetPOT);
+
+    // Get integrals for all cuts
+    double AllEventsInt = AllEventsHisto->Integral("width");
+    double AllRecoEventsInt = AllRecoEventsHisto->Integral("width");
+    double AllTrueEventsInt = AllTrueEventsHisto->Integral("width");
+    double AllTrueRecoEventsInt = AllTrueRecoEventsHisto->Integral("width");
+
+    double FirstCutInt = FirstCutHisto->Integral("width");
+    double FirstCutTrueInt = FirstCutTrueHisto->Integral("width");
+
+    double SecondCutInt = SecondCutHisto->Integral("width");
+    double SecondCutTrueInt = SecondCutTrueHisto->Integral("width");
+
+    double ThirdCutInt = ThirdCutHisto->Integral("width");
+    double ThirdCutTrueInt = ThirdCutTrueHisto->Integral("width");
+
+    double FourthCutInt = FourthCutHisto->Integral("width");
+    double FourthCutTrueInt = FourthCutTrueHisto->Integral("width");
+
+    double FifthCutInt = FifthCutHisto->Integral("width");
+    double FifthCutTrueInt = FifthCutTrueHisto->Integral("width");
+
+    double SixthCutInt = SixthCutHisto->Integral("width");
+    double SixthCutTrueInt = SixthCutTrueHisto->Integral("width");
+
+    double RecoSignalInt = RecoSignalHisto->Integral("width");
+    double RecoTrueSignalInt = RecoTrueSignalHisto->Integral("width");
+
+    // Print results
+    std::cout << "================================" << std::endl;
+    std::cout << "All events: " << AllEventsInt << std::endl;
+    std::cout << "Reconstructed events: " << AllRecoEventsInt << std::endl;
+    std::cout << "True signal events: " << AllTrueEventsInt << std::endl;
+    std::cout << "True signal events that were reconstructed: " << AllTrueRecoEventsInt << std::endl;
+    std::cout << "Cuts: " << std::endl;
+    std::cout << "    Cosmic cut: " << FirstCutInt << ". G.E: " <<  (FirstCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FirstCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (FirstCutTrueInt / FirstCutInt) * 100. << std::endl;
+    std::cout << "    Vertex in FV cut: " << SecondCutInt << ". G.E: " <<  (SecondCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (SecondCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (SecondCutTrueInt / SecondCutInt) * 100. << std::endl;
+    std::cout << "    One muon cut: " << ThirdCutInt << ". G.E: " <<  (ThirdCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (ThirdCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (ThirdCutTrueInt / ThirdCutInt) * 100. << std::endl;
+    std::cout << "    Two protons cut: " << FourthCutInt << ". G.E: " <<  (FourthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FourthCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (FourthCutTrueInt / FourthCutInt) * 100. << std::endl;
+    std::cout << "    No charged pions cut: " << FifthCutInt << ". G.E: " <<  (FifthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FifthCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (FifthCutTrueInt / FifthCutInt) * 100. << std::endl;
+    std::cout << "    No neutral pions cut: " << SixthCutInt << ". G.E: " <<  (SixthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (SixthCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (SixthCutTrueInt / SixthCutInt) * 100. << std::endl;
+    std::cout << "Reconstructed events satisfying signal definition: " << RecoSignalInt << ". Purity: " << (RecoTrueSignalInt / RecoSignalInt) * 100. << std::endl;
 }
