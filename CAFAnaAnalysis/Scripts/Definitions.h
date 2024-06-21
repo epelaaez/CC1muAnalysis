@@ -70,7 +70,7 @@ namespace ana
     // Looks for a muon track and gets its PID
     std::tuple<bool, int> bOneMuon(const caf::SRSliceProxy* slc) {
         // Momentum range for muons
-        float lb = std::get<0>(PDGToThreshold.at(13)); 
+        float lb = std::get<0>(PDGToThreshold.at(13));
         float ub = std::get<1>(PDGToThreshold.at(13));
 
         std::vector<int> CandidateMuons;
@@ -109,10 +109,10 @@ namespace ana
             
             if (std::isnan(pfp.trk.len)) continue;
             if (
-                fMuAverage < fMuCutMuScore && 
-                fPrAverage > fMuCutPrScore && 
+                fMuAverage < fMuCutMuScore &&
+                fPrAverage > fMuCutPrScore &&
                 pfp.trk.len > fMuCutLength &&
-                fMomentum > lb && 
+                fMomentum > lb &&
                 fMomentum < ub
             ) {
                 CandidateMuons.push_back(pfp.id);
@@ -406,5 +406,29 @@ namespace ana
 
     const Cut kRecoIsBackground([](const caf::SRSliceProxy* slc) {
         return (kRecoIsSignal(slc) && kTruthNoSignal(&slc->truth));
+    });
+
+    const Cut kNoInvalidVariables([](const caf::SRSliceProxy* slc) {
+        if (std::isnan(slc->vertex.x) || std::isnan(slc->vertex.y) || std::isnan(slc->vertex.z)) return false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (std::isnan(pfp.trk.start.x) || std::isnan(pfp.trk.start.y) || std::isnan(pfp.trk.start.z)) return false;
+            if (std::isnan(pfp.trk.end.x)   || std::isnan(pfp.trk.end.y)   || std::isnan(pfp.trk.end.z)) return false;
+            if (std::isnan(pfp.trk.len)) return false;
+            if (std::isnan(pfp.trk.mcsP.fwdP_muon) || std::isnan(pfp.trk.rangeP.p_muon)) return false;
+
+            for (int i = 0; i < 3; i++) {
+                if (
+                    std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                    pfp.trk.chi2pid[i].chi2_muon == 0. ||
+                    std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                    pfp.trk.chi2pid[i].chi2_proton == 0.
+                ) return false;
+            }
+        }
+        return true;
+    });
+
+    const Cut kTrueSignal([](const caf::SRSliceProxy* slc) {
+        return (kNoInvalidVariables(slc) && kTruthIsSignal(&slc->truth));
     });
 }
