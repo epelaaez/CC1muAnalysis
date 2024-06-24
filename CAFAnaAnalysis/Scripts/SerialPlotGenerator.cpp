@@ -48,11 +48,23 @@ void SerialPlotGenerator() {
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
-
     const int NPlots = PlotNames.size();
+
+    // Samples for each plot (all reco, reco true, bkg)
+    std::vector<TString> SampleNames; std::vector<TString> Labels; std::vector<int> Colors;
+    SampleNames.push_back("_reco"); Labels.push_back("Reconstructed"); Colors.push_back(kBlue+2);
+    SampleNames.push_back("_true"); Labels.push_back("True"); Colors.push_back(kRed+1);
+    SampleNames.push_back("_bkg"); Labels.push_back("Background"); Colors.push_back(kOrange+7);
+
+    const int NSamples = SampleNames.size();
+
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
-        // Load histogram with serial plot
-        TH1D* TrueHisto(File->Get<TH1D>(PlotNames.at(iPlot)));
+        // Load true plots
+        std::vector<TH1D*> TruePlots; TruePlots.resize(NSamples);
+        for (int iSample = 0; iSample < NSamples; iSample++) {
+            TString PlotName = PlotNames[iPlot] + SampleNames[iSample];
+            TruePlots[iSample] = (TH1D*)(File->Get<TH1D>(PlotName));
+        }
         
         // Flatten out double differential plots
         auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
@@ -60,8 +72,11 @@ void SerialPlotGenerator() {
         int StartIndex = 0;
 
         // Create vector to store deserialize plots
-        std::vector<TH1D*> Histos;
+        std::vector<std::vector<TH1D*>> Histos;
         Histos.resize(NSlices);
+        for (int iSlice = 0; iSlice < NSlices; iSlice++) {
+            Histos[iSlice].resize(NSamples);
+        }
 
         // Loop over slices
         for (int iSlice = 0; iSlice < NSlices; iSlice++) {
@@ -91,41 +106,50 @@ void SerialPlotGenerator() {
             leg->SetNColumns(2);
             leg->SetTextSize(TextSize*0.8);
             leg->SetTextFont(FontStyle);
-            
-            Histos[iSlice]= tools.GetHistoBins(
-                    TrueHisto,
+
+            for (int iSample = 0; iSample < NSamples; iSample++) {
+                Histos[iSlice][iSample]= tools.GetHistoBins(
+                    TruePlots[iSample],
                     SerialVectorLowBin.at(iSlice),
                     SerialVectorHighBin.at(iSlice),
                     SliceWidth,
                     SerialSliceBinning,
-                    "SBND"
+                    Labels[iSample]
                 );
-            Histos[iSlice]->SetLineWidth(4);
-            Histos[iSlice]->SetLineColor(602); // blue
+                Histos[iSlice][iSample]->SetLineWidth(4);
+                Histos[iSlice][iSample]->SetLineColor(Colors.at(iSample));
 
-            Histos[iSlice]->GetXaxis()->SetTitleFont(FontStyle);
-            Histos[iSlice]->GetXaxis()->SetLabelFont(FontStyle);
-            Histos[iSlice]->GetXaxis()->SetNdivisions(8);
-            Histos[iSlice]->GetXaxis()->SetLabelSize(TextSize);
-            Histos[iSlice]->GetXaxis()->SetTitle(XAxisLabel.at(iPlot));
-            Histos[iSlice]->GetXaxis()->SetTitleSize(TextSize);
-            Histos[iSlice]->GetXaxis()->SetTitleOffset(1.1);
-            Histos[iSlice]->GetXaxis()->CenterTitle();
+                Histos[iSlice][iSample]->GetXaxis()->SetTitleFont(FontStyle);
+                Histos[iSlice][iSample]->GetXaxis()->SetLabelFont(FontStyle);
+                Histos[iSlice][iSample]->GetXaxis()->SetNdivisions(8);
+                Histos[iSlice][iSample]->GetXaxis()->SetLabelSize(TextSize);
+                Histos[iSlice][iSample]->GetXaxis()->SetTitle(XAxisLabel.at(iPlot));
+                Histos[iSlice][iSample]->GetXaxis()->SetTitleSize(TextSize);
+                Histos[iSlice][iSample]->GetXaxis()->SetTitleOffset(1.1);
+                Histos[iSlice][iSample]->GetXaxis()->CenterTitle();
 
-            Histos[iSlice]->GetYaxis()->SetTitleFont(FontStyle);
-            Histos[iSlice]->GetYaxis()->SetLabelFont(FontStyle);
-            Histos[iSlice]->GetYaxis()->SetNdivisions(6);
-            Histos[iSlice]->GetYaxis()->SetLabelSize(TextSize);
-            Histos[iSlice]->GetYaxis()->SetTitle(YAxisLabel.at(iPlot));
-            Histos[iSlice]->GetYaxis()->SetTitleSize(TextSize);
-            Histos[iSlice]->GetYaxis()->SetTitleOffset(1.3);
-            Histos[iSlice]->GetYaxis()->SetTickSize(0);
-            Histos[iSlice]->GetYaxis()->CenterTitle();
+                Histos[iSlice][iSample]->GetYaxis()->SetTitleFont(FontStyle);
+                Histos[iSlice][iSample]->GetYaxis()->SetLabelFont(FontStyle);
+                Histos[iSlice][iSample]->GetYaxis()->SetNdivisions(6);
+                Histos[iSlice][iSample]->GetYaxis()->SetLabelSize(TextSize);
+                Histos[iSlice][iSample]->GetYaxis()->SetTitle(YAxisLabel.at(iPlot));
+                Histos[iSlice][iSample]->GetYaxis()->SetTitleSize(TextSize);
+                Histos[iSlice][iSample]->GetYaxis()->SetTitleOffset(1.3);
+                Histos[iSlice][iSample]->GetYaxis()->SetTickSize(0);
+                Histos[iSlice][iSample]->GetYaxis()->CenterTitle();
 
-            PlotCanvas->cd();
-            Histos[iSlice]->Draw("hist same");
-            leg->AddEntry(Histos[iSlice],"SBND","l");
+                double imax = TMath::Max(Histos[iSlice][iSample]->GetMaximum(),Histos[iSlice][0]->GetMaximum());
 
+                double YAxisRange = 1.15*imax;
+                Histos[iSlice][iSample]->GetYaxis()->SetRangeUser(0.,YAxisRange);
+                Histos[iSlice][0]->GetYaxis()->SetRangeUser(0.,YAxisRange);			
+
+                PlotCanvas->cd();
+                Histos[iSlice][iSample]->Draw("hist same");
+                Histos[iSlice][0]->Draw("hist same");	
+
+                leg->AddEntry(Histos[iSlice][iSample],Labels[iSample],"l");
+            }
             PlotCanvas->cd();
             leg->Draw();
 

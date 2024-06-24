@@ -225,7 +225,7 @@ void Selection() {
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/"+PlotNames[i]+".png");
 
         // Save to root file
-        SaveFile->WriteObject(RecoHisto, PlotNames[i]);
+        SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
         SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_true");
         SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_bkg");
 
