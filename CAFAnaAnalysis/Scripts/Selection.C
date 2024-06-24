@@ -33,7 +33,7 @@ void Selection()
     SpectrumLoader NuLoader(TargetFile);
 
     // Create the binning schemes for the Vars we wish to plot.
-    const Binning bPrimaryEnergy = Binning::Simple(20, 0, 3.0);
+    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 1.0); // one bin
     const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
     const Binning bDeltaAlphaBins = Binning::Simple(20, 0.0, 180.0);
     const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
@@ -64,9 +64,17 @@ void Selection()
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
-    // Variables to plot
+    // Root file to store objects in
+    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Selection.root";
+    std::unique_ptr<TFile> SaveFile(TFile::Open(RootFilePath, "RECREATE"));
+
+    // Vectors to fill with variables and variable information to plot
     std::vector<Var> Vars; std::vector<Binning> VarBins;
     std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
+    
+    ////////////////////////////////
+    // Single differential variables
+    ////////////////////////////////
 
     // Muon angle
     Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
@@ -108,21 +116,25 @@ void Selection()
     Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
+    ////////////////////////////////
+    // Double differential variables
+    ////////////////////////////////
+
     // Serial transverse momentum in muon cos theta
     Vars.push_back(kTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
-    PlotNames.push_back("TransverseMomentumInMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
+    PlotNames.push_back("SerialTransverseMomentumInMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
 
     // Delta alpha transverse in muon cos theta
     Vars.push_back(kDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
-    PlotNames.push_back("DeltaAlphaTInMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
+    PlotNames.push_back("SerialDeltaAlphaTInMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
 
     // Opening angle between protons in muon cos theta
     Vars.push_back(kCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
-    PlotNames.push_back("CosOpeningAngleProtonsInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
+    PlotNames.push_back("SerialCosOpeningAngleProtonsInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
     
     // Opening angle between muon and protons in muon cos theta
     Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
-    PlotNames.push_back("CosOpeningAngleMuonTotalProtonInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
+    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProtonInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
 
     // Construct all spectra
     std::vector<std::tuple<
@@ -211,6 +223,7 @@ void Selection()
         leg->Draw();
 
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/"+PlotNames[i]+".png");
+        SaveFile->WriteObject(&PlotCanvas, PlotNames[i]);
         delete PlotCanvas;
     }
 
@@ -274,12 +287,15 @@ void Selection()
     std::cout << "Reconstructed events: " << AllRecoEventsInt << std::endl;
     std::cout << "True signal events: " << AllTrueEventsInt << std::endl;
     std::cout << "True signal events that were reconstructed: " << AllTrueRecoEventsInt << std::endl;
+    std::cout << std::endl;
     std::cout << "Cuts: " << std::endl;
-    std::cout << "    Cosmic cut: " << FirstCutInt << ". G.E: " <<  (FirstCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FirstCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (FirstCutTrueInt / FirstCutInt) * 100. << std::endl;
-    std::cout << "    Vertex in FV cut: " << SecondCutInt << ". G.E: " <<  (SecondCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (SecondCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (SecondCutTrueInt / SecondCutInt) * 100. << std::endl;
-    std::cout << "    One muon cut: " << ThirdCutInt << ". G.E: " <<  (ThirdCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (ThirdCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (ThirdCutTrueInt / ThirdCutInt) * 100. << std::endl;
-    std::cout << "    Two protons cut: " << FourthCutInt << ". G.E: " <<  (FourthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FourthCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (FourthCutTrueInt / FourthCutInt) * 100. << std::endl;
-    std::cout << "    No charged pions cut: " << FifthCutInt << ". G.E: " <<  (FifthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FifthCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (FifthCutTrueInt / FifthCutInt) * 100. << std::endl;
-    std::cout << "    No neutral pions cut: " << SixthCutInt << ". G.E: " <<  (SixthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (SixthCutTrueInt / AllTrueRecoEventsInt) * 100. << ". Purity: " << (SixthCutTrueInt / SixthCutInt) * 100. << std::endl;
-    std::cout << "Reconstructed events satisfying signal definition: " << RecoSignalInt << ". Purity: " << (RecoTrueSignalInt / RecoSignalInt) * 100. << std::endl;
+    std::cout << "    Cosmic cut: " << FirstCutInt << ". G.E: " <<  (FirstCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FirstCutTrueInt / AllTrueEventsInt) * 100. << ". Purity: " << (FirstCutTrueInt / FirstCutInt) * 100. << std::endl;
+    std::cout << "    Vertex in FV cut: " << SecondCutInt << ". G.E: " <<  (SecondCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (SecondCutTrueInt / AllTrueEventsInt) * 100. << ". Purity: " << (SecondCutTrueInt / SecondCutInt) * 100. << std::endl;
+    std::cout << "    One muon cut: " << ThirdCutInt << ". G.E: " <<  (ThirdCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (ThirdCutTrueInt / AllTrueEventsInt) * 100. << ". Purity: " << (ThirdCutTrueInt / ThirdCutInt) * 100. << std::endl;
+    std::cout << "    Two protons cut: " << FourthCutInt << ". G.E: " <<  (FourthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FourthCutTrueInt / AllTrueEventsInt) * 100. << ". Purity: " << (FourthCutTrueInt / FourthCutInt) * 100. << std::endl;
+    std::cout << "    No charged pions cut: " << FifthCutInt << ". G.E: " <<  (FifthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (FifthCutTrueInt / AllTrueEventsInt) * 100. << ". Purity: " << (FifthCutTrueInt / FifthCutInt) * 100. << std::endl;
+    std::cout << "    No neutral pions cut: " << SixthCutInt << ". G.E: " <<  (SixthCutInt / AllRecoEventsInt) * 100. << ". S.E.: " << (SixthCutTrueInt / AllTrueEventsInt) * 100. << ". Purity: " << (SixthCutTrueInt / SixthCutInt) * 100. << std::endl;
+    std::cout << std::endl;
+    std::cout << "Reconstructed events satisfying signal definition: " << RecoSignalInt << ". Final signal efficiency: " << (RecoTrueSignalInt / AllTrueEventsInt) << ". Purity: " << (RecoTrueSignalInt / RecoSignalInt) * 100. << std::endl;
+    std::cout << "Cross check. Reconstructed true signal: " << RecoTrueSignalInt << ", divided by signal efficiency: " << RecoTrueSignalInt * (AllTrueEventsInt / RecoTrueSignalInt) << std::endl;
 }

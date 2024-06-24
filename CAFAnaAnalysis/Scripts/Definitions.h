@@ -25,12 +25,12 @@ using namespace Constants;
 namespace ana
 {
     // Constants
-    const float fFVXMax =  199.15f-10.f;
-    const float fFVXMin = -199.15f+10.f;
-    const float fFVYMax =  200.00f-10.f;
-    const float fFVYMin = -200.00f+10.f;
-    const float fFVZMax =  500.00f-50.f;
-    const float fFVZMin =    0.00f+10.f;
+    const float fFVXMax = 180.f;
+    const float fFVXMin =   5.f;
+    const float fFVYMax = 180.f;
+    const float fFVYMin =   0.f;
+    const float fFVZMax = 450.f;
+    const float fFVZMin =  10.f;
 
     const float fMuCutMuScore = 30.0f;
     const float fMuCutPrScore = 60.0f;
@@ -53,8 +53,8 @@ namespace ana
     bool bIsInFV(const caf::Proxy<caf::SRVector3D>* data) {
         if (std::isnan(data->x) || std::isnan(data->y) || std::isnan(data->z)) return false;
         return (
-            (data->x > fFVXMin) && (data->x < fFVXMax) &&
-            (data->y > fFVYMin) && (data->y < fFVYMax) &&
+            (TMath::Abs(data->x) > fFVXMin) && (TMath::Abs(data->x) < fFVXMax) &&
+            (TMath::Abs(data->y) > fFVYMin) && (TMath::Abs(data->y) < fFVYMax) &&
             (data->z > fFVZMin) && (data->z < fFVZMax) 
         );
     }
