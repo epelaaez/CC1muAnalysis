@@ -208,6 +208,8 @@ Using the reconstructed event data, we can perform a \verb|Cut| that checks the 
 \end{enumerate}
 Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events. This is shown in Figure~\ref{fig:truth-match-signal-def}, where the variable plotted is $\cos(\theta_{\vec{p}_{\mu}})$.
 
+We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts we apply to the reconstructed events. These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()|. Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and the all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
+
 \begin{figure}
     \centering
     \includegraphics[width=5in]{Figs/CAFAna/MuonCosTheta.png}
@@ -220,15 +222,15 @@ Using these two discriminators on simulated events, the reconstructed events tha
         \begin{tabular}{|l|cccc|}
         \hline
         \textbf{Cut}         & \textbf{Number of events} & \textbf{Global efficiency} & \textbf{Signal efficiency} & \textbf{Purity} \\ \hline
-        All                  &         & -     &  -    & -  \\
-        True signal events   & 6722    & -     &  -    & -  \\
-        All reco events      &         & 100\% &       &    \\
-        Cosmic cut           &         &       &       &    \\
-        Vertex in FV cut     & & & & \\
-        One muon cut         & & & & \\
-        Two protons cut      & & & & \\
-        No charged pions cut & & & & \\
-        No neutral pions cut & & & & \\ \hline
+        All                  & 308481  & -       & -       & -      \\
+        True signal events   & 6040.06 & -       & -       & -      \\
+        All reco events      & 175064  & 100\%   & -       & -      \\
+        Cosmic cut           & 140772  & 80.41\% & 84.67\% & 3.63\% \\
+        Vertex in FV cut     & 82953.4 & 47.39\% & 83.87\% & 6.11\% \\
+        One muon cut         & 33951   & 19.39\% & 43.55\% & 7.75\% \\
+        Two protons cut      & 2727.77 & 1.56\%  & 17.74\% & 39.29\% \\
+        No charged pions cut & 1266.46 & 0.72\%  & 12.90\% & 61.54\% \\
+        No neutral pions cut & 1120.33 & 0.64\%  & 12.10\% & 65.22\% \\ \hline
         \end{tabular}
     \end{center}
     \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition}
