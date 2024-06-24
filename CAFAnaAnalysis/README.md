@@ -36,4 +36,8 @@ To perform the event selection, you have to run
 cafe -bq Scripts/Selection.C
 ```
 
-This will generate the cuts defined in `Definitions.h` and will produce the corresponding figures under `Figs/`.
+This will generate the cuts defined in `Definitions.h` and will produce the corresponding figures under `Figs/`. For scripts that do not process the events direclty but rather load the already created histogram and create new plots, you have to run, for example
+
+```bash
+root -l Scripts/SerialPlotGenerator.cpp
+```

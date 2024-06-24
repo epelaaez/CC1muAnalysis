@@ -23,8 +23,7 @@ using namespace std;
 using namespace ana;
 using namespace Constants;
 
-void Selection()
-{
+void Selection() {
     // Some useful variables for later.
     const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
     const double TargetPOT(6.6e20);
@@ -66,7 +65,7 @@ void Selection()
 
     // Root file to store objects in
     TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Selection.root";
-    std::unique_ptr<TFile> SaveFile(TFile::Open(RootFilePath, "RECREATE"));
+    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variables and variable information to plot
     std::vector<Var> Vars; std::vector<Binning> VarBins;
@@ -122,19 +121,19 @@ void Selection()
 
     // Serial transverse momentum in muon cos theta
     Vars.push_back(kTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
-    PlotNames.push_back("SerialTransverseMomentumInMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
+    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
 
     // Delta alpha transverse in muon cos theta
     Vars.push_back(kDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
-    PlotNames.push_back("SerialDeltaAlphaTInMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
+    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
 
     // Opening angle between protons in muon cos theta
     Vars.push_back(kCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleProtonsInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
+    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
     
     // Opening angle between muon and protons in muon cos theta
     Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProtonInMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
+    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
 
     // Construct all spectra
     std::vector<std::tuple<
@@ -222,10 +221,18 @@ void Selection()
         RecoBkgHisto->Draw("hist same");
         leg->Draw();
 
+        // Save as png
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/"+PlotNames[i]+".png");
-        SaveFile->WriteObject(&PlotCanvas, PlotNames[i]);
+
+        // Save to root file
+        SaveFile->WriteObject(RecoHisto, PlotNames[i]);
+        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_true");
+        SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_bkg");
+
         delete PlotCanvas;
     }
+    // Close file
+    SaveFile->Close();
 
     // Get histograms for all cuts
     TH1D* AllEventsHisto = sAllEvents.ToTH1(TargetPOT);
