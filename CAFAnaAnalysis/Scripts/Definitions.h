@@ -201,14 +201,10 @@ namespace ana
         return true;
     }
 
-    ////////////
-    // MultiVars
-    ////////////
-
     // Gets position vectors given the particle IDs
     std::tuple<TVector3, TVector3, TVector3> GetVectors(const caf::SRSliceProxy* slc, int MuonID, int ProtonID1, int ProtonID2) {
-        TVector3 Muon(1, 1, 1); 
-        TVector3 LeadingProton(1, 1, 1); 
+        TVector3 Muon(1, 1, 1);
+        TVector3 LeadingProton(1, 1, 1);
         TVector3 RecoilProton(1, 1, 1);
         
         for (auto const& pfp : slc -> reco.pfp) {
@@ -233,19 +229,29 @@ namespace ana
         return {Muon, LeadingProton, RecoilProton};
     }
 
-    // Contains all variables we are interested in
-    const MultiVar kVars([](const caf::SRSliceProxy* slc) -> std::vector<double> {
+    std::tuple<TVector3, TVector3, TVector3> GetTrueVector(const caf::SRTrueInteractionProxy* nu) {
+        TVector3 Muon(1, 1, 1);
+        TVector3 LeadingProton(1, 1, 1);
+        TVector3 RecoilProton(1, 1, 1);
+        bool FirstProton = true;
+
+        // TODO: check what vector in SRTrueParticle.h to use
+        for (auto const& prim : nu->prim) {
+            if (prim.pdg == 13) {
+                Muon.SetXYZ(prim.startp.x, prim.startp.y, prim.startp.z);
+            } else if ((prim.pdg == 2212) && FirstProton) {
+                LeadingProton.SetXYZ(prim.startp.x, prim.startp.y, prim.startp.z);
+                FirstProton = false;
+            } else if (prim.pdg == 2212) {
+                RecoilProton.SetXYZ(prim.startp.x, prim.startp.y, prim.startp.z);
+            }
+        }
+        return {Muon, LeadingProton, RecoilProton};
+    }
+
+    std::vector<double> GetVarsFromHelper(TwoPTools Helper) {
         std::vector<double> vars; 
-
-        // Get IDs for tagged particles
-        std::vector<int> TaggedIDs;
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        auto [Muon, LeadingProton, RecoilProton] = GetVectors(slc, MuonID, ProtonIDs.at(0), ProtonIDs.at(1));
-
-        // Use helper class
-        TwoPTools Helper(Muon, LeadingProton, RecoilProton);
-
+        
         double MuonCosTheta = Helper.ReturnMuonCosTheta();
         vars.push_back(MuonCosTheta);
 
@@ -277,6 +283,34 @@ namespace ana
         vars.push_back(RecoilProtonMomentum);
 
         return vars;
+    }
+
+    ////////////
+    // MultiVars
+    ////////////
+
+    const TruthMultiVar kTruthVars([](const caf::SRTrueInteractionProxy* nu) {
+        // Get vectors
+        auto [Muon, LeadingProton, RecoilProton] = GetTrueVector(nu);
+
+        // Extract vars from helper
+        TwoPTools Helper(Muon, LeadingProton, RecoilProton);
+        return GetVarsFromHelper(Helper);
+    });
+
+    // Contains all variables we are interested in
+    const MultiVar kVars([](const caf::SRSliceProxy* slc) -> std::vector<double> {
+        std::vector<double> vars; 
+
+        // Get IDs for tagged particles
+        std::vector<int> TaggedIDs;
+        auto [OneMuon, MuonID] = bOneMuon(slc);
+        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
+        auto [Muon, LeadingProton, RecoilProton] = GetVectors(slc, MuonID, ProtonIDs.at(0), ProtonIDs.at(1));
+
+        // Extract vars from helper
+        TwoPTools Helper(Muon, LeadingProton, RecoilProton);
+        return GetVarsFromHelper(Helper);
     });
 
     ////////////// 
