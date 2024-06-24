@@ -32,7 +32,7 @@ void Selection() {
     SpectrumLoader NuLoader(TargetFile);
 
     // Create the binning schemes for the Vars we wish to plot.
-    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 1.0); // one bin
+    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
     const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
     const Binning bDeltaAlphaBins = Binning::Simple(20, 0.0, 180.0);
     const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
@@ -262,33 +262,34 @@ void Selection() {
     TH1D* RecoTrueSignalHisto = sRecoTrueSignal.ToTH1(TargetPOT);
 
     // Get integrals for all cuts
-    double AllEventsInt = AllEventsHisto->Integral("width");
-    double AllRecoEventsInt = AllRecoEventsHisto->Integral("width");
-    double AllTrueEventsInt = AllTrueEventsHisto->Integral("width");
-    double AllTrueRecoEventsInt = AllTrueRecoEventsHisto->Integral("width");
+    double AllEventsInt = AllEventsHisto->Integral();
+    double AllRecoEventsInt = AllRecoEventsHisto->Integral();
+    double AllTrueEventsInt = AllTrueEventsHisto->Integral();
+    double AllTrueRecoEventsInt = AllTrueRecoEventsHisto->Integral();
 
-    double FirstCutInt = FirstCutHisto->Integral("width");
-    double FirstCutTrueInt = FirstCutTrueHisto->Integral("width");
+    double FirstCutInt = FirstCutHisto->Integral();
+    double FirstCutTrueInt = FirstCutTrueHisto->Integral();
 
-    double SecondCutInt = SecondCutHisto->Integral("width");
-    double SecondCutTrueInt = SecondCutTrueHisto->Integral("width");
+    double SecondCutInt = SecondCutHisto->Integral();
+    double SecondCutTrueInt = SecondCutTrueHisto->Integral();
 
-    double ThirdCutInt = ThirdCutHisto->Integral("width");
-    double ThirdCutTrueInt = ThirdCutTrueHisto->Integral("width");
+    double ThirdCutInt = ThirdCutHisto->Integral();
+    double ThirdCutTrueInt = ThirdCutTrueHisto->Integral();
 
-    double FourthCutInt = FourthCutHisto->Integral("width");
-    double FourthCutTrueInt = FourthCutTrueHisto->Integral("width");
+    double FourthCutInt = FourthCutHisto->Integral();
+    double FourthCutTrueInt = FourthCutTrueHisto->Integral();
 
-    double FifthCutInt = FifthCutHisto->Integral("width");
-    double FifthCutTrueInt = FifthCutTrueHisto->Integral("width");
+    double FifthCutInt = FifthCutHisto->Integral();
+    double FifthCutTrueInt = FifthCutTrueHisto->Integral();
 
-    double SixthCutInt = SixthCutHisto->Integral("width");
-    double SixthCutTrueInt = SixthCutTrueHisto->Integral("width");
+    double SixthCutInt = SixthCutHisto->Integral();
+    double SixthCutTrueInt = SixthCutTrueHisto->Integral();
 
-    double RecoSignalInt = RecoSignalHisto->Integral("width");
-    double RecoTrueSignalInt = RecoTrueSignalHisto->Integral("width");
+    double RecoSignalInt = RecoSignalHisto->Integral();
+    double RecoTrueSignalInt = RecoTrueSignalHisto->Integral();
 
     // Print results
+    std::cout << std::endl;
     std::cout << "================================" << std::endl;
     std::cout << "All events: " << AllEventsInt << std::endl;
     std::cout << "Reconstructed events: " << AllRecoEventsInt << std::endl;
@@ -305,4 +306,6 @@ void Selection() {
     std::cout << std::endl;
     std::cout << "Reconstructed events satisfying signal definition: " << RecoSignalInt << ". Final signal efficiency: " << (RecoTrueSignalInt / AllTrueEventsInt) << ". Purity: " << (RecoTrueSignalInt / RecoSignalInt) * 100. << std::endl;
     std::cout << "Cross check. Reconstructed true signal: " << RecoTrueSignalInt << ", divided by signal efficiency: " << RecoTrueSignalInt * (AllTrueEventsInt / RecoTrueSignalInt) << std::endl;
+    std::cout << "================================" << std::endl;
+    std::cout << std::endl;
 }
