@@ -210,8 +210,7 @@ void Selection() {
         leg->SetTextSize(TextSize*0.8);
         leg->SetTextFont(FontStyle);
 
-        TLegendEntry* legReco = leg->AddEntry(RecoHisto,"all reco","l");
-        legReco->SetTextColor(kBlue+2);
+        TLegendEntry* legReco = leg->AddEntry(RecoHisto,"Reconstructed","l");
         RecoHisto->SetLineColor(kBlue+2);
         RecoHisto->SetLineWidth(4);
 
@@ -239,13 +238,11 @@ void Selection() {
         RecoTrueHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
         RecoBkgHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
-        TLegendEntry* legRecoTrue = leg->AddEntry(RecoTrueHisto,"signal","l");
-        legRecoTrue->SetTextColor(kRed+1);
+        TLegendEntry* legRecoTrue = leg->AddEntry(RecoTrueHisto,"True","l");
         RecoTrueHisto->SetLineColor(kRed+1); 
         RecoTrueHisto->SetLineWidth(4);
 
-        TLegendEntry* legRecoBkg = leg->AddEntry(RecoBkgHisto,"bkg","l");
-        legRecoBkg->SetTextColor(kOrange+7);
+        TLegendEntry* legRecoBkg = leg->AddEntry(RecoBkgHisto,"Background","l");
         RecoBkgHisto->SetLineColor(kOrange+7);
         RecoBkgHisto->SetLineWidth(4);
 
