@@ -201,7 +201,7 @@ namespace ana
         return true;
     }
 
-    // Gets position vectors given the particle IDs
+    // Gets reconstructed momentum vectors given the particle IDs
     std::tuple<TVector3, TVector3, TVector3> GetVectors(const caf::SRSliceProxy* slc, int MuonID, int ProtonID1, int ProtonID2) {
         TVector3 Muon(1, 1, 1);
         TVector3 LeadingProton(1, 1, 1);
@@ -229,26 +229,27 @@ namespace ana
         return {Muon, LeadingProton, RecoilProton};
     }
 
+    // Get true momentum vectors
     std::tuple<TVector3, TVector3, TVector3> GetTrueVector(const caf::SRTrueInteractionProxy* nu) {
         TVector3 Muon(1, 1, 1);
         TVector3 LeadingProton(1, 1, 1);
         TVector3 RecoilProton(1, 1, 1);
         bool FirstProton = true;
 
-        // TODO: check what vector in SRTrueParticle.h to use
         for (auto const& prim : nu->prim) {
             if (prim.pdg == 13) {
-                Muon.SetXYZ(prim.startp.x, prim.startp.y, prim.startp.z);
+                Muon.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
             } else if ((prim.pdg == 2212) && FirstProton) {
-                LeadingProton.SetXYZ(prim.startp.x, prim.startp.y, prim.startp.z);
+                LeadingProton.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
                 FirstProton = false;
             } else if (prim.pdg == 2212) {
-                RecoilProton.SetXYZ(prim.startp.x, prim.startp.y, prim.startp.z);
+                RecoilProton.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
             }
         }
         return {Muon, LeadingProton, RecoilProton};
     }
 
+    // Get all vars from TwoPTools helper
     std::vector<double> GetVarsFromHelper(TwoPTools Helper) {
         std::vector<double> vars; 
         
