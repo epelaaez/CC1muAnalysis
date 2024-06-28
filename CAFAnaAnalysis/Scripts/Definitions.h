@@ -328,9 +328,19 @@ namespace ana
         return kVars(slc).at(0);
     });
 
+    // True muon angle
+    const TruthVar kTruthMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(0);
+    });
+
     // Leading proton angle
     const Var kLeadingProtonCosTheta([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(1);
+    });
+
+    // True leading proton angle
+    const TruthVar kTruthLeadingProtonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(1);
     });
 
     // Recoil proton angle
@@ -338,9 +348,19 @@ namespace ana
         return kVars(slc).at(2);
     });
 
+    // True recoil proton angle
+    const TruthVar kTruthRecoilProtonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(2);
+    });
+
     // Opening angle between protons
     const Var kCosOpeningAngleProtons([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(3);
+    });
+
+    // True opening angle between protons
+    const TruthVar kTruthCosOpeningAngleProtons([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(3);
     });
 
     // Opening angle between muon and total proton
@@ -348,9 +368,19 @@ namespace ana
         return kVars(slc).at(4);
     });
 
+    // True opening angle between muon and total proton
+    const TruthVar kTruthCosOpeningAngleMuonTotalProton([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(4);
+    });
+
     // Delta alpha transverse
     const Var kDeltaAlphaT([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(5);
+    });
+
+    // True delta alpha transverse
+    const TruthVar kTruthDeltaAlphaT([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(5);
     });
 
     // Transverse momentum
@@ -358,9 +388,19 @@ namespace ana
         return kVars(slc).at(6);
     });
 
+    // True transverse momentum
+    const TruthVar kTruthTransverseMomentum([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(6);
+    });
+
     // Muon momentum
     const Var kMuonMomentum([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(7);
+    });
+
+    // True muon momentum
+    const TruthVar kTruthMuonMomentum([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(7);
     });
 
     // Leading proton momentum
@@ -368,9 +408,19 @@ namespace ana
         return kVars(slc).at(8);
     });
 
+    // True leading proton momentum
+    const TruthVar kTruthLeadingProtonMomentum([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(8);
+    });
+
     // Muon momentum
     const Var kRecoilProtonMomentum([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(9);
+    });
+
+    // True muon momentum
+    const TruthVar kTruthRecoilProtonMomentum([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(9);
     });
 
     ////////////////////////////////
@@ -397,6 +447,22 @@ namespace ana
         return SerialTransverseMomentumInMuonCosThetaIndex;
     });
 
+    // True transverse momentum
+    const TruthVar kTruthTransverseMomentumInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fTransverseMomentum = kTruthTransverseMomentum(nu);
+
+        if (fTransverseMomentum < TwoDArrayTransverseMomentum[0]) { fTransverseMomentum = (TwoDArrayTransverseMomentum[0] + TwoDArrayTransverseMomentum[1]) / 2.; }
+        else if (fTransverseMomentum > TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum]) { fTransverseMomentum = (TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum] + TwoDArrayTransverseMomentum[TwoDNBinsTransverseMomentum - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
+        int SerialTransverseMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fTransverseMomentum
+        );
+        return SerialTransverseMomentumInMuonCosThetaIndex;
+    });
+
     // Delta alpha transverse
     const Var kDeltaAlphaTInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
         float fDeltaAlphaT = kDeltaAlphaT(slc);
@@ -405,6 +471,22 @@ namespace ana
         else if (fDeltaAlphaT > TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT]) { fDeltaAlphaT = (TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT] + TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT - 1]) / 2.; }
 
         int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialDeltaAlphaTInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fDeltaAlphaT
+        );
+        return SerialDeltaAlphaTInMuonCosThetaIndex;
+    });
+
+    // True delta alpha transverse
+    const TruthVar kTruthDeltaAlphaTInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fDeltaAlphaT = kTruthDeltaAlphaT(nu);
+
+        if (fDeltaAlphaT < TwoDArrayDeltaAlphaT[0]) { fDeltaAlphaT = (TwoDArrayDeltaAlphaT[0] + TwoDArrayDeltaAlphaT[1]) / 2.; }
+        else if (fDeltaAlphaT > TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT]) { fDeltaAlphaT = (TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT] + TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
         int SerialDeltaAlphaTInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
             TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices,
             MuonCosThetaTwoDIndex,
@@ -426,11 +508,37 @@ namespace ana
         return SerialCosOpeningAngleProtonsInMuonCosThetaIndex;
     });
 
+    // True opening angle between protons
+    const TruthVar kTruthCosOpeningAngleProtonsInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fCosOpeningAngleProtons = kTruthCosOpeningAngleProtons(nu);
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
+        int SerialCosOpeningAngleProtonsInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fCosOpeningAngleProtons
+        );
+        return SerialCosOpeningAngleProtonsInMuonCosThetaIndex;
+    });
+
     // Opening angle betwen muon and total proton
     const Var kCosOpeningAngleMuonTotalProtonInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
         float fCosOpeningAngleMuonTotalProton = kCosOpeningAngleMuonTotalProton(slc);
 
         int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fCosOpeningAngleMuonTotalProton
+        );
+        return SerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex;
+    });
+
+    // True opening angle between muon and total proton
+    const TruthVar kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fCosOpeningAngleMuonTotalProton = kTruthCosOpeningAngleMuonTotalProton(nu);
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
         int SerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
             TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices,
             MuonCosThetaTwoDIndex,
