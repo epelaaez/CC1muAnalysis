@@ -13,6 +13,7 @@ __pycache__/
 *.so
 *.pcm
 Selection_C_ACLiC*
+SelectionEfficiency_C_ACLiC*
 
 # sbnana local build
 v09_75_03/
