@@ -132,7 +132,7 @@ void SerialPlotGenerator() {
                 Histos[iSlice][iSample]->GetYaxis()->SetLabelFont(FontStyle);
                 Histos[iSlice][iSample]->GetYaxis()->SetNdivisions(6);
                 Histos[iSlice][iSample]->GetYaxis()->SetLabelSize(TextSize);
-                Histos[iSlice][iSample]->GetYaxis()->SetTitle(YAxisLabel.at(iPlot));
+                Histos[iSlice][iSample]->GetYaxis()->SetTitle("Events");
                 Histos[iSlice][iSample]->GetYaxis()->SetTitleSize(TextSize);
                 Histos[iSlice][iSample]->GetYaxis()->SetTitleOffset(1.3);
                 Histos[iSlice][iSample]->GetYaxis()->SetTickSize(0);

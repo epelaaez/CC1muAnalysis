@@ -24,6 +24,13 @@ using namespace ana;
 using namespace Constants;
 
 void Selection() {
+    // Set defaults and load tools
+    TH1D::SetDefaultSumw2();
+    TH2D::SetDefaultSumw2();
+
+    int FontStyle = 132;
+    double TextSize = 0.06;	
+
     // Some useful variables for later.
     const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
     const double TargetPOT(6.6e20);
@@ -197,23 +204,50 @@ void Selection() {
         PlotCanvas->SetRightMargin(0.05);
         PlotCanvas->SetBottomMargin(0.16);
 
-        TLegend* leg = new TLegend(0.13,0.88,0.50,0.99);
+        TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
         leg->SetBorderSize(0);
-        leg->SetNColumns(2);
-        leg->SetMargin(0.2);
-        leg->SetFillColor(0);
+        leg->SetNColumns(3);
+        leg->SetTextSize(TextSize*0.8);
+        leg->SetTextFont(FontStyle);
 
         TLegendEntry* legReco = leg->AddEntry(RecoHisto,"all reco","l");
-        legReco->SetTextColor(602); // blue
-        RecoHisto->SetLineColor(602);
+        legReco->SetTextColor(kBlue+2);
+        RecoHisto->SetLineColor(kBlue+2);
+        RecoHisto->SetLineWidth(4);
+
+        // Style histograms
+        RecoHisto->GetXaxis()->SetTitleFont(FontStyle);
+        RecoHisto->GetXaxis()->SetLabelFont(FontStyle);
+        RecoHisto->GetXaxis()->SetNdivisions(8);
+        RecoHisto->GetXaxis()->SetLabelSize(TextSize);
+        RecoHisto->GetXaxis()->SetTitleSize(TextSize);
+        RecoHisto->GetXaxis()->SetTitleOffset(1.1);
+        RecoHisto->GetXaxis()->CenterTitle();
+
+        RecoHisto->GetYaxis()->SetTitleFont(FontStyle);
+        RecoHisto->GetYaxis()->SetLabelFont(FontStyle);
+        RecoHisto->GetYaxis()->SetNdivisions(6);
+        RecoHisto->GetYaxis()->SetLabelSize(TextSize);
+        RecoHisto->GetYaxis()->SetTitleSize(TextSize);
+        RecoHisto->GetYaxis()->SetTitleOffset(1.3);
+        RecoHisto->GetYaxis()->SetTickSize(0);
+        RecoHisto->GetYaxis()->CenterTitle();
+
+        double imax = RecoHisto->GetMaximum();
+        double YAxisRange = 1.3*imax;
+        RecoHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
+        RecoTrueHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
+        RecoBkgHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
         TLegendEntry* legRecoTrue = leg->AddEntry(RecoTrueHisto,"signal","l");
-        legRecoTrue->SetTextColor(797); // orange
-        RecoTrueHisto->SetLineColor(797);  
+        legRecoTrue->SetTextColor(kRed+1);
+        RecoTrueHisto->SetLineColor(kRed+1); 
+        RecoTrueHisto->SetLineWidth(4);
 
         TLegendEntry* legRecoBkg = leg->AddEntry(RecoBkgHisto,"bkg","l");
-        legRecoBkg->SetTextColor(417); // green
-        RecoBkgHisto->SetLineColor(417);
+        legRecoBkg->SetTextColor(kOrange+7);
+        RecoBkgHisto->SetLineColor(kOrange+7);
+        RecoBkgHisto->SetLineWidth(4);
 
         PlotCanvas->cd();
         RecoHisto->Draw("hist same");
