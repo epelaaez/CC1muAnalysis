@@ -150,7 +150,7 @@ void SelectionEfficiency() {
         Eff->SetTitle("All events");
         Eff->Draw("AP");
         gPad->Update();
-        Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(0,1);
+        Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(VarBins.at(i).Min(),VarBins.at(i).Max());
 
         // Save as png
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Efficiency/"+PlotNames[i]+".png");
