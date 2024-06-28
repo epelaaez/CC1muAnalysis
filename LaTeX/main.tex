@@ -58,13 +58,11 @@ define several variables. First, we define the momenta and opening angle of each
     \label{fig:momenta-cos-theta}
 \end{figure}
 
-We also define variables relating the multiple momentum vectors. First, the opening angle between the protons in the lab frame,
-given by 
+We also define variables relating the multiple momentum vectors. First, the opening angle between the protons in the lab frame, given by 
 \begin{align}
     \cos\left(\theta_{\vlp,\vrp}\right) = \frac{\vlp \cdot \vrp}{|\vlp||\vrp|}.
 \end{align}
-Then, the opening angle between the total proton momentum ($\vtp = \vlp + \vrp$) and the 
-muon, given by 
+Then, the opening angle between the total proton momentum ($\vtp = \vlp + \vrp$) and the muon, given by 
 \begin{align}
     \cos\left(\theta_{\vm,\vtp}\right) = \frac{\vm \cdot \vtp}{|\vm||\vtp|}.
 \end{align}
@@ -79,7 +77,7 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueTransverseMomentumPlot.png}}
-    \caption{Cross sections for opening angles and transverse momentum.}
+    \caption{Cross sections for opening angles and transverse momentum}
     \label{fig:angles-transverse-momentum}
 \end{figure}
 
@@ -87,7 +85,7 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
     \centering
     \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueTransverseMomentumPlot.png}}
     \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueTransverseMomentumPlot.png}}
-    \caption{Event interaction breakdown for $|\vdp|$.}
+    \caption{Event interaction breakdown for $|\vdp|$}
     \label{fig:inte-breakdown-dpt}
 \end{figure}
 
@@ -236,5 +234,58 @@ We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the tr
     \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition}
     \label{table:cut-efficiency-purity}
 \end{table}
+
+\section{SBND plots}
+
+Using all the variable definitions as we did when studying the event generators, and the signal definition based on the cuts described in the previous section, we can generate plots for SBND data. The reconstructed single differential variables corresponding to vector opening angles and magnitudes are shown in Figure~\ref{fig:sbnd-vector-plots}. In these figures, three lines are shown, corresponding to: all reconstructed (all the reconstructed events that pass our signal definition), signal (reconstructed events that pass signal definition and are true signal events), and background (reconstructed events that pass signal definition but are not true signal events) events. Similarly, the variables relating multiple vectors are shown in Figure~\ref{fig:sbnd-opening-angles-transverse}, and double differential sliced variables are shown in Figure~\ref{fig:sbnd-double-diff-sliced}.
+
+Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. Some of these plots are shown in Figure~\ref{fig:sbnd-signal-efficiency}.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/RecoilProtonCosTheta.png}} 
+    \caption{Vector directions and magnitudes for SBND data}
+    \label{fig:sbnd-vector-plots}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleMuonTotalProton.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleProtons.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/DeltaAlphaT.png}}
+    \caption{Vector opening angles and transverse momentum for SBND data}
+    \label{fig:sbnd-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Sliced double differential plots for SBND events}
+    \label{fig:sbnd-double-diff-sliced}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \caption{Signal efficiency plots for some single and double differential plots}
+    \label{fig:sbnd-signal-efficiency}
+\end{figure}
 
 \end{document}
