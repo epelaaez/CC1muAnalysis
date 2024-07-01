@@ -3,6 +3,7 @@
 #include "sbnana/CAFAna/Core/Spectrum.h"
 #include "sbnana/CAFAna/Core/Binning.h"
 #include "sbnana/CAFAna/Core/Var.h"
+#include "sbnana/CAFAna/Core/Cut.h"
 
 // ROOT includes.
 #include "TCanvas.h"
@@ -37,14 +38,6 @@ void SelectionMigrationMatrix() {
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
-    // Create the binning schemes for the Vars we wish to plot.
-    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
-    const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
-    const Binning bDeltaAlphaBins = Binning::Simple(20, 0.0, 180.0);
-    const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
-    const Binning bMuonMomentumBins = Binning::Simple(20, 0.1, 1.2);
-    const Binning bProtonMomentumBins = Binning::Simple(20, 0.3, 1.0);
-
     // We now create migration matrices for several variables, where these represent the ratio
     // between the events with a reconstructed value in bin i over the total true signal events
     // with true value in bin i
@@ -65,22 +58,41 @@ void SelectionMigrationMatrix() {
     PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
 
     // Construct spectra
-    std::vector<std::tuple<std::unique_ptr<Spectrum>, std::unique_ptr<Spectrum>>> Spectra;
+    std::vector<std::tuple<
+        std::unique_ptr<Spectrum>, 
+        std::vector<std::unique_ptr<Spectrum>>
+    >> Spectra;
     for (std::size_t i = 0; i < Vars.size(); i++) {
-        auto RecoValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i).first, kNoSpillCut, kRecoIsTrueReco);
+        const std::vector<double>& BinEdges = VarBins.at(i).Edges();
+        std::vector<std::unique_ptr<Spectrum>> InnerSpectra;
+        Var kCurrentVar = Vars.at(i).second;
+
+        for (int j = 0; j < VarBins.at(i).NBins(); j++) {
+            double BinMin = BinEdges.at(j);
+            double BinMax = (j == VarBins.at(i).NBins() - 1) ?  VarBins.at(i).Max() : BinEdges.at(j + 1);
+
+            const Cut TempCut([=](const caf::SRSliceProxy* slc) {
+                return (
+                    kRecoIsTrueReco(slc) && 
+                    kCurrentVar(slc) >= BinMin &&
+                    kCurrentVar(slc) < BinMax
+                );
+            });
+            auto RecoBinValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i).first, kNoSpillCut, TempCut);
+            InnerSpectra.push_back(std::move(RecoBinValues));
+        }
         auto TruthValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i).second, kNoSpillCut, kRecoIsTrueReco);
-        Spectra.push_back({std::move(RecoValues), std::move(TruthValues)});
+        Spectra.push_back({std::move(TruthValues), std::move(InnerSpectra)});
     }
 
     NuLoader.Go();
 
     // Loop over variables
     for (std::size_t i = 0; i < Vars.size(); i++) {
-        auto& [RecoValues, TruthValues] = Spectra.at(i);
-
+        double RecoTotalEvents = 0.;
+        auto& [TruthValues, InnerSpectra] = Spectra.at(i);
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
-        TH1* RecoValuesHist = RecoValues->ToTH1(TargetPOT);
         TH1* TruthValuesHist = TruthValues->ToTH1(TargetPOT);
         TH2* MigrationMatrix = new TH2F(
             "Migration",
@@ -93,15 +105,20 @@ void SelectionMigrationMatrix() {
             VarBins.at(i).Max()
         );
 
+        std::vector<TH1*> RecoValuesHistos;
+        for (int j = 0; j < VarBins.at(i).NBins(); j++) {
+            RecoValuesHistos.push_back(InnerSpectra.at(j)->ToTH1(TargetPOT));
+        }
+
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
             double TruthCounts = TruthValuesHist->GetBinContent(x);
+            TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT lables bins starting from 1
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                 double RecoCounts = RecoValuesHist->GetBinContent(y);
                 double Ratio = RecoCounts / TruthCounts;
 
-                std::cout << RecoValuesHist->GetXaxis()->GetBinLowEdge(y) << "  " << RecoCounts << std::endl;
-                std::cout << TruthValuesHist->GetXaxis()->GetBinLowEdge(x) << "  " << TruthCounts << std::endl;
-                std::cout << std::endl;
+                // std::cout << RecoValuesHist->GetXaxis()->GetBinLowEdge(y) << "  " << RecoCounts << std::endl;
+                // std::cout << TruthValuesHist->GetXaxis()->GetBinLowEdge(x) << "  " << TruthCounts << std::endl;
 
                 if (TruthCounts == 0.) Ratio = 0.;
                 MigrationMatrix->Fill(
@@ -110,6 +127,7 @@ void SelectionMigrationMatrix() {
                     Ratio
                 );
             }
+            RecoTotalEvents += RecoValuesHist->Integral();
         }
 
         MigrationMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
@@ -123,39 +141,13 @@ void SelectionMigrationMatrix() {
         PlotCanvas->cd();
         MigrationMatrix->Draw("colz text");
 
+        // Sanity check, these should be the same
+        std::cout << "Total true var events: " << TruthValuesHist->Integral() << std::endl;
+        std::cout << "Total reco var events: " << RecoTotalEvents << std::endl;
+
         // Save as png
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Migration/Migration"+PlotNames[i]+".png");
-
-        PlotCanvas->cd();
-
-        TLegend* leg = new TLegend(0.2,0.73,0.45,0.83);
-        leg->SetBorderSize(0);
-        leg->SetNColumns(3);
-        leg->SetTextSize(TextSize*0.8);
-        leg->SetTextFont(FontStyle);
-
-        TLegendEntry* legReco = leg->AddEntry(RecoValuesHist,"Reco","l");
-        RecoValuesHist->SetLineColor(kBlue+2);
-        RecoValuesHist->SetLineWidth(4);
-
-        TLegendEntry* legTrue = leg->AddEntry(TruthValuesHist,"True","l");
-        TruthValuesHist->SetLineColor(kRed+1);
-        TruthValuesHist->SetLineWidth(4);
-
-        double TrueMax = TruthValuesHist->GetMaximum();
-        double RecoMax = RecoValuesHist->GetMaximum();
-        double YAxisRange = 1.15 * ((TrueMax < RecoMax) ? RecoMax:  TrueMax);
-
-        TruthValuesHist->GetYaxis()->SetRangeUser(0., YAxisRange);
-        RecoValuesHist->GetYaxis()->SetRangeUser(0., YAxisRange);
-
-        TruthValuesHist->Draw("hist");
-        RecoValuesHist->Draw("hist same");
-        leg->Draw();
-
-        // Save as png
-        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Migration/TrueAndReco"+PlotNames[i]+".png");
-
+        
         // Save to root file
         SaveFile->WriteObject(MigrationMatrix, PlotNames[i]+"_migration");
 
