@@ -384,6 +384,10 @@ namespace ana
         return kTruthVars(nu).at(5);
     });
 
+    const Var kRecoTruthDeltaAlphaT([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthDeltaAlphaT(&slc->truth);
+    });
+
     // Transverse momentum
     const Var kTransverseMomentum([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(6);
@@ -634,22 +638,25 @@ namespace ana
     });
 
     const Cut kNoInvalidVariables([](const caf::SRSliceProxy* slc) {
-        if (std::isnan(slc->vertex.x) || std::isnan(slc->vertex.y) || std::isnan(slc->vertex.z)) return false;
-        for (auto const& pfp : slc -> reco.pfp) {
-            if (std::isnan(pfp.trk.start.x) || std::isnan(pfp.trk.start.y) || std::isnan(pfp.trk.start.z)) return false;
-            if (std::isnan(pfp.trk.end.x)   || std::isnan(pfp.trk.end.y)   || std::isnan(pfp.trk.end.z)) return false;
-            if (std::isnan(pfp.trk.len)) return false;
-            if (std::isnan(pfp.trk.mcsP.fwdP_muon) || std::isnan(pfp.trk.rangeP.p_muon)) return false;
+        // if (std::isnan(slc->vertex.x) || std::isnan(slc->vertex.y) || std::isnan(slc->vertex.z)) return false;
+        // for (auto const& pfp : slc -> reco.pfp) {
+        //     if (std::isnan(pfp.trk.start.x) || std::isnan(pfp.trk.start.y) || std::isnan(pfp.trk.start.z)) return false;
+        //     if (std::isnan(pfp.trk.end.x)   || std::isnan(pfp.trk.end.y)   || std::isnan(pfp.trk.end.z)) return false;
+        //     if (std::isnan(pfp.trk.len)) return false;
+        //     if (std::isnan(pfp.trk.mcsP.fwdP_muon) || std::isnan(pfp.trk.rangeP.p_muon)) return false;
 
-            for (int i = 0; i < 3; i++) {
-                if (
-                    std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
-                    pfp.trk.chi2pid[i].chi2_muon == 0. ||
-                    std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
-                    pfp.trk.chi2pid[i].chi2_proton == 0.
-                ) return false;
-            }
-        }
+        //     for (int i = 0; i < 3; i++) {
+        //         if (
+        //             std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+        //             pfp.trk.chi2pid[i].chi2_muon == 0. ||
+        //             std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+        //             pfp.trk.chi2pid[i].chi2_proton == 0.
+        //         ) return false;
+        //     }
+        // }
+        // TODO: figure out a better way to implement this, we don't really care about ALL
+        //       the daughter particles, but only about those that we tag successfully and 
+        //       we will use to compute our reconstructed variables
         return true;
     });
 
