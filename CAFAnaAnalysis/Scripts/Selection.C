@@ -222,6 +222,7 @@ void Selection() {
         RecoHisto->GetXaxis()->SetTitleSize(TextSize);
         RecoHisto->GetXaxis()->SetTitleOffset(1.1);
         RecoHisto->GetXaxis()->CenterTitle();
+        RecoHisto->GetXaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
 
         RecoHisto->GetYaxis()->SetTitleFont(FontStyle);
         RecoHisto->GetYaxis()->SetLabelFont(FontStyle);

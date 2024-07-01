@@ -123,7 +123,7 @@ void SerialPlotGenerator() {
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelFont(FontStyle);
                 Histos[iSlice][iSample]->GetXaxis()->SetNdivisions(8);
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelSize(TextSize);
-                Histos[iSlice][iSample]->GetXaxis()->SetTitle(XAxisLabel.at(iPlot));
+                Histos[iSlice][iSample]->GetXaxis()->SetTitle("Reco " + XAxisLabel.at(iPlot));
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleSize(TextSize);
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleOffset(1.1);
                 Histos[iSlice][iSample]->GetXaxis()->CenterTitle();
