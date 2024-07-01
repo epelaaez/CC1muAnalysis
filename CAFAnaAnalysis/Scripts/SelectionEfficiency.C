@@ -207,6 +207,7 @@ void SelectionEfficiency() {
 
                 // Create efficiency plot
                 TEfficiency* Eff = new TEfficiency(*SlicedRecoTrueHisto, *SlicedTrueHisto);
+                Eff->SetTitle((";True " + VarLabels.at(i) + ";").c_str());
 
                 PlotCanvas->cd();
                 Eff->SetMarkerStyle(21);
@@ -214,7 +215,6 @@ void SelectionEfficiency() {
                 Eff->Draw("AP");
                 gPad->Update();
                 Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(SerialSliceBinning.at(0),SerialSliceBinning.at(SerialSliceBinning.size() - 1));
-                Eff->GetPaintedGraph()->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
 
                 // Slice label
                 TLatex *textSlice = new TLatex();
@@ -230,6 +230,7 @@ void SelectionEfficiency() {
         } else {
             // Create efficiency plot
             TEfficiency* Eff = new TEfficiency(*RecoTrueHisto, *TrueHisto);
+            Eff->SetTitle((";True " + VarLabels.at(i) + ";").c_str());
 
             PlotCanvas->cd();
             Eff->SetMarkerStyle(21);
