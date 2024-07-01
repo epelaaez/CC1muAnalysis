@@ -45,6 +45,34 @@ namespace ana
         {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
     };
 
+    ///////////
+    // Binning
+    ///////////
+
+    // Create the binning schemes for the Vars we wish to plot.
+    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
+    const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
+    const Binning bDeltaAlphaBins = Binning::Simple(8, 0.0, 180.0);
+    const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
+    const Binning bMuonMomentumBins = Binning::Simple(20, 0.1, 1.2);
+    const Binning bProtonMomentumBins = Binning::Simple(20, 0.3, 1.0);
+
+    // Double differential bins
+    Tools tools; // tools for double differential bins
+
+    const Binning bTransverseMomentumInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices)
+    );
+    const Binning bDeltaAlphaTInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices)
+    );
+    const Binning bCosOpeningAngleProtonsInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices)
+    );
+    const Binning bCosOpeningAngleMuonTotalProtonInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)
+    );
+
     //////////////
     // Functions
     //////////////
@@ -431,8 +459,6 @@ namespace ana
     ////////////////////////////////
     // Double differential variables
     ////////////////////////////////
-
-    Tools tools; // tools for double differential variables
 
     // All variables are in muon cos theta
 

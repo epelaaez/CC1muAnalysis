@@ -38,30 +38,6 @@ void Selection() {
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
-    // Create the binning schemes for the Vars we wish to plot.
-    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
-    const Binning bAngleBins = Binning::Simple(20, 0.0, 1.0);
-    const Binning bDeltaAlphaBins = Binning::Simple(20, 0.0, 180.0);
-    const Binning bTransverseMomentumBins = Binning::Simple(20, 0.0, 1.0);
-    const Binning bMuonMomentumBins = Binning::Simple(20, 0.1, 1.2);
-    const Binning bProtonMomentumBins = Binning::Simple(20, 0.3, 1.0);
-
-    // Double differential bins
-    Tools tools; // tools for double differential bins
-
-    const Binning bTransverseMomentumInMuonCosTheta = Binning::Custom(
-        tools.Return2DBinIndices(TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices)
-    );
-    const Binning bDeltaAlphaTInMuonCosTheta = Binning::Custom(
-        tools.Return2DBinIndices(TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices)
-    );
-    const Binning bCosOpeningAngleProtonsInMuonCosTheta = Binning::Custom(
-        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices)
-    );
-    const Binning bCosOpeningAngleMuonTotalProtonInMuonCosTheta = Binning::Custom(
-        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)
-    );
-
     // We now create overlaid plots for several reconstructed variables and three lines:
     //     1. all selected reconstructed events
     //     2. reco signal events
@@ -240,7 +216,7 @@ void Selection() {
         RecoBkgHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
         TLegendEntry* legRecoTrue = leg->AddEntry(RecoTrueHisto,"True","l");
-        RecoTrueHisto->SetLineColor(kRed+1); 
+        RecoTrueHisto->SetLineColor(kRed+1);
         RecoTrueHisto->SetLineWidth(4);
 
         TLegendEntry* legRecoBkg = leg->AddEntry(RecoBkgHisto,"Background","l");
