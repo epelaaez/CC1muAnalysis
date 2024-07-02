@@ -312,7 +312,7 @@ Using the truth information about reconstructed events, we can also compute sign
 
 \section{SBND migration matrices}
 
-Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}.
+Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
 
 \begin{figure}
     \centering
@@ -334,6 +334,16 @@ Further, we compute migration matrices which give us a measure of how reliable o
     \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationCosOpeningAngleMuonTotalProton.png}}
     \caption{Migration matrices for signal differential vector opening angles and transverse momentum}
     \label{fig:migration-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Migration matrices for double differential variables}
+    \label{fig:migration-double-differential}
 \end{figure}
 
 \end{document}
