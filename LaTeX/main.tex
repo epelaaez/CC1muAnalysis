@@ -74,9 +74,10 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
 
 \begin{figure}
     \centering
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueDeltaAlphaTPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueTransverseMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueTransverseMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} 
     \caption{Cross sections for opening angles and transverse momentum}
     \label{fig:angles-transverse-momentum}
 \end{figure}
@@ -162,8 +163,8 @@ We also generated pure MEC events with different configurations to get the MEC s
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueTransverseMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueDeltaAlphaTPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueDeltaAlphaTPlot.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueTransverseMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
     \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
     \caption{Transverse kinematic variables for pure MEC events}
@@ -228,11 +229,9 @@ We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the tr
     \label{table:cut-efficiency-purity}
 \end{table}
 
-\section{SBND plots}
+\section{SBND variable plots}
 
-Using all the variable definitions as we did when studying the event generators, and the signal definition based on the cuts described in the previous section, we can generate plots for SBND data. The reconstructed single differential variables corresponding to vector opening angles and magnitudes are shown in Figure~\ref{fig:sbnd-vector-plots}. In these figures, three lines are shown, corresponding to: all reconstructed (all the reconstructed events that pass our signal definition), signal (reconstructed events that pass signal definition and are true signal events), and background (reconstructed events that pass signal definition but are not true signal events) events. Similarly, the variables relating multiple vectors are shown in Figure~\ref{fig:sbnd-opening-angles-transverse}, and double differential sliced variables are shown in Figure~\ref{fig:sbnd-double-diff-sliced}.
-
-Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. Some of these plots are shown in Figure~\ref{fig:sbnd-signal-efficiency}.
+Using all the variable definitions as we did when studying the event generators, and the signal definition based on the cuts described in the previous section, we can generate plots for SBND data. The reconstructed single differential variables corresponding to vector opening angles and magnitudes are shown in Figure~\ref{fig:sbnd-vector-plots}. In these figures, three lines are shown, corresponding to: all reconstructed (all the reconstructed events that pass our signal definition), signal (reconstructed events that pass signal definition and are true signal events as determined by the \verb|TruthCut| from our previous section), and background (reconstructed events that pass signal definition but are not true signal events) events. Similarly, the variables relating multiple vectors are shown in Figure~\ref{fig:sbnd-opening-angles-transverse}, and double differential sliced variables are shown in Figure~\ref{fig:sbnd-double-diff-sliced}.
 
 \begin{figure}
     \centering
@@ -248,9 +247,10 @@ Using the truth information about reconstructed events, we can also compute sign
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleMuonTotalProton.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleProtons.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleMuonTotalProton.png}}
     \caption{Vector opening angles and transverse momentum for SBND data}
     \label{fig:sbnd-opening-angles-transverse}
 \end{figure}
@@ -269,16 +269,70 @@ Using the truth information about reconstructed events, we can also compute sign
     \label{fig:sbnd-double-diff-sliced}
 \end{figure}
 
+\section{SBND signal efficiency}
+
+Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. These plots are shown in Figure~\ref{fig:sbnd-signal-efficiency-vector-plots} and Figure~\ref{fig:sbnd-signal-efficiency-opening-angles-transverse} for single-differential variables and Figure~\ref{fig:sbnd-signal-efficiency-double-differential} for double differential variables.
+
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthMuonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthRecoilProtonCosTheta.png}} 
+    \caption{Signal efficiency plots for single differential vector directions and magnitudes}
+    \label{fig:sbnd-signal-efficiency-vector-plots}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthTransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}}
+    \caption{Signal efficiency plots for single differential vector opening angles and transverse momentum}
+    \label{fig:sbnd-signal-efficiency-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_0.png}}
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
-    \caption{Signal efficiency plots for some single and double differential variables}
-    \label{fig:sbnd-signal-efficiency}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Signal efficiency plots for double differential variables}
+    \label{fig:sbnd-signal-efficiency-double-differential}
+\end{figure}
+
+\section{SBND migration matrices}
+
+Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationRecoilProtonCosTheta.png}}
+    \caption{Migration matrices for signal differential vector directions and magnitudes}
+    \label{fig:migration-vector-plots}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationCosOpeningAngleMuonTotalProton.png}}
+    \caption{Migration matrices for signal differential vector opening angles and transverse momentum}
+    \label{fig:migration-opening-angles-transverse}
 \end{figure}
 
 \end{document}
