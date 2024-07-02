@@ -50,47 +50,47 @@ void SelectionMigrationMatrix() {
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variable pairs and information to plot
-    std::vector<std::pair<Var, Var>> Vars; std::vector<Binning> VarBins;
+    std::vector<std::tuple<Var, Var, TruthVar>> Vars; std::vector<Binning> VarBins;
     std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
 
     // Muon angle
-    Vars.push_back({kMuonCosTheta, kRecoTruthMuonCosTheta}); VarBins.push_back(bAngleBins);
+    Vars.push_back({kMuonCosTheta, kRecoTruthMuonCosTheta, kTruthMuonCosTheta}); VarBins.push_back(bAngleBins);
     PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
 
     // Leading proton angle
-    Vars.push_back({kLeadingProtonCosTheta, kRecoTruthLeadingProtonCosTheta}); VarBins.push_back(bAngleBins);
+    Vars.push_back({kLeadingProtonCosTheta, kRecoTruthLeadingProtonCosTheta, kTruthLeadingProtonCosTheta}); VarBins.push_back(bAngleBins);
     PlotNames.push_back("LeadingProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L}})");
 
     // Recoil proton angle
-    Vars.push_back({kRecoilProtonCosTheta, kRecoTruthRecoilProtonCosTheta}); VarBins.push_back(bAngleBins);
+    Vars.push_back({kRecoilProtonCosTheta, kRecoTruthRecoilProtonCosTheta, kTruthRecoilProtonCosTheta}); VarBins.push_back(bAngleBins);
     PlotNames.push_back("RecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
 
     // Opening angle between protons
-    Vars.push_back({kCosOpeningAngleProtons, kRecoTruthCosOpeningAngleProtons}); VarBins.push_back(bAngleBins);
+    Vars.push_back({kCosOpeningAngleProtons, kRecoTruthCosOpeningAngleProtons, kTruthCosOpeningAngleProtons}); VarBins.push_back(bAngleBins);
     PlotNames.push_back("CosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
 
     // Opening angle between muon and total proton
-    Vars.push_back({kCosOpeningAngleMuonTotalProton, kRecoTruthCosOpeningAngleMuonTotalProton}); VarBins.push_back(bAngleBins);
+    Vars.push_back({kCosOpeningAngleMuonTotalProton, kRecoTruthCosOpeningAngleMuonTotalProton, kTruthCosOpeningAngleMuonTotalProton}); VarBins.push_back(bAngleBins);
     PlotNames.push_back("CosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
 
     // Delta alpha transverse
-    Vars.push_back({kDeltaAlphaT, kRecoTruthDeltaAlphaT}); VarBins.push_back(bDeltaAlphaBins);
+    Vars.push_back({kDeltaAlphaT, kRecoTruthDeltaAlphaT, kTruthDeltaAlphaT}); VarBins.push_back(bDeltaAlphaBins);
     PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
 
     // Transverse momentum
-    Vars.push_back({kTransverseMomentum, kRecoTruthTransverseMomentum}); VarBins.push_back(bTransverseMomentumBins);
+    Vars.push_back({kTransverseMomentum, kRecoTruthTransverseMomentum, kTruthTransverseMomentum}); VarBins.push_back(bTransverseMomentumBins);
     PlotNames.push_back("TransverseMomentum"); VarLabels.push_back("#delta P_{T}");
 
     // Muon momentum 
-    Vars.push_back({kMuonMomentum, kRecoTruthMuonMomentum}); VarBins.push_back(bMuonMomentumBins);
+    Vars.push_back({kMuonMomentum, kRecoTruthMuonMomentum, kTruthMuonMomentum}); VarBins.push_back(bMuonMomentumBins);
     PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
 
     // Leading proton momentum 
-    Vars.push_back({kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back({kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum, kTruthLeadingProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
     PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
 
     // Recoil proton momentum 
-    Vars.push_back({kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back({kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum, kTruthRecoilProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     ////////////////////////////////
@@ -98,30 +98,31 @@ void SelectionMigrationMatrix() {
     ////////////////////////////////
 
     // Serial transverse momentum in muon cos theta
-    Vars.push_back({kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta}); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
+    Vars.push_back({kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta, kTruthTransverseMomentumInMuonCosTheta}); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
     PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
 
     // Delta alpha transverse in muon cos theta
-    Vars.push_back({kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta}); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
+    Vars.push_back({kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta, kTruthDeltaAlphaTInMuonCosTheta}); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
     PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
 
     // Opening angle between protons in muon cos theta
-    Vars.push_back({kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta}); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
+    Vars.push_back({kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta, kTruthCosOpeningAngleProtonsInMuonCosTheta}); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
     PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
     
     // Opening angle between muon and protons in muon cos theta
-    Vars.push_back({kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta}); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
+    Vars.push_back({kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta}); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
 
     // Construct spectra
     std::vector<std::tuple<
         std::unique_ptr<Spectrum>, 
+        std::unique_ptr<Spectrum>,
         std::vector<std::unique_ptr<Spectrum>>
     >> Spectra;
     for (std::size_t i = 0; i < Vars.size(); i++) {
         const std::vector<double>& BinEdges = VarBins.at(i).Edges();
         std::vector<std::unique_ptr<Spectrum>> InnerSpectra;
-        Var kCurrentVar = Vars.at(i).second;
+        Var kCurrentVar = std::get<1>(Vars.at(i));
 
         for (int j = 0; j < VarBins.at(i).NBins(); j++) {
             double BinMin = BinEdges.at(j);
@@ -134,11 +135,12 @@ void SelectionMigrationMatrix() {
                     kCurrentVar(slc) < BinMax
                 );
             });
-            auto RecoBinValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i).first, kNoSpillCut, TempCut);
+            auto RecoBinValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, TempCut);
             InnerSpectra.push_back(std::move(RecoBinValues));
         }
-        auto TruthValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i).second, kNoSpillCut, kRecoIsTrueReco);
-        Spectra.push_back({std::move(TruthValues), std::move(InnerSpectra)});
+        auto RecoTruthValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<1>(Vars.at(i)), kNoSpillCut, kRecoIsTrueReco);
+        auto TruthValues = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<2>(Vars.at(i)), kTruthIsSignal, kNoSpillCut);
+        Spectra.push_back({std::move(TruthValues), std::move(RecoTruthValues), std::move(InnerSpectra)});
     }
 
     NuLoader.Go();
@@ -146,13 +148,24 @@ void SelectionMigrationMatrix() {
     // Loop over variables
     for (std::size_t i = 0; i < Vars.size(); i++) {
         double RecoTotalEvents = 0.;
-        auto& [TruthValues, InnerSpectra] = Spectra.at(i);
+        auto& [TruthValues, RecoTruthValues, InnerSpectra] = Spectra.at(i);
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         TH1* TruthValuesHist = TruthValues->ToTH1(TargetPOT);
+        TH1* RecoTruthValuesHist = RecoTruthValues->ToTH1(TargetPOT);
         TH2* MigrationMatrix = new TH2D(
             "Migration",
             "Migration",
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max()
+        );
+        TH2* ResponseMatrix = new TH2D(
+            "Response",
+            "Response",
             VarBins.at(i).NBins(),
             VarBins.at(i).Min(),
             VarBins.at(i).Max(),
@@ -170,30 +183,48 @@ void SelectionMigrationMatrix() {
         std::cout << PlotNames.at(i) << std::endl;
 
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
+            double RecoTruthCounts = RecoTruthValuesHist->GetBinContent(x);
             double TruthCounts = TruthValuesHist->GetBinContent(x);
             TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT lables bins starting from 1
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                 double RecoCounts = RecoValuesHist->GetBinContent(y);
-                double Ratio = RecoCounts / TruthCounts;
-                if (TruthCounts == 0.) Ratio = 0.0;
+
+                // Migration matrix
+                double MigrationRatio = RecoCounts / RecoTruthCounts;
+                if (RecoTruthCounts == 0.) MigrationRatio = 0.0;
+
+                // Response matrix
+                double ResponseRatio = RecoCounts / TruthCounts;
+                if (TruthCounts == 0.) ResponseRatio = 0.0;
 
                 // Debugging
                 std::cout << "Reco low bin: " << y << ". Counts: " << RecoCounts << std::endl;
                 std::cout << "True low bin: " << x << ". Counts: " << TruthCounts << std::endl;
-                std::cout << "Ratio: " << Ratio << std::endl;
+                std::cout << "Migration ratio: " << MigrationRatio << std::endl;
                 std::cout << std::endl;
 
                 MigrationMatrix->Fill(
                     TruthValuesHist->GetXaxis()->GetBinCenter(x),
                     RecoValuesHist->GetXaxis()->GetBinCenter(y),
-                    Ratio
+                    MigrationRatio
+                );
+                ResponseMatrix->Fill(
+                    TruthValuesHist->GetXaxis()->GetBinCenter(x),
+                    RecoValuesHist->GetXaxis()->GetBinCenter(y),
+                    ResponseRatio
                 );
             }
             RecoTotalEvents += RecoValuesHist->Integral();
         }
+        // Sanity check, these should be the same
+        std::cout << "Total true var events: " << RecoTruthValuesHist->Integral() << std::endl;
+        std::cout << "Total reco var events: " << RecoTotalEvents << std::endl;
 
         MigrationMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         MigrationMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
+
+        ResponseMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
+        ResponseMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
 
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.17);
@@ -203,18 +234,22 @@ void SelectionMigrationMatrix() {
         PlotCanvas->cd();
         MigrationMatrix->Draw("colz text");
 
-        // Sanity check, these should be the same
-        std::cout << "Total true var events: " << TruthValuesHist->Integral() << std::endl;
-        std::cout << "Total reco var events: " << RecoTotalEvents << std::endl;
+        // Save migration matrix as png
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Matrices/Migration"+PlotNames[i]+".png");
 
-        // Save as png
-        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Migration/Migration"+PlotNames[i]+".png");
+        PlotCanvas->cd();
+        ResponseMatrix->Draw("colz text");
+
+        // Save response matrix as png
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Matrices/Response"+PlotNames[i]+".png");
         
-        // Save to root file
+        // Save both to root file
         SaveFile->WriteObject(MigrationMatrix, PlotNames[i]+"_migration");
+        SaveFile->WriteObject(ResponseMatrix, PlotNames[i]+"_migration");
 
         delete PlotCanvas;
         delete MigrationMatrix;
+        delete ResponseMatrix;
     }
     // Close file
     SaveFile->Close();
