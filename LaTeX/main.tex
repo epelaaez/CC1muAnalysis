@@ -310,40 +310,74 @@ Using the truth information about reconstructed events, we can also compute sign
     \label{fig:sbnd-signal-efficiency-double-differential}
 \end{figure}
 
-\section{SBND migration matrices}
+\section{SBND migration and response matrices}
 
-Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
+Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. For the migration matrix, we consider true signal events that were reconstructed and satisfy our signal definition in the denominator. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
+
+Response matrices are computed in a similar manner, but using the total number of generated events in the denominator when computing the ratios, i.e., without requiring the events to be successfully reconstructed. Therefore, for these matrices, the columns of the response matrices do not have to add up to $1$. The response matrices for single differential variables are presented in Figure~\ref{fig:response-vector-plots} and Figure~\ref{fig:response-opening-angles-transverse}, and the double differential response matrices are given in Figure~\ref{fig:response-double-differential}.
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationMuonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationLeadingProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationLeadingProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationRecoilProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationRecoilProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationRecoilProtonCosTheta.png}}
     \caption{Migration matrices for signal differential vector directions and magnitudes}
     \label{fig:migration-vector-plots}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationDeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationTransverseMomentum.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationCosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationCosOpeningAngleMuonTotalProton.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationCosOpeningAngleMuonTotalProton.png}}
     \caption{Migration matrices for signal differential vector opening angles and transverse momentum}
     \label{fig:migration-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialDeltaAlphaT_InMuonCosTheta.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialTransverseMomentum_InMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Migration/MigrationSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
     \caption{Migration matrices for double differential variables}
     \label{fig:migration-double-differential}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseRecoilProtonCosTheta.png}}
+    \caption{Response matrices for signal differential vector directions and magnitudes}
+    \label{fig:response-vector-plots}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseCosOpeningAngleMuonTotalProton.png}}
+    \caption{Response matrices for signal differential vector opening angles and transverse momentum}
+    \label{fig:response-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Response matrices for double differential variables}
+    \label{fig:response-double-differential}
 \end{figure}
 
 \end{document}
