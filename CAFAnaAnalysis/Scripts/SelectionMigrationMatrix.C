@@ -53,9 +53,45 @@ void SelectionMigrationMatrix() {
     std::vector<std::pair<Var, Var>> Vars; std::vector<Binning> VarBins;
     std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
 
+    // Muon angle
+    Vars.push_back({kMuonCosTheta, kRecoTruthMuonCosTheta}); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
+
+    // Leading proton angle
+    Vars.push_back({kLeadingProtonCosTheta, kRecoTruthLeadingProtonCosTheta}); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("LeadingProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L}})");
+
+    // Recoil proton angle
+    Vars.push_back({kRecoilProtonCosTheta, kRecoTruthRecoilProtonCosTheta}); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("RecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
+
+    // Opening angle between protons
+    Vars.push_back({kCosOpeningAngleProtons, kRecoTruthCosOpeningAngleProtons}); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("CosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
+
+    // Opening angle between muon and total proton
+    Vars.push_back({kCosOpeningAngleMuonTotalProton, kRecoTruthCosOpeningAngleMuonTotalProton}); VarBins.push_back(bAngleBins);
+    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
+
     // Delta alpha transverse
     Vars.push_back({kDeltaAlphaT, kRecoTruthDeltaAlphaT}); VarBins.push_back(bDeltaAlphaBins);
     PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
+
+    // Transverse momentum
+    Vars.push_back({kTransverseMomentum, kRecoTruthTransverseMomentum}); VarBins.push_back(bTransverseMomentumBins);
+    PlotNames.push_back("TransverseMomentum"); VarLabels.push_back("#delta P_{T}");
+
+    // Muon momentum 
+    Vars.push_back({kMuonMomentum, kRecoTruthMuonMomentum}); VarBins.push_back(bMuonMomentumBins);
+    PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
+
+    // Leading proton momentum 
+    Vars.push_back({kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
+    PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
+
+    // Recoil proton momentum 
+    Vars.push_back({kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
+    PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     // Construct spectra
     std::vector<std::tuple<
@@ -94,7 +130,7 @@ void SelectionMigrationMatrix() {
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         TH1* TruthValuesHist = TruthValues->ToTH1(TargetPOT);
-        TH2* MigrationMatrix = new TH2F(
+        TH2* MigrationMatrix = new TH2D(
             "Migration",
             "Migration",
             VarBins.at(i).NBins(),
@@ -110,20 +146,26 @@ void SelectionMigrationMatrix() {
             RecoValuesHistos.push_back(InnerSpectra.at(j)->ToTH1(TargetPOT));
         }
 
+        // Debugging
+        std::cout << PlotNames.at(i) << std::endl;
+
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
             double TruthCounts = TruthValuesHist->GetBinContent(x);
             TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT lables bins starting from 1
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                 double RecoCounts = RecoValuesHist->GetBinContent(y);
                 double Ratio = RecoCounts / TruthCounts;
+                if (TruthCounts == 0.) Ratio = 0.0;
 
-                // std::cout << RecoValuesHist->GetXaxis()->GetBinLowEdge(y) << "  " << RecoCounts << std::endl;
-                // std::cout << TruthValuesHist->GetXaxis()->GetBinLowEdge(x) << "  " << TruthCounts << std::endl;
+                // Debugging
+                std::cout << "Reco low bin: " << y << ". Counts: " << RecoCounts << std::endl;
+                std::cout << "True low bin: " << x << ". Counts: " << TruthCounts << std::endl;
+                std::cout << "Ratio: " << Ratio << std::endl;
+                std::cout << std::endl;
 
-                if (TruthCounts == 0.) Ratio = 0.;
                 MigrationMatrix->Fill(
-                    TruthValuesHist->GetXaxis()->GetBinLowEdge(x),
-                    RecoValuesHist->GetXaxis()->GetBinLowEdge(y),
+                    TruthValuesHist->GetXaxis()->GetBinCenter(x),
+                    RecoValuesHist->GetXaxis()->GetBinCenter(y),
                     Ratio
                 );
             }
@@ -152,6 +194,7 @@ void SelectionMigrationMatrix() {
         SaveFile->WriteObject(MigrationMatrix, PlotNames[i]+"_migration");
 
         delete PlotCanvas;
+        delete MigrationMatrix;
     }
     // Close file
     SaveFile->Close();
