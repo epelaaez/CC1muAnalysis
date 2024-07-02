@@ -1,8 +1,12 @@
 // SBNAna includes.
 #include "sbnana/CAFAna/Core/SpectrumLoader.h"
 #include "sbnana/CAFAna/Core/Spectrum.h"
+#include "sbnana/CAFAna/Core/EnsembleSpectrum.h"
 #include "sbnana/CAFAna/Core/Binning.h"
 #include "sbnana/CAFAna/Core/Var.h"
+#include "sbnana/CAFAna/Core/HistAxis.h"
+#include "sbnana/CAFAna/Core/SystShifts.h"
+#include "sbnana/CAFAna/Systs/SBNWeightSysts.h"
 
 // ROOT includes.
 #include "TCanvas.h"
@@ -37,6 +41,15 @@ void Selection() {
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
+
+    // Flux weights for systematics
+    const std::vector<const ISyst*> SBNSysts = GetSBNGenieWeightSysts();
+    std::vector<SystShifts> AllShifts;
+    for (std::size_t i = 0; i < SBNSysts.size(); i++) {
+        SystShifts SigP1Shift(SBNSysts[i], +1);
+        SystShifts SigM1Shift(SBNSysts[i], -1);
+        AllShifts.push_back(SigP1Shift); AllShifts.push_back(SigM1Shift);
+    }
 
     // We now create overlaid plots for several reconstructed variables and three lines:
     //     1. all selected reconstructed events
@@ -120,12 +133,19 @@ void Selection() {
 
     // Construct all spectra
     std::vector<std::tuple<
-        std::unique_ptr<Spectrum>,
+        std::unique_ptr<EnsembleSpectrum>,
         std::unique_ptr<Spectrum>,
         std::unique_ptr<Spectrum>
     >> Spectra;
     for (std::size_t i = 0; i < Vars.size(); i++) {
-        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsSignal); 
+        // auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsSignal); 
+        auto RecoSignals = std::make_unique<EnsembleSpectrum>(
+            NuLoader,
+            HistAxis(VarLabels.at(i), VarBins.at(i), Vars.at(i)),
+            kNoSpillCut,
+            kRecoIsSignal,
+            AllShifts
+        );
         auto RecoTrueSignals = std::make_unique<Spectrum> (VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsTrueReco); 
         auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsBackground); 
         Spectra.push_back({std::move(RecoSignals), std::move(RecoTrueSignals), std::move(RecoBkgSignals)});
@@ -171,7 +191,8 @@ void Selection() {
         auto& [RecoSignals, RecoTrueSignals, RecoBkgSignals] = Spectra.at(i);
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
-        TH1D* RecoHisto = RecoSignals->ToTH1(TargetPOT);
+        // TH1D* RecoHisto = RecoSignals->ToTH1(TargetPOT);
+        TH1D* RecoHisto = RecoSignals->Nominal().ToTH1(TargetPOT);
         TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
         TH1D* RecoBkgHisto = RecoBkgSignals->ToTH1(TargetPOT);
 
