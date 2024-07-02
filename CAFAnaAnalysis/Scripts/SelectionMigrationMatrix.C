@@ -93,6 +93,26 @@ void SelectionMigrationMatrix() {
     Vars.push_back({kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
+    ////////////////////////////////
+    // Double differential variables
+    ////////////////////////////////
+
+    // Serial transverse momentum in muon cos theta
+    Vars.push_back({kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta}); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
+    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
+
+    // Delta alpha transverse in muon cos theta
+    Vars.push_back({kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta}); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
+    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
+
+    // Opening angle between protons in muon cos theta
+    Vars.push_back({kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta}); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
+    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
+    
+    // Opening angle between muon and protons in muon cos theta
+    Vars.push_back({kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta}); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
+    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
+
     // Construct spectra
     std::vector<std::tuple<
         std::unique_ptr<Spectrum>, 
