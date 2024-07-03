@@ -46,7 +46,7 @@ void SelectionMigrationMatrix() {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/SelectionMigrationMatrix.root";
+    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Matrix.root";
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variable pairs and information to plot
@@ -245,7 +245,8 @@ void SelectionMigrationMatrix() {
         
         // Save both to root file
         SaveFile->WriteObject(MigrationMatrix, PlotNames[i]+"_migration");
-        SaveFile->WriteObject(ResponseMatrix, PlotNames[i]+"_migration");
+        SaveFile->WriteObject(ResponseMatrix, PlotNames[i]+"_response");
+        SaveFile->WriteObject(TruthValuesHist, PlotNames[i]+"_true");
 
         delete PlotCanvas;
         delete MigrationMatrix;

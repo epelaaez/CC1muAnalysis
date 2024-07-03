@@ -55,7 +55,7 @@ void SerialPlotGenerator() {
     // Samples for each plot (all reco, reco true, bkg)
     std::vector<TString> SampleNames; std::vector<TString> Labels; std::vector<int> Colors;
     SampleNames.push_back("_reco"); Labels.push_back("Reconstructed"); Colors.push_back(kBlue+2);
-    SampleNames.push_back("_true"); Labels.push_back("True"); Colors.push_back(kRed+1);
+    SampleNames.push_back("_reco_true"); Labels.push_back("True"); Colors.push_back(kRed+1);
     SampleNames.push_back("_bkg"); Labels.push_back("Background"); Colors.push_back(kOrange+7);
 
     const int NSamples = SampleNames.size();

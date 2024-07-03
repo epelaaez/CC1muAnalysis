@@ -234,7 +234,7 @@ void Selection() {
 
         // Save to root file
         SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
-        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_true");
+        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
         SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_bkg");
 
         delete PlotCanvas;

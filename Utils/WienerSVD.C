@@ -98,7 +98,17 @@ TMatrixD Matrix_C(Int_t n, Int_t type)
 
 
 
-TVectorD WienerSVD(TMatrixD Response, TVectorD Signal, TVectorD Measure, TMatrixD Covariance, Int_t C_type, Float_t Norm_type, TMatrixD& AddSmear, TVectorD& WF, TMatrixD& UnfoldCov, TMatrixD& CovRotation)
+TVectorD WienerSVD(
+    TMatrixD Response,     // response matrix 
+    TVectorD Signal,       // true var values (all generated)
+    TVectorD Measure,      // reco var values
+    TMatrixD Covariance,   // cov matrix
+    Int_t C_type,          // 0: unit, 1: first derivative, 2: second derivative
+    Float_t Norm_type,     // norm type to exponentiate
+    TMatrixD& AddSmear,    // 
+    TVectorD& WF,          //
+    TMatrixD& UnfoldCov,   //
+    TMatrixD& CovRotation) //
 {
     Int_t m = Response.GetNrows(); // measure, M
     Int_t n = Response.GetNcols(); // signal, S
