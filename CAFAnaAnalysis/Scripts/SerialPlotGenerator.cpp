@@ -8,8 +8,10 @@
 #include <vector>
 
 // Generator analysis includes.
-#include "../../GeneratorAnalysis/Utils/Tools.cxx"
 #include "../../GeneratorAnalysis/Scripts/Constants.h"
+
+// Utils includes.
+#include "../../Utils/Tools.cxx"
 
 using namespace std;
 using namespace Constants;
