@@ -43,6 +43,8 @@ void Unfold() {
     int FontStyle = 132;
     double TextSize = 0.06;	
 
+    Tools tools;
+
     // Load root file(s) with histograms
     TString SelectionRootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Selection.root";
     TString MatrixRootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Matrix.root";
@@ -113,6 +115,30 @@ void Unfold() {
     XLabels.push_back("|#vec{p}_{R}|");
     YLabels.push_back("#frac{d|#vec{p}_{R}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    ////////////////////////////////
+    // Double differential variables
+    ////////////////////////////////
+
+    // Serial transverse momentum in muon cos theta
+    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); 
+    XLabels.push_back("#delta P_{T}");
+    YLabels.push_back("#frac{d#delta P_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Delta alpha transverse in muon cos theta
+    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); 
+    XLabels.push_back("#delta #alpha_{T}");
+    YLabels.push_back("#frac{d#delta #alpha_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Opening angle between protons in muon cos theta
+    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); 
+    XLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
+    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    
+    // Opening angle between muon and protons in muon cos theta
+    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); 
+    XLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
+    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     const int NPlots = PlotNames.size();
 
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
@@ -167,7 +193,7 @@ void Unfold() {
         ReweightXSec(SmearedSignal);
         SmearedSignal->Scale(Units / (IntegratedFlux * NTargets));
 
-        // Declare canvas and legend
+        // Declare canvas
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);
 
         PlotCanvas->SetTopMargin(0.13);
@@ -175,33 +201,109 @@ void Unfold() {
         PlotCanvas->SetRightMargin(0.05);
         PlotCanvas->SetBottomMargin(0.16);
 
-        TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
-        leg->SetBorderSize(0);
-        leg->SetNColumns(3);
-        leg->SetTextSize(TextSize*0.8);
-        leg->SetTextFont(FontStyle);
+        // Deserialize double differential plots
+        if (PlotNames[iPlot].Contains("Serial")) {
+            TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
+            leg->SetBorderSize(0);
+            leg->SetNColumns(3);
+            leg->SetTextSize(TextSize*0.8);
+            leg->SetTextFont(FontStyle);
 
-        TLegendEntry* legRecoTrue = leg->AddEntry(SmearedSignal,"True","l");
-        SmearedSignal->SetLineColor(kRed+1);
-        SmearedSignal->SetLineWidth(4);
+            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
+            auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
+            int StartIndex = 0;
 
-        TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
-        UnfoldedSpectrum->SetLineColor(kOrange+7);
-        UnfoldedSpectrum->SetLineWidth(4);
+            // Loop over slices
+            for (int iSlice = 0; iSlice < NSlices; iSlice++) {
+                // Slice name
+                TString SlicePlotName = PlotNames[iPlot] + "_" + TString(std::to_string(iSlice));
 
-        double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
-        double YAxisRange = 1.35*imax;
-        UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
-        SmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);	
+                // Get slice width
+                double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
 
-        PlotCanvas->cd();
-        UnfoldedSpectrum->Draw("hist same");
-        SmearedSignal->Draw("hist same");
-        leg->Draw();
+                // Get number of bins
+                int SliceNBins = SerialVectorBins.at(iSlice);
+                std::vector<double> SerialSliceBinning;
 
-        // Save histogram
-        TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
-        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+PlotNames[iPlot]+".png");
+                for (int iBin = 0; iBin < SliceNBins + 1; iBin++) {
+                    double value = SerialVectorRanges.at(StartIndex + iBin);
+                    SerialSliceBinning.push_back(value);
+                } // End of the number of bins and the bin ranges declaration
+
+                // Slice true and reco true histos
+                TH1D* SlicedSmearedSignal = tools.GetHistoBins(
+                    SmearedSignal,
+                    SerialVectorLowBin.at(iSlice),
+                    SerialVectorHighBin.at(iSlice),
+                    SliceWidth,
+                    SerialSliceBinning,
+                    "SmearedSignal"
+                );
+                TH1D* SlicedUnfoldedSpectrum = tools.GetHistoBins(
+                    UnfoldedSpectrum,
+                    SerialVectorLowBin.at(iSlice),
+                    SerialVectorHighBin.at(iSlice),
+                    SliceWidth,
+                    SerialSliceBinning,
+                    "UnfoldedSpectrum"
+                );
+
+                TLegendEntry* legRecoTrue = leg->AddEntry(SlicedSmearedSignal,"True","l");
+                SlicedSmearedSignal->SetLineColor(kRed+1);
+                SlicedSmearedSignal->SetLineWidth(4);
+
+                TLegendEntry* legRecoBkg = leg->AddEntry(SlicedUnfoldedSpectrum,"Unfolded","l");
+                SlicedUnfoldedSpectrum->SetLineColor(kOrange+7);
+                SlicedUnfoldedSpectrum->SetLineWidth(4);
+
+                double imax = TMath::Max(SlicedUnfoldedSpectrum->GetMaximum(),SlicedSmearedSignal->GetMaximum());
+                double YAxisRange = 1.35*imax;
+                SlicedUnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
+                SlicedSmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);
+
+                PlotCanvas->cd();
+                SlicedSmearedSignal->Draw("hist");
+                SlicedUnfoldedSpectrum->Draw("hist same");
+                leg->Draw();
+
+                // Slice label
+                TLatex *textSlice = new TLatex();
+                TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel["True"+PlotNames[iPlot]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
+                textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
+
+                // Save histogram
+                TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+                PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+SlicePlotName+".png");	
+            }
+        } else {
+            TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
+            leg->SetBorderSize(0);
+            leg->SetNColumns(3);
+            leg->SetTextSize(TextSize*0.8);
+            leg->SetTextFont(FontStyle);
+
+            TLegendEntry* legRecoTrue = leg->AddEntry(SmearedSignal,"True","l");
+            SmearedSignal->SetLineColor(kRed+1);
+            SmearedSignal->SetLineWidth(4);
+
+            TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
+            UnfoldedSpectrum->SetLineColor(kOrange+7);
+            UnfoldedSpectrum->SetLineWidth(4);
+
+            double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
+            double YAxisRange = 1.35*imax;
+            UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
+            SmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);	
+
+            PlotCanvas->cd();
+            UnfoldedSpectrum->Draw("hist");
+            SmearedSignal->Draw("hist same");
+            leg->Draw();
+
+            // Save histogram
+            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+PlotNames[iPlot]+".png");
+        }
         delete PlotCanvas;
     }
 }
