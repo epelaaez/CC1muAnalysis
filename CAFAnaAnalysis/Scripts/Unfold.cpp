@@ -68,10 +68,51 @@ void Unfold() {
     XLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
     YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    // Leading proton angle
+    PlotNames.push_back("LeadingProtonCosTheta");
+    XLabels.push_back("cos(#theta_{#vec{p}_{L}})");
+    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{L}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Recoil proton angle
+    PlotNames.push_back("RecoilProtonCosTheta");
+    XLabels.push_back("cos(#theta_{#vec{p}_{R}})");
+    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{R}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Opening angle between protons
+    PlotNames.push_back("CosOpeningAngleProtons"); 
+    XLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
+    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Opening angle between muon and total proton
+    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); 
+    XLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
+    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Delta alpha transverse
+    PlotNames.push_back("DeltaAlphaT"); 
+    XLabels.push_back("#delta #alpha_{T}");
+    YLabels.push_back("#frac{d#delta #alpha_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Transverse momentum
     PlotNames.push_back("TransverseMomentum"); 
     XLabels.push_back("#delta P_{T}");
     YLabels.push_back("#frac{d#delta P_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-    
+
+    // Muon momentum    
+    PlotNames.push_back("MuonMomentum"); 
+    XLabels.push_back("|#vec{p}_{#mu}|");
+    YLabels.push_back("#frac{d|#vec{p}_{#mu}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Leading proton momentum 
+    PlotNames.push_back("LeadingProtonMomentum"); 
+    XLabels.push_back("|#vec{p}_{L}|");
+    YLabels.push_back("#frac{d|#vec{p}_{L}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // Recoil proton momentum 
+    PlotNames.push_back("RecoilProtonMomentum"); 
+    XLabels.push_back("|#vec{p}_{R}|");
+    YLabels.push_back("#frac{d|#vec{p}_{R}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     const int NPlots = PlotNames.size();
 
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
@@ -120,8 +161,11 @@ void Unfold() {
         ReweightXSec(UnfoldedSpectrum);
         UnfoldedSpectrum->Scale(Units / (IntegratedFlux * NTargets));
 
-        ReweightXSec(TruePlot);
-        TruePlot->Scale(Units / (IntegratedFlux * NTargets));
+        TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,Nuedges);
+        TVectorD SmearedVector = AddSmear * SignalVector;
+        V2H(SmearedVector, SmearedSignal);
+        ReweightXSec(SmearedSignal);
+        SmearedSignal->Scale(Units / (IntegratedFlux * NTargets));
 
         // Declare canvas and legend
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);
@@ -137,22 +181,22 @@ void Unfold() {
         leg->SetTextSize(TextSize*0.8);
         leg->SetTextFont(FontStyle);
 
-        TLegendEntry* legRecoTrue = leg->AddEntry(TruePlot,"True","l");
-        TruePlot->SetLineColor(kRed+1);
-        TruePlot->SetLineWidth(4);
+        TLegendEntry* legRecoTrue = leg->AddEntry(SmearedSignal,"True","l");
+        SmearedSignal->SetLineColor(kRed+1);
+        SmearedSignal->SetLineWidth(4);
 
         TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
         UnfoldedSpectrum->SetLineColor(kOrange+7);
         UnfoldedSpectrum->SetLineWidth(4);
 
-        double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),TruePlot->GetMaximum());
-        double YAxisRange = 1.15*imax;
+        double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
+        double YAxisRange = 1.35*imax;
         UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
-        TruePlot->GetYaxis()->SetRangeUser(0.,YAxisRange);	
+        SmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);	
 
         PlotCanvas->cd();
         UnfoldedSpectrum->Draw("hist same");
-        TruePlot->Draw("hist same");
+        SmearedSignal->Draw("hist same");
         leg->Draw();
 
         // Save histogram
