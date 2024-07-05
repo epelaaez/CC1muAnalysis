@@ -19,6 +19,9 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
+// Generator analysis includes.
+#include "../../GeneratorAnalysis/Scripts/Constants.h"
+
 using namespace std;
 using namespace ana;
 using namespace Constants;
@@ -33,7 +36,6 @@ void Selection() {
 
     // Some useful variables for later.
     const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const double TargetPOT(6.6e20);
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);

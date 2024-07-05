@@ -14,6 +14,14 @@
 using namespace std;
 
 namespace Constants {
+    const double Units = 1E38;
+
+    const double TargetPOT(6.6e20);
+    const double NTargets = 1.05E30; // Argon nuclei, not nucleons
+
+    double Nominal_UB_XY_Surface = 175.*180.*2.; // cm2
+	double POTPerSpill = 4997.*5e8;
+
     // Variables for double differential analysis
     static const int TwoDNBinsMuonCosTheta = 2; 
     std::vector<double> TwoDArrayNBinsMuonCosTheta{-1.0,0.5,1.0};
