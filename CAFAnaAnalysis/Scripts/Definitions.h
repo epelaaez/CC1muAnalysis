@@ -47,6 +47,16 @@ namespace ana
         {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
     };
 
+    std::vector<std::string> SystNames = {
+        "GENIEReWeight_SBND_v1_multisigma_MaCCQE",
+        "GENIEReWeight_SBND_v1_multisigma_MaNCEL",
+        "GENIEReWeight_SBND_v1_multisigma_EtaNCEL",
+        "GENIEReWeight_SBND_v1_multisigma_MaCCRES",
+        "GENIEReWeight_SBND_v1_multisigma_MvCCRES",
+        "GENIEReWeight_SBND_v1_multisigma_MaNCRES",
+        "GENIEReWeight_SBND_v1_multisigma_MvNCRES"
+    };
+
     ///////////
     // Binning
     ///////////
