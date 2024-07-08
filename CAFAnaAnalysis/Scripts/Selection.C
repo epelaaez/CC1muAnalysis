@@ -7,6 +7,7 @@
 #include "sbnana/CAFAna/Core/HistAxis.h"
 #include "sbnana/CAFAna/Core/SystShifts.h"
 #include "sbnana/CAFAna/Systs/SBNWeightSysts.h"
+#include "sbnana/CAFAna/Core/ISyst.h"
 
 // ROOT includes.
 #include "TCanvas.h"
@@ -36,18 +37,25 @@ void Selection() {
     double TextSize = 0.06;	
 
     // Some useful variables for later.
-    const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
+    // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
+    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/reco2-0032e5ef-870c-4f4b-8e74-095e05baf35b.flat.caf.root";
     const double TargetPOT(6.6e20);
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
     // Flux weights for systematics
-    const std::vector<const ISyst*> SBNSysts = GetSBNGenieWeightSysts();
+    std::vector<std::string> SystNames = {
+        "GENIEReWeight_SBND_v1_multisigma_MaCCQE",
+        "GENIEReWeight_SBND_v1_multisigma_MaNCEL",
+        "GENIEReWeight_SBND_v1_multisigma_EtaNCEL",
+        "GENIEReWeight_SBND_v1_multisigma_MaCCRES"
+    };
     std::vector<SystShifts> AllShifts;
-    for (std::size_t i = 0; i < SBNSysts.size(); i++) {
-        SystShifts SigP1Shift(SBNSysts[i], +1);
-        SystShifts SigM1Shift(SBNSysts[i], -1);
+    for (std::size_t i = 0; i < SystNames.size(); i++) {
+        ISyst* syst = new SBNWeightSyst(SystNames[i]);
+        SystShifts SigP1Shift(syst, +1);
+        SystShifts SigM1Shift(syst, -1);
         AllShifts.push_back(SigP1Shift); AllShifts.push_back(SigM1Shift);
     }
 
@@ -195,6 +203,7 @@ void Selection() {
         TH1D* RecoHisto = RecoSignals->Nominal().ToTH1(TargetPOT);
         TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
         TH1D* RecoBkgHisto = RecoBkgSignals->ToTH1(TargetPOT);
+        TGraphAsymmErrors* ErrorBand = RecoSignals->ErrorBand(TargetPOT);
 
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.17);
@@ -246,6 +255,7 @@ void Selection() {
 
         PlotCanvas->cd();
         RecoHisto->Draw("hist same");
+        ana::DrawErrorBand(RecoHisto, ErrorBand);
         RecoTrueHisto->Draw("hist same");
         RecoBkgHisto->Draw("hist same");
         leg->Draw();
