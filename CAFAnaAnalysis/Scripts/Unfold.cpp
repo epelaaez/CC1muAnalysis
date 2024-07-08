@@ -203,12 +203,6 @@ void Unfold() {
 
         // Deserialize double differential plots
         if (PlotNames[iPlot].Contains("Serial")) {
-            TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
-            leg->SetBorderSize(0);
-            leg->SetNColumns(3);
-            leg->SetTextSize(TextSize*0.8);
-            leg->SetTextFont(FontStyle);
-
             auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
             auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
             int StartIndex = 0;
@@ -247,6 +241,13 @@ void Unfold() {
                     SerialSliceBinning,
                     "UnfoldedSpectrum"
                 );
+
+                // Create legend object
+                TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
+                leg->SetBorderSize(0);
+                leg->SetNColumns(3);
+                leg->SetTextSize(TextSize*0.8);
+                leg->SetTextFont(FontStyle);
 
                 TLegendEntry* legRecoTrue = leg->AddEntry(SlicedSmearedSignal,"True","l");
                 SlicedSmearedSignal->SetLineColor(kRed+1);
