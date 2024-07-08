@@ -17,8 +17,10 @@
 
 // Generator analysis includes.
 #include "../../GeneratorAnalysis/Selections/TwoPTools.cxx"
-#include "../../GeneratorAnalysis/Utils/Tools.cxx"
 #include "../../GeneratorAnalysis/Scripts/Constants.h"
+
+// Utils includes.
+#include "../../Utils/Tools.cxx"
 
 using namespace Constants;
 

@@ -23,6 +23,9 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
+// Generator analysis includes.
+#include "../../GeneratorAnalysis/Scripts/Constants.h"
+
 using namespace std;
 using namespace ana;
 using namespace Constants;
@@ -30,7 +33,6 @@ using namespace Constants;
 void SelectionMigrationMatrix() {
     // Some useful variables for later.
     const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const double TargetPOT(6.6e20);
 
     int FontStyle = 132;
     double TextSize = 0.06;	
@@ -46,7 +48,7 @@ void SelectionMigrationMatrix() {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/SelectionMigrationMatrix.root";
+    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Matrix.root";
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variable pairs and information to plot
@@ -245,7 +247,8 @@ void SelectionMigrationMatrix() {
         
         // Save both to root file
         SaveFile->WriteObject(MigrationMatrix, PlotNames[i]+"_migration");
-        SaveFile->WriteObject(ResponseMatrix, PlotNames[i]+"_migration");
+        SaveFile->WriteObject(ResponseMatrix, PlotNames[i]+"_response");
+        SaveFile->WriteObject(TruthValuesHist, PlotNames[i]+"_true");
 
         delete PlotCanvas;
         delete MigrationMatrix;

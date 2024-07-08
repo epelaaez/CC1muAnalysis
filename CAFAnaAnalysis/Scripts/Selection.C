@@ -24,6 +24,9 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
+// Generator analysis includes.
+#include "../../GeneratorAnalysis/Scripts/Constants.h"
+
 using namespace std;
 using namespace ana;
 using namespace Constants;
@@ -37,9 +40,7 @@ void Selection() {
     double TextSize = 0.06;	
 
     // Some useful variables for later.
-    // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
     const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/reco2-0032e5ef-870c-4f4b-8e74-095e05baf35b.flat.caf.root";
-    const double TargetPOT(6.6e20);
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
@@ -265,7 +266,7 @@ void Selection() {
 
         // Save to root file
         SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
-        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_true");
+        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
         SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_bkg");
 
         delete PlotCanvas;

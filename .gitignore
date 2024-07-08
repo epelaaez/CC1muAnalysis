@@ -1,2 +1,7 @@
 # dev
 .vscode/
+
+# c++/root generated
+*.d
+*.so
+*.pcm
