@@ -305,7 +305,7 @@ void Selection() {
             auto [SystName, SystNUniv] = SystNames[iSyst];
             
             // Compute covariance matrices
-	        std::string CovName = "Cov" + SystName;
+	    std::string CovName = "Cov" + SystName;
             TH2* CovMatrix = new TH2D(
                 CovName.c_str(),
                 CovName.c_str(),
@@ -318,7 +318,7 @@ void Selection() {
             );
 	    
             int NUniv = (SystNUniv == 6 || SystNUniv == 10) ? 1 : SystNUniv;
-            for (int iUniv = 0; i < NUniv; NUniv) {
+            for (int iUniv = 0; iUniv < NUniv; iUniv++) {
                 TH1* UnivRecoSpectrum = RecoSignals[iSyst]->Universe(iUniv).ToTH1(TargetPOT);
                 TH1* UnivRecoTrueSpectrum = RecoTrueSignals[iSyst]->Universe(iUniv).ToTH1(TargetPOT);
                 TH1* UnivRecoBkgSpectrum = RecoBkgSignals[iSyst]->Universe(iUniv).ToTH1(TargetPOT);
@@ -360,7 +360,7 @@ void Selection() {
             CovMatrix->Draw("colz text");
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Cov"+PlotNames[i]+".png");
             
-	        // Get all error bands
+	    // Get all error bands
             TGraphAsymmErrors* RecoErrorBand = RecoSignals[iSyst]->ErrorBand(TargetPOT);
             TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSignals[iSyst]->ErrorBand(TargetPOT);
             TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSignals[iSyst]->ErrorBand(TargetPOT);
@@ -376,7 +376,7 @@ void Selection() {
 
             // Save as png
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
-	        SaveFile->WriteObject(CovMatrix, (TString)SystName+PlotNames[i]+"_cov");
+	    SaveFile->WriteObject(CovMatrix, (TString)SystName+PlotNames[i]+"_cov");
         }
         // Save to root file
         SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
