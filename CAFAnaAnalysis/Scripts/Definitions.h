@@ -49,18 +49,18 @@ namespace ana
 
     // Systematic name and number of universes
     std::vector<std::tuple<std::string, int>> SystNames = {
-	{"GENIEReWeight_SBND_v1_multisigma_MaCCQE", 6}, // 0
-	//{"GENIEReWeight_SBND_v1_multisigma_MaNCEL", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_EtaNCEL", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_MaCCRES", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_MvCCRES", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_MaNCRES", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_MvNCRES", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi", 6},
-	//{"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi", 6}, // 10
-	//{"GENIEReWeight_SBND_v1_multisim_MaCCQE", 100} // out of order!! (temp to test multisim)
+        {"GENIEReWeight_SBND_v1_multisigma_MaCCQE", 6}, // 0
+        {"GENIEReWeight_SBND_v1_multisigma_MaNCEL", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_EtaNCEL", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MaCCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MvCCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MaNCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MvNCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi", 6}, // 10
+        {"GENIEReWeight_SBND_v1_multisim_MaCCQE", 100} // out of order!! (temp to test multisim)
     };
 
     ///////////
