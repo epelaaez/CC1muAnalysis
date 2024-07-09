@@ -16,6 +16,7 @@
 #include "TLegendEntry.h"
 #include "TFile.h"
 #include "TH1D.h"
+#include "TRandom3.h"
 
 // std includes.
 #include <filesystem>
@@ -40,9 +41,14 @@ void Selection() {
     int FontStyle = 132;
     double TextSize = 0.06;
 
+    // Get integrated flux
+    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
+    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
+    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);    
+
     // Some useful variables for later.
     // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/reco2-0032e5ef-870c-4f4b-8e74-095e05baf35b.flat.caf.root";
+    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
@@ -141,10 +147,23 @@ void Selection() {
 
         // Loop over all systematics
         for (std::size_t iSyst = 0; iSyst < SystNames.size(); iSyst++) {
-            // Create shift with plus/minus 1 sigma
-            ISyst* syst = new SBNWeightSyst(SystNames[iSyst]);
-            SystShifts SigP1Shift(syst, +1); SystShifts SigM1Shift(syst, -1);
-            std::vector<SystShifts> Shifts = {SigP1Shift, SigM1Shift};
+            // Create shift depending on number of universes, 6/10 for multisigma
+	        // and everything else is treated as nuniv
+            auto [SystName, SystNUniv] = SystNames[iSyst];
+	        ISyst* syst = new SBNWeightSyst(SystName);
+	        std::vector<SystShifts> Shifts;
+	        SystShifts SigP1Shift(syst, +1);
+
+            if (SystNUniv == 6 || SystNUniv == 10) {
+                // Add +1 sigma shift
+                Shifts.push_back(SigP1Shift);
+            } else {
+                // Add random Gaussian shifts
+                for (int i = 0; i < SystNUniv; i++) {
+                    SystShifts RandomShift(syst, gRandom->Gaus(0,1));
+                    Shifts.push_back(RandomShift);
+                } 
+	    }
 
             // Create reco spectrum with shift
             auto RecoSignals = std::make_unique<EnsembleSpectrum>(
@@ -283,7 +302,60 @@ void Selection() {
         
         // Now add uncertainties
         for (std::size_t iSyst = 0; iSyst < SystNames.size(); iSyst++) {
-            // Get all error bands
+            auto [SystName, SystNUniv] = SystNames[iSyst];
+                
+            // Compute covariance matrices
+	    std::string CovName = "Cov" + SystName;
+            TH2* CovMatrix = new TH2D(
+                CovName.c_str(),
+                CovName.c_str(),
+                VarBins.at(i).NBins(),
+                VarBins.at(i).Min(),
+                VarBins.at(i).Max(),
+                VarBins.at(i).NBins(),
+                VarBins.at(i).Min(),
+                VarBins.at(i).Max()
+            );
+	    
+            if (SystNUniv == 6 || SystNUniv == 10) {
+                TH1* SigP1RecoSpectrum = RecoSignals[iSyst]->Universe(0).ToTH1(TargetPOT);
+                TH1* SigP1RecoTrueSpectrum = RecoTrueSignals[iSyst]->Universe(0).ToTH1(TargetPOT);
+                TH1* SigP1RecoBkgSpectrum = RecoBkgSignals[iSyst]->Universe(0).ToTH1(TargetPOT);
+
+                for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
+                    double XEventRateCV = RecoHisto->GetBinContent(x) / IntegratedFlux;
+                    double XEventRateVar = SigP1RecoSpectrum->GetBinContent(x) / IntegratedFlux;
+                    for (int y = 1; y <= x; y++) {
+                        double YEventRateCV = RecoHisto->GetBinContent(y) / IntegratedFlux;
+                        double YEventRateVar = SigP1RecoSpectrum->GetBinContent(y) / IntegratedFlux; 
+
+                    CovMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(x),
+                        RecoHisto->GetXaxis()->GetBinCenter(y),
+                        (XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)
+                    );
+
+                    CovMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(y),
+                        RecoHisto->GetXaxis()->GetBinCenter(x),
+                        (XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)
+                    );
+                }
+            }
+            } else { std::cout << "Todo for multisim" << std::endl; }
+
+            // Create directory for this sytematic if it does not exist yet
+            std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
+	    
+            // Plot and save cov matrix
+	    CovMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+	    CovMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
+
+            PlotCanvas->cd();
+            CovMatrix->Draw("colz text");
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Cov"+PlotNames[i]+".png");
+            
+	        // Get all error bands
             TGraphAsymmErrors* RecoErrorBand = RecoSignals[iSyst]->ErrorBand(TargetPOT);
             TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSignals[iSyst]->ErrorBand(TargetPOT);
             TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSignals[iSyst]->ErrorBand(TargetPOT);
@@ -298,8 +370,7 @@ void Selection() {
             leg->Draw();
 
             // Save as png
-            std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystNames[iSyst]);
-            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystNames[iSyst]+"/"+PlotNames[i]+".png");
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
         }
 
         // Save to root file
