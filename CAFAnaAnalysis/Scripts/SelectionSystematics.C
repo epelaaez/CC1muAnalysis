@@ -37,9 +37,11 @@ void SelectionSystematics(int SystIndex) {
     std::string SystName = std::get<0>(SystsVector.at(SystIndex));
     int SystNUniv = std::get<1>(SystsVector.at(SystIndex));
 
-    std::cout << "==============================" << std::endl;
-    std::cout << "Systematic name: " << SystName << ", number of universes: " << SystNUniv <<  std::endl;
-    std::cout << "==============================" << std::endl;
+    std::cout << std::endl;
+    std::cout << "========================================" << std::endl;
+    std::cout << "Systematic index " << SystIndex << " with name " << SystName << ", and number of universes " << SystNUniv <<  std::endl;
+    std::cout << "========================================" << std::endl;
+    std::cout << std::endl;
 
     // Set defaults and load tools
     TH1D::SetDefaultSumw2();
@@ -153,7 +155,7 @@ void SelectionSystematics(int SystIndex) {
 	std::vector<SystShifts> Shifts;
 	SystShifts SigP1Shift(syst, +1);
 
-	if (SystNUniv == 6 || SystNUniv == 10) {
+	if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
     	    // Add +1 sigma shift
 	    Shifts.push_back(SigP1Shift);
 	} else {
