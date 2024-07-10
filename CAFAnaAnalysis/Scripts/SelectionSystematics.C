@@ -276,11 +276,11 @@ void SelectionSystematics(int SystIndex) {
             TH1* UnivRecoBkgSpectrum = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
 
     	    for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
-		double XEventRateCV = RecoHisto->GetBinContent(x) / IntegratedFlux;
-    		double XEventRateVar = UnivRecoSpectrum->GetBinContent(x) / IntegratedFlux;
+		double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
+    		double XEventRateVar = (UnivRecoSpectrum->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
 		for (int y = 1; y <= x; y++) {
-		    double YEventRateCV = RecoHisto->GetBinContent(y) / IntegratedFlux;
-	    	    double YEventRateVar = UnivRecoSpectrum->GetBinContent(y) / IntegratedFlux; 
+		    double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
+	    	    double YEventRateVar = (UnivRecoSpectrum->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units; 
 
 	    	    CovMatrix->Fill(
 			RecoHisto->GetXaxis()->GetBinCenter(x),
