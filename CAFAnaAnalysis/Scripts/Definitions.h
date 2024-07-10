@@ -1,3 +1,6 @@
+#ifndef Definitions_h
+#define Definitions_h
+
 // SBNAna includes.
 #include "sbnanaobj/StandardRecord/Proxy/SRProxy.h"
 #include "sbnanaobj/StandardRecord/SRVector3D.h"
@@ -829,3 +832,5 @@ namespace ana
         return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
     });
 }
+
+#endif
