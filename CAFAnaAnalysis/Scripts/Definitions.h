@@ -1,3 +1,6 @@
+#ifndef Definitions_h
+#define Definitions_h
+
 // SBNAna includes.
 #include "sbnanaobj/StandardRecord/Proxy/SRProxy.h"
 #include "sbnanaobj/StandardRecord/SRVector3D.h"
@@ -47,14 +50,20 @@ namespace ana
         {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
     };
 
-    std::vector<std::string> SystNames = {
-        "GENIEReWeight_SBND_v1_multisigma_MaCCQE",
-        "GENIEReWeight_SBND_v1_multisigma_MaNCEL",
-        "GENIEReWeight_SBND_v1_multisigma_EtaNCEL",
-        "GENIEReWeight_SBND_v1_multisigma_MaCCRES",
-        "GENIEReWeight_SBND_v1_multisigma_MvCCRES",
-        "GENIEReWeight_SBND_v1_multisigma_MaNCRES",
-        "GENIEReWeight_SBND_v1_multisigma_MvNCRES"
+    // Systematic name and number of universes
+    std::vector<std::tuple<std::string, int>> SystsVector = {
+        {"GENIEReWeight_SBND_v1_multisigma_MaCCQE", 6}, // 0
+        {"GENIEReWeight_SBND_v1_multisigma_MaNCEL", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_EtaNCEL", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MaCCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MvCCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MaNCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_MvNCRES", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi", 6},
+        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi", 6}, // 10
+        {"GENIEReWeight_SBND_v1_multisim_MaCCQE", 100} // out of order!! (temp to test multisim)
     };
 
     ///////////
@@ -823,3 +832,5 @@ namespace ana
         return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
     });
 }
+
+#endif

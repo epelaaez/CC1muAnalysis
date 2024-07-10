@@ -30,7 +30,7 @@ And run the [`event_selection.ipynb`](https://github.com/epelaaez/CC1muAnalysis/
 
 ### Running event selection
 
-To perform the event selection, you have to run
+To perform the event selection without any systematics included, you have to run
 
 ```bash
 cafe -bq Scripts/Selection.C
@@ -40,4 +40,10 @@ This will generate the cuts defined in `Definitions.h` and will produce the corr
 
 ```bash
 root -l Scripts/SerialPlotGenerator.cpp
+```
+
+For the systematic study, in which we produce the covariance matrices and error bands for each systematic and plotted variable, we split up the selection code from the script that runs it. This way, we can get results in a stream instead of having to wait many hours for all the results to come at once. The selection logic is stored in `Scripts/SelectionSytematics.C`, and it can be run with all the systematics defined in `Scripts/Definitions.h` by doing
+
+```bash
+cafe -bq Scripts/RunAllSystematics.C
 ```

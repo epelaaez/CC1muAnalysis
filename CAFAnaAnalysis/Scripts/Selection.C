@@ -1,13 +1,8 @@
 // SBNAna includes.
 #include "sbnana/CAFAna/Core/SpectrumLoader.h"
 #include "sbnana/CAFAna/Core/Spectrum.h"
-#include "sbnana/CAFAna/Core/EnsembleSpectrum.h"
 #include "sbnana/CAFAna/Core/Binning.h"
 #include "sbnana/CAFAna/Core/Var.h"
-#include "sbnana/CAFAna/Core/HistAxis.h"
-#include "sbnana/CAFAna/Core/SystShifts.h"
-#include "sbnana/CAFAna/Systs/SBNWeightSysts.h"
-#include "sbnana/CAFAna/Core/ISyst.h"
 
 // ROOT includes.
 #include "TCanvas.h"
@@ -18,7 +13,6 @@
 #include "TH1D.h"
 
 // std includes.
-#include <filesystem>
 #include <vector>
 #include <memory>
 
@@ -38,11 +32,11 @@ void Selection() {
     TH2D::SetDefaultSumw2();
 
     int FontStyle = 132;
-    double TextSize = 0.06;
+    double TextSize = 0.06;	
 
     // Some useful variables for later.
     // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/reco2-0032e5ef-870c-4f4b-8e74-095e05baf35b.flat.caf.root";
+    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
@@ -56,7 +50,7 @@ void Selection() {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Selection.root";
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variables and variable information to plot
@@ -129,55 +123,15 @@ void Selection() {
 
     // Construct all spectra
     std::vector<std::tuple<
-        std::vector<std::unique_ptr<EnsembleSpectrum>>,
-        std::vector<std::unique_ptr<EnsembleSpectrum>>,
-        std::vector<std::unique_ptr<EnsembleSpectrum>>
+        std::unique_ptr<Spectrum>,
+        std::unique_ptr<Spectrum>,
+        std::unique_ptr<Spectrum>
     >> Spectra;
-    for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-        // Create spectrum vectors
-        std::vector<std::unique_ptr<EnsembleSpectrum>> RecoSpectra;
-        std::vector<std::unique_ptr<EnsembleSpectrum>> RecoTrueSpectra;
-        std::vector<std::unique_ptr<EnsembleSpectrum>> RecoBkgSpectra;
-
-        // Loop over all systematics
-        for (std::size_t iSyst = 0; iSyst < SystNames.size(); iSyst++) {
-            // Create shift with plus/minus 1 sigma
-            ISyst* syst = new SBNWeightSyst(SystNames[iSyst]);
-            SystShifts SigP1Shift(syst, +1); SystShifts SigM1Shift(syst, -1);
-            std::vector<SystShifts> Shifts = {SigP1Shift, SigM1Shift};
-
-            // Create reco spectrum with shift
-            auto RecoSignals = std::make_unique<EnsembleSpectrum>(
-                NuLoader,
-                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                kNoSpillCut,
-                kRecoIsSignal,
-                Shifts
-            );
-            RecoSpectra.push_back(std::move(RecoSignals));
-
-            // Create reco true signal spectrum with shift
-            auto RecoTrueSignals = std::make_unique<EnsembleSpectrum>(
-                NuLoader,
-                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                kNoSpillCut,
-                kRecoIsTrueReco,
-                Shifts
-            );
-            RecoTrueSpectra.push_back(std::move(RecoTrueSignals));
-
-            // Create reco background spectrum with shift
-            auto RecoBkgSignals = std::make_unique<EnsembleSpectrum>(
-                NuLoader,
-                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                kNoSpillCut,
-                kRecoIsBackground,
-                Shifts
-            );
-            RecoBkgSpectra.push_back(std::move(RecoBkgSignals));
-        }
-        // Add everything to main vector
-        Spectra.push_back({std::move(RecoSpectra), std::move(RecoTrueSpectra), std::move(RecoBkgSpectra)});
+    for (std::size_t i = 0; i < Vars.size(); i++) {
+        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsSignal); 
+        auto RecoTrueSignals = std::make_unique<Spectrum> (VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsTrueReco); 
+        auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsBackground); 
+        Spectra.push_back({std::move(RecoSignals), std::move(RecoTrueSignals), std::move(RecoBkgSignals)});
     }
 
     // We now create spectra that will help us get the efficiency and purity data for each of the cuts
@@ -220,9 +174,9 @@ void Selection() {
         auto& [RecoSignals, RecoTrueSignals, RecoBkgSignals] = Spectra.at(i);
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
-        TH1D* RecoHisto = RecoSignals[0]->Nominal().ToTH1(TargetPOT);
-        TH1D* RecoTrueHisto = RecoTrueSignals[0]->Nominal().ToTH1(TargetPOT);
-        TH1D* RecoBkgHisto = RecoBkgSignals[0]->Nominal().ToTH1(TargetPOT);
+        TH1D* RecoHisto = RecoSignals->ToTH1(TargetPOT);
+        TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
+        TH1D* RecoBkgHisto = RecoBkgSignals->ToTH1(TargetPOT);
 
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.17);
@@ -273,34 +227,13 @@ void Selection() {
         RecoBkgHisto->SetLineWidth(4);
 
         PlotCanvas->cd();
-        RecoHisto->Draw("hist");
+        RecoHisto->Draw("hist same");
         RecoTrueHisto->Draw("hist same");
         RecoBkgHisto->Draw("hist same");
         leg->Draw();
 
         // Save as png
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/"+PlotNames[i]+".png");
-        
-        // Now add uncertainties
-        for (std::size_t iSyst = 0; iSyst < SystNames.size(); iSyst++) {
-            // Get all error bands
-            TGraphAsymmErrors* RecoErrorBand = RecoSignals[iSyst]->ErrorBand(TargetPOT);
-            TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSignals[iSyst]->ErrorBand(TargetPOT);
-            TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSignals[iSyst]->ErrorBand(TargetPOT);
-
-            PlotCanvas->cd();
-            RecoHisto->Draw("hist");
-            ana::DrawErrorBand(RecoHisto, RecoErrorBand);
-            RecoTrueHisto->Draw("hist same");
-            ana::DrawErrorBand(RecoTrueHisto, RecoTrueErrorBand);
-            RecoBkgHisto->Draw("hist same");
-            ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
-            leg->Draw();
-
-            // Save as png
-            std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystNames[iSyst]);
-            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystNames[iSyst]+"/"+PlotNames[i]+".png");
-        }
 
         // Save to root file
         SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
