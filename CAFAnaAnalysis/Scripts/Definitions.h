@@ -48,7 +48,7 @@ namespace ana
     };
 
     // Systematic name and number of universes
-    std::vector<std::tuple<std::string, int>> SystNames = {
+    std::vector<std::tuple<std::string, int>> SystsVector = {
         {"GENIEReWeight_SBND_v1_multisigma_MaCCQE", 6}, // 0
         {"GENIEReWeight_SBND_v1_multisigma_MaNCEL", 6},
         {"GENIEReWeight_SBND_v1_multisigma_EtaNCEL", 6},
