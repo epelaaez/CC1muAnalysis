@@ -382,6 +382,8 @@ Response matrices are computed in a similar manner, but using the total number o
 
 \section{Closure test}
 
+To ensure that the unfolding techniques that we will implement work correctly, we perform a closure test, meaning that we will perform the unfolding on simulated true signal events and check that the unfolded data matches the true signal data with added smearing. We can see that the plots that perform this test in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. We also note that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. \textbf{TODO: stop using dummy covariance matrices.}
+
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/MuonMomentum.png}}
@@ -389,9 +391,25 @@ Response matrices are computed in a similar manner, but using the total number o
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/LeadingProtonCosTheta.png}}
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/RecoilProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/CosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Caption}
-    \label{fig:enter-label}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/TransverseMomentum.png}}
+    \caption{Closure test single differential plots}
+    \label{fig:closure-test-single-diff}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Closure test double differential plots}
+    \label{fig:closure-test-double-diff}
 \end{figure}
 
 \end{document}
