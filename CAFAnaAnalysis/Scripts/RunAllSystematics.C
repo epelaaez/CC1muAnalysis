@@ -40,6 +40,6 @@ void RunAllSystematics() {
 
     int nSysts = SystsVector.size();
     for (int i = 0; i < nSysts; i++) {
-        gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(0) + ")").c_str()); 
+        gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(i) + ")").c_str()); 
     }
 }
