@@ -71,8 +71,8 @@ void SelectionSystematics(int SystIndex) {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
     std::vector<Var> Vars; std::vector<Binning> VarBins;
@@ -149,14 +149,20 @@ void SelectionSystematics(int SystIndex) {
     if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
     	// Add +1 sigma shift
         SystShifts SigP1Shift(syst, +1);
-	Shifts.push_back(SigP1Shift);
+	    Shifts.push_back(SigP1Shift);
     } else {
-	// Add random Gaussian shifts
-	for (int i = 0; i < SystNUniv; i++) {
- 	    SystShifts RandomShift(syst, gRandom->Gaus(0,1));
-	    Shifts.push_back(RandomShift);
-	}
+	    // Add random Gaussian shifts
+        for (int i = 0; i < SystNUniv; i++) {
+            SystShifts RandomShift(syst, gRandom->Gaus(0,1));
+            Shifts.push_back(RandomShift);
+        }
     }
+
+    // We now have the option to either load all the spectra from a previous run or 
+    // run the spectra in this run
+    const bool ConstructSpectra = false;
+    // TODO: have to run everything once so I get all the data and then
+    // I'll code this up
 
     // Construct all spectra
     std::vector<std::tuple<
@@ -165,37 +171,33 @@ void SelectionSystematics(int SystIndex) {
         std::unique_ptr<EnsembleSpectrum>
     >> Spectra;
     for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-	// Create reco spectrum with shift
-    	auto RecoSpectra = std::make_unique<EnsembleSpectrum>(
-	    NuLoader,
-	    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-	    kNoSpillCut,
-	    kRecoIsSignal,
- 	    Shifts
-	);
-
-	// Create reco true signal spectrum with shift
-    	auto RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
-	    NuLoader,
-     	    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+        // Create reco spectrum with shift
+        auto RecoSpectra = std::make_unique<EnsembleSpectrum>(
+            NuLoader,
+            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+            kNoSpillCut,
+            kRecoIsSignal,
+            Shifts
+        );
+        // Create reco true signal spectrum with shift
+        auto RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
+            NuLoader,
+            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
             kNoSpillCut,
             kRecoIsTrueReco,
             Shifts
         );
-
         // Create reco background spectrum with shift
         auto RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
             NuLoader,
-    	    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-	    kNoSpillCut,
-	    kRecoIsBackground,
-	    Shifts
-	);
-        
-	// Add everything to main vector
+            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+            kNoSpillCut,
+            kRecoIsBackground,
+            Shifts
+        );
+        // Add everything to main vector
         Spectra.push_back({std::move(RecoSpectra), std::move(RecoTrueSpectra), std::move(RecoBkgSpectra)});
     }
-
     // Load spectra
     NuLoader.Go();
 
@@ -203,15 +205,11 @@ void SelectionSystematics(int SystIndex) {
     for (std::size_t i = 0; i < Vars.size(); i++) {
         auto& [RecoSpectra, RecoTrueSpectra, RecoBkgSpectra] = Spectra.at(i);
 
-        TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         TH1D* RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
         TH1D* RecoTrueHisto = RecoTrueSpectra->Nominal().ToTH1(TargetPOT);
         TH1D* RecoBkgHisto = RecoBkgSpectra->Nominal().ToTH1(TargetPOT);
 
-        PlotCanvas->SetTopMargin(0.13);
-        PlotCanvas->SetLeftMargin(0.17);
-        PlotCanvas->SetRightMargin(0.05);
-        PlotCanvas->SetBottomMargin(0.16);
+        TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
 
         TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
         leg->SetBorderSize(0);
@@ -256,81 +254,106 @@ void SelectionSystematics(int SystIndex) {
         RecoBkgHisto->SetLineColor(kOrange+7);
         RecoBkgHisto->SetLineWidth(4);
 
-	// Create covariance matrix
-	std::string CovName = "Cov" + SystName;
-	TH2* CovMatrix = new TH2D(
-	    CovName.c_str(),
-	    CovName.c_str(),
-	    VarBins.at(i).NBins(),
-	    VarBins.at(i).Min(),
-	    VarBins.at(i).Max(),
-	    VarBins.at(i).NBins(),
-	    VarBins.at(i).Min(),
-	    VarBins.at(i).Max()
-	);
+        // Create covariance matrix
+        std::string CovName = "Cov" + SystName;
+        TH2* CovMatrix = new TH2D(
+            CovName.c_str(),
+            CovName.c_str(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max()
+        );
 
-	// Loop over all universes
-	int NUniv = (SystNUniv == 6 || SystNUniv == 10) ? 1 : SystNUniv;
-    	for (int iUniv = 0; iUniv < NUniv; iUniv++) {
-	    TH1* UnivRecoSpectrum = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
-    	    TH1* UnivRecoTrueSpectrum = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
+        // Loop over all universes
+        int NUniv = (SystNUniv == 6 || SystNUniv == 10) ? 1 : SystNUniv;
+        for (int iUniv = 0; iUniv < NUniv; iUniv++) {
+            TH1* UnivRecoSpectrum = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
+            TH1* UnivRecoTrueSpectrum = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
             TH1* UnivRecoBkgSpectrum = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
 
-    	    for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
-		double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
-    		double XEventRateVar = (UnivRecoSpectrum->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
-		for (int y = 1; y <= x; y++) {
-		    double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
-	    	    double YEventRateVar = (UnivRecoSpectrum->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units; 
+            for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
+                double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
+                double XEventRateVar = (UnivRecoSpectrum->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
+                for (int y = 1; y <= x; y++) {
+                    double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
+                    double YEventRateVar = (UnivRecoSpectrum->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units; 
+                    double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
+                    CovMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(x),
+                        RecoHisto->GetXaxis()->GetBinCenter(y),
+                        Value
+                    );
+                    CovMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(y),
+                        RecoHisto->GetXaxis()->GetBinCenter(x),
+                        Value
+                    );
+                }
+	        }
 
-	    	    CovMatrix->Fill(
-			RecoHisto->GetXaxis()->GetBinCenter(x),
-	    		RecoHisto->GetXaxis()->GetBinCenter(y),
-			((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv
-		    );
-
-	    	    CovMatrix->Fill(
-			RecoHisto->GetXaxis()->GetBinCenter(y),
-	    		RecoHisto->GetXaxis()->GetBinCenter(x),
-			((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv
-	 	    );
-		}
-	    }
-	    // Save syst univ spectrum
-    	    TString UnivString = TString(std::to_string(iUniv));
-	    SaveFile->WriteObject(UnivRecoSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
+            // Save syst univ spectrum
+            TString UnivString = TString(std::to_string(iUniv));
+            SaveFile->WriteObject(UnivRecoSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
             SaveFile->WriteObject(UnivRecoTrueSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
             SaveFile->WriteObject(UnivRecoBkgSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
-	}
-	// Create directory for this sytematic if it does not exist yet
-	std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
-	    
-	// Plot and save cov matrix
-     	CovMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
- 	CovMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
-
- 	PlotCanvas->cd();
-	CovMatrix->Draw("colz text");
-	PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Cov"+PlotNames[i]+".png");
+        }
+        // Create directory for this sytematic if it does not exist yet
+        std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
             
-	// Get all error bands
-	TGraphAsymmErrors* RecoErrorBand = RecoSpectra->ErrorBand(TargetPOT);
-	TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSpectra->ErrorBand(TargetPOT);
-	TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSpectra->ErrorBand(TargetPOT);
+        // Plot and save cov matrix
+        double CovMin = CovMatrix->GetMinimum();
+        double CovMax = CovMatrix->GetMaximum();
+        CovMatrix->GetZaxis()->SetRangeUser(CovMin,CovMax); // set the ranges accordingly, for frac cov should be [0,100], for corr matrices [-1,1]
+        CovMatrix->GetZaxis()->CenterTitle();
+        CovMatrix->GetZaxis()->SetTitleFont(FontStyle);
+        CovMatrix->GetZaxis()->SetTitleSize(TextSize);
+        CovMatrix->GetZaxis()->SetLabelFont(FontStyle);
+        CovMatrix->GetZaxis()->SetLabelSize(TextSize);
+        CovMatrix->GetZaxis()->SetNdivisions(5);
 
-	PlotCanvas->cd();
-	RecoHisto->Draw("hist");
-	ana::DrawErrorBand(RecoHisto, RecoErrorBand);
-	RecoTrueHisto->Draw("hist same");
-	ana::DrawErrorBand(RecoTrueHisto, RecoTrueErrorBand);
-	RecoBkgHisto->Draw("hist same");
-	ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
-	leg->Draw();
+        CovMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+        CovMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
 
-	// Save as png
-	PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
-	SaveFile->WriteObject(CovMatrix, (TString)SystName+PlotNames[i]+"_cov");
-	delete PlotCanvas;
+        PlotCanvas->cd();
+
+        PlotCanvas->SetTopMargin(0.13);
+        PlotCanvas->SetLeftMargin(0.15);
+        PlotCanvas->SetRightMargin(0.15);
+        PlotCanvas->SetBottomMargin(0.16);
+
+        CovMatrix->Draw("colz");
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Cov"+PlotNames[i]+".png");
+        SaveFile->WriteObject(CovMatrix, PlotNames[i]+"_cov");
+
+        // Get all error bands
+        TGraphAsymmErrors* RecoErrorBand = RecoSpectra->ErrorBand(TargetPOT);
+        TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSpectra->ErrorBand(TargetPOT);
+        TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSpectra->ErrorBand(TargetPOT);
+
+        PlotCanvas->cd();
+
+        PlotCanvas->SetTopMargin(0.13);
+        PlotCanvas->SetLeftMargin(0.17);
+        PlotCanvas->SetRightMargin(0.05);
+        PlotCanvas->SetBottomMargin(0.16);
+
+        RecoHisto->Draw("hist");
+        ana::DrawErrorBand(RecoHisto, RecoErrorBand);
+        RecoTrueHisto->Draw("hist same");
+        ana::DrawErrorBand(RecoTrueHisto, RecoTrueErrorBand);
+        RecoBkgHisto->Draw("hist same");
+        ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
+        leg->Draw();
+
+        // Save as png
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
+        SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
+        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
+        SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
+        delete PlotCanvas;
     }
     // Close file
     SaveFile->Close();
