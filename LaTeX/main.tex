@@ -9,6 +9,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{float}
+\usepackage{pgffor}
 \usepackage{enumitem}
 
 \title{CC1mu2p0pi Analysis}
@@ -155,8 +156,22 @@
     RecoilProtonMomentum,
     SerialTransverseMomentum_InMuonCosTheta,
     SerialDeltaAlphaT_InMuonCosTheta,
-    SerialCosOpeningAngleProtons_InMuonCosTheta,
+     SerialCosOpeningAngleProtons_InMuonCosTheta,
     SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta
+}
+
+\newcounter{systcounter}
+\newcommand{\PrintAllSystematicVarPlots}{
+    \foreach \SystName in \SystList {
+        \foreach \VarName in \VarList {
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=3in]{Figs/CAFAna/Uncertainties/\SystName/\VarName.png}
+                \caption{\SystName variations for \VarName}
+                \label{fig:\SystName-var-\VarName}
+            \end{figure}
+        }
+    }
 }
 
 \begin{document}
@@ -548,5 +563,9 @@ To ensure that the unfolding techniques that we will implement work correctly, w
     \caption{Closure test double differential plots}
     \label{fig:closure-test-double-diff}
 \end{figure}
+
+\section{Systematics}
+
+\PrintAllSystematicVarPlots
 
 \end{document}
