@@ -39,7 +39,7 @@ void RunAllSystematics() {
     gROOT->ProcessLine(".L ./Scripts/SelectionSystematics.C");
 
     int nSysts = SystsVector.size();
-    for (int i = 0; i < nSysts; i++) {
+    for (int i = 93; i < nSysts; i++) {
         gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(i) + ")").c_str()); 
     }
 }
