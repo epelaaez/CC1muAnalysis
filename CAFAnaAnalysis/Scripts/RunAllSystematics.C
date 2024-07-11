@@ -39,11 +39,7 @@ void RunAllSystematics() {
     gROOT->ProcessLine(".L ./Scripts/SelectionSystematics.C");
 
     int nSysts = SystsVector.size();
-    //for (int i = 0; i < 2; i++) {
-    //    gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(i) + ")").c_str()); 
-    //}
-    gROOT->ProcessLine("SelectionSystematics(88)");
-    gROOT->ProcessLine("SelectionSystematics(91)");
-    gROOT->ProcessLine("SelectionSystematics(92)");
-    gROOT->ProcessLine("SelectionSystematics(98)");
+    for (int i = 0; i < nSysts; i++) {
+        gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(i) + ")").c_str()); 
+    }
 }

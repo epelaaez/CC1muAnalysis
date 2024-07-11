@@ -146,8 +146,6 @@ void SelectionSystematics(int SystIndex) {
     ISyst* syst = new SBNWeightSyst(SystName);
     std::vector<SystShifts> Shifts;
 
-    std::cout << syst->Min() << "   " << syst->Max() << std::endl;
-    
     if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
     	// Add +1 sigma shift
         SystShifts SigP1Shift(syst, +1);
