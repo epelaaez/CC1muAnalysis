@@ -141,6 +141,24 @@ void SelectionSystematics(int SystIndex) {
     // Opening angle between muon and protons in muon cos theta
     Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
+    
+    // Create shift depending on number of universes
+    ISyst* syst = new SBNWeightSyst(SystName);
+    std::vector<SystShifts> Shifts;
+
+    std::cout << syst->Min() << "   " << syst->Max() << std::endl;
+    
+    if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
+    	// Add +1 sigma shift
+        SystShifts SigP1Shift(syst, +1);
+	Shifts.push_back(SigP1Shift);
+    } else {
+	// Add random Gaussian shifts
+	for (int i = 0; i < SystNUniv; i++) {
+ 	    SystShifts RandomShift(syst, gRandom->Gaus(0,1));
+	    Shifts.push_back(RandomShift);
+	}
+    }
 
     // Construct all spectra
     std::vector<std::tuple<
@@ -149,23 +167,6 @@ void SelectionSystematics(int SystIndex) {
         std::unique_ptr<EnsembleSpectrum>
     >> Spectra;
     for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-        // Create shift depending on number of universes, 6/10 for multisigma
-	// and everything else is treated as nuniv
-     	ISyst* syst = new SBNWeightSyst(SystName);
-	std::vector<SystShifts> Shifts;
-	SystShifts SigP1Shift(syst, +1);
-
-	if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
-    	    // Add +1 sigma shift
-	    Shifts.push_back(SigP1Shift);
-	} else {
-	    // Add random Gaussian shifts
-    	    for (int i = 0; i < SystNUniv; i++) {
-		SystShifts RandomShift(syst, gRandom->Gaus(0,1));
-    		Shifts.push_back(RandomShift);
-    	    }
-	}
-
 	// Create reco spectrum with shift
     	auto RecoSpectra = std::make_unique<EnsembleSpectrum>(
 	    NuLoader,
