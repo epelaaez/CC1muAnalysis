@@ -40,6 +40,17 @@ void RunAllSystematics() {
 
     int nSysts = SystsVector.size();
     for (int i = 0; i < nSysts; i++) {
+        std::cout << std::endl;
+        std::cout << "========================================" << std::endl;
+        std::cout << "Starting systematic " << i << std::endl;
+        std::cout << "========================================" << std::endl;
+
         gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(i) + ")").c_str()); 
+
+        std::cout << "========================================" << std::endl;
+        std::cout << "Done with systematic " << i << std::endl;
+        std::cout << ((i + 1.) / nSysts) * 100 << "\% done" << std::endl;
+        std::cout << "========================================" << std::endl;
+        std::cout << std::endl;
     }
 }
