@@ -161,53 +161,90 @@ void SelectionSystematics(int SystIndex) {
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
     const bool ConstructSpectra = false;
-    // TODO: have to run everything once so I get all the data and then
-    // I'll code this up
 
-    // Construct all spectra
+    // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
         std::unique_ptr<EnsembleSpectrum>,
         std::unique_ptr<EnsembleSpectrum>,
         std::unique_ptr<EnsembleSpectrum>
     >> Spectra;
-    for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-        // Create reco spectrum with shift
-        auto RecoSpectra = std::make_unique<EnsembleSpectrum>(
-            NuLoader,
-            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-            kNoSpillCut,
-            kRecoIsSignal,
-            Shifts
-        );
-        // Create reco true signal spectrum with shift
-        auto RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
-            NuLoader,
-            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-            kNoSpillCut,
-            kRecoIsTrueReco,
-            Shifts
-        );
-        // Create reco background spectrum with shift
-        auto RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
-            NuLoader,
-            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-            kNoSpillCut,
-            kRecoIsBackground,
-            Shifts
-        );
-        // Add everything to main vector
-        Spectra.push_back({std::move(RecoSpectra), std::move(RecoTrueSpectra), std::move(RecoBkgSpectra)});
+
+    // Where we load histograms if we do not construct spectra
+    std::vector<std::vector<std::tuple<TH1*, TH1*, TH1*>>> LoadedHistos;
+
+    if (ConstructSpectra) {
+        // Construct all spectra
+        for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
+            // Create reco spectrum with shift
+            auto RecoSpectra = std::make_unique<EnsembleSpectrum>(
+                NuLoader,
+                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                kNoSpillCut,
+                kRecoIsSignal,
+                Shifts
+            );
+            // Create reco true signal spectrum with shift
+            auto RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
+                NuLoader,
+                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                kNoSpillCut,
+                kRecoIsTrueReco,
+                Shifts
+            );
+            // Create reco background spectrum with shift
+            auto RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
+                NuLoader,
+                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                kNoSpillCut,
+                kRecoIsBackground,
+                Shifts
+            );
+            // Add everything to main vector
+            Spectra.push_back({std::move(RecoSpectra), std::move(RecoTrueSpectra), std::move(RecoBkgSpectra)});
+        }
+        // Load spectra
+        NuLoader.Go();
+    } else {
+        // Load previously constructed histograms from file
+        for (std::size_t i = 0; i < Vars.size(); i++) {
+            std::vector<std::tuple<TH1*, TH1*, TH1*>> VarHistos;
+
+            // Nominal plots
+            TH1* RecoHisto = (TH1*)(SaveFile->Get<TH1>(PlotNames[i]+"_reco"));
+            TH1* RecoTrueHisto = (TH1*)(SaveFile->Get<TH1>(PlotNames[i]+"_reco_true"));
+            TH1* RecoBkgHisto = (TH1*)(SaveFile->Get<TH1>(PlotNames[i]+"_reco_bkg"));
+            VarHistos.push_back({std::move(RecoHisto), std::move(RecoTrueHisto), std::move(RecoBkgHisto)});
+
+            // Var univ plots
+            int NUniv = (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) ? 1 : SystNUniv;
+            for (int iUniv = 0; iUniv < NUniv; iUniv++) {
+                TString UnivString = TString(std::to_string(iUniv));
+                TH1* UnivRecoHisto = (TH1D*)(SaveFile->Get<TH1>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco"));
+                TH1* UnivRecoTrueHisto = (TH1D*)(SaveFile->Get<TH1>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true"));
+                TH1* UnivRecoBkgHisto = (TH1D*)(SaveFile->Get<TH1>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg"));
+                VarHistos.push_back({std::move(UnivRecoHisto), std::move(UnivRecoTrueHisto), std::move(UnivRecoBkgHisto)});
+            }
+            LoadedHistos.push_back(std::move(VarHistos));
+
+            // Resize Spectra so everything compiles correctly
+            Spectra.resize(Vars.size());
+        }
     }
-    // Load spectra
-    NuLoader.Go();
 
     // Loop over variables
     for (std::size_t i = 0; i < Vars.size(); i++) {
+        // Get histograms
+        TH1* RecoHisto; TH1* RecoTrueHisto; TH1* RecoBkgHisto;
         auto& [RecoSpectra, RecoTrueSpectra, RecoBkgSpectra] = Spectra.at(i);
-
-        TH1D* RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
-        TH1D* RecoTrueHisto = RecoTrueSpectra->Nominal().ToTH1(TargetPOT);
-        TH1D* RecoBkgHisto = RecoBkgSpectra->Nominal().ToTH1(TargetPOT);
+        if (ConstructSpectra) {
+            RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
+            RecoTrueHisto = RecoTrueSpectra->Nominal().ToTH1(TargetPOT);
+            RecoBkgHisto = RecoBkgSpectra->Nominal().ToTH1(TargetPOT);
+        } else {
+            RecoHisto = std::get<0>(LoadedHistos.at(i)[0]);
+            RecoTrueHisto = std::get<1>(LoadedHistos.at(i)[0]);
+            RecoBkgHisto = std::get<2>(LoadedHistos.at(i)[0]);
+        }
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
 
@@ -257,7 +294,7 @@ void SelectionSystematics(int SystIndex) {
         // Create covariance matrix
         std::string CovName = "Cov" + SystName;
         TH2* CovMatrix = new TH2D(
-            CovName.c_str(),
+            (CovName + (std::string)PlotNames[i]).c_str(),
             CovName.c_str(),
             VarBins.at(i).NBins(),
             VarBins.at(i).Min(),
@@ -267,43 +304,100 @@ void SelectionSystematics(int SystIndex) {
             VarBins.at(i).Max()
         );
 
+        // Create fractional covariance matrix
+        std::string FracCovName = "FracCov" + SystName;
+        TH2* FracCovMatrix = new TH2D(
+            (FracCovName + (std::string)PlotNames[i]).c_str(),
+            FracCovName.c_str(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max()
+        );
+
+        // Create correlation matrix
+        std::string CorrName = "Corr" + SystName;
+        TH2* CorrMatrix = new TH2D(
+            (CorrName + (std::string)PlotNames[i]).c_str(),
+            CorrName.c_str(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max(),
+            VarBins.at(i).NBins(),
+            VarBins.at(i).Min(),
+            VarBins.at(i).Max()
+        );
+
         // Loop over all universes
-        int NUniv = (SystNUniv == 6 || SystNUniv == 10) ? 1 : SystNUniv;
+        int NUniv = (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) ? 1 : SystNUniv;
         for (int iUniv = 0; iUniv < NUniv; iUniv++) {
-            TH1* UnivRecoSpectrum = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
-            TH1* UnivRecoTrueSpectrum = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
-            TH1* UnivRecoBkgSpectrum = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
+            // Get histograms
+            TH1* UnivRecoHisto; TH1* UnivRecoTrueHisto; TH1* UnivRecoBkgHisto;
+            if (ConstructSpectra) {
+                UnivRecoHisto = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
+                UnivRecoTrueHisto = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
+                UnivRecoBkgHisto = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
+            } else {
+                UnivRecoHisto = std::get<0>(LoadedHistos.at(i)[iUniv + 1]);
+                UnivRecoTrueHisto = std::get<1>(LoadedHistos.at(i)[iUniv + 1]);
+                UnivRecoBkgHisto = std::get<2>(LoadedHistos.at(i)[iUniv + 1]);
+            }
 
             for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
                 double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
-                double XEventRateVar = (UnivRecoSpectrum->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
-                for (int y = 1; y <= x; y++) {
+                double XEventRateVar = (UnivRecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
+                for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                     double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
-                    double YEventRateVar = (UnivRecoSpectrum->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units; 
+                    double YEventRateVar = (UnivRecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units; 
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
+
+                    // Fill covariance matrix
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
                         RecoHisto->GetXaxis()->GetBinCenter(y),
-                        Value
-                    );
-                    CovMatrix->Fill(
-                        RecoHisto->GetXaxis()->GetBinCenter(y),
-                        RecoHisto->GetXaxis()->GetBinCenter(x),
                         Value
                     );
                 }
 	        }
 
+            for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
+                for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
+                    double BinValue = CovMatrix->GetBinContent(x,y);
+                    double XBinValue = CovMatrix->GetBinContent(x,x);
+                    double YBinValue = CovMatrix->GetBinContent(y,y);
+
+                    // Fill frac cov matrix                    
+                    double FracValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (XBinValue * YBinValue);
+                    FracCovMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(x), 
+                        RecoHisto->GetXaxis()->GetBinCenter(y), 
+                        FracValue
+                    );
+
+                    // Fill corr matrix
+                    double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
+                    CorrMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(x), 
+                        RecoHisto->GetXaxis()->GetBinCenter(y), 
+                        CorrValue
+                    );
+                }
+            }
+
             // Save syst univ spectrum
             TString UnivString = TString(std::to_string(iUniv));
-            SaveFile->WriteObject(UnivRecoSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
-            SaveFile->WriteObject(UnivRecoTrueSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
-            SaveFile->WriteObject(UnivRecoBkgSpectrum, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
+            if (ConstructSpectra) {
+                SaveFile->WriteObject(UnivRecoHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
+                SaveFile->WriteObject(UnivRecoTrueHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
+                SaveFile->WriteObject(UnivRecoBkgHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
+            }
         }
         // Create directory for this sytematic if it does not exist yet
         std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
             
-        // Plot and save cov matrix
+        // Plot cov matrix
         double CovMin = CovMatrix->GetMinimum();
         double CovMax = CovMatrix->GetMaximum();
         CovMatrix->GetZaxis()->SetRangeUser(CovMin,CovMax); // set the ranges accordingly, for frac cov should be [0,100], for corr matrices [-1,1]
@@ -326,33 +420,81 @@ void SelectionSystematics(int SystIndex) {
 
         CovMatrix->Draw("colz");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Cov"+PlotNames[i]+".png");
-        SaveFile->WriteObject(CovMatrix, PlotNames[i]+"_cov");
 
-        // Get all error bands
-        TGraphAsymmErrors* RecoErrorBand = RecoSpectra->ErrorBand(TargetPOT);
-        TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSpectra->ErrorBand(TargetPOT);
-        TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSpectra->ErrorBand(TargetPOT);
+        // Plot frac cov matrix
+        double FracCovMin = FracCovMatrix->GetMinimum();
+        double FracCovMax = FracCovMatrix->GetMaximum();
+        FracCovMatrix->GetZaxis()->SetRangeUser(FracCovMin,FracCovMax); // set the ranges accordingly, for frac cov should be [0,100], for corr matrices [-1,1]
+        FracCovMatrix->GetZaxis()->CenterTitle();
+        FracCovMatrix->GetZaxis()->SetTitleFont(FontStyle);
+        FracCovMatrix->GetZaxis()->SetTitleSize(TextSize);
+        FracCovMatrix->GetZaxis()->SetLabelFont(FontStyle);
+        FracCovMatrix->GetZaxis()->SetLabelSize(TextSize);
+        FracCovMatrix->GetZaxis()->SetNdivisions(5);
+
+        FracCovMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+        FracCovMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
 
         PlotCanvas->cd();
 
         PlotCanvas->SetTopMargin(0.13);
-        PlotCanvas->SetLeftMargin(0.17);
-        PlotCanvas->SetRightMargin(0.05);
+        PlotCanvas->SetLeftMargin(0.15);
+        PlotCanvas->SetRightMargin(0.15);
         PlotCanvas->SetBottomMargin(0.16);
 
-        RecoHisto->Draw("hist");
-        ana::DrawErrorBand(RecoHisto, RecoErrorBand);
-        RecoTrueHisto->Draw("hist same");
-        ana::DrawErrorBand(RecoTrueHisto, RecoTrueErrorBand);
-        RecoBkgHisto->Draw("hist same");
-        ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
-        leg->Draw();
+        FracCovMatrix->Draw("colz");
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/FracCov"+PlotNames[i]+".png");
 
-        // Save as png
-        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
-        SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
-        SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
-        SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
+        // Plot correlation matrix
+        CorrMatrix->GetZaxis()->SetRangeUser(-1,1);
+        CorrMatrix->GetZaxis()->CenterTitle();
+        CorrMatrix->GetZaxis()->SetTitleFont(FontStyle);
+        CorrMatrix->GetZaxis()->SetTitleSize(TextSize);
+        CorrMatrix->GetZaxis()->SetLabelFont(FontStyle);
+        CorrMatrix->GetZaxis()->SetLabelSize(TextSize);
+        CorrMatrix->GetZaxis()->SetNdivisions(5);
+
+        CorrMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+        CorrMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
+
+        PlotCanvas->cd();
+
+        PlotCanvas->SetTopMargin(0.13);
+        PlotCanvas->SetLeftMargin(0.15);
+        PlotCanvas->SetRightMargin(0.15);
+        PlotCanvas->SetBottomMargin(0.16);
+
+        CorrMatrix->Draw("colz text");
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Corr"+PlotNames[i]+".png");
+
+        if (ConstructSpectra) {
+            // Plot histograms with error bands, only when constructing spectra
+            TGraphAsymmErrors* RecoErrorBand = RecoSpectra->ErrorBand(TargetPOT);
+            TGraphAsymmErrors* RecoTrueErrorBand = RecoTrueSpectra->ErrorBand(TargetPOT);
+            TGraphAsymmErrors* RecoBkgErrorBand = RecoBkgSpectra->ErrorBand(TargetPOT);
+
+            PlotCanvas->cd();
+
+            PlotCanvas->SetTopMargin(0.13);
+            PlotCanvas->SetLeftMargin(0.17);
+            PlotCanvas->SetRightMargin(0.05);
+            PlotCanvas->SetBottomMargin(0.16);
+
+            RecoHisto->Draw("hist");
+            ana::DrawErrorBand(RecoHisto, RecoErrorBand);
+            RecoTrueHisto->Draw("hist same");
+            ana::DrawErrorBand(RecoTrueHisto, RecoTrueErrorBand);
+            RecoBkgHisto->Draw("hist same");
+            ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
+            leg->Draw();
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
+
+            // Save objects
+            SaveFile->WriteObject(CovMatrix, PlotNames[i]+"_cov");
+            SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
+            SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
+            SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
+        }
         delete PlotCanvas;
     }
     // Close file
