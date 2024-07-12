@@ -362,30 +362,6 @@ void SelectionSystematics(int SystIndex) {
                 }
 	        }
 
-            for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
-                for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
-                    double BinValue = CovMatrix->GetBinContent(x,y);
-                    double XBinValue = CovMatrix->GetBinContent(x,x);
-                    double YBinValue = CovMatrix->GetBinContent(y,y);
-
-                    // Fill frac cov matrix                    
-                    double FracValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (XBinValue * YBinValue);
-                    FracCovMatrix->Fill(
-                        RecoHisto->GetXaxis()->GetBinCenter(x), 
-                        RecoHisto->GetXaxis()->GetBinCenter(y), 
-                        FracValue
-                    );
-
-                    // Fill corr matrix
-                    double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                    CorrMatrix->Fill(
-                        RecoHisto->GetXaxis()->GetBinCenter(x), 
-                        RecoHisto->GetXaxis()->GetBinCenter(y), 
-                        CorrValue
-                    );
-                }
-            }
-
             // Save syst univ spectrum
             TString UnivString = TString(std::to_string(iUniv));
             if (ConstructSpectra) {
@@ -394,6 +370,24 @@ void SelectionSystematics(int SystIndex) {
                 SaveFile->WriteObject(UnivRecoBkgHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
             }
         }
+
+        // Create fractional covariance and correlation matrices
+        for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
+            for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
+                double BinValue = CovMatrix->GetBinContent(x,y);
+                double XBinValue = CovMatrix->GetBinContent(x,x);
+                double YBinValue = CovMatrix->GetBinContent(y,y);
+
+                // Fill frac cov matrix                    
+                double FracValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (XBinValue * YBinValue);
+                FracCovMatrix->SetBinContent(x, y, FracValue);
+
+                // Fill corr matrix
+                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
+                CorrMatrix->SetBinContent(x, y, CorrValue);
+            }
+        }
+
         // Create directory for this sytematic if it does not exist yet
         std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
             
