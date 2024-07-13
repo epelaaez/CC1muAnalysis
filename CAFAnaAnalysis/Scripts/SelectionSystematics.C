@@ -373,17 +373,19 @@ void SelectionSystematics(int SystIndex) {
 
         // Create fractional covariance and correlation matrices
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
+            double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
-                double BinValue = CovMatrix->GetBinContent(x,y);
+                double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
+                double CovBinValue = CovMatrix->GetBinContent(x,y);
                 double XBinValue = CovMatrix->GetBinContent(x,x);
                 double YBinValue = CovMatrix->GetBinContent(y,y);
 
-                // Fill frac cov matrix                    
-                double FracValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (XBinValue * YBinValue);
+                // Fill frac cov matrix
+                double FracValue = (XBinValue == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
                 FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
-                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : BinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
+                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
                 CorrMatrix->SetBinContent(x, y, CorrValue);
             }
         }
