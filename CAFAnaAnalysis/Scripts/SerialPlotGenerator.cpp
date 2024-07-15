@@ -28,7 +28,7 @@ void SerialPlotGenerator() {
     Tools tools;
 
     // Load root file with histograms
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Selection.root";
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
     std::unique_ptr<TFile> File(TFile::Open(RootFilePath));
 
     // Double differential plots to deserialize

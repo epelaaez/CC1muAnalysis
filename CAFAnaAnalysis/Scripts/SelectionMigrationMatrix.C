@@ -225,7 +225,9 @@ void SelectionMigrationMatrix() {
 
         MigrationMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         MigrationMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
-        MigrationMatrix->GetZaxis()->SetRangeUser(0,1);
+        double MigrationMin = MigrationMatrix->GetMinimum();
+        double MigrationMax = MigrationMatrix->GetMaximum();
+        MigrationMatrix->GetZaxis()->SetRangeUser(MigrationMin,MigrationMax);
         MigrationMatrix->GetZaxis()->CenterTitle();
         MigrationMatrix->GetZaxis()->SetTitleFont(FontStyle);
         MigrationMatrix->GetZaxis()->SetTitleSize(TextSize);
@@ -235,7 +237,9 @@ void SelectionMigrationMatrix() {
 
         ResponseMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         ResponseMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
-        ResponseMatrix->GetZaxis()->SetRangeUser(0,1);
+        double ResponseMin = ResponseMatrix->GetMinimum();
+        double ResponseMax = ResponseMatrix->GetMaximum();
+        ResponseMatrix->GetZaxis()->SetRangeUser(ResponseMin,ResponseMax);
         ResponseMatrix->GetZaxis()->CenterTitle();
         ResponseMatrix->GetZaxis()->SetTitleFont(FontStyle);
         ResponseMatrix->GetZaxis()->SetTitleSize(TextSize);

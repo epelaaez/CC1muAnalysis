@@ -70,6 +70,9 @@ void SelectionSystematics(int SystIndex) {
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
+    // Create directory for this sytematic if it does not exist yet
+    std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
+
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
@@ -160,7 +163,7 @@ void SelectionSystematics(int SystIndex) {
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = false;
+    const bool ConstructSpectra = true;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -357,7 +360,7 @@ void SelectionSystematics(int SystIndex) {
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
                         RecoHisto->GetXaxis()->GetBinCenter(y),
-                        Value
+                        TMath::Max(Value, 1e-8)
                     );
                 }
 	        }
@@ -382,16 +385,13 @@ void SelectionSystematics(int SystIndex) {
 
                 // Fill frac cov matrix
                 double FracValue = (XBinValue == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
-                FracCovMatrix->SetBinContent(x, y, FracValue);
+                FracCovMatrix->SetBinContent(x, y, TMath::Max(FracValue, 1e-8));
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                CorrMatrix->SetBinContent(x, y, CorrValue);
+                CorrMatrix->SetBinContent(x, y, TMath::Max(CorrValue, 1e-8));
             }
         }
-
-        // Create directory for this sytematic if it does not exist yet
-        std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/"+SystName);
             
         // Plot cov matrix
         double CovMin = CovMatrix->GetMinimum();
@@ -463,6 +463,11 @@ void SelectionSystematics(int SystIndex) {
         CorrMatrix->Draw("colz text");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/Corr"+PlotNames[i]+".png");
 
+        // Save objects
+        SaveFile->WriteObject(CovMatrix, PlotNames[i]+"_cov");
+        SaveFile->WriteObject(FracCovMatrix, PlotNames[i]+"_fraccov");
+        SaveFile->WriteObject(CorrMatrix, PlotNames[i]+"_corr");
+
         if (ConstructSpectra) {
             // Plot histograms with error bands, only when constructing spectra
             TGraphAsymmErrors* RecoErrorBand = RecoSpectra->ErrorBand(TargetPOT);
@@ -486,7 +491,6 @@ void SelectionSystematics(int SystIndex) {
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
 
             // Save objects
-            SaveFile->WriteObject(CovMatrix, PlotNames[i]+"_cov");
             SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
             SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
             SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");

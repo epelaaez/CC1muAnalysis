@@ -45,7 +45,7 @@ void SelectionEfficiency() {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/SelectionEfficiency.root";
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionEfficiency.root";
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variables and variable information to plot

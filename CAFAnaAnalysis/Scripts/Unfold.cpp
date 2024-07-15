@@ -45,11 +45,13 @@ void Unfold() {
 
     Tools tools;
 
-    // Load root file(s) with histograms
-    TString SelectionRootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Selection.root";
-    TString MatrixRootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Matrix.root";
+    // Load root file(s) with histograms and matrices
+    TString SelectionRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
+    TString MatrixRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
+    TString CovRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/TotalCovMatrices.root";
     std::unique_ptr<TFile> SelectionFile(TFile::Open(SelectionRootFilePath));
     std::unique_ptr<TFile> MatrixFile(TFile::Open(MatrixRootFilePath));
+    std::unique_ptr<TFile> CovFile(TFile::Open(CovRootFilePath));
 
     // Flux file
     TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
@@ -144,6 +146,7 @@ void Unfold() {
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
         // Load necessary plots
         TH2D* ResponseHist = (TH2D*)(MatrixFile->Get<TH2D>(PlotNames[iPlot]+"_response")); // response matrix
+        TH2D* CovHist = (TH2D*)(CovFile->Get<TH2D>(PlotNames[iPlot])); // covariance matrix
         TH1D* TruePlot = (TH1D*)(MatrixFile->Get<TH1D>(PlotNames[iPlot]+"_true")); // all true generated events
         TH1D* RecoPlot = (TH1D*)(SelectionFile->Get<TH1D>(PlotNames[iPlot]+"_reco")); // reco events
         TH1D* BkgPlot = (TH1D*)(SelectionFile->Get<TH1D>(PlotNames[iPlot]+"_bkg")); // bkg events
@@ -165,7 +168,7 @@ void Unfold() {
         TVectorD SignalVector(n); H2V(TruePlot, SignalVector);
         TVectorD MeasureVector(m); H2V(RecoPlot, MeasureVector);
         TMatrixD ResponseMatrix(m, n); H2M(ResponseHist, ResponseMatrix, kFALSE);
-        TMatrixD CovarianceMatrix(m, m); CovarianceMatrix.UnitMatrix();
+        TMatrixD CovarianceMatrix(m, m); H2M(CovHist, CovarianceMatrix, kTRUE);
 
         TVectorD unfold = WienerSVD(
             ResponseMatrix,
@@ -183,7 +186,6 @@ void Unfold() {
         // Add smear to signal
         TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,Nuedges);
         V2H(unfold, UnfoldedSpectrum); 
-        
         ReweightXSec(UnfoldedSpectrum);
         UnfoldedSpectrum->Scale(Units / (IntegratedFlux * NTargets));
 
@@ -256,6 +258,9 @@ void Unfold() {
                 TLegendEntry* legRecoBkg = leg->AddEntry(SlicedUnfoldedSpectrum,"Unfolded","l");
                 SlicedUnfoldedSpectrum->SetLineColor(kOrange+7);
                 SlicedUnfoldedSpectrum->SetLineWidth(4);
+                SlicedUnfoldedSpectrum->SetMarkerColor(kOrange+7);
+                SlicedUnfoldedSpectrum->SetMarkerStyle(20);
+                SlicedUnfoldedSpectrum->SetMarkerSize(1.);
 
                 double imax = TMath::Max(SlicedUnfoldedSpectrum->GetMaximum(),SlicedSmearedSignal->GetMaximum());
                 double YAxisRange = 1.35*imax;
@@ -264,7 +269,7 @@ void Unfold() {
 
                 PlotCanvas->cd();
                 SlicedSmearedSignal->Draw("hist");
-                SlicedUnfoldedSpectrum->Draw("hist same");
+                SlicedUnfoldedSpectrum->Draw("p0 hist same");
                 leg->Draw();
 
                 // Slice label
@@ -290,6 +295,9 @@ void Unfold() {
             TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
             UnfoldedSpectrum->SetLineColor(kOrange+7);
             UnfoldedSpectrum->SetLineWidth(4);
+            UnfoldedSpectrum->SetMarkerColor(kOrange+7);
+			UnfoldedSpectrum->SetMarkerStyle(20);
+			UnfoldedSpectrum->SetMarkerSize(1.);
 
             double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
             double YAxisRange = 1.35*imax;
@@ -297,7 +305,7 @@ void Unfold() {
             SmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);	
 
             PlotCanvas->cd();
-            UnfoldedSpectrum->Draw("hist");
+            UnfoldedSpectrum->Draw("p0 hist");
             SmearedSignal->Draw("hist same");
             leg->Draw();
 
