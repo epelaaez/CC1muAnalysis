@@ -103,13 +103,11 @@ void StatSystematics() {
                 if (x == y) {
                     double RecoBinContent = RecoHist->GetBinContent(x);
                     double RecoValue = TMath::Sqrt(RecoBinContent) * (Units / (IntegratedFlux * NTargets));
-                    RecoCovMatrix->SetBinContent(x, y, RecoValue);
-                    RecoCovMatrix->SetBinContent(y, x, RecoValue);
+                    RecoCovMatrix->SetBinContent(x, y, TMath::Max(RecoValue, 1e-20));
 
                     double BkgBinContent = BkgHist->GetBinContent(x);
                     double BkgValue = TMath::Sqrt(BkgBinContent) * (Units / (IntegratedFlux * NTargets));
-                    BkgCovMatrix->SetBinContent(x, y, BkgValue);
-                    BkgCovMatrix->SetBinContent(y, x, BkgValue);
+                    BkgCovMatrix->SetBinContent(x, y, TMath::Max(BkgValue, 1e-20));
                 } else {
                     RecoCovMatrix->SetBinContent(x, y, 0.);
                     RecoCovMatrix->SetBinContent(y, x, 0.);
