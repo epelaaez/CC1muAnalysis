@@ -5,3 +5,12 @@
 *.d
 *.so
 *.pcm
+
+# latex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.gz
+*.toc
