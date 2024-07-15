@@ -11,6 +11,8 @@
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{pgffor}
+\usepackage{placeins}
+\usepackage{afterpage}
 
 \title{CC1mu2p0pi Analysis}
 \author{Emilio Peláez Cisneros}
@@ -25,123 +27,123 @@
 
 \def\SystList{
     GENIEReWeight_SBND_v1_multisigma_MaCCQE/GenieMaCCQE,
-    GENIEReWeight_SBND_v1_multisigma_MaNCEL/GenieMaNCEL,
-    GENIEReWeight_SBND_v1_multisigma_EtaNCEL/GenieEtaNCEL,
-    GENIEReWeight_SBND_v1_multisigma_MaCCRES/GenieMaCCRES,
-    GENIEReWeight_SBND_v1_multisigma_MvCCRES/GenieMvCCRES,
-    GENIEReWeight_SBND_v1_multisigma_MaNCRES/GenieMaNCRES,
-    GENIEReWeight_SBND_v1_multisigma_MvNCRES/GenieMvNCRES
-}
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_RDecBR1gamma,
-    % GENIEReWeight_SBND_v1_multisigma_RDecBR1eta,
-    % GENIEReWeight_SBND_v1_multisigma_Theta_Delta2Npi,
-    % GENIEReWeight_SBND_v1_multisigma_AhtBY,
-    % GENIEReWeight_SBND_v1_multisigma_BhtBY,
-    % GENIEReWeight_SBND_v1_multisigma_CV1uBY,
-    % GENIEReWeight_SBND_v1_multisigma_CV2uBY,
-    % GENIEReWeight_SBND_v1_multisigma_FormZone,
-    % GENIEReWeight_SBND_v1_multisigma_MFP_pi,
-    % GENIEReWeight_SBND_v1_multisigma_FrCEx_pi,
-    % GENIEReWeight_SBND_v1_multisigma_FrInel_pi,
-    % GENIEReWeight_SBND_v1_multisigma_FrAbs_pi,
-    % GENIEReWeight_SBND_v1_multisigma_FrPiProd_pi,
-    % GENIEReWeight_SBND_v1_multisigma_MFP_N,
-    % GENIEReWeight_SBND_v1_multisigma_FrCEx_N,
-    % GENIEReWeight_SBND_v1_multisigma_FrInel_N,
-    % GENIEReWeight_SBND_v1_multisigma_FrAbs_N,
-    % GENIEReWeight_SBND_v1_multisigma_FrPiProd_N,
-    % GENIEReWeight_SBND_v1_multisigma_CCQEPauliSupViaKF,
-    % GENIEReWeight_SBND_v1_multisigma_CCQEMomDistroFGtoSF,
-    % GENIEReWeight_SBND_v1_multisim_MaCCQE, 
-    % GENIEReWeight_SBND_v1_multisim_MaNCEL,
-    % GENIEReWeight_SBND_v1_multisim_EtaNCEL,
-    % GENIEReWeight_SBND_v1_multisim_MaCCRES,
-    % GENIEReWeight_SBND_v1_multisim_MvCCRES,
-    % GENIEReWeight_SBND_v1_multisim_MaNCRES,
-    % GENIEReWeight_SBND_v1_multisim_MvNCRES,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC2pi,
-    % GENIEReWeight_SBND_v1_multisim_RDecBR1gamma,
-    % GENIEReWeight_SBND_v1_multisim_RDecBR1eta,
-    % GENIEReWeight_SBND_v1_multisim_AhtBY,
-    % GENIEReWeight_SBND_v1_multisim_BhtBY,
-    % GENIEReWeight_SBND_v1_multisim_CV1uBY,
-    % GENIEReWeight_SBND_v1_multisim_CV2uBY,
-    % GENIEReWeight_SBND_v1_multisim_FormZone, 
-    % GENIEReWeight_SBND_v1_multisim_MFP_pi, 
-    % GENIEReWeight_SBND_v1_multisim_FrCEx_pi, 
-    % GENIEReWeight_SBND_v1_multisim_FrInel_pi, 
-    % GENIEReWeight_SBND_v1_multisim_FrAbs_pi,
-    % GENIEReWeight_SBND_v1_multisim_FrPiProd_pi,
-    % GENIEReWeight_SBND_v1_multisim_MFP_N,
-    % GENIEReWeight_SBND_v1_multisim_FrCEx_N,
-    % GENIEReWeight_SBND_v1_multisim_FrInel_N,
-    % GENIEReWeight_SBND_v1_multisim_FrAbs_N,
-    % GENIEReWeight_SBND_v1_multisim_FrPiProd_N,
-    % GENIEReWeight_SBND_v1_multisim_CCQEPauliSupViaKF,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nu,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nu,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nubar,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nubar,
-    % % MINERvAq0q3Weighting_SBND_v1_Mnv2p2hGaussEnhancement,
-    % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nu,
-    % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nubar,
-    % % MiscInteractionSysts_SBND_v1_nuenuebar_xsec_ratio,
-    % % MiscInteractionSysts_SBND_v1_nuenumu_xsec_ratio,
-    % MiscInteractionSysts_SBND_v1_SPPLowQ2Suppression,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_3Pi,
+    GENIEReWeight_SBND_v1_multisigma_MaNCEL/GenieMaNCEL
+        % GENIEReWeight_SBND_v1_multisigma_EtaNCEL/GenieEtaNCEL,
+        % GENIEReWeight_SBND_v1_multisigma_MaCCRES/GenieMaCCRES,
+        % GENIEReWeight_SBND_v1_multisigma_MvCCRES/GenieMvCCRES,
+        % GENIEReWeight_SBND_v1_multisigma_MaNCRES/GenieMaNCRES,
+        % GENIEReWeight_SBND_v1_multisigma_MvNCRES/GenieMvNCRES,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi/GenieNonResBGvpCC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi/GenieNonResBGvpCC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi/GenieNonResBGvpNC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi/GenieNonResBGvpNC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC1pi/GenieNonResBGvnCC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC2pi/GenieNonResBGvnCC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC1pi/GenieNonResBGvnNC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC2pi/GenieNonResBGvnNC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC1pi/GenieNonResBGvbarpCC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC2pi/GenieNonResBGvbarpCC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC1pi/GenieNonResBGvbarpNC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC2pi/GenieNonResBGvbarpNC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC1pi/GenieNonResBGvbarnCC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC2pi/GenieNonResBGvbarnCC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC1pi/GenieNonResBGvbarnNC1pi,
+    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC2pi/GenieNonResBGvbarnNC2pi,
+    % GENIEReWeight_SBND_v1_multisigma_RDecBR1gamma/GenieRDecBR1gamma,
+    % GENIEReWeight_SBND_v1_multisigma_RDecBR1eta/GenieRDecBR1eta,
+    % GENIEReWeight_SBND_v1_multisigma_Theta_Delta2Npi/GenieTheta_Delta2Npi,
+    % GENIEReWeight_SBND_v1_multisigma_AhtBY/GenieAhtBY,
+    % GENIEReWeight_SBND_v1_multisigma_BhtBY/GenieBhtBY,
+    % GENIEReWeight_SBND_v1_multisigma_CV1uBY/GenieCV1uBY,
+    % GENIEReWeight_SBND_v1_multisigma_CV2uBY/GenieCV2uBY,
+    % GENIEReWeight_SBND_v1_multisigma_FormZone/GenieFormZone,
+    % GENIEReWeight_SBND_v1_multisigma_MFP_pi/GenieMFPpi,
+    % GENIEReWeight_SBND_v1_multisigma_FrCEx_pi/GenieFrCExpi,
+    % GENIEReWeight_SBND_v1_multisigma_FrInel_pi/GenieFrInelpi,
+    % GENIEReWeight_SBND_v1_multisigma_FrAbs_pi/GenieFrAbspi,
+    % GENIEReWeight_SBND_v1_multisigma_FrPiProd_pi/GenieFrPiProdpi,
+    % GENIEReWeight_SBND_v1_multisigma_MFP_N/GenieMFPN,
+    % GENIEReWeight_SBND_v1_multisigma_FrCEx_N/GenieFrCExN,
+    % GENIEReWeight_SBND_v1_multisigma_FrInel_N/GenieFrInelN,
+    % GENIEReWeight_SBND_v1_multisigma_FrAbs_N/GenieFrAbsN,
+    % GENIEReWeight_SBND_v1_multisigma_FrPiProd_N/GenieFrPiProdN,
+    % GENIEReWeight_SBND_v1_multisigma_CCQEPauliSupViaKF/GenieCCQEPauliSupViaKF,
+    % GENIEReWeight_SBND_v1_multisigma_CCQEMomDistroFGtoSF/GenieCCQEMomDistroFGtoSF,
+        % GENIEReWeight_SBND_v1_multisim_MaCCQE/GenieMultisimMaCCQE, 
+        % GENIEReWeight_SBND_v1_multisim_MaNCEL/GenieMultisimMaNCEL,
+        % GENIEReWeight_SBND_v1_multisim_EtaNCEL/GenieMultisimEtaNCEL,
+        % GENIEReWeight_SBND_v1_multisim_MaCCRES/GenieMultisimMaCCRES,
+        % GENIEReWeight_SBND_v1_multisim_MvCCRES/GenieMultisimMvCCRES,
+        % GENIEReWeight_SBND_v1_multisim_MaNCRES/GenieMultisimMaNCRES,
+        % GENIEReWeight_SBND_v1_multisim_MvNCRES/GenieMultisimMvNCRES
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC1pi/GenieMultisimNonResBGvpCC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC2pi/GenieMultisimNonResBGvpCC2pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi/GenieMultisimNonResBGvpNC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi/GenieMultisimNonResBGvpNC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC1pi/GenieMultisimNonResBGvnCC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC2pi/GenieMultisimNonResBGvnCC2pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC1pi/GenieMultisimNonResBGvnNC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC2pi/GenieMultisimNonResBGvnNC2pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC1pi/GenieMultisimNonResBGvbarpCC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC2pi/GenieMultisimNonResBGvbarpCC2pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC1pi/GenieMultisimNonResBGvbarpNC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC2pi/GenieMultisimNonResBGvbarpNC2pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC1pi/GenieMultisimNonResBGvbarnCC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC2pi/GenieMultisimNonResBGvbarnCC2pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC1pi/GenieMultisimNonResBGvbarnNC1pi,
+    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC2pi/GenieMultisimNonResBGvbarnNC2pi,
+    % GENIEReWeight_SBND_v1_multisim_RDecBR1gamma/GenieMultisimRDecBR1gamma,
+    % GENIEReWeight_SBND_v1_multisim_RDecBR1eta/GenieMultisimRDecBR1eta,
+    % GENIEReWeight_SBND_v1_multisim_AhtBY/GenieMultisimAhtBY,
+    % GENIEReWeight_SBND_v1_multisim_BhtBY/GenieMultisimBhtBY,
+    % GENIEReWeight_SBND_v1_multisim_CV1uBY/GenieMultisimCV1uBY,
+    % GENIEReWeight_SBND_v1_multisim_CV2uBY/GenieMultisimCV2uBY,
+    % GENIEReWeight_SBND_v1_multisim_FormZone/GenieMultisimFormZone, 
+    % GENIEReWeight_SBND_v1_multisim_MFP_pi/GenieMultisimMFPpi, 
+    % GENIEReWeight_SBND_v1_multisim_FrCEx_pi/GenieMultisimFrCExpi, 
+    % GENIEReWeight_SBND_v1_multisim_FrInel_pi/GenieMultisimFrInelpi, 
+    % GENIEReWeight_SBND_v1_multisim_FrAbs_pi/GenieMultisimFrAbspi,
+    % GENIEReWeight_SBND_v1_multisim_FrPiProd_pi/GenieMultisimFrPiProdpi,
+    % GENIEReWeight_SBND_v1_multisim_MFP_N/GenieMultisimMFPN,
+    % GENIEReWeight_SBND_v1_multisim_FrCEx_N/GenieMultisimFrCExN,
+    % GENIEReWeight_SBND_v1_multisim_FrInel_N/GenieMultisimFrInelN,
+    % GENIEReWeight_SBND_v1_multisim_FrAbs_N/GenieMultisimFrAbsN,
+    % GENIEReWeight_SBND_v1_multisim_FrPiProd_N/GenieMultisimFrPiProdN,
+    % GENIEReWeight_SBND_v1_multisim_CCQEPauliSupViaKF/GenieMultisimCCQEPauliSupViaKF,
+    % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nu/MinerVAE2p2hAnu,
+    % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nu/MinerVAE2p2hBnu,
+    % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nubar/MinerVAE2p2hAnubar,
+    % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nubar/MinerVAE2p2hBnubar,
+    % % MINERvAq0q3Weighting_SBND_v1_Mnv2p2hGaussEnhancement/MinerVAq0q3GaussEnhancement,
+    % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nu/MiscC12ToAr402p2hScalingnu,
+    % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nubar/MiscC12ToAr402p2hScalingnubar,
+    % % MiscInteractionSysts_SBND_v1_nuenuebar_xsec_ratio/MiscNueNuebarXsecRatio,
+    % % MiscInteractionSysts_SBND_v1_nuenumu_xsec_ratio/MiscNueNumuXsecRatio,
+    % MiscInteractionSysts_SBND_v1_SPPLowQ2Suppression/MiscSPPLowQ2Suppression,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_2Pi/NOvAnunCC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_3Pi/NOvAnunCC3Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_2Pi/NOvAnupCC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_3Pi/NOvAnupCC3Pi,
     % % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_np_CC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_3Pi
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_1Pi/NOvAnunNC1Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_2Pi/NOvAnunNC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_3Pi/NOvAnunNC3Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_1Pi/NOvAnupNC1Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_2Pi/NOvAnupNC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_3Pi/NOvAnupNC3Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_1Pi/NOvAnunbarCC1Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_2Pi/NOvAnunbarCC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_3Pi/NOvAnunbarCC3Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_1Pi/NOvAnubarCC1Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_2Pi/NOvAnubarCC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_3Pi/NOvAnubarCC3Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_1Pi/NOvAnunbarNC1Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_2Pi/NOvAnunbarNC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_3Pi/NOvAnunbarNC3Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_1Pi/NOvAnubarNC1Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_2Pi/NOvAnubarNC2Pi,
+    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_3Pi/NOvAnubarNC3Pi
+}
 
 \def\VarList{
     MuonCosTheta/$\cos(\theta_{\vm})$,
@@ -152,8 +154,8 @@
     DeltaAlphaT/$\delta\alpha_T$,
     TransverseMomentum/$\delta P_T$,
     MuonMomentum/$|\vm|$,
-    LeadingProtonMomentum/$|\vlp|$,
-    RecoilProtonMomentum/$|\vrp|$,
+    % LeadingProtonMomentum/$|\vlp|$,
+    % RecoilProtonMomentum/$|\vrp|$,
     SerialTransverseMomentum_InMuonCosTheta/$\delta P_T$ in $\cos(\theta_{\vm})$,
     SerialDeltaAlphaT_InMuonCosTheta/$\delta \alpha_T$ in $\cos(\theta_{\vm})$,
     SerialCosOpeningAngleProtons_InMuonCosTheta/$\cos(\theta_{\vlp,\vrp})$ in $\cos(\theta_{\vm})$,
@@ -164,16 +166,20 @@
 \newcommand{\PrintAllSystematicVarPlots}{
     \foreach \SystName/\SystLabel in \SystList {
         \foreach \VarName/\VarLabel in \VarList {
-            \begin{figure}[H]ok
+            \begin{figure}[H]
                 \centering
-                \includegraphics[width=3in]{Figs/CAFAna/Uncertainties/\SystName/\VarName.png}
-                \includegraphics[width=3in]{Figs/CAFAna/Uncertainties/\SystName/Cov\VarName.png}
-                \caption{\SystLabel  variations for  \VarLabel}
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/\SystName/\VarName.png}
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/\SystName/Cov\VarName.png} \\
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/\SystName/FracCov\VarName.png}
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/\SystName/Corr\VarName.png}
+                \caption{\SystLabel~variations for~\VarLabel.}
                 \label{fig:\SystName-\VarName}
             \end{figure}
         }
     }
 }
+
+\usepackage{lineno}
 
 \begin{document}
 
@@ -183,6 +189,8 @@
 
 \tableofcontents
 \newpage
+
+\linenumbers
 
 \section{Signal definition}
 
@@ -202,15 +210,17 @@ define several variables. First, we define the momenta and opening angle of each
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueMuonMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueMuonCosThetaPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueLeadingProtonMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueLeadingProtonCosThetaPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
-    \caption{Cross sections for momenta and angles of individual particles}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueLeadingProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueLeadingProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
+    \caption{Cross sections for momenta and angles of individual particles.}
     \label{fig:momenta-cos-theta}
 \end{figure}
+
+\afterpage{\clearpage}
 
 We also define variables relating the multiple momentum vectors. First, the opening angle between the protons in the lab frame, given by 
 \begin{align}
@@ -228,19 +238,19 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueDeltaAlphaTPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueTransverseMomentumPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} 
-    \caption{Cross sections for opening angles and transverse momentum}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueDeltaAlphaTPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueTransverseMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}} 
+    \caption{Cross sections for opening angles and transverse momentum.}
     \label{fig:angles-transverse-momentum}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueTransverseMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueTransverseMomentumPlot.png}}
-    \caption{Event interaction breakdown for $|\vdp|$}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueTransverseMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueTransverseMomentumPlot.png}}
+    \caption{Event interaction breakdown for $|\vdp|$.}
     \label{fig:inte-breakdown-dpt}
 \end{figure}
 
@@ -252,16 +262,16 @@ Since GiBUU is the outlier, we checked the specific interaction mode for the RES
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PreFSI/InteBreakDown_GiBUU_TrueNoFSIMuonMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueNoFSIMuonMomentumPlot.png}}
-    \caption{Event interaction breakdown before final state interactions}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GiBUU_TrueNoFSIMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueNoFSIMuonMomentumPlot.png}}
+    \caption{Event interaction breakdown before final state interactions.}
     \label{fig:pre-fsi-inte-breakdown}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueMuonMomentumPlot.png}}
-    \caption{Event interaction breakdown for final events from GiBUU events with no FSI}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueMuonMomentumPlot.png}}
+    \caption{Event interaction breakdown for final events from GiBUU events with no FSI.}
     \label{fig:gibuu-no-fsi}
 \end{figure}
 
@@ -269,29 +279,29 @@ Since GiBUU is the outlier, we checked the specific interaction mode for the RES
 
 We plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, and $\cos\left(\theta_{\vm,\vtp}\right)$ in $\cos(\theta_{\vec{p}_{\mu}})$. These are shown in Figure~\ref{fig:double-differential-cos-mu}. We have two bins for $\cos(\theta_{\vec{p}_{\mu}})$, the first one going from $-1$ to $0.5$ and the second from $0.5$ to $1$. Therefore, these are irregular bins, with the first holding a larger range than the first.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueSerialTransverseMomentum_InMuonCosThetaPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/PostFSI/Overlay_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot.png}}
-    \caption{Double differential serial plots, all in $\cos(\theta_{\vec{p}_{\mu}})$}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueSerialTransverseMomentum_InMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot.png}}
+    \caption{Double differential serial plots, all in $\cos(\theta_{\vec{p}_{\mu}})$.}
     \label{fig:double-differential-cos-mu}
 \end{figure}
 
-We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers. These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighed appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice. Note that the plots for the $1 < \cos(\theta_{\vec{p}_{\mu}}) < 1.5$ slice have more events in general, as it can be seen by the scale of the vertical axis. 
+We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers. These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighed appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice. Note that the plots for the $0.5 < \cos(\theta_{\vec{p}_{\mu}}) < 1$ slice have more events in general, as it can be seen by the scale of the vertical axis. 
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
-    \caption{Sliced double differential plots}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
+    \caption{Sliced double differential plots.}
     \label{fig:sliced-double-differential-cos-mu}
 \end{figure}
 
@@ -299,15 +309,15 @@ We also performed the same double differential analysis but for the events befor
 
 \begin{figure}
     \centering
-    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
-    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
-    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
-    % \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
-    \caption{Sliced double differential plots for pre-FSI events}
+    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
+    \caption{Sliced double differential plots for pre-FSI events.}
     \label{fig:sliced-double-differential-cos-mu-no-fsi}
 \end{figure}
 
@@ -317,25 +327,25 @@ We also generated pure MEC events with different configurations to get the MEC s
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueDeltaAlphaTPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueTransverseMomentumPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
-    \caption{Transverse kinematic variables for pure MEC events}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueDeltaAlphaTPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueTransverseMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
+    \caption{Transverse kinematic variables for pure MEC events.}
     \label{fig:transverse-k-mec}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
-    \caption{Sliced double differential plots for pure MEC events}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Serial/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} 
+    \caption{Sliced double differential plots for pure MEC events.}
     \label{fig:sliced-double-mec}
 \end{figure}
 
@@ -379,7 +389,7 @@ We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the tr
         No neutral pions cut & 1120.33 & 0.64\%  & 12.10\% & 65.22\% \\ \hline
         \end{tabular}
     \end{center}
-    \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition}
+    \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition.}
     \label{table:cut-efficiency-purity}
 \end{table}
 
@@ -389,37 +399,37 @@ Using all the variable definitions as we did when studying the event generators,
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/MuonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/MuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/LeadingProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/LeadingProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/RecoilProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/RecoilProtonCosTheta.png}} 
-    \caption{Vector directions and magnitudes for SBND data}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/RecoilProtonCosTheta.png}} 
+    \caption{Vector directions and magnitudes for SBND data.}
     \label{fig:sbnd-vector-plots}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/DeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/TransverseMomentum.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Vector opening angles and transverse momentum for SBND data}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Vector opening angles and transverse momentum for SBND data.}
     \label{fig:sbnd-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialTransverseMomentum_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Serial/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
-    \caption{Sliced double differential plots for SBND events}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Serial/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Sliced double differential plots for SBND events.}
     \label{fig:sbnd-double-diff-sliced}
 \end{figure}
 
@@ -429,37 +439,37 @@ Using the truth information about reconstructed events, we can also compute sign
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthMuonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthLeadingProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthLeadingProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthRecoilProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthRecoilProtonCosTheta.png}} 
-    \caption{Signal efficiency plots for single differential vector directions and magnitudes}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthRecoilProtonCosTheta.png}} 
+    \caption{Signal efficiency plots for single differential vector directions and magnitudes.}
     \label{fig:sbnd-signal-efficiency-vector-plots}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthDeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthTransverseMomentum.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}}
     \caption{Signal efficiency plots for single differential vector opening angles and transverse momentum}
-    \label{fig:sbnd-signal-efficiency-opening-angles-transverse}
+    \label{fig:sbnd-signal-efficiency-opening-angles-transverse.}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
-    \caption{Signal efficiency plots for double differential variables}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Signal efficiency plots for double differential variables.}
     \label{fig:sbnd-signal-efficiency-double-differential}
 \end{figure}
 
@@ -471,65 +481,65 @@ Response matrices are computed in a similar manner, but using the total number o
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationMuonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationLeadingProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationLeadingProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationRecoilProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationRecoilProtonCosTheta.png}}
-    \caption{Migration matrices for signal differential vector directions and magnitudes}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationRecoilProtonCosTheta.png}}
+    \caption{Migration matrices for signal differential vector directions and magnitudes.}
     \label{fig:migration-vector-plots}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationDeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationTransverseMomentum.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationCosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationCosOpeningAngleMuonTotalProton.png}}
-    \caption{Migration matrices for signal differential vector opening angles and transverse momentum}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationCosOpeningAngleMuonTotalProton.png}}
+    \caption{Migration matrices for signal differential vector opening angles and transverse momentum.}
     \label{fig:migration-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialDeltaAlphaT_InMuonCosTheta.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialTransverseMomentum_InMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/MigrationSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
-    \caption{Migration matrices for double differential variables}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationSerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationSerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Migration matrices for double differential variables.}
     \label{fig:migration-double-differential}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseMuonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseLeadingProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseLeadingProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseRecoilProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseRecoilProtonCosTheta.png}}
-    \caption{Response matrices for signal differential vector directions and magnitudes}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseRecoilProtonCosTheta.png}}
+    \caption{Response matrices for signal differential vector directions and magnitudes.}
     \label{fig:response-vector-plots}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseDeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseTransverseMomentum.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseCosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseCosOpeningAngleMuonTotalProton.png}}
-    \caption{Response matrices for signal differential vector opening angles and transverse momentum}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseCosOpeningAngleMuonTotalProton.png}}
+    \caption{Response matrices for signal differential vector opening angles and transverse momentum.}
     \label{fig:response-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialDeltaAlphaT_InMuonCosTheta.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialTransverseMomentum_InMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
-    \subfloat{\includegraphics[width=3.25in]{Figs/CAFAna/Matrices/ResponseSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
-    \caption{Response matrices for double differential variables}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseSerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseSerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Response matrices for double differential variables.}
     \label{fig:response-double-differential}
 \end{figure}
 
@@ -539,29 +549,29 @@ To ensure that the unfolding techniques that we will implement work correctly, w
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/MuonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/MuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/LeadingProtonCosTheta.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/RecoilProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/CosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/DeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/TransverseMomentum.png}}
-    \caption{Closure test single differential plots}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/LeadingProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/RecoilProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/TransverseMomentum.png}}
+    \caption{Closure test single differential plots.}
     \label{fig:closure-test-single-diff}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialTransverseMomentum_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
-    \caption{Closure test double differential plots}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Closure test double differential plots.}
     \label{fig:closure-test-double-diff}
 \end{figure}
 
@@ -577,5 +587,7 @@ There are a few systematics that are currently crashing when trying to produce a
 
 \newpage
 \PrintAllSystematicVarPlots
+
+\section{Cross-section results}
 
 \end{document}
