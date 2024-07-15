@@ -49,7 +49,7 @@ void SelectionMigrationMatrix() {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/Matrix.root";
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
     // Vectors to fill with variable pairs and information to plot
@@ -225,23 +225,37 @@ void SelectionMigrationMatrix() {
 
         MigrationMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         MigrationMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
+        MigrationMatrix->GetZaxis()->SetRangeUser(0,1);
+        MigrationMatrix->GetZaxis()->CenterTitle();
+        MigrationMatrix->GetZaxis()->SetTitleFont(FontStyle);
+        MigrationMatrix->GetZaxis()->SetTitleSize(TextSize);
+        MigrationMatrix->GetZaxis()->SetLabelFont(FontStyle);
+        MigrationMatrix->GetZaxis()->SetLabelSize(TextSize);
+        MigrationMatrix->GetZaxis()->SetNdivisions(5);
 
         ResponseMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         ResponseMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
+        ResponseMatrix->GetZaxis()->SetRangeUser(0,1);
+        ResponseMatrix->GetZaxis()->CenterTitle();
+        ResponseMatrix->GetZaxis()->SetTitleFont(FontStyle);
+        ResponseMatrix->GetZaxis()->SetTitleSize(TextSize);
+        ResponseMatrix->GetZaxis()->SetLabelFont(FontStyle);
+        ResponseMatrix->GetZaxis()->SetLabelSize(TextSize);
+        ResponseMatrix->GetZaxis()->SetNdivisions(5);
 
         PlotCanvas->SetTopMargin(0.13);
-        PlotCanvas->SetLeftMargin(0.17);
-        PlotCanvas->SetRightMargin(0.05);
+        PlotCanvas->SetLeftMargin(0.15);
+        PlotCanvas->SetRightMargin(0.15);
         PlotCanvas->SetBottomMargin(0.16);
 
         PlotCanvas->cd();
-        MigrationMatrix->Draw("colz text");
+        MigrationMatrix->Draw("colz");
 
         // Save migration matrix as png
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Matrices/Migration"+PlotNames[i]+".png");
 
         PlotCanvas->cd();
-        ResponseMatrix->Draw("colz text");
+        ResponseMatrix->Draw("colz");
 
         // Save response matrix as png
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Matrices/Response"+PlotNames[i]+".png");
