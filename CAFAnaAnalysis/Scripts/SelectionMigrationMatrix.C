@@ -209,12 +209,12 @@ void SelectionMigrationMatrix() {
                 MigrationMatrix->Fill(
                     TruthValuesHist->GetXaxis()->GetBinCenter(x),
                     RecoValuesHist->GetXaxis()->GetBinCenter(y),
-                    TMath::Max(MigrationRatio, 1e-20)
+                    MigrationRatio
                 );
                 ResponseMatrix->Fill(
                     TruthValuesHist->GetXaxis()->GetBinCenter(x),
                     RecoValuesHist->GetXaxis()->GetBinCenter(y),
-                    TMath::Max(ResponseRatio, 1e-20)
+                    ResponseRatio
                 );
             }
             RecoTotalEvents += RecoValuesHist->Integral();

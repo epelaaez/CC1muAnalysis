@@ -155,8 +155,8 @@ void Unfold() {
         int n = TruePlot->GetNbinsX();
         int m = RecoPlot->GetNbinsX();
 
-        double Nuedges[n+1];
-        for (int i = 0; i < n+1; i++) { Nuedges[i] = TruePlot->GetBinLowEdge(i+1); }
+        double edges[n+1];
+        for (int i = 0; i < n+1; i++) { edges[i] = TruePlot->GetBinLowEdge(i+1); }
 
         // Create objects to store matrices/vectors from Wiener SVD
         TMatrixD AddSmear(n,n);
@@ -184,12 +184,12 @@ void Unfold() {
         );
 
         // Add smear to signal
-        TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,Nuedges);
+        TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges);
         V2H(unfold, UnfoldedSpectrum); 
         ReweightXSec(UnfoldedSpectrum);
         UnfoldedSpectrum->Scale(Units / (IntegratedFlux * NTargets));
 
-        TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,Nuedges);
+        TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges);
         TVectorD SmearedVector = AddSmear * SignalVector;
         V2H(SmearedVector, SmearedSignal);
         ReweightXSec(SmearedSignal);
