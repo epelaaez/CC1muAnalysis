@@ -56,7 +56,7 @@ namespace ana
 
     // Create the binning schemes for the Vars we wish to plot.
     const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
-    const Binning bAngleBins = Binning::Simple(6, 0.0, 1.0);
+    const Binning bAngleBins = Binning::Simple(10, -1.0, 1.0);
     const Binning bDeltaAlphaBins = Binning::Simple(6, 0.0, 180.0);
     const Binning bTransverseMomentumBins = Binning::Simple(6, 0.0, 1.0);
     const Binning bMuonMomentumBins = Binning::Simple(6, 0.1, 1.2);

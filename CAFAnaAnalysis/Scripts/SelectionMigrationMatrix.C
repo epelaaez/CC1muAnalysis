@@ -50,7 +50,7 @@ void SelectionMigrationMatrix() {
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variable pairs and information to plot
     std::vector<std::tuple<Var, Var, TruthVar>> Vars; std::vector<Binning> VarBins;
@@ -188,7 +188,7 @@ void SelectionMigrationMatrix() {
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
             double RecoTruthCounts = RecoTruthValuesHist->GetBinContent(x);
             double TruthCounts = TruthValuesHist->GetBinContent(x);
-            TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT lables bins starting from 1
+            TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT labels bins starting from 1
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                 double RecoCounts = RecoValuesHist->GetBinContent(y);
 
@@ -203,7 +203,9 @@ void SelectionMigrationMatrix() {
                 // Debugging
                 std::cout << "Reco low bin: " << y << ". Counts: " << RecoCounts << std::endl;
                 std::cout << "True low bin: " << x << ". Counts: " << TruthCounts << std::endl;
+                std::cout << "Reco truth counts: " << RecoTruthCounts << std::endl;
                 std::cout << "Migration ratio: " << MigrationRatio << std::endl;
+                std::cout << "Response ratio: " << ResponseRatio << std::endl;
                 std::cout << std::endl;
 
                 MigrationMatrix->Fill(

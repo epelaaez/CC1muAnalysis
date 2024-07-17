@@ -53,6 +53,9 @@ void Unfold() {
     std::unique_ptr<TFile> MatrixFile(TFile::Open(MatrixRootFilePath));
     std::unique_ptr<TFile> CovFile(TFile::Open(CovRootFilePath));
 
+    // Dir to save plots
+    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+
     // Flux file
     TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
 	TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
@@ -164,6 +167,10 @@ void Unfold() {
         TMatrixD UnfoldCov(n,n);
         TMatrixD CovRotation(n,n);
 
+        // Scale histograms
+        TruePlot->Scale(Units / (IntegratedFlux * NTargets));
+        RecoPlot->Scale(Units / (IntegratedFlux * NTargets));
+
         // Convert histograms to matrices/vectors
         TVectorD SignalVector(n); H2V(TruePlot, SignalVector);
         TVectorD MeasureVector(m); H2V(RecoPlot, MeasureVector);
@@ -187,13 +194,11 @@ void Unfold() {
         TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges);
         V2H(unfold, UnfoldedSpectrum); 
         ReweightXSec(UnfoldedSpectrum);
-        UnfoldedSpectrum->Scale(Units / (IntegratedFlux * NTargets));
 
         TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges);
         TVectorD SmearedVector = AddSmear * SignalVector;
         V2H(SmearedVector, SmearedSignal);
         ReweightXSec(SmearedSignal);
-        SmearedSignal->Scale(Units / (IntegratedFlux * NTargets));
 
         // Declare canvas
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);
@@ -278,7 +283,6 @@ void Unfold() {
                 textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
                 // Save histogram
-                TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
                 PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+SlicePlotName+".png");	
             }
         } else {
@@ -310,7 +314,6 @@ void Unfold() {
             leg->Draw();
 
             // Save histogram
-            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+PlotNames[iPlot]+".png");
         }
         delete PlotCanvas;
