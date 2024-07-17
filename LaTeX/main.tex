@@ -14,7 +14,8 @@
 \usepackage{placeins}
 \usepackage{afterpage}
 
-\title{CC1mu2p0pi Analysis}
+\title{Extraction of Single and Double Differential Cross-Sections on Argon for CC1$\mu$2p0$\pi$ Event Topologies in the SBND}
+
 \author{Emilio Peláez Cisneros}
 
 \newcommand{\vm}{\vec{p}_\mu}
@@ -185,27 +186,56 @@
 
 \maketitle
 
-\noindent Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
+\begin{abstract}
+    The precise measurement of cross-sections for a variety of interactions is critical to the success of upcoming
+    flagship neutrino experiments. Of special interest are neutrino interactions that leave the nucleus in a 
+    2-particle 2-hole state (2p2h). This note will present cross-section measurements for the production of 2p2h
+    states on Argon. Using SBND data collected from the \textbf{period} of operation, we select events corresponding 
+    to a charged-current $\nu_\mu$ interaction that left the Argon nucleus in a 2p2h state. These interactions produce
+    a topology with one muon and two protons in the final state (CC1$\mu$2p0$\pi$). This analysis targets both single 
+    differential and double differential cross-section measurements for CC1$\mu$2p0$\pi$ event topologies in a variety of
+    kinematic variables. Comparisons are made to a set of theoretical models that explore different cross-section
+    modeling configurations. Code for this analysis is available on \href{https://github.com/epelaaez/CC1muAnalysis/tree/main}{GitHub}.
+\end{abstract}
 
 \tableofcontents
 \newpage
 
 \linenumbers
 
-\section{Signal definition}
+\section{Generator analysis}
+
+\subsection{Signal definition}
 
 We choose charged-current muon neutrino interactions that result in one muon, two protons, no charged pions with $P_{\pi} > 70$ MeV/c, no neutral pions or heavier mesons, and any number of neutrons. These interactions are denoted as CC1$\mu$2p0$\pi$. We require the momentum of the muon and protons to be in the following ranges (in MeV/c):
 \begin{align}
     100 < P_P < 1200 \qquad 300 < P_\mu < 1000
 \end{align}
 
-\section{Generators}
+\subsection{Generators}
 
 The following generators are used to create events, which are then discriminated using the signal definition above: NuWro, GiBUU, NEUT, GENIE G18, GENIE AR23.
+Information about these generators is summarized in Table~\ref{table:generator-data}.
 
-\section{Variables definition}
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{lc}
+        \hline
+        \textbf{Name} & \textbf{Generator/Configuration} \\ \hline
+        Genie G18 & GENIE v3.0.6 G18\_10a\_02\_11a \\
+        Genie AR23 & --- \\
+        NuWro & NuWro 19.02.1 \\
+        NEUT & NEUT v5.4.0 \\
+        GiBUU & GiBUU 2021
+        \end{tabular}
+    \end{center}
+    \caption{Generator and configuration data.}
+    \label{table:generator-data}
+\end{table}
 
-Given the vectors for the leading proton $\vlp$, recoil proton $\vrp$, and muon $\vm$, we 
+\subsection{Variables definition}
+
+Given the momentum vectors for the leading proton $\vlp$, recoil proton $\vrp$, and muon $\vm$, we 
 define several variables. First, we define the momenta and opening angle of each variable, denoted as $|\vec p|$ and $\cos(\theta_{\vec p})$, with the appropriate index for each momentum vector. These variables are plotted in Figure~\ref{fig:momenta-cos-theta}.
 
 \begin{figure}
@@ -216,7 +246,7 @@ define several variables. First, we define the momenta and opening angle of each
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueLeadingProtonCosThetaPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonMomentumPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
-    \caption{Cross sections for momenta and angles of individual particles.}
+    \caption{Cross sections for momentum and opening angles of individual particles.}
     \label{fig:momenta-cos-theta}
 \end{figure}
 
@@ -230,11 +260,19 @@ Then, the opening angle between the total proton momentum ($\vtp = \vlp + \vrp$)
 \begin{align}
     \cos\left(\theta_{\vm,\vtp}\right) = \frac{\vm \cdot \vtp}{|\vm||\vtp|}.
 \end{align}
-Finally, the momentum transverse to the direction of the neutrino beam, which we denote $\vdp$ and is given by 
+The momentum transverse to the direction of the neutrino beam, which we denote $\vdp$ and is given by 
 \begin{align}
     \vdp = \vec{p}^{\mu}_T + \vec{p}^{L}_T + \vec{p}^{R}_T.
 \end{align}
-For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We plot the differential cross sections of these variables against for the given generators in Figure~\ref{fig:angles-transverse-momentum}. We can also see the cross section by event type for $|\vdp|$ for the NuWro and GENIE AR23 generators in Figure~\ref{fig:inte-breakdown-dpt}.
+For the transverse momentum, we will be interested in its magnitude $|\vdp|$. 
+Finally, the angular orientation of the transverse momentum with respect to the transverse muon 
+is defined as 
+\begin{align}
+    \delta \alpha_T = \cos^{-1}\left(\frac{- \vec{p}^\mu_T \cdot \vdp}{|\vec{p}^\mu_T||\vdp|}\right).
+\end{align}
+We plot the differential cross sections of these variables for the given generators in Figure~\ref{fig:angles-transverse-momentum}.
+We can also see the cross section by event type for $|\vdp|$ for the all generators in Figure~\ref{fig:inte-breakdown-dpt}. We only show
+one variable for the interaction breakdown, as the percentages will remain the same for other variables.
 
 \begin{figure}
     \centering
@@ -249,37 +287,55 @@ For the transverse momentum, we will be interested in its magnitude $|\vdp|$. We
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueTransverseMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueTransverseMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueTransverseMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueTransverseMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueTransverseMomentumPlot.png}}
     \caption{Event interaction breakdown for $|\vdp|$.}
     \label{fig:inte-breakdown-dpt}
 \end{figure}
 
-\section{Pre-FSI events}
+\subsection{Pre-FSI events}
 
-To investigate why the percentage of MEC events for some generators is low, we performed event selection before any final state interactions took place. For both GENIE tunes, NEUT, and NuWro, we got 100\% MEC events pre-FSI. For GiBUU, only 4.1\% MEC versus 76.2\% RES and 16\% DIS events pre-FSI. The plots for GiBUU and NuWro are shown in Figure~\ref{fig:pre-fsi-inte-breakdown}. 
-
-Since GiBUU is the outlier, we checked the specific interaction mode for the RES events. We got that 10 has 39.3\%, 11 has 34.7\%, 12 has 0.0136\%, 13 has 26 \%, and 27, 22, and 23 all have zero percent of the RES events. We also checked the event interaction breakdown for GiBUU samples without final state interactions, in which we found that 100\% of the events are MEC, shown in Figure~\ref{fig:gibuu-no-fsi}.
+To investigate why the percentage of MEC events for some generators is low, we performed event selection before any final state interactions took place. For both GENIE tunes, NEUT, and NuWro, we got 100\% MEC events pre-FSI. For GiBUU, only 4.1\% MEC versus 76.2\% RES and 16\% DIS events pre-FSI. The 
+interaction breakdown plots for all the generators are shown in Figure~\ref{fig:pre-fsi-inte-breakdown}. Again, only one variable is shown 
+as the percentages will remain the same for others.
+Since GiBUU is the outlier, we checked the specific interaction mode for the resonance events. We got that 10 has 39.3\%, 11 has 34.7\%, 12 has 0.0136\%, 13 has 26 \%, and 27, 22, and 23 all have zero percent of the resonance events. 
+We also checked the event interaction breakdown for GiBUU samples without final state interactions, in which we found that 100\% of the events are MEC, shown in Figure~\ref{fig:gibuu-no-fsi}.
 
 \begin{figure}
     \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueNoFSIMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueNoFSIMuonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueNoFSIMuonMomentumPlot.png}}    
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueNoFSIMuonMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GiBUU_TrueNoFSIMuonMomentumPlot.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueNoFSIMuonMomentumPlot.png}}
-    \caption{Event interaction breakdown before final state interactions.}
+    \caption{Event interaction breakdown of $|\vm|$ before final state interactions.}
     \label{fig:pre-fsi-inte-breakdown}
 \end{figure}
 
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueLeadingProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueLeadingProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueRecoilProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueRecoilProtonCosThetaPlot.png}} \\
     \caption{Event interaction breakdown for final events from GiBUU events with no FSI.}
     \label{fig:gibuu-no-fsi}
 \end{figure}
 
-\section{Double differential plots}
+\subsection{Double differential plots}
 
-We plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, and $\cos\left(\theta_{\vm,\vtp}\right)$ in $\cos(\theta_{\vec{p}_{\mu}})$. These are shown in Figure~\ref{fig:double-differential-cos-mu}. We have two bins for $\cos(\theta_{\vec{p}_{\mu}})$, the first one going from $-1$ to $0.5$ and the second from $0.5$ to $1$. Therefore, these are irregular bins, with the first holding a larger range than the first.
+For our double differential figures, we plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
+and $\cos\left(\theta_{\vm,\vtp}\right)$ in $\cos(\theta_{\vec{p}_{\mu}})$. These are shown
+in Figure~\ref{fig:double-differential-cos-mu}. We have two bins for $\cos(\theta_{\vec{p}_{\mu}})$, the first one 
+going from $-1$ to $0.5$ and the second from $0.5$ to $1$. Therefore, these are irregular bins, with the first 
+holding a larger range than the first. The interaction breakdown for $\delta\alpha_T$ in $\cos(\theta_{\vec{p}_{\mu}})$ 
+is shown in Figure~\ref{fig:inte-breakdown-double-differential}.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueSerialTransverseMomentum_InMuonCosThetaPlot.png}} \\
@@ -289,7 +345,25 @@ We plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
     \label{fig:double-differential-cos-mu}
 \end{figure}
 
-We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers. These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighed appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice. Note that the plots for the $0.5 < \cos(\theta_{\vec{p}_{\mu}}) < 1$ slice have more events in general, as it can be seen by the scale of the vertical axis. 
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
+    \caption{Interaction breakdown for $\delta\alpha_T$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-differential}    
+\end{figure}
+
+We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers.
+These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighted 
+appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis
+multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice.
+Note that the plots for the $0.5 < \cos(\theta_{\vec{p}_{\mu}}) < 1$ slice have more events in general, although they span a smaller phase space 
+of $\cos(\theta_{\vec{p}_{\mu}})$, as it can be seen by the scale of the vertical axis. 
+We performed the same double differential analysis for the events before final state interactions. 
+These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}.
 
 \begin{figure}
     \centering
@@ -305,14 +379,12 @@ We also slice the double differential plots into two plots each, so that we have
     \label{fig:sliced-double-differential-cos-mu}
 \end{figure}
 
-We also performed the same double differential analysis but for the events before final state interactions. These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}. Only the plots for the two opening angles are shown here for compactness. 
-
 \begin{figure}
     \centering
-    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
-    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
-    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
-    % \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
@@ -321,9 +393,11 @@ We also performed the same double differential analysis but for the events befor
     \label{fig:sliced-double-differential-cos-mu-no-fsi}
 \end{figure}
 
-\section{Pure MEC events}
+\subsection{Pure MEC events}
 
-We also generated pure MEC events with different configurations to get the MEC splines. These were all different tunes of GENIE: AR23, G18 with Empirical MEC model, and G18 with Nieves MEC model. The plots for the transverse kinematic variables are shown in Figure~\ref{fig:transverse-k-mec}. Some of the sliced double differential plots are shown in Figure~\ref{fig:sliced-double-mec}.
+We also generated pure MEC events with different configurations to get the MEC splines. These were all different tunes of GENIE: AR23, G18 with Empirical MEC model, and G18 with Nieves MEC model. 
+The plots for the transverse kinematic variables are shown in Figure~\ref{fig:transverse-k-mec}. 
+The sliced double differential plots are shown in Figure~\ref{fig:sliced-double-mec}.
 
 \begin{figure}
     \centering
@@ -349,7 +423,31 @@ We also generated pure MEC events with different configurations to get the MEC s
     \label{fig:sliced-double-mec}
 \end{figure}
 
-\section{CAFAna analysis}
+\clearpage
+
+\section{SBND analysis}
+
+The CAF files used for this analysis are available in the Fermilab gpvms at the 
+path 
+
+\begin{center}
+    \verb|/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root|    
+\end{center}
+
+\noindent where the asterisk means that all the files in the directory with the extension 
+\verb|.flat.caf.root| will be used.
+
+\subsection{Fiducial volume}
+
+To perform the analysis of SBND data, we have to define the fiducial volume of the detector, which represents
+a central part of the detector in which we will accept signals. The fiducial volume is given by the 
+following ranges:
+\begin{align}
+    5 < |x| < 180 \qquad |y| < 180 \qquad 10 < z < 450
+\end{align}
+where $x$, $y$, and $z$ are the coordinates in the detector frame, all in centimeters.
+
+\subsection{Signal definition}
 
 To perform analysis on experiment data, we will be using the CAFAna framework. This allows us to perform cuts based on the reconstructed and Monte Carlo data (if available, i.e., only in the case of dealing with simulated events), to discriminate events. To discriminate events based on their Monte Carlo data, we perform a simple \verb|TruthCut| that checks the following:
 \begin{enumerate}[label=(\roman*)]
@@ -360,10 +458,11 @@ To perform analysis on experiment data, we will be using the CAFAna framework. T
     \item That there are only two protons in our allowed momentum range
     \item That there are no charged/neutral pions in our defined momenta ranges
 \end{enumerate}
+
 Using the reconstructed event data, we can perform a \verb|Cut| that checks the following:
 \begin{enumerate}[label=(\roman*)]
     \item The reconstructed vertex for the neutrino interaction takes place in the fiducial volume
-    \item That the event is not a cosmic event by Pandora's criteria (using \verb|nu_score| to check how neutrino like the slice is, and \verb|fmatch.score| with \verb|fmatch.time| to check the event comes from the beam
+    \item That the event is not a cosmic event by Pandora's criteria (using \verb|nu_score| to check how neutrino like the slice is, and \verb|fmatch.score| with \verb|fmatch.time| to check the event comes from the beam)
     \item That there is one muon track with $L_{\text{track}} > 50$ cm, $\chi^2_\mu < 30$, $\chi^2_p > 60$, and this being the longest reconstructed track, and that this has momentum in our allowed range
     \item That there are two proton tracks with $\chi^2_p < 100$, and that these have momentum in our allowed range
     \item That there are no other reconstructed tracks with momentum in the allowed range for charged pions
@@ -371,29 +470,31 @@ Using the reconstructed event data, we can perform a \verb|Cut| that checks the 
 \end{enumerate}
 Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events. This is shown in more detail for all our variables in the next section.
 
-We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts we apply to the reconstructed events. These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()|. Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and the all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
+We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts we apply to the reconstructed events. 
+These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()|. Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and the all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
+The numbers reported in this table are POT normalized to $6.6 \cdot 10^{20}$.
 
 \begin{table}
     \begin{center}
         \begin{tabular}{|l|cccc|}
         \hline
         \textbf{Cut}         & \textbf{Number of events} & \textbf{Global efficiency} & \textbf{Signal efficiency} & \textbf{Purity} \\ \hline
-        All                  & 308481  & -       & -       & -      \\
-        True signal events   & 6040.06 & -       & -       & -      \\
-        All reco events      & 175064  & 100\%   & -       & -      \\
-        Cosmic cut           & 140772  & 80.41\% & 84.67\% & 3.63\% \\
-        Vertex in FV cut     & 82953.4 & 47.39\% & 83.87\% & 6.11\% \\
-        One muon cut         & 33951   & 19.39\% & 43.55\% & 7.75\% \\
-        Two protons cut      & 2727.77 & 1.56\%  & 17.74\% & 39.29\% \\
-        No charged pions cut & 1266.46 & 0.72\%  & 12.90\% & 61.54\% \\
-        No neutral pions cut & 1120.33 & 0.64\%  & 12.10\% & 65.22\% \\ \hline
+        All                  & 1.31823e7  & -       & -       & -      \\
+        True signal events   & 273751 & -       & -       & -      \\
+        All reco events      & 6.61683e6  & 100\%   & -       & -      \\
+        Cosmic cut           & 5.46987e6  & 82.6659\% & 89.0567\% & 4.45703\% \\
+        Vertex in FV cut     & 3.10952e6 & 46.9941\% & 87.5899\% & 7.7111\% \\
+        One muon cut         & 2.14513e06 & 32.4193\% & 69.629\% & 8.88571\% \\
+        Two protons cut      & 137309 & 2.07514\%  & 16.3503\% & 32.5975\% \\
+        No charged pions cut & 65938 & 0.99652\%  & 12.1369\% & 50.3881\% \\
+        No neutral pions cut & 54088.9 & 0.817444\%  & 10.929\% & 55.313\% \\ \hline
         \end{tabular}
     \end{center}
     \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition.}
     \label{table:cut-efficiency-purity}
 \end{table}
 
-\section{SBND variable plots}
+\subsection{Variable plots}
 
 Using all the variable definitions as we did when studying the event generators, and the signal definition based on the cuts described in the previous section, we can generate plots for SBND data. The reconstructed single differential variables corresponding to vector opening angles and magnitudes are shown in Figure~\ref{fig:sbnd-vector-plots}. In these figures, three lines are shown, corresponding to: all reconstructed (all the reconstructed events that pass our signal definition), signal (reconstructed events that pass signal definition and are true signal events as determined by the \verb|TruthCut| from our previous section), and background (reconstructed events that pass signal definition but are not true signal events) events. Similarly, the variables relating multiple vectors are shown in Figure~\ref{fig:sbnd-opening-angles-transverse}, and double differential sliced variables are shown in Figure~\ref{fig:sbnd-double-diff-sliced}.
 
@@ -433,7 +534,7 @@ Using all the variable definitions as we did when studying the event generators,
     \label{fig:sbnd-double-diff-sliced}
 \end{figure}
 
-\section{SBND signal efficiency}
+\subsection{Signal efficiency}
 
 Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. These plots are shown in Figure~\ref{fig:sbnd-signal-efficiency-vector-plots} and Figure~\ref{fig:sbnd-signal-efficiency-opening-angles-transverse} for single-differential variables and Figure~\ref{fig:sbnd-signal-efficiency-double-differential} for double differential variables.
 
@@ -455,8 +556,8 @@ Using the truth information about reconstructed events, we can also compute sign
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthTransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthCosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}}
-    \caption{Signal efficiency plots for single differential vector opening angles and transverse momentum}
-    \label{fig:sbnd-signal-efficiency-opening-angles-transverse.}
+    \caption{Signal efficiency plots for single differential vector opening angles and transverse momentum.}
+    \label{fig:sbnd-signal-efficiency-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
@@ -473,7 +574,7 @@ Using the truth information about reconstructed events, we can also compute sign
     \label{fig:sbnd-signal-efficiency-double-differential}
 \end{figure}
 
-\section{SBND migration and response matrices}
+\subsection{Migration and response matrices}
 
 Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. For the migration matrix, we consider true signal events that were reconstructed and satisfy our signal definition in the denominator. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
 
@@ -543,6 +644,39 @@ Response matrices are computed in a similar manner, but using the total number o
     \label{fig:response-double-differential}
 \end{figure}
 
+\subsection{Systematics}
+
+To include systematic uncertainties in our study, we first consider cross sectional systematics.
+These are variations in the cross section models used to generate the events. They can be of two types:
+multisigma and multisim. For the former, we consider a $1\sigma$ variation of the affected parameters, 
+and in the latter we consider one hundred universes, each with a random variation picked from a 
+Gaussian distribution between $0\sigma$ and $1\sigma$. From these variations, we compute the covariance matrix 
+as 
+\begin{align}
+    E_{i,j} = \frac{1}{N_{\text{Univ}}} \sum_{s = 1}^{N_{\text{Univ}}} (\tilde{\sigma}_i^{\text{Var}, s} - \tilde{\sigma}_i^\text{CV})(\tilde{\sigma}_j^{\text{Var}, s} - \tilde{\sigma}_j^\text{CV})
+\end{align}
+where $\tilde{\sigma}_i^{\text{Var}, s}$ represents the variaton cross section of the variable in the $i$-th 
+bin in the $s$-th universe, and $\tilde{\sigma}_i^\text{CV}$ is the central value (without any variation) 
+of the cross section in the $i$-th bin. Then, the fractional covariance matrix is defined as 
+\begin{align}
+    F_{i,j} = \frac{E_{i,j}}{\tilde{\sigma}_i^\text{CV} \tilde{\sigma}_j^\text{CV}}.
+\end{align}
+And the correlation matrix is defined as
+\begin{align}
+    \rho_{i,j} = \frac{E_{i,j}}{\sqrt{E_{i,i} E_{j,j}}}.
+\end{align}
+In the case of a multisigma systematic, $N_{\text{Univ}} = 1$, and for a multisim systematic, $N_{\text{Univ}} = 100$.
+The plots for all the individual cross sectional systematics are shown in Appendix~\ref{sec:xsec-systematics}.
+There are a few systematics that are currently crashing when trying to produce all plots. This are:
+\begin{itemize}
+    \item MINERvAq0q3Weighting\_SBND\_v1\_Mnv2p2hGaussEnhancement
+    \item MiscInteractionSysts\_SBND\_v1\_nuenuebar\_xsec\_ratio
+    \item MiscInteractionSysts\_SBND\_v1\_nuenumu\_xsec\_ratio
+    \item NOvAStyleNonResPionNorm\_SBND\_v1\_NR\_nu\_np\_CC\_1Pi
+\end{itemize}
+
+
+\clearpage
 \section{Closure test}
 
 To ensure that the unfolding techniques that we will implement work correctly, we perform a closure test, meaning that we will perform the unfolding on simulated true signal events and check that the unfolded data matches the true signal data with added smearing. We can see that the plots that perform this test in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. We also note that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. \textbf{TODO: stop using dummy covariance matrices.}
@@ -575,19 +709,17 @@ To ensure that the unfolding techniques that we will implement work correctly, w
     \label{fig:closure-test-double-diff}
 \end{figure}
 
-\section{Systematics}
-
-There are a few systematics that are currently crashing when trying to produce all plots. This are:
-\begin{itemize}
-    \item MINERvAq0q3Weighting\_SBND\_v1\_Mnv2p2hGaussEnhancement
-    \item MiscInteractionSysts\_SBND\_v1\_nuenuebar\_xsec\_ratio
-    \item MiscInteractionSysts\_SBND\_v1\_nuenumu\_xsec\_ratio
-    \item NOvAStyleNonResPionNorm\_SBND\_v1\_NR\_nu\_np\_CC\_1Pi
-\end{itemize}
-
-\newpage
-\PrintAllSystematicVarPlots
-
 \section{Cross-section results}
+Placeholder.
+
+\clearpage
+
+\section{Appendices}
+
+\subsection{Cross section systematics}\label{sec:xsec-systematics}
+In this appendix, the variations, covariance matrices, fractional covariance matrices, 
+and correlation matrices are plotted for all of the cross section systematics and variables.
+
+\PrintAllSystematicVarPlots
 
 \end{document}
