@@ -133,6 +133,13 @@ void SelectionEfficiency() {
         TH1D* TrueHisto = TrueSignals->ToTH1(TargetPOT);
         TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
 
+        // Manage under/overflow bins
+        TrueHisto->SetBinContent(TrueHisto->GetNbinsX(), TrueHisto->GetBinContent(TrueHisto->GetNbinsX()) + TrueHisto->GetBinContent(TrueHisto->GetNbinsX() + 1));
+        RecoTrueHisto->SetBinContent(RecoTrueHisto->GetNbinsX(), RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX()) + RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX() + 1));
+
+        TrueHisto->SetBinContent(1, TrueHisto->GetBinContent(0) + TrueHisto->GetBinContent(1));
+        RecoTrueHisto->SetBinContent(1, RecoTrueHisto->GetBinContent(0) + RecoTrueHisto->GetBinContent(1));
+
         // Change y axis title so efficiency plot inherits it
         TrueHisto->GetYaxis()->SetTitle("Signal efficiency");
         RecoTrueHisto->GetYaxis()->SetTitle("Signal efficiency");

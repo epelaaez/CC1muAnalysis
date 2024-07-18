@@ -243,6 +243,15 @@ void SelectionSystematics(int SystIndex) {
             RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
             RecoTrueHisto = RecoTrueSpectra->Nominal().ToTH1(TargetPOT);
             RecoBkgHisto = RecoBkgSpectra->Nominal().ToTH1(TargetPOT);
+
+            // Manage under/overflow bins
+            RecoHisto->SetBinContent(RecoHisto->GetNbinsX(), RecoHisto->GetBinContent(RecoHisto->GetNbinsX()) + RecoHisto->GetBinContent(RecoHisto->GetNbinsX() + 1));
+            RecoTrueHisto->SetBinContent(RecoTrueHisto->GetNbinsX(), RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX()) + RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX() + 1));
+            RecoBkgHisto->SetBinContent(RecoBkgHisto->GetNbinsX(), RecoBkgHisto->GetBinContent(RecoBkgHisto->GetNbinsX()) + RecoBkgHisto->GetBinContent(RecoBkgHisto->GetNbinsX() + 1));
+
+            RecoHisto->SetBinContent(1, RecoHisto->GetBinContent(0) + RecoHisto->GetBinContent(1));
+            RecoTrueHisto->SetBinContent(1, RecoTrueHisto->GetBinContent(0) + RecoTrueHisto->GetBinContent(1));
+            RecoBkgHisto->SetBinContent(1, RecoBkgHisto->GetBinContent(0) + RecoBkgHisto->GetBinContent(1));
         } else {
             RecoHisto = std::get<0>(LoadedHistos.at(i)[0]);
             RecoTrueHisto = std::get<1>(LoadedHistos.at(i)[0]);
@@ -342,6 +351,15 @@ void SelectionSystematics(int SystIndex) {
                 UnivRecoHisto = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
                 UnivRecoTrueHisto = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
                 UnivRecoBkgHisto = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
+
+                // Manage under/overflow bins
+                UnivRecoHisto->SetBinContent(UnivRecoHisto->GetNbinsX(), UnivRecoHisto->GetBinContent(UnivRecoHisto->GetNbinsX()) + UnivRecoHisto->GetBinContent(UnivRecoHisto->GetNbinsX() + 1));
+                UnivRecoTrueHisto->SetBinContent(UnivRecoTrueHisto->GetNbinsX(), UnivRecoTrueHisto->GetBinContent(UnivRecoTrueHisto->GetNbinsX()) + UnivRecoTrueHisto->GetBinContent(UnivRecoTrueHisto->GetNbinsX() + 1));
+                UnivRecoBkgHisto->SetBinContent(UnivRecoBkgHisto->GetNbinsX(), UnivRecoBkgHisto->GetBinContent(UnivRecoBkgHisto->GetNbinsX()) + UnivRecoBkgHisto->GetBinContent(UnivRecoBkgHisto->GetNbinsX() + 1));
+
+                UnivRecoHisto->SetBinContent(1, UnivRecoHisto->GetBinContent(0) + UnivRecoHisto->GetBinContent(1));
+                UnivRecoTrueHisto->SetBinContent(1, UnivRecoTrueHisto->GetBinContent(0) + UnivRecoTrueHisto->GetBinContent(1));
+                UnivRecoBkgHisto->SetBinContent(1, UnivRecoBkgHisto->GetBinContent(0) + UnivRecoBkgHisto->GetBinContent(1));
             } else {
                 UnivRecoHisto = std::get<0>(LoadedHistos.at(i)[iUniv + 1]);
                 UnivRecoTrueHisto = std::get<1>(LoadedHistos.at(i)[iUniv + 1]);

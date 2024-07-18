@@ -156,6 +156,14 @@ void SelectionMigrationMatrix() {
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         TH1* TruthValuesHist = TruthValues->ToTH1(TargetPOT);
         TH1* RecoTruthValuesHist = RecoTruthValues->ToTH1(TargetPOT);
+
+        // Manage under/overflow bins
+        TruthValuesHist->SetBinContent(TruthValuesHist->GetNbinsX(), TruthValuesHist->GetBinContent(TruthValuesHist->GetNbinsX()) + TruthValuesHist->GetBinContent(TruthValuesHist->GetNbinsX() + 1));
+        RecoTruthValuesHist->SetBinContent(RecoTruthValuesHist->GetNbinsX(), RecoTruthValuesHist->GetBinContent(RecoTruthValuesHist->GetNbinsX()) + RecoTruthValuesHist->GetBinContent(RecoTruthValuesHist->GetNbinsX() + 1));
+
+        TruthValuesHist->SetBinContent(1, TruthValuesHist->GetBinContent(0) + TruthValuesHist->GetBinContent(1));
+        RecoTruthValuesHist->SetBinContent(1, RecoTruthValuesHist->GetBinContent(0) + RecoTruthValuesHist->GetBinContent(1));
+
         TH2* MigrationMatrix = new TH2D(
             "Migration",
             "Migration",
@@ -189,6 +197,11 @@ void SelectionMigrationMatrix() {
             double RecoTruthCounts = RecoTruthValuesHist->GetBinContent(x);
             double TruthCounts = TruthValuesHist->GetBinContent(x);
             TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT labels bins starting from 1
+
+            // Manage under/overflow bins
+            RecoValuesHist->SetBinContent(RecoValuesHist->GetNbinsX(), RecoValuesHist->GetBinContent(RecoValuesHist->GetNbinsX()) + RecoValuesHist->GetBinContent(RecoValuesHist->GetNbinsX() + 1));
+            RecoValuesHist->SetBinContent(1, RecoValuesHist->GetBinContent(0) + RecoValuesHist->GetBinContent(1));
+
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                 double RecoCounts = RecoValuesHist->GetBinContent(y);
 
