@@ -46,7 +46,7 @@ void SelectionEfficiency() {
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionEfficiency.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
     std::vector<TruthVar> Vars; std::vector<Binning> VarBins;

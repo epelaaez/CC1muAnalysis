@@ -96,8 +96,8 @@ namespace ana
     int iCountMultParticle(const caf::SRTrueInteractionProxy* nu, int pdg, float lb, float up) {
         int count = 0;
         for (auto const& prim : nu->prim) {
-            float totp = std::sqrt(std::pow(prim.startp.x, 2) + std::pow(prim.startp.y, 2) + std::pow(prim.startp.z, 2));
-            if (prim.pdg == pdg && totp > lb && totp < up) {
+            float totp = std::sqrt(std::pow(prim.genp.x, 2) + std::pow(prim.genp.y, 2) + std::pow(prim.genp.z, 2));
+            if (prim.pdg == pdg && totp >= lb && totp < up) {
                 count++;
             }
         }
@@ -149,7 +149,7 @@ namespace ana
                 fMuAverage < fMuCutMuScore &&
                 fPrAverage > fMuCutPrScore &&
                 pfp.trk.len > fMuCutLength &&
-                fMomentum > lb &&
+                fMomentum >= lb &&
                 fMomentum < ub
             ) {
                 CandidateMuons.push_back(pfp.id);
@@ -203,7 +203,7 @@ namespace ana
 
             if (
                 fPrAverage < fPrCutPrScore && 
-                fMomentum > lb &&
+                fMomentum >= lb &&
                 fMomentum < ub
             ) ProtonIDs.push_back(pfp.id);
         }
@@ -220,7 +220,7 @@ namespace ana
             if (!(bIsInFV(&pfp.trk.start) && bIsInFV(&pfp.trk.end))) continue;
 
             float fMomentum = pfp.trk.rangeP.p_pion;
-            if (fMomentum > lb && fMomentum < ub) return false; // tag pion
+            if (fMomentum >= lb && fMomentum < ub) return false; // tag pion
         }
         return true;
     }
@@ -267,18 +267,42 @@ namespace ana
         TVector3 Muon(1, 1, 1);
         TVector3 LeadingProton(1, 1, 1);
         TVector3 RecoilProton(1, 1, 1);
-        bool FirstProton = true;
+        bool FirstMuon = false;
+        bool FirstProton = false;
+        bool SecondProton = false;
 
         for (auto const& prim : nu->prim) {
-            if (prim.pdg == 13) {
+            float totp = std::sqrt(std::pow(prim.genp.x, 2) + std::pow(prim.genp.y, 2) + std::pow(prim.genp.z, 2));
+            if (
+                (prim.pdg == 13) && 
+                (totp >= std::get<0>(PDGToThreshold.at(13))) && 
+                (totp < std::get<1>(PDGToThreshold.at(13)))
+            ) {
                 Muon.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
-            } else if ((prim.pdg == 2212) && FirstProton) {
+                FirstMuon = true;
+            } else if (
+                (prim.pdg == 2212) && 
+                (totp >= std::get<0>(PDGToThreshold.at(2212))) && 
+                (totp < std::get<1>(PDGToThreshold.at(2212))) &&
+                !FirstProton
+            ) {
                 LeadingProton.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
-                FirstProton = false;
-            } else if (prim.pdg == 2212) {
+                FirstProton = true;
+            } else if (
+                (prim.pdg == 2212) && 
+                (totp >= std::get<0>(PDGToThreshold.at(2212))) && 
+                (totp < std::get<1>(PDGToThreshold.at(2212)))
+            ) {
                 RecoilProton.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
+                SecondProton = true;
             }
         }
+
+        if (!(FirstMuon && FirstProton && SecondProton)) {
+            std::cout << "All particles not found" << std::endl;
+            exit(-1);
+        }
+
         return {Muon, LeadingProton, RecoilProton};
     }
 

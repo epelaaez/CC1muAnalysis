@@ -155,6 +155,17 @@ void Unfold() {
         TH1D* BkgPlot = (TH1D*)(SelectionFile->Get<TH1D>(PlotNames[iPlot]+"_bkg")); // bkg events
         RecoPlot->Add(BkgPlot, -1); // subtract background from reco events
 
+        // Debugging under/overflow
+        // TH1D* RecoTruePlot = (TH1D*)(SelectionFile->Get<TH1D>(PlotNames[iPlot]+"_reco_true")); // bkg events
+        // std::cout << PlotNames[iPlot] << std::endl;
+        // std::cout << "Bkg underflow/overflow  " << BkgPlot->GetBinContent(0) << "  " << BkgPlot->GetBinContent(BkgPlot->GetNbinsX() + 1) << std::endl;
+        // std::cout << "Reco underflow/overflow  " << RecoPlot->GetBinContent(0) << "  " << RecoPlot->GetBinContent(RecoPlot->GetNbinsX() + 1) << std::endl;
+        // std::cout << "Reco true underflow/overflow  " << RecoTruePlot->GetBinContent(0) << "  " << RecoTruePlot->GetBinContent(RecoTruePlot->GetNbinsX() + 1) << std::endl;
+        // std::cout << "True underflow/overflow  " << TruePlot->GetBinContent(0) << "  " << TruePlot->GetBinContent(TruePlot->GetNbinsX() + 1) << std::endl;
+        // std::cout << std::endl;
+
+        // continue;
+
         int n = TruePlot->GetNbinsX();
         int m = RecoPlot->GetNbinsX();
 
