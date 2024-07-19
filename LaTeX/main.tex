@@ -13,6 +13,7 @@
 \usepackage{pgffor}
 \usepackage{placeins}
 \usepackage{afterpage}
+\usepackage[nottoc,numbib]{tocbibind}
 
 \title{Extraction of Single and Double Differential Cross-Sections on Argon for CC1$\mu$2p0$\pi$ Event Topologies in the SBND}
 
@@ -222,16 +223,41 @@ Information about these generators is summarized in Table~\ref{table:generator-d
         \begin{tabular}{lc}
         \hline
         \textbf{Name} & \textbf{Generator/Configuration} \\ \hline
-        Genie G18 & GENIE v3.0.6 G18\_10a\_02\_11a \\
-        Genie AR23 & --- \\
+        G18 & GENIE v3.0.6 G18\_10a\_02\_11a \\
+        AR23 & G18 with SuSAv2 MEC model \\
         NuWro & NuWro 19.02.1 \\
         NEUT & NEUT v5.4.0 \\
-        GiBUU & GiBUU 2021
+        GiBUU & GiBUU 2021 \\ \hline
         \end{tabular}
     \end{center}
     \caption{Generator and configuration data.}
     \label{table:generator-data}
 \end{table}
+
+The GENIE configurations we used are:
+\begin{enumerate}[label=(\roman*)]
+    \item GENIE G18~\cite{ANDREOPOULOS201087,andreopoulos2015genieneutrinomontecarlo}: This modern model configuration uses the local Fermi gas (LFG) model~\cite{CARRASCO1992445}, 
+    the Nieves CCQE scattering prescription~\cite{PhysRevD.85.113008}, which includes Coulomb corrections for the outgoing 
+    muon~\cite{PhysRevC.57.2004}, and random phase approximation (RPA) corrections~\cite{PhysRevC.70.055503}. Additionally, it uses the Nieves
+    MEC model~\cite{schwehr2017genieimplementationificvalencia}, the KuzminLyubushkin-Naumov Berger-Sehgal RES~\cite{PhysRevD.76.113004,PhysRevD.104.072009,doi:10.1142/S0217732304016172}, Berger-Sehgal COH~\cite{PhysRevD.79.053003} and 
+    Bodek-Yang DIS~\cite{PhysRevLett.82.2467} scattering models with the PYTHIA~\cite{Sjostrand_2006} hadronization part, and the hA2018 FSI model \cite{PhysRevC.23.2173}.
+    \item GENIE AR23: Same as the G18 model configuration but using the SuSAv2 MEC model.
+\end{enumerate}
+
+The alternative event generators are:
+\begin{enumerate}[label=(\roman*)]
+    \item NuWro~\cite{GOLAN2012499}: Includes the LFG model~\cite{CARRASCO1992445}, the Llewellyn Smith model for QE events~\cite{LLEWELLYNSMITH1972261},
+    the Nieves model for MEC events~\cite{PhysRevC.83.045501}, the AdlerRarita-Schwinger formalism to calculate the $\Delta$
+    resonance explicitly~\cite{PhysRevD.77.053001}, the Berger-Sehgal (BS) COH~\cite{PhysRevD.79.053003} scattering model, an intranuclear cascade
+    model for FSI~\cite{PhysRevC.83.045501}, and a coupling to PYTHIA~\cite{Sjostrand_2006} for hadronization.
+    \item NEUT~\cite{Hayato2021}: Corresponds to the combination of the LFG model~\cite{Bourguille2021,CARRASCO1992445}, the Nieves CCQE scattering prescription~\cite{PhysRevD.85.113008}, the Nieves MEC model
+    using a lookup table~\cite{schwehr2017genieimplementationificvalencia}, the Berger Sehgal RES \cite{PhysRevD.76.113004,PhysRevD.77.053001,Auchincloss1990} and BS COH \cite{PhysRevD.79.053003} scattering models, FSI
+    with medium corrections for pions~\cite{ANDREOPOULOS201087,andreopoulos2015genieneutrinomontecarlo}, and PYTHIA~\cite{Sjostrand_2006} purposes.
+    \item GiBUU~\cite{Mosel_2019}: Uses similar models to GENIE, but they are implemented in a coherent way
+    by solving the Boltzmann-Uehling-Uhlenbeck transport equation~\cite{Mosel_2019}. The modeling includes the LFG model~\cite{CARRASCO1992445}, a standard CCQE expression~\cite{PhysRevC.73.065502}, an
+    empirical MEC model, and a dedicated spin dependent resonance amplitude calculation following the MAID analysis~\cite{Mosel_2019}. The DIS model is from PYTHIA~\cite{Sjostrand_2006}. GiBUU’s FSI treatment propagates the hadrons through the residual nucleus in a nuclear potential
+    consistent with the initial state.
+\end{enumerate}
 
 \subsection{Variables definition}
 
@@ -721,5 +747,11 @@ In this appendix, the variations, covariance matrices, fractional covariance mat
 and correlation matrices are plotted for all of the cross section systematics and variables.
 
 \PrintAllSystematicVarPlots
+
+
+\clearpage
+
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{references}
 
 \end{document}
