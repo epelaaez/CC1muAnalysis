@@ -343,6 +343,24 @@ namespace ana
         return vars;
     }
 
+    ///////////
+    // SpillVar
+    ///////////
+
+    const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
+        fstream file; 
+        file.open(
+            "/exp/sbnd/data/users/epelaez/CAFAnaOutput/EventData.csv",
+            fstream::out | fstream::app
+        );
+        file << sr->hdr.fno << ",";
+        file << sr->hdr.run << ",";
+        file << sr->hdr.subrun << ",";
+        file << sr->hdr.evt << ",";
+        file << sr->hdr.subevt << std::endl;
+        return 1;
+    });
+
     ////////////
     // MultiVars
     ////////////
@@ -839,6 +857,17 @@ namespace ana
         TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
 
         return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+    });
+    
+    ///////////
+    // SpillCut
+    ///////////
+    
+    const SpillCut kSpillDatacut([](const caf::StandardRecordProxy* sr) {
+        for (auto const& slc : sr->slc) {
+            if (kRecoIsSignal(&slc)) return true;
+        }
+        return false;
     });
 }
 
