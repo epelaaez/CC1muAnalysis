@@ -1,7 +1,7 @@
 cafe -bq Scripts/Selection.C
-root -bq Scripts/SerialPlotGenerator.cpp
+root -b -q Scripts/SerialPlotGenerator.cpp
 cafe -bq Scripts/SelectionEfficiency.C
 cafe -bq Scripts/SelectionMigrationMatrix.C
 cafe -bq Scripts/RunAllSystematics.C
-root -bq Scripts/StatSystematics.cpp
-root -bq Scripts/Unfold.cpp
+root -b -q Scripts/StatSystematics.cpp
+root -b -q Scripts/Unfold.cpp
