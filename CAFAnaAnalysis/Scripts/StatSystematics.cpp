@@ -155,7 +155,7 @@ void StatSystematics() {
         BkgCovMatrix->Draw("colz");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/Statistical/CovBkg"+PlotNames[iVar]+".png");
 
-        SaveFile->WriteObject(RecoCovMatrix, PlotNames[iVar]+"reco_cov");
+        SaveFile->WriteObject(RecoCovMatrix, PlotNames[iVar]+"_cov");
         SaveFile->WriteObject(BkgCovMatrix, PlotNames[iVar]+"bkg_cov");
     }
 }

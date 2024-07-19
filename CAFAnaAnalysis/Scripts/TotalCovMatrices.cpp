@@ -48,7 +48,7 @@ void TotalCovMatrices() {
     PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
 
-    // Vector with all files
+    // Vector with all cross section systematic files
     std::vector<std::unique_ptr<TFile>> CovFiles;
     for (int iSyst = 0; iSyst < (int) SystsVector.size(); iSyst++) {
         std::string SystName = std::get<0>(SystsVector.at(iSyst));
@@ -56,6 +56,10 @@ void TotalCovMatrices() {
         std::unique_ptr<TFile> File(TFile::Open(FilePath));
         CovFiles.push_back(std::move(File));
     }
+
+    // File with stat systematics
+    std::unique_ptr<TFile> StatsFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsStats.root"));
+    CovFiles.push_back(std::move(StatsFile));
 
     // File to store total cov matrices
     TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/TotalCovMatrices.root";
@@ -76,8 +80,9 @@ void TotalCovMatrices() {
         int min = FirstCovHist->GetXaxis()->GetXmin();
         TMatrixD TotalCovMatrix(n, n); H2M(FirstCovHist, TotalCovMatrix, kTRUE);
 
-        for (int iSyst = 1; iSyst < (int) SystsVector.size(); iSyst++) {
-            TH2D* CovHist = (TH2D*)(CovFiles[iSyst]->Get<TH2D>(PlotNames[iVar]+"_cov"));
+        // Add cross section uncertainties
+        for (int iCov = 1; iCov < (int) CovFiles.size(); iCov++) {
+            TH2D* CovHist = (TH2D*)(CovFiles[iCov]->Get<TH2D>(PlotNames[iVar]+"_cov"));
             TMatrixD CovMatrix(n, n); H2M(CovHist, CovMatrix, kTRUE);
             TotalCovMatrix += CovMatrix;
         }
@@ -88,7 +93,7 @@ void TotalCovMatrices() {
             n, min, max, 
             n, min, max
         );
-        std::cout << TotalCovMatrix.Determinant() << std::endl;
+        // std::cout << TotalCovMatrix.Determinant() << std::endl;
         M2H(TotalCovMatrix, TotalCovHist);
 
         double CovMin = TotalCovHist->GetMinimum();

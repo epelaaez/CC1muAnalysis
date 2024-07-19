@@ -48,7 +48,7 @@ void Unfold() {
     // Load root file(s) with histograms and matrices
     TString SelectionRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
     TString MatrixRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
-    TString CovRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsStats.root";
+    TString CovRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/TotalCovMatrices.root";
     std::unique_ptr<TFile> SelectionFile(TFile::Open(SelectionRootFilePath));
     std::unique_ptr<TFile> MatrixFile(TFile::Open(MatrixRootFilePath));
     std::unique_ptr<TFile> CovFile(TFile::Open(CovRootFilePath));
@@ -149,7 +149,7 @@ void Unfold() {
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
         // Load necessary plots
         TH2D* ResponseHist = (TH2D*)(MatrixFile->Get<TH2D>(PlotNames[iPlot]+"_response")); // response matrix
-        TH2D* CovHist = (TH2D*)(CovFile->Get<TH2D>(PlotNames[iPlot]+"reco_cov")); // covariance matrix
+        TH2D* CovHist = (TH2D*)(CovFile->Get<TH2D>(PlotNames[iPlot])); // covariance matrix
         TH1D* TruePlot = (TH1D*)(MatrixFile->Get<TH1D>(PlotNames[iPlot]+"_true")); // all true generated events
         TH1D* RecoPlot = (TH1D*)(SelectionFile->Get<TH1D>(PlotNames[iPlot]+"_reco")); // reco events
         TH1D* BkgPlot = (TH1D*)(SelectionFile->Get<TH1D>(PlotNames[iPlot]+"_bkg")); // bkg events
