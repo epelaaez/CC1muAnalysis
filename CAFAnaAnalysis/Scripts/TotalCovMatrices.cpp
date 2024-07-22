@@ -48,6 +48,11 @@ void TotalCovMatrices() {
     PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
 
+    // Get cross-section and flux systematics
+    std::vector<std::tuple<std::string, int>> SystsVector(XSecSystsVector);
+    // SystsVector.insert(SystsVector.end(), FluxSystsVector.begin(), FluxSystsVector.end());
+    // Flux systematics not working yet
+
     // Vector with all cross section systematic files
     std::vector<std::unique_ptr<TFile>> CovFiles;
     for (int iSyst = 0; iSyst < (int) SystsVector.size(); iSyst++) {

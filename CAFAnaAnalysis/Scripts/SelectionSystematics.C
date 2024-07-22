@@ -33,13 +33,10 @@ using namespace std;
 using namespace ana;
 using namespace Constants;
 
-void SelectionSystematics(int SystIndex) {
-    std::string SystName = std::get<0>(SystsVector.at(SystIndex));
-    int SystNUniv = std::get<1>(SystsVector.at(SystIndex));
-
+void SelectionSystematics(std::string SystName, int SystNUniv) {
     std::cout << std::endl;
     std::cout << "========================================" << std::endl;
-    std::cout << "Systematic index " << SystIndex << " with name " << SystName << ", and number of universes " << SystNUniv <<  std::endl;
+    std::cout << "Systematic with name " << SystName << ", and number of universes " << SystNUniv <<  std::endl;
     std::cout << "========================================" << std::endl;
     std::cout << std::endl;
 

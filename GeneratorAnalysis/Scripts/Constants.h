@@ -13,7 +13,7 @@
 
 using namespace std;
 
-namespace Constants {
+namespace Constants { 
     const double Units = 1E38;
 
     const double TargetPOT(6.6e20);
@@ -86,7 +86,7 @@ namespace Constants {
     // Systematics
     ///////////////
 
-    std::vector<std::tuple<std::string, int>> SystsVector = {
+    const std::vector<std::tuple<std::string, int>> XSecSystsVector = {
         {"GENIEReWeight_SBND_v1_multisigma_MaCCQE", 6}, // 0
         {"GENIEReWeight_SBND_v1_multisigma_MaNCEL", 6},
         {"GENIEReWeight_SBND_v1_multisigma_EtaNCEL", 6},
@@ -204,6 +204,22 @@ namespace Constants {
         {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_1Pi", 6},
         {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_2Pi", 6},
         {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_3Pi", 6}	
+    };
+
+    const std::vector<std::tuple<std::string, int>> FluxSystsVector = {
+        {"expskin_Flux", 100},
+        {"horncurrent_Flux", 100},
+        {"kminus_Flux", 100},
+        {"kplus_Flux", 100},
+        {"kzero_Flux", 100},
+        {"nucleoninexsec_Flux", 100},
+        {"nucleonqexsec_Flux", 100},
+        {"nucleontotxsec_Flux", 100},
+        {"piminus_Flux", 100},
+        {"pioninexsec_Flux", 100},
+        {"pionqexsec_Flux", 100},
+        {"piontotxsec_Flux", 100},
+        {"piplus_Flux", 100}
     };
 }
 
