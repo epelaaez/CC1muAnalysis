@@ -204,6 +204,23 @@
 
 \linenumbers
 
+\section{Introduction and motivation}
+
+Since many current and next generation neutrino oscillation experiments will utilize dense nuclear targets,
+such as liquid argon (LAr), it is critical to characterize the impact of nuclear effects on neutrino cross-sections.
+One area of interest are neutrino events that eject 2 nucleons from the nucleus, leaving it with 2 holes: known
+as 2-particle 2-hole states (2p2h). The general picture is that the neutrino has a charged-current interaction
+with a neutron in the nucleus, producing a proton with significant momentum; this proton interacts with
+another proton, producing the 2p2h state. While the majority of 2p2h states are caused by Meson Exchange
+Currents (MEC)~\cite{10.1063/1.4919465}, some nuclear effects, such as Short-Range Nucleon-Nucleon correlations (SRC)~\cite{Cruz-Torres:2019fum},
+can also produce these states. In an accelerator-based liquid argon time projection chamber (LArTPC)
+experiment, such as SBND, a charged-current (CC) muon neutrino ($\nu_\mu$) interaction that results in
+a 2p2h state would have a final state topology of 1 muon, 2 protons, and no charged or neutral pions.
+While there are existing measurements of CC1$\mu$2p0$\pi$ events on argon, the analyses were statistically limited
+and no cross-sections were extracted~\cite{PhysRevD.90.012008,MicroBooNE:2018zvh}. There was a previous report with single differential cross-section
+measurements from the MicroBooNE detector~\cite{MicroBooNE:2022pvp}, but this document presents the first double differential cross-section 
+measurements of CC1$\mu$2p0$\pi$ topologies on argon, using data collected from the \textbf{period} of SBND operations.
+
 \section{Generator analysis}
 
 \subsection{Signal definition}
@@ -477,28 +494,32 @@ where $x$, $y$, and $z$ are the coordinates in the detector frame, all in centim
 
 To perform analysis on experiment data, we will be using the CAFAna framework. This allows us to perform cuts based on the reconstructed and Monte Carlo data (if available, i.e., only in the case of dealing with simulated events), to discriminate events. To discriminate events based on their Monte Carlo data, we perform a simple \verb|TruthCut| that checks the following:
 \begin{enumerate}[label=(\roman*)]
-    \item That the neutrino interaction takes place in the fiducial volume
-    \item That the neutrino is a muon neutrino
-    \item That the interaction is a charged current interaction
-    \item That the there is only one muon in our allowed momentum range
-    \item That there are only two protons in our allowed momentum range
-    \item That there are no charged/neutral pions in our defined momenta ranges
+    \item That the neutrino interaction takes place in the fiducial volume.
+    \item That the neutrino is a muon neutrino.
+    \item That the interaction is a charged current interaction.
+    \item That the there is only one muon in our allowed momentum range.
+    \item That there are only two protons in our allowed momentum range.
+    \item That there are no charged/neutral pions in our defined momenta ranges.
 \end{enumerate}
 
-Using the reconstructed event data, we can perform a \verb|Cut| that checks the following:
+Using the reconstructed event data, the cut we have to use is not a simple as in the Monte Carlo data case. 
+We now have to use a \verb|Cut| that looks at different variables of the reconstructed event to determine if 
+it is a signal event. We perform the following cuts:
 \begin{enumerate}[label=(\roman*)]
-    \item The reconstructed vertex for the neutrino interaction takes place in the fiducial volume
-    \item That the event is not a cosmic event by Pandora's criteria (using \verb|nu_score| to check how neutrino like the slice is, and \verb|fmatch.score| with \verb|fmatch.time| to check the event comes from the beam)
-    \item That there is one muon track with $L_{\text{track}} > 50$ cm, $\chi^2_\mu < 30$, $\chi^2_p > 60$, and this being the longest reconstructed track, and that this has momentum in our allowed range
-    \item That there are two proton tracks with $\chi^2_p < 100$, and that these have momentum in our allowed range
-    \item That there are no other reconstructed tracks with momentum in the allowed range for charged pions
-    \item That there are no reconstructed particles with a positive \verb|trackScore| less than 0.5, so we don't allow any neutral pions
+    \item Cosmic: that the event is not a cosmic event by Pandora's criteria, i.e., requiring \verb|nu_score| $> 0.4$ to 
+    check how neutrino-like the event is, and \verb|fmatch.score| $< 7$ with $0 <$ \verb|fmatch.time| $< 1.8$ to check the event comes from the beam.
+    \item Vertex in FV\@: that the reconstructed vertex for the neutrino interaction takes place in the fiducial volume defined above.
+    \item One muon: that there is one muon track with $L_{\text{track}} > 50$ cm, starting point in the fiducial volume, $\chi^2_\mu < 30$, $\chi^2_p > 60$, with momentum in our allowed range; if
+    there are multiple candidate tracks, the one with the longest track length is chosen.
+    \item Two protons: that there are two proton tracks with $\chi^2_p < 100$, full track in the fiducial volume, and that these have momentum in our allowed range.
+    \item No charged pions: that there are no other reconstructed tracks with momentum in the allowed range for charged pions inside the fiducial volume.
+    \item No neutrial pions: that there are no reconstructed particles with a positive \verb|trackScore| less than 0.5 indicating a shower, so we don't allow any neutral pions.
 \end{enumerate}
-Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events. This is shown in more detail for all our variables in the next section.
+Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events.
 
-We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts we apply to the reconstructed events. 
+We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts described above is applied to the reconstructed events. 
 These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()|. Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and the all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
-The numbers reported in this table are POT normalized to $6.6 \cdot 10^{20}$.
+The numbers reported in this table are POT normalized to $6.6 \times 10^{20}$.
 
 \begin{table}
     \begin{center}
@@ -751,7 +772,7 @@ and correlation matrices are plotted for all of the cross section systematics an
 
 \clearpage
 
-\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}
