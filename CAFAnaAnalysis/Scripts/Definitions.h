@@ -112,9 +112,9 @@ namespace ana
 
         std::vector<int> CandidateMuons;
         std::vector<int> CandidateMuonsTrkLen;
-        bool bSkipPFP = false;
 
         for (auto const& pfp : slc -> reco.pfp) {
+            bool bSkipPFP = false;
             float fMuAverage = 0.0f;
             float fPrAverage = 0.0f;
             for (int i = 0; i < 3; i++) {
