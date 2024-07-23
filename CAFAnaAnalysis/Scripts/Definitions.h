@@ -29,6 +29,10 @@ using namespace Constants;
 
 namespace ana
 {
+    // Files with samples
+    // const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
+    const std::string TargetFile = "/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv/*.flat.caf.root";
+
     // Constants
     const float fFVXMax = 180.f;
     const float fFVXMin =   5.f;

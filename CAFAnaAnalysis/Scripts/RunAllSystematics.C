@@ -42,8 +42,8 @@ void RunAllSystematics() {
     SystsVector.insert(SystsVector.end(), FluxSystsVector.begin(), FluxSystsVector.end());
 
     int nSysts = SystsVector.size();
-    nSysts -= FluxSystsVector.size(); // exclude flux systs for now
-    for (int SystIndex = 0; SystIndex < 1; SystIndex++) {
+    // nSysts -= FluxSystsVector.size(); // exclude flux systs for now
+    for (int SystIndex = 38; SystIndex < nSysts; SystIndex++) {
         std::cout << std::endl;
         std::cout << "========================================" << std::endl;
         std::cout << "Starting systematic " << SystIndex << std::endl;

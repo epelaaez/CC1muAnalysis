@@ -28,9 +28,6 @@ using namespace ana;
 using namespace Constants;
 
 void SelectionRunData() {
-    // Some useful variables for later.
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 

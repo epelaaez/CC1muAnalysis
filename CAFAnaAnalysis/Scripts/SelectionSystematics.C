@@ -52,10 +52,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
     double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);    
 
-    // Some useful variables for later.
-    // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -160,7 +156,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = false;
+    const bool ConstructSpectra = true;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
