@@ -11,6 +11,7 @@
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{pgffor}
+\usepackage{cleveref}
 \usepackage{placeins}
 \usepackage{afterpage}
 \usepackage[nottoc,numbib]{tocbibind}
@@ -314,8 +315,8 @@ is defined as
     \delta \alpha_T = \cos^{-1}\left(\frac{- \vec{p}^\mu_T \cdot \vdp}{|\vec{p}^\mu_T||\vdp|}\right).
 \end{align}
 We plot the differential cross sections of these variables for the given generators in Figure~\ref{fig:angles-transverse-momentum}.
-We can also see the cross section by event type for $|\vdp|$ for the all generators in Figure~\ref{fig:inte-breakdown-dpt}. We only show
-one variable for the interaction breakdown, as the percentages will remain the same for other variables.
+We can also see the cross section by event type for all variables and all generators in 
+Figures~\labelcref{fig:inte-breakdown-muon-momentum,fig:inte-breakdown-muon-cos-theta,fig:inte-breakdown-lp-momentum,fig:inte-breakdown-lp-cos-theta,fig:inte-breakdown-rp-momentum,fig:inte-breakdown-rp-cos-theta,fig:inte-breakdown-delta-alpha-t,fig:inte-breakdown-dpt,fig:inte-breakdown-cos-opening-angle-protons,fig:inte-breakdown-cos-opening-angle-muon-total-proton}.
 
 \begin{figure}
     \centering
@@ -329,6 +330,83 @@ one variable for the interaction breakdown, as the percentages will remain the s
 
 \begin{figure}
     \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueMuonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueMuonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueMuonMomentumPlot.png}}
+    \caption{Event interaction breakdown for $|\vm|$.}
+    \label{fig:inte-breakdown-muon-momentum}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueMuonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueMuonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueMuonCosThetaPlot.png}}
+    \caption{Event interaction breakdown for $\cos(\theta_{\vm})$.}
+    \label{fig:inte-breakdown-muon-cos-theta}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueLeadingProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueLeadingProtonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueLeadingProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueLeadingProtonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueLeadingProtonMomentumPlot.png}}
+    \caption{Event interaction breakdown for $|\vlp|$.}
+    \label{fig:inte-breakdown-lp-momentum}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueLeadingProtonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueLeadingProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueLeadingProtonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueLeadingProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueLeadingProtonCosThetaPlot.png}}
+    \caption{Event interaction breakdown for $\cos(\theta_{\vlp})$.}
+    \label{fig:inte-breakdown-lp-cos-theta}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueRecoilProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueRecoilProtonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueRecoilProtonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueRecoilProtonMomentumPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueRecoilProtonMomentumPlot.png}}
+    \caption{Event interaction breakdown for $|\vrp|$.}
+    \label{fig:inte-breakdown-rp-momentum}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueRecoilProtonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueRecoilProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueRecoilProtonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueRecoilProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueRecoilProtonCosThetaPlot.png}}
+    \caption{Event interaction breakdown for $\cos(\theta_{\vrp})$.}
+    \label{fig:inte-breakdown-rp-cos-theta}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueDeltaAlphaTPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueDeltaAlphaTPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueDeltaAlphaTPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueDeltaAlphaTPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueDeltaAlphaTPlot.png}}
+    \caption{Event interaction breakdown for $\delta \alpha_T$.}
+    \label{fig:inte-breakdown-delta-alpha-t}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueTransverseMomentumPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueTransverseMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueTransverseMomentumPlot.png}}
@@ -337,14 +415,40 @@ one variable for the interaction breakdown, as the percentages will remain the s
     \caption{Event interaction breakdown for $|\vdp|$.}
     \label{fig:inte-breakdown-dpt}
 \end{figure}
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueCosOpeningAngleProtonsPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueCosOpeningAngleProtonsPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueCosOpeningAngleProtonsPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueCosOpeningAngleProtonsPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueCosOpeningAngleProtonsPlot.png}}
+    \caption{Event interaction breakdown for $\cos(\theta_{\vlp,\vrp})$.}
+    \label{fig:inte-breakdown-cos-opening-angle-protons}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueCosOpeningAngleMuonTotalProtonPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueCosOpeningAngleMuonTotalProtonPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
+    \caption{Event interaction breakdown for $\cos(\theta_{\vm,\vtp})$.}
+    \label{fig:inte-breakdown-cos-opening-angle-muon-total-proton}
+\end{figure}
+
+\clearpage
 
 \subsection{Pre-FSI events}
 
-To investigate why the percentage of MEC events for some generators is low, we performed event selection before any final state interactions took place. For both GENIE tunes, NEUT, and NuWro, we got 100\% MEC events pre-FSI. For GiBUU, only 4.1\% MEC versus 76.2\% RES and 16\% DIS events pre-FSI. The 
-interaction breakdown plots for all the generators are shown in Figure~\ref{fig:pre-fsi-inte-breakdown}. Again, only one variable is shown 
-as the percentages will remain the same for others.
+To investigate why the percentage of MEC events for some generators is low, we performed event selection before any final state interactions took place and plotted the interaction breakdown. 
+For both GENIE tunes, NEUT, and NuWro, we got 100\% MEC events pre-FSI. For GiBUU, only 4.1\% MEC versus 76.2\% RES and 16\% DIS events pre-FSI. 
+The interaction breakdown for $|\vm|$ for all the generators are shown in Figure~\ref{fig:pre-fsi-inte-breakdown}. 
 Since GiBUU is the outlier, we checked the specific interaction mode for the resonance events. We got that 10 has 39.3\%, 11 has 34.7\%, 12 has 0.0136\%, 13 has 26 \%, and 27, 22, and 23 all have zero percent of the resonance events. 
-We also checked the event interaction breakdown for GiBUU samples without final state interactions, in which we found that 100\% of the events are MEC, shown in Figure~\ref{fig:gibuu-no-fsi}.
+We also checked the event interaction breakdown for GiBUU samples generated without final state interactions, in which we found that 100\% of the events are MEC, shown in Figure~\ref{fig:gibuu-no-fsi}.
+
+Note that the difference between these two GiBUU samples is that in the former, the samples were generated with final state interactions, and then we look at the state before the final state interactions reportedly took place, 
+and in the latter the event generation was done without any final state interactions.
 
 \begin{figure}
     \centering
@@ -371,12 +475,13 @@ We also checked the event interaction breakdown for GiBUU samples without final 
 
 \subsection{Double differential plots}
 
-For our double differential figures, we plot $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
-and $\cos\left(\theta_{\vm,\vtp}\right)$ in $\cos(\theta_{\vec{p}_{\mu}})$. These are shown
-in Figure~\ref{fig:double-differential-cos-mu}. We have two bins for $\cos(\theta_{\vec{p}_{\mu}})$, the first one 
+For our double differential variables, we look at $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
+and $\cos\left(\theta_{\vm,\vtp}\right)$ in $\cos(\theta_{\vec{p}_{\mu}})$. We have two bins for $\cos(\theta_{\vec{p}_{\mu}})$, the first one 
 going from $-1$ to $0.5$ and the second from $0.5$ to $1$. Therefore, these are irregular bins, with the first 
-holding a larger range than the first. The interaction breakdown for $\delta\alpha_T$ in $\cos(\theta_{\vec{p}_{\mu}})$ 
-is shown in Figure~\ref{fig:inte-breakdown-double-differential}.
+holding a larger range than the first. These plots are shown in Figure~\ref{fig:double-differential-cos-mu}. Note that, 
+in these plots, the horizontal axis is defined by bin number of the double differential measurement, not the value of the
+variable. This is because we are representing two variables in a single axis, but we can slice the plots to get our usual 
+horizontal axis.
 
 \begin{figure}
     \centering
@@ -388,25 +493,18 @@ is shown in Figure~\ref{fig:inte-breakdown-double-differential}.
     \label{fig:double-differential-cos-mu}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialDeltaAlphaT_InMuonCosThetaPlot.png}}
-    \caption{Interaction breakdown for $\delta\alpha_T$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
-    \label{fig:inte-breakdown-double-differential}    
-\end{figure}
-
-We also slice the double differential plots into two plots each, so that we have $\cos(\theta_{\vec{p}_{\mu}})$ in the horizontal axis instead of bin numbers.
-These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}. In these plots, the bins contents have been reweighted 
+We slice the double differential plots into two plots each, so that we have the variable of interest in the horizontal axis instead of bin numbers,
+and each slice corresponds to one bin of $\cos(\theta_{\vec{p}_{\mu}})$.
+These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}, and the plots broke down by interaction are in 
+Figures~\labelcref{fig:inte-breakdown-double-alpha-t,fig:inte-breakdown-double-dpt,fig:inte-breakdown-double-cos-opening-angle-protons,fig:inte-breakdown-double-cos-opening-angle-muon-total-proton}.
+In these plots, the bins contents have been reweighted 
 appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis
 multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice.
 Note that the plots for the $0.5 < \cos(\theta_{\vec{p}_{\mu}}) < 1$ slice have more events in general, although they span a smaller phase space 
 of $\cos(\theta_{\vec{p}_{\mu}})$, as it can be seen by the scale of the vertical axis. 
 We performed the same double differential analysis for the events before final state interactions. 
-These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}.
+These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}, and the corresponding interaction 
+breakdown plots are in Figures~\labelcref{fig:inte-breakdown-double-delta-alpha-t-no-fsi,fig:inte-breakdown-double-dpt-no-fsi,fig:inte-breakdown-double-cos-opening-angle-muon-total-proton-no-fsi,fig:inte-breakdown-double-cos-opening-angle-protons-no-fsi}.
 
 \begin{figure}
     \centering
@@ -424,6 +522,71 @@ These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}.
 
 \begin{figure}
     \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for $\delta\alpha_T$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-alpha-t}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for $|\vdp|$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-dpt}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for $\cos(\theta_{\vlp,\vrp})$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-cos-opening-angle-protons}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_AR23_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GENIE_G18_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NuWro_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_NEUT_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for $\cos(\theta_{\vm,\vtp})$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-cos-opening-angle-muon-total-proton}
+\end{figure}
+
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/Serial/TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
@@ -436,19 +599,88 @@ These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}.
     \label{fig:sliced-double-differential-cos-mu-no-fsi}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialDeltaAlphaT_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for pre-FSI $\delta\alpha_T$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-delta-alpha-t-no-fsi}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialTransverseMomentum_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialTransverseMomentum_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for pre-FSI $|\vdp|$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-dpt-no-fsi}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for pre-FSI $\cos(\theta_{\vlp,\vrp})$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-cos-opening-angle-protons-no-fsi}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_AR23_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_GENIE_G18_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NuWro_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PreFSI/InteBreakDown_NEUT_TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}} \\
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_0.png}}
+    \subfloat{\includegraphics[width=2.5in]{../Figs/InteBreakDown/PostFSI/InteBreakDown_GiBUU_NoFSI_TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot_1.png}}
+    \caption{Interaction breakdown for sliced double differential plots for pre-FSI $\cos(\theta_{\vm,\vtp})$ in $\cos(\theta_{\vec{p}_{\mu}})$.}
+    \label{fig:inte-breakdown-double-cos-opening-angle-muon-total-proton-no-fsi}
+\end{figure}
+
 \subsection{Pure MEC events}
 
-We also generated pure MEC events with different configurations to get the MEC splines. These were all different tunes of GENIE: AR23, G18 with Empirical MEC model, and G18 with Nieves MEC model. 
+We also generated pure meson exchange current events using different configurations to get the MEC splines. 
+These were all generated using different tunes of GENIE: AR23, G18 with Empirical MEC model, and G18 with Nieves MEC model. 
 The plots for the transverse kinematic variables are shown in Figure~\ref{fig:transverse-k-mec}. 
 The sliced double differential plots are shown in Figure~\ref{fig:sliced-double-mec}.
 
 \begin{figure}
     \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueMuonMomentumPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueMuonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueLeadingProtonCosThetaPlot.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueDeltaAlphaTPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueTransverseMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
-    \caption{Transverse kinematic variables for pure MEC events.}
+    \caption{Variable plots for pure MEC events.}
     \label{fig:transverse-k-mec}
 \end{figure}
 
