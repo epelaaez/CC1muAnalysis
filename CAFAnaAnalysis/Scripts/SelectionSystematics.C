@@ -430,11 +430,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
                 // Fill frac cov matrix
                 double FracValue = (XBinValue == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
-                FracCovMatrix->SetBinContent(x, y, FracValue);
+                FracCovMatrix->SetBinContent(x, y, TMath::Max(FracValue, 1e-8));
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                CorrMatrix->SetBinContent(x, y, FracValue);
+                CorrMatrix->SetBinContent(x, y, TMath::Max(CorrValue, 1e-8));
             }
         }
             
