@@ -48,21 +48,26 @@ void TotalCovMatrices() {
     PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
 
-    // Get cross-section and flux systematics
-    std::vector<std::tuple<std::string, int>> SystsVector(XSecSystsVector);
-    // SystsVector.insert(SystsVector.end(), FluxSystsVector.begin(), FluxSystsVector.end());
-    // Flux systematics not working yet
-
     // Vector with all cross section systematic files
     std::vector<std::unique_ptr<TFile>> CovFiles;
-    for (int iSyst = 0; iSyst < (int) SystsVector.size(); iSyst++) {
-        std::string SystName = std::get<0>(SystsVector.at(iSyst));
+
+    // Add xsec systematics
+    for (int iSyst = 0; iSyst < (int) XSecSystsVector.size(); iSyst++) {
+        std::string SystName = std::get<0>(XSecSystsVector.at(iSyst));
         TString FilePath =  "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
         std::unique_ptr<TFile> File(TFile::Open(FilePath));
         CovFiles.push_back(std::move(File));
     }
 
-    // File with stat systematics
+    // Add flux systematics
+    for (int iSyst = 0; iSyst < (int) FluxSystsVector.size(); iSyst++) {
+        std::string SystName = std::get<0>(FluxSystsVector.at(iSyst));
+        TString FilePath =  "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
+        std::unique_ptr<TFile> File(TFile::Open(FilePath));
+        CovFiles.push_back(std::move(File));
+    }
+
+    // Add stat systematics
     std::unique_ptr<TFile> StatsFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsStats.root"));
     CovFiles.push_back(std::move(StatsFile));
 

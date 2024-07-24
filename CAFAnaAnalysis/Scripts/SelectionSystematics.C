@@ -140,23 +140,22 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     
     // Create shift depending on number of universes
     ISyst* syst = new SBNWeightSyst(SystName);
-    std::vector<SystShifts> Shifts;
+    std::vector<SystShifts> Shifts; std::vector<Var> Weis;
 
     if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
     	// Add +1 sigma shift
         SystShifts SigP1Shift(syst, +1);
 	    Shifts.push_back(SigP1Shift);
     } else {
-	    // Add random Gaussian shifts
+        Weis.reserve(SystNUniv);
         for (int i = 0; i < SystNUniv; i++) {
-            SystShifts RandomShift(syst, gRandom->Gaus(0,1));
-            Shifts.push_back(RandomShift);
+            Weis.push_back(GetUniverseWeight(SystName, i));
         }
     }
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = true;
+    const bool ConstructSpectra = false;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -171,31 +170,55 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     if (ConstructSpectra) {
         // Construct all spectra
         for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-            // Create reco spectrum with shift
-            auto RecoSpectra = std::make_unique<EnsembleSpectrum>(
-                NuLoader,
-                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                kNoSpillCut,
-                kRecoIsSignal,
-                Shifts
-            );
-            // Create reco true signal spectrum with shift
-            auto RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
-                NuLoader,
-                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                kNoSpillCut,
-                kRecoIsTrueReco,
-                Shifts
-            );
-            // Create reco background spectrum with shift
-            auto RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
-                NuLoader,
-                HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                kNoSpillCut,
-                kRecoIsBackground,
-                Shifts
-            );
-            // Add everything to main vector
+            std::unique_ptr<EnsembleSpectrum> RecoSpectra;
+            std::unique_ptr<EnsembleSpectrum> RecoTrueSpectra;
+            std::unique_ptr<EnsembleSpectrum> RecoBkgSpectra;
+
+            if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
+                RecoSpectra = std::make_unique<EnsembleSpectrum>(
+                    NuLoader,
+                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                    kNoSpillCut,
+                    kRecoIsSignal,
+                    Shifts
+                );
+                RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
+                    NuLoader,
+                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                    kNoSpillCut,
+                    kRecoIsTrueReco,
+                    Shifts
+                );
+                RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
+                    NuLoader,
+                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                    kNoSpillCut,
+                    kRecoIsBackground,
+                    Shifts
+                );
+            } else {
+                RecoSpectra = std::make_unique<EnsembleSpectrum>(
+                    NuLoader,
+                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                    kNoSpillCut,
+                    kRecoIsSignal,
+                    Weis
+                );
+                RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
+                    NuLoader,
+                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                    kNoSpillCut,
+                    kRecoIsTrueReco,
+                    Weis
+                );
+                RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
+                    NuLoader,
+                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
+                    kNoSpillCut,
+                    kRecoIsBackground,
+                    Weis
+                );
+            }
             Spectra.push_back({std::move(RecoSpectra), std::move(RecoTrueSpectra), std::move(RecoBkgSpectra)});
         }
         // Load spectra
@@ -236,6 +259,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
             RecoTrueHisto = RecoTrueSpectra->Nominal().ToTH1(TargetPOT);
             RecoBkgHisto = RecoBkgSpectra->Nominal().ToTH1(TargetPOT);
+
+            // Scale histograms
+            RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+            RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+            RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
 
             // Manage under/overflow bins
             RecoHisto->SetBinContent(RecoHisto->GetNbinsX(), RecoHisto->GetBinContent(RecoHisto->GetNbinsX()) + RecoHisto->GetBinContent(RecoHisto->GetNbinsX() + 1));
@@ -345,6 +373,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                 UnivRecoTrueHisto = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
                 UnivRecoBkgHisto = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
 
+                // Scale histograms
+                UnivRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+                UnivRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+                UnivRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
                 // Manage under/overflow bins
                 UnivRecoHisto->SetBinContent(UnivRecoHisto->GetNbinsX(), UnivRecoHisto->GetBinContent(UnivRecoHisto->GetNbinsX()) + UnivRecoHisto->GetBinContent(UnivRecoHisto->GetNbinsX() + 1));
                 UnivRecoTrueHisto->SetBinContent(UnivRecoTrueHisto->GetNbinsX(), UnivRecoTrueHisto->GetBinContent(UnivRecoTrueHisto->GetNbinsX()) + UnivRecoTrueHisto->GetBinContent(UnivRecoTrueHisto->GetNbinsX() + 1));
@@ -360,11 +393,12 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             }
 
             for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
-                double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
-                double XEventRateVar = (UnivRecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
+                double XEventRateCV = RecoHisto->GetBinContent(x);
+                double XEventRateVar = UnivRecoHisto->GetBinContent(x);
                 for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
-                    double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
-                    double YEventRateVar = (UnivRecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units; 
+                    double YEventRateCV = RecoHisto->GetBinContent(y);
+                    double YEventRateVar = UnivRecoHisto->GetBinContent(y);
+
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
 
                     // Fill covariance matrix
@@ -387,20 +421,20 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
         // Create fractional covariance and correlation matrices
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
-            double XEventRateCV = (RecoHisto->GetBinContent(x) / (IntegratedFlux * NTargets)) * Units;
+            double XEventRateCV = RecoHisto->GetBinContent(x);
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
-                double YEventRateCV = (RecoHisto->GetBinContent(y) / (IntegratedFlux * NTargets)) * Units;
+                double YEventRateCV = RecoHisto->GetBinContent(y);
                 double CovBinValue = CovMatrix->GetBinContent(x,y);
                 double XBinValue = CovMatrix->GetBinContent(x,x);
                 double YBinValue = CovMatrix->GetBinContent(y,y);
 
                 // Fill frac cov matrix
                 double FracValue = (XBinValue == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
-                FracCovMatrix->SetBinContent(x, y, TMath::Max(FracValue, 1e-8));
+                FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                CorrMatrix->SetBinContent(x, y, TMath::Max(CorrValue, 1e-8));
+                CorrMatrix->SetBinContent(x, y, FracValue);
             }
         }
             
@@ -491,6 +525,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             PlotCanvas->SetLeftMargin(0.17);
             PlotCanvas->SetRightMargin(0.05);
             PlotCanvas->SetBottomMargin(0.16);
+
+            // Undo scale
+            RecoHisto->Scale((IntegratedFlux * NTargets) / Units);
+            RecoTrueHisto->Scale((IntegratedFlux * NTargets) / Units);
+            RecoBkgHisto->Scale((IntegratedFlux * NTargets) / Units);
 
             RecoHisto->Draw("hist");
             ana::DrawErrorBand(RecoHisto, RecoErrorBand);
