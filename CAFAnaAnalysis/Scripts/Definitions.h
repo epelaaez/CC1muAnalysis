@@ -674,6 +674,81 @@ namespace ana
         return (kTruthIsSignal(nu) && kValidEnergyTruthCut(nu));
     });
 
+    // Truth cuts for other topologies
+    const TruthCut kCCNgt0p1pi([](const caf::SRTrueInteractionProxy* nu) {
+        int nChargedPions = iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) + iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211)));
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 && // check for one muon
+            nChargedPions == 1 &&                                                                                      // one charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0 // no neutral pions
+        );
+    });
+
+    const TruthCut kCCNg2p0pi([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) > 2 &&  // check for more than two protons
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pion
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kCC1p0pi([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 1 && // check for one proton
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pion
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kCC0p0pi([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 0 && // no protons
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pion
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kCCNgt0pNg1pi([](const caf::SRTrueInteractionProxy* nu) {
+        int nChargedPions = iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) + iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211)));
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 && // check for one muon
+            nChargedPions > 1 &&                                                                                       // more than one charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0 // no neutral pions
+        );
+    });
+
+    const TruthCut kOtherTopology([](const caf::SRTrueInteractionProxy* nu) {
+        return !(
+            kTruthIsSignal(nu) ||
+            kCC1p0pi(nu) ||
+            kCCNg2p0pi(nu) ||
+            kCCNgt0p1pi(nu) ||
+            kCC0p0pi(nu)
+            // kCCNgt0pNg1pi
+        );
+    });
+
     //////////////
     // Cuts
     //////////////

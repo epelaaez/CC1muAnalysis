@@ -27,7 +27,7 @@ using namespace std;
 using namespace ana;
 using namespace Constants;
 
-void SelectionInteBreakdown() {
+void SelectionTopologyBreakdown() {
     // Set defaults and load tools
     TH1D::SetDefaultSumw2();
     TH2D::SetDefaultSumw2();
@@ -47,7 +47,7 @@ void SelectionInteBreakdown() {
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionInteBreakdown.root";
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionTopologyBreakdown.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
@@ -118,34 +118,34 @@ void SelectionInteBreakdown() {
     Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
 
-    ////////////////////
-    // Interaction modes
-    ////////////////////
+    //////////////
+    // Topologies
+    //////////////
 
-    std::vector<std::tuple<std::string, int>> IntModes = {
-        {"QE", 0},
-        {"MEC", 10},
-        {"RES", 1},
-        {"DIS", 2}
+    std::vector<std::tuple<std::string, TruthCut>> Topologies = {
+        {"CC2p0#pi", kTruthIsSignal},
+        {"CC1p0#pi", kCC1p0pi},
+        {"CC(N > 2)p0#pi", kCCNg2p0pi},
+        {"CC(N #geq 0)p1#pi", kCCNgt0p1pi},
+        {"CC0p0#pi", kCC0p0pi},
+        {"Other", kOtherTopology}
+        // {"CC(N #geq 0)p(N > 1)#pi", kCCNgt0pNg1pi},
     };
-    std::vector<int> Colors{kBlack, kBlue, kRed+1, kOrange+7, kGreen+1};
+    std::vector<int> Colors{kBlack, kBlue, kRed+1, kOrange+7, kGreen+1, kMagenta+1, kCyan+2};
 
     std::vector<std::vector<std::unique_ptr<Spectrum>>> Spectra;
     for (std::size_t i = 0; i < Vars.size(); i++) {
         std::vector<std::unique_ptr<Spectrum>> InnerSpectra;
 
-        // Without any interaction discrimination
+        // Without any topology discrimination
         auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsSignal); 
         InnerSpectra.push_back(std::move(RecoSignals));
 
-        for (std::size_t j = 0; j < IntModes.size(); j++) {
-            int IntCode = std::get<1>(IntModes[j]);
+        for (std::size_t j = 0; j < Topologies.size(); j++) {
+            TruthCut TopologyCut = std::get<1>(Topologies[j]);
 
             const Cut kRecoSignalsCut([=](const caf::SRSliceProxy* slc) {
-                return (
-                    kRecoIsSignal(slc) &&
-                    slc->truth.genie_mode == IntCode
-                );
+                return kRecoIsSignal(slc) && TopologyCut(&slc->truth);
             });
             auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoSignalsCut); 
             InnerSpectra.push_back(std::move(RecoSignals));
@@ -166,7 +166,7 @@ void SelectionInteBreakdown() {
             std::vector<std::vector<TH1D*>> Histos;
             Histos.resize(NSlices);
             for (int iSlice = 0; iSlice < NSlices; iSlice++) {
-                Histos[iSlice].resize(IntModes.size());
+                Histos[iSlice].resize(Topologies.size());
             }
 
             for (int iSlice = 0; iSlice < NSlices; iSlice++) {
@@ -191,59 +191,58 @@ void SelectionInteBreakdown() {
                 PlotCanvas->SetRightMargin(0.05);
                 PlotCanvas->SetBottomMargin(0.16);
 
-                TLegend* leg = new TLegend(0.2,0.73,0.85,0.83);
+                TLegend* leg = new TLegend(0.2,0.68,0.87,0.83);
                 leg->SetBorderSize(0);
-                leg->SetNColumns(3);
-                leg->SetTextSize(TextSize*0.8);
+                leg->SetNColumns(2);
+                leg->SetTextSize(TextSize*0.7);
                 leg->SetTextFont(FontStyle);
 
-                for (std::size_t iInt = 0; iInt < IntModes.size() + 1; iInt++) {
-                    auto& IntRecoSignals = Spectra[iVar][iInt];
-                    Histos[iSlice][iInt]= tools.GetHistoBins(
-                        IntRecoSignals->ToTH1(TargetPOT),
+                for (std::size_t iTop = 0; iTop < Topologies.size() + 1; iTop++) {
+                    auto& TopRecoSignals = Spectra[iVar][iTop];
+                    Histos[iSlice][iTop]= tools.GetHistoBins(
+                        TopRecoSignals->ToTH1(TargetPOT),
                         SerialVectorLowBin.at(iSlice),
                         SerialVectorHighBin.at(iSlice),
                         SliceWidth,
                         SerialSliceBinning,
-                        VarLabels[iInt]
+                        VarLabels[iTop]
                     );
-                    Histos[iSlice][iInt]->SetLineWidth(4);
-                    Histos[iSlice][iInt]->SetLineColor(Colors.at(iInt));
+                    Histos[iSlice][iTop]->SetLineWidth(4);
+                    Histos[iSlice][iTop]->SetLineColor(Colors.at(iTop));
 
-                    Histos[iSlice][iInt]->GetXaxis()->SetTitleFont(FontStyle);
-                    Histos[iSlice][iInt]->GetXaxis()->SetLabelFont(FontStyle);
-                    Histos[iSlice][iInt]->GetXaxis()->SetNdivisions(8);
-                    Histos[iSlice][iInt]->GetXaxis()->SetLabelSize(TextSize);
-                    Histos[iSlice][iInt]->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
-                    Histos[iSlice][iInt]->GetXaxis()->SetTitleSize(TextSize);
-                    Histos[iSlice][iInt]->GetXaxis()->SetTitleOffset(1.1);
-                    Histos[iSlice][iInt]->GetXaxis()->CenterTitle();
+                    Histos[iSlice][iTop]->GetXaxis()->SetTitleFont(FontStyle);
+                    Histos[iSlice][iTop]->GetXaxis()->SetLabelFont(FontStyle);
+                    Histos[iSlice][iTop]->GetXaxis()->SetNdivisions(8);
+                    Histos[iSlice][iTop]->GetXaxis()->SetLabelSize(TextSize);
+                    Histos[iSlice][iTop]->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
+                    Histos[iSlice][iTop]->GetXaxis()->SetTitleSize(TextSize);
+                    Histos[iSlice][iTop]->GetXaxis()->SetTitleOffset(1.1);
+                    Histos[iSlice][iTop]->GetXaxis()->CenterTitle();
 
-                    Histos[iSlice][iInt]->GetYaxis()->SetTitleFont(FontStyle);
-                    Histos[iSlice][iInt]->GetYaxis()->SetLabelFont(FontStyle);
-                    Histos[iSlice][iInt]->GetYaxis()->SetNdivisions(6);
-                    Histos[iSlice][iInt]->GetYaxis()->SetLabelSize(TextSize);
-                    Histos[iSlice][iInt]->GetYaxis()->SetTitleSize(TextSize);
-                    Histos[iSlice][iInt]->GetYaxis()->SetTitleOffset(1.3);
-                    Histos[iSlice][iInt]->GetYaxis()->SetTickSize(0);
-                    Histos[iSlice][iInt]->GetYaxis()->CenterTitle();
+                    Histos[iSlice][iTop]->GetYaxis()->SetTitleFont(FontStyle);
+                    Histos[iSlice][iTop]->GetYaxis()->SetLabelFont(FontStyle);
+                    Histos[iSlice][iTop]->GetYaxis()->SetNdivisions(6);
+                    Histos[iSlice][iTop]->GetYaxis()->SetLabelSize(TextSize);
+                    Histos[iSlice][iTop]->GetYaxis()->SetTitleSize(TextSize);
+                    Histos[iSlice][iTop]->GetYaxis()->SetTitleOffset(1.3);
+                    Histos[iSlice][iTop]->GetYaxis()->SetTickSize(0);
+                    Histos[iSlice][iTop]->GetYaxis()->CenterTitle();
 
-                    double imax = TMath::Max(Histos[iSlice][iInt]->GetMaximum(),Histos[iSlice][0]->GetMaximum());
-                    double YAxisRange = 1.15*imax;
-                    Histos[iSlice][iInt]->GetYaxis()->SetRangeUser(0.,YAxisRange);
-                    Histos[iSlice][0]->GetYaxis()->SetRangeUser(0.,YAxisRange);			
+                    double imax = Histos[iSlice][0]->GetMaximum();
+                    double YAxisRange = 1.4*imax;
+                    Histos[iSlice][iTop]->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
-                    double frac = Histos[iSlice][iInt]->Integral("width") / Histos[iSlice][0]->Integral("width") * 100.;
-                    std::string IntLabel = (iInt == 0) ? "All" : std::get<0>(IntModes[iInt - 1]);
-                    TString LegLabel = (TString)IntLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
-                    TLegendEntry* legReco = leg->AddEntry(Histos[iSlice][iInt],LegLabel,"l");
+                    double frac = Histos[iSlice][iTop]->Integral("width") / Histos[iSlice][0]->Integral("width") * 100.;
+                    std::string TopLabel = (iTop == 0) ? "All" : std::get<0>(Topologies[iTop - 1]);
+                    TString LegLabel = (TString)TopLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
+                    TLegendEntry* legReco = leg->AddEntry(Histos[iSlice][iTop],LegLabel,"l");
 
                     PlotCanvas->cd();
-                    Histos[iSlice][iInt]->Draw("hist same");
+                    Histos[iSlice][iTop]->Draw("hist same");
                     Histos[iSlice][0]->Draw("hist same");
 
                     // Save to root file
-                    SaveFile->WriteObject(Histos[iSlice][iInt], SlicePlotName+(TString)LegLabel+"_reco");
+                    SaveFile->WriteObject(Histos[iSlice][iTop], SlicePlotName+(TString)LegLabel+"_reco");
                 }
                 leg->Draw();
 
@@ -254,77 +253,75 @@ void SelectionInteBreakdown() {
                 textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
                 // Save as png
-                PlotCanvas->SaveAs(dir+"/Figs/CAFAna/InteBreakdown/"+SlicePlotName+".png");
+                PlotCanvas->SaveAs(dir+"/Figs/CAFAna/TopologyBreakdown/"+SlicePlotName+".png");
 
                 delete PlotCanvas;
             }
         } else {
-            std::vector<TH1D*> Histos; Histos.resize(IntModes.size() + 1);
+            std::vector<TH1D*> Histos; Histos.resize(Topologies.size() + 1);
             TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
             PlotCanvas->SetTopMargin(0.13);
             PlotCanvas->SetLeftMargin(0.17);
             PlotCanvas->SetRightMargin(0.05);
             PlotCanvas->SetBottomMargin(0.16);
 
-            TLegend* leg = new TLegend(0.2,0.73,0.85,0.83);
+            TLegend* leg = new TLegend(0.2,0.68,0.87,0.83);
             leg->SetBorderSize(0);
-            leg->SetNColumns(3);
-            leg->SetTextSize(TextSize*0.8);
+            leg->SetNColumns(2);
+            leg->SetTextSize(TextSize*0.7);
             leg->SetTextFont(FontStyle);
 
-            for (std::size_t iInt = 0; iInt < IntModes.size() + 1; iInt++) {
-                auto& IntRecoSignals = Spectra[iVar][iInt];
-                Histos[iInt] = IntRecoSignals->ToTH1(TargetPOT);
+            for (std::size_t iTop = 0; iTop < Topologies.size() + 1; iTop++) {
+                auto& TopRecoSignals = Spectra[iVar][iTop];
+                Histos[iTop] = TopRecoSignals->ToTH1(TargetPOT);
 
                 // Manage under/overflow bins
-                Histos[iInt]->SetBinContent(Histos[iInt]->GetNbinsX(), Histos[iInt]->GetBinContent(Histos[iInt]->GetNbinsX()) + Histos[iInt]->GetBinContent(Histos[iInt]->GetNbinsX() + 1));
-                Histos[iInt]->SetBinContent(1, Histos[iInt]->GetBinContent(0) + Histos[iInt]->GetBinContent(1));
+                Histos[iTop]->SetBinContent(Histos[iTop]->GetNbinsX(), Histos[iTop]->GetBinContent(Histos[iTop]->GetNbinsX()) + Histos[iTop]->GetBinContent(Histos[iTop]->GetNbinsX() + 1));
+                Histos[iTop]->SetBinContent(1, Histos[iTop]->GetBinContent(0) + Histos[iTop]->GetBinContent(1));
 
-                double frac = Histos[iInt]->Integral("width") / Histos[0]->Integral("width") * 100.;
-                std::string IntLabel = (iInt == 0) ? "All" : std::get<0>(IntModes[iInt - 1]);
-                TString LegLabel = (TString)IntLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
-                TLegendEntry* legReco = leg->AddEntry(Histos[iInt],LegLabel,"l");
-                Histos[iInt]->SetLineColor(Colors.at(iInt));
-                Histos[iInt]->SetLineWidth(4);
+                double frac = Histos[iTop]->Integral("width") / Histos[0]->Integral("width") * 100.;
+                std::string TopLabel = (iTop == 0) ? "All" : std::get<0>(Topologies[iTop - 1]);
+                TString LegLabel = (TString)TopLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
+                TLegendEntry* legReco = leg->AddEntry(Histos[iTop],LegLabel,"l");
+                Histos[iTop]->SetLineColor(Colors.at(iTop));
+                Histos[iTop]->SetLineWidth(4);
 
                 // Style histograms
-                if (iInt == 0) {
-                    Histos[iInt]->GetXaxis()->SetTitleFont(FontStyle);
-                    Histos[iInt]->GetXaxis()->SetLabelFont(FontStyle);
-                    Histos[iInt]->GetXaxis()->SetNdivisions(8);
-                    Histos[iInt]->GetXaxis()->SetLabelSize(TextSize);
-                    Histos[iInt]->GetXaxis()->SetTitleSize(TextSize);
-                    Histos[iInt]->GetXaxis()->SetTitleOffset(1.1);
-                    Histos[iInt]->GetXaxis()->CenterTitle();
-                    Histos[iInt]->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
+                if (iTop == 0) {
+                    Histos[iTop]->GetXaxis()->SetTitleFont(FontStyle);
+                    Histos[iTop]->GetXaxis()->SetLabelFont(FontStyle);
+                    Histos[iTop]->GetXaxis()->SetNdivisions(8);
+                    Histos[iTop]->GetXaxis()->SetLabelSize(TextSize);
+                    Histos[iTop]->GetXaxis()->SetTitleSize(TextSize);
+                    Histos[iTop]->GetXaxis()->SetTitleOffset(1.1);
+                    Histos[iTop]->GetXaxis()->CenterTitle();
+                    Histos[iTop]->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
 
-                    Histos[iInt]->GetYaxis()->SetTitleFont(FontStyle);
-                    Histos[iInt]->GetYaxis()->SetLabelFont(FontStyle);
-                    Histos[iInt]->GetYaxis()->SetNdivisions(6);
-                    Histos[iInt]->GetYaxis()->SetLabelSize(TextSize);
-                    Histos[iInt]->GetYaxis()->SetTitleSize(TextSize);
-                    Histos[iInt]->GetYaxis()->SetTitleOffset(1.3);
-                    Histos[iInt]->GetYaxis()->SetTickSize(0);
-                    Histos[iInt]->GetYaxis()->CenterTitle();
+                    Histos[iTop]->GetYaxis()->SetTitleFont(FontStyle);
+                    Histos[iTop]->GetYaxis()->SetLabelFont(FontStyle);
+                    Histos[iTop]->GetYaxis()->SetNdivisions(6);
+                    Histos[iTop]->GetYaxis()->SetLabelSize(TextSize);
+                    Histos[iTop]->GetYaxis()->SetTitleSize(TextSize);
+                    Histos[iTop]->GetYaxis()->SetTitleOffset(1.3);
+                    Histos[iTop]->GetYaxis()->SetTickSize(0);
+                    Histos[iTop]->GetYaxis()->CenterTitle();
                 }
                 double imax = Histos[0]->GetMaximum();
-                double YAxisRange = 1.3*imax;
-                Histos[iInt]->GetYaxis()->SetRangeUser(0.,YAxisRange);
+                double YAxisRange = 1.4*imax;
+                Histos[iTop]->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
                 PlotCanvas->cd();
-                Histos[iInt]->Draw("hist same");
+                Histos[iTop]->Draw("hist same");
 
                 // Save to root file
-                SaveFile->WriteObject(Histos[iInt], PlotNames[iVar]+(TString)LegLabel+"_reco");
+                SaveFile->WriteObject(Histos[iTop], PlotNames[iVar]+(TString)LegLabel+"_reco");
             }
             leg->Draw();
 
             // Save as png
-            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/InteBreakdown/"+PlotNames[iVar]+".png");
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/TopologyBreakdown/"+PlotNames[iVar]+".png");
 
             delete PlotCanvas;
         }
-
-        
     }
 }
