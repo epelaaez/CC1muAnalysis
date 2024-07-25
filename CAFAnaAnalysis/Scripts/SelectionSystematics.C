@@ -533,6 +533,12 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             RecoTrueHisto->Scale((IntegratedFlux * NTargets) / Units);
             RecoBkgHisto->Scale((IntegratedFlux * NTargets) / Units);
 
+            double imax = RecoHisto->GetMaximum();
+            double YAxisRange = 1.3*imax;
+            RecoHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
+            RecoTrueHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
+            RecoBkgHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
+
             RecoHisto->Draw("hist");
             ana::DrawErrorBand(RecoHisto, RecoErrorBand);
             RecoTrueHisto->Draw("hist same");
