@@ -160,7 +160,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     >> Spectra;
 
     // Where we load histograms if we do not construct spectra
-    std::vector<std::vector<std::tuple<TH1*, TH1*, TH1*>>> LoadedHistos;
+    std::vector<std::vector<std::tuple<TH1D*, TH1D*, TH1D*>>> LoadedHistos;
 
     if (ConstructSpectra) {
         // Construct all spectra
@@ -221,21 +221,21 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     } else {
         // Load previously constructed histograms from file
         for (std::size_t i = 0; i < Vars.size(); i++) {
-            std::vector<std::tuple<TH1*, TH1*, TH1*>> VarHistos;
+            std::vector<std::tuple<TH1D*, TH1D*, TH1D*>> VarHistos;
 
             // Nominal plots
-            TH1* RecoHisto = (TH1*)(SaveFile->Get<TH1>(PlotNames[i]+"_reco"));
-            TH1* RecoTrueHisto = (TH1*)(SaveFile->Get<TH1>(PlotNames[i]+"_reco_true"));
-            TH1* RecoBkgHisto = (TH1*)(SaveFile->Get<TH1>(PlotNames[i]+"_reco_bkg"));
+            TH1D* RecoHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco"));
+            TH1D* RecoTrueHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco_true"));
+            TH1D* RecoBkgHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco_bkg"));
             VarHistos.push_back({std::move(RecoHisto), std::move(RecoTrueHisto), std::move(RecoBkgHisto)});
 
             // Var univ plots
             int NUniv = (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) ? 1 : SystNUniv;
             for (int iUniv = 0; iUniv < NUniv; iUniv++) {
                 TString UnivString = TString(std::to_string(iUniv));
-                TH1* UnivRecoHisto = (TH1D*)(SaveFile->Get<TH1>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco"));
-                TH1* UnivRecoTrueHisto = (TH1D*)(SaveFile->Get<TH1>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true"));
-                TH1* UnivRecoBkgHisto = (TH1D*)(SaveFile->Get<TH1>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg"));
+                TH1D* UnivRecoHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco"));
+                TH1D* UnivRecoTrueHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true"));
+                TH1D* UnivRecoBkgHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg"));
                 VarHistos.push_back({std::move(UnivRecoHisto), std::move(UnivRecoTrueHisto), std::move(UnivRecoBkgHisto)});
             }
             LoadedHistos.push_back(std::move(VarHistos));
@@ -248,7 +248,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     // Loop over variables
     for (std::size_t i = 0; i < Vars.size(); i++) {
         // Get histograms
-        TH1* RecoHisto; TH1* RecoTrueHisto; TH1* RecoBkgHisto;
+        TH1D* RecoHisto; TH1D* RecoTrueHisto; TH1D* RecoBkgHisto;
         auto& [RecoSpectra, RecoTrueSpectra, RecoBkgSpectra] = Spectra.at(i);
         if (ConstructSpectra) {
             RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
@@ -268,6 +268,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             RecoHisto->SetBinContent(1, RecoHisto->GetBinContent(0) + RecoHisto->GetBinContent(1));
             RecoTrueHisto->SetBinContent(1, RecoTrueHisto->GetBinContent(0) + RecoTrueHisto->GetBinContent(1));
             RecoBkgHisto->SetBinContent(1, RecoBkgHisto->GetBinContent(0) + RecoBkgHisto->GetBinContent(1));
+
+            // Save histos to root file
+            SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
+            SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
+            SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
         } else {
             RecoHisto = std::get<0>(LoadedHistos.at(i)[0]);
             RecoTrueHisto = std::get<1>(LoadedHistos.at(i)[0]);
@@ -362,7 +367,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         int NUniv = (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) ? 1 : SystNUniv;
         for (int iUniv = 0; iUniv < NUniv; iUniv++) {
             // Get histograms
-            TH1* UnivRecoHisto; TH1* UnivRecoTrueHisto; TH1* UnivRecoBkgHisto;
+            TH1D* UnivRecoHisto; TH1D* UnivRecoTrueHisto; TH1D* UnivRecoBkgHisto;
             if (ConstructSpectra) {
                 UnivRecoHisto = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
                 UnivRecoTrueHisto = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
@@ -381,6 +386,12 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                 UnivRecoHisto->SetBinContent(1, UnivRecoHisto->GetBinContent(0) + UnivRecoHisto->GetBinContent(1));
                 UnivRecoTrueHisto->SetBinContent(1, UnivRecoTrueHisto->GetBinContent(0) + UnivRecoTrueHisto->GetBinContent(1));
                 UnivRecoBkgHisto->SetBinContent(1, UnivRecoBkgHisto->GetBinContent(0) + UnivRecoBkgHisto->GetBinContent(1));
+
+                // Save to root file
+                TString UnivString = TString(std::to_string(iUniv));
+                SaveFile->WriteObject(UnivRecoHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
+                SaveFile->WriteObject(UnivRecoTrueHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
+                SaveFile->WriteObject(UnivRecoBkgHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
             } else {
                 UnivRecoHisto = std::get<0>(LoadedHistos.at(i)[iUniv + 1]);
                 UnivRecoTrueHisto = std::get<1>(LoadedHistos.at(i)[iUniv + 1]);
@@ -396,6 +407,10 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
 
+                    // Debugging
+                    std::cout << XEventRateCV << "     " << XEventRateVar << std::endl;
+                    std::cout << YEventRateCV << "     " << YEventRateVar << std::endl;
+
                     // Fill covariance matrix
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
@@ -404,14 +419,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                     );
                 }
 	        }
-
-            // Save syst univ spectrum
-            TString UnivString = TString(std::to_string(iUniv));
-            if (ConstructSpectra) {
-                SaveFile->WriteObject(UnivRecoHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
-                SaveFile->WriteObject(UnivRecoTrueHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
-                SaveFile->WriteObject(UnivRecoBkgHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
-            }
         }
 
         // Create fractional covariance and correlation matrices
@@ -424,7 +431,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                 double YBinValue = CovMatrix->GetBinContent(y,y);
 
                 // Fill frac cov matrix
-                double FracValue = (XBinValue == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
+                double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
                 FracCovMatrix->SetBinContent(x, y, TMath::Max(FracValue, 1e-8));
 
                 // Fill corr matrix
@@ -534,11 +541,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
             leg->Draw();
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
-
-            // Save objects
-            SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
-            SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
-            SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
         }
         delete PlotCanvas;
     }
