@@ -28,124 +28,183 @@
 
 %\setlength{\parindent}{0pt}
 
-\def\SystList{
-    GENIEReWeight_SBND_v1_multisigma_MaCCQE/GenieMaCCQE,
-    GENIEReWeight_SBND_v1_multisigma_MaNCEL/GenieMaNCEL
-        % GENIEReWeight_SBND_v1_multisigma_EtaNCEL/GenieEtaNCEL,
-        % GENIEReWeight_SBND_v1_multisigma_MaCCRES/GenieMaCCRES,
-        % GENIEReWeight_SBND_v1_multisigma_MvCCRES/GenieMvCCRES,
-        % GENIEReWeight_SBND_v1_multisigma_MaNCRES/GenieMaNCRES,
-        % GENIEReWeight_SBND_v1_multisigma_MvNCRES/GenieMvNCRES,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi/GenieNonResBGvpCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi/GenieNonResBGvpCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi/GenieNonResBGvpNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi/GenieNonResBGvpNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC1pi/GenieNonResBGvnCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC2pi/GenieNonResBGvnCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC1pi/GenieNonResBGvnNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC2pi/GenieNonResBGvnNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC1pi/GenieNonResBGvbarpCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC2pi/GenieNonResBGvbarpCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC1pi/GenieNonResBGvbarpNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC2pi/GenieNonResBGvbarpNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC1pi/GenieNonResBGvbarnCC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC2pi/GenieNonResBGvbarnCC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC1pi/GenieNonResBGvbarnNC1pi,
-    % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC2pi/GenieNonResBGvbarnNC2pi,
-    % GENIEReWeight_SBND_v1_multisigma_RDecBR1gamma/GenieRDecBR1gamma,
-    % GENIEReWeight_SBND_v1_multisigma_RDecBR1eta/GenieRDecBR1eta,
-    % GENIEReWeight_SBND_v1_multisigma_Theta_Delta2Npi/GenieTheta_Delta2Npi,
-    % GENIEReWeight_SBND_v1_multisigma_AhtBY/GenieAhtBY,
-    % GENIEReWeight_SBND_v1_multisigma_BhtBY/GenieBhtBY,
-    % GENIEReWeight_SBND_v1_multisigma_CV1uBY/GenieCV1uBY,
-    % GENIEReWeight_SBND_v1_multisigma_CV2uBY/GenieCV2uBY,
-    % GENIEReWeight_SBND_v1_multisigma_FormZone/GenieFormZone,
-    % GENIEReWeight_SBND_v1_multisigma_MFP_pi/GenieMFPpi,
-    % GENIEReWeight_SBND_v1_multisigma_FrCEx_pi/GenieFrCExpi,
-    % GENIEReWeight_SBND_v1_multisigma_FrInel_pi/GenieFrInelpi,
-    % GENIEReWeight_SBND_v1_multisigma_FrAbs_pi/GenieFrAbspi,
-    % GENIEReWeight_SBND_v1_multisigma_FrPiProd_pi/GenieFrPiProdpi,
-    % GENIEReWeight_SBND_v1_multisigma_MFP_N/GenieMFPN,
-    % GENIEReWeight_SBND_v1_multisigma_FrCEx_N/GenieFrCExN,
-    % GENIEReWeight_SBND_v1_multisigma_FrInel_N/GenieFrInelN,
-    % GENIEReWeight_SBND_v1_multisigma_FrAbs_N/GenieFrAbsN,
-    % GENIEReWeight_SBND_v1_multisigma_FrPiProd_N/GenieFrPiProdN,
-    % GENIEReWeight_SBND_v1_multisigma_CCQEPauliSupViaKF/GenieCCQEPauliSupViaKF,
-    % GENIEReWeight_SBND_v1_multisigma_CCQEMomDistroFGtoSF/GenieCCQEMomDistroFGtoSF,
-        % GENIEReWeight_SBND_v1_multisim_MaCCQE/GenieMultisimMaCCQE, 
-        % GENIEReWeight_SBND_v1_multisim_MaNCEL/GenieMultisimMaNCEL,
-        % GENIEReWeight_SBND_v1_multisim_EtaNCEL/GenieMultisimEtaNCEL,
-        % GENIEReWeight_SBND_v1_multisim_MaCCRES/GenieMultisimMaCCRES,
-        % GENIEReWeight_SBND_v1_multisim_MvCCRES/GenieMultisimMvCCRES,
-        % GENIEReWeight_SBND_v1_multisim_MaNCRES/GenieMultisimMaNCRES,
-        % GENIEReWeight_SBND_v1_multisim_MvNCRES/GenieMultisimMvNCRES
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC1pi/GenieMultisimNonResBGvpCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC2pi/GenieMultisimNonResBGvpCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi/GenieMultisimNonResBGvpNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi/GenieMultisimNonResBGvpNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC1pi/GenieMultisimNonResBGvnCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC2pi/GenieMultisimNonResBGvnCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC1pi/GenieMultisimNonResBGvnNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC2pi/GenieMultisimNonResBGvnNC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC1pi/GenieMultisimNonResBGvbarpCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC2pi/GenieMultisimNonResBGvbarpCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC1pi/GenieMultisimNonResBGvbarpNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC2pi/GenieMultisimNonResBGvbarpNC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC1pi/GenieMultisimNonResBGvbarnCC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC2pi/GenieMultisimNonResBGvbarnCC2pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC1pi/GenieMultisimNonResBGvbarnNC1pi,
-    % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC2pi/GenieMultisimNonResBGvbarnNC2pi,
-    % GENIEReWeight_SBND_v1_multisim_RDecBR1gamma/GenieMultisimRDecBR1gamma,
-    % GENIEReWeight_SBND_v1_multisim_RDecBR1eta/GenieMultisimRDecBR1eta,
-    % GENIEReWeight_SBND_v1_multisim_AhtBY/GenieMultisimAhtBY,
-    % GENIEReWeight_SBND_v1_multisim_BhtBY/GenieMultisimBhtBY,
-    % GENIEReWeight_SBND_v1_multisim_CV1uBY/GenieMultisimCV1uBY,
-    % GENIEReWeight_SBND_v1_multisim_CV2uBY/GenieMultisimCV2uBY,
-    % GENIEReWeight_SBND_v1_multisim_FormZone/GenieMultisimFormZone, 
-    % GENIEReWeight_SBND_v1_multisim_MFP_pi/GenieMultisimMFPpi, 
-    % GENIEReWeight_SBND_v1_multisim_FrCEx_pi/GenieMultisimFrCExpi, 
-    % GENIEReWeight_SBND_v1_multisim_FrInel_pi/GenieMultisimFrInelpi, 
-    % GENIEReWeight_SBND_v1_multisim_FrAbs_pi/GenieMultisimFrAbspi,
-    % GENIEReWeight_SBND_v1_multisim_FrPiProd_pi/GenieMultisimFrPiProdpi,
-    % GENIEReWeight_SBND_v1_multisim_MFP_N/GenieMultisimMFPN,
-    % GENIEReWeight_SBND_v1_multisim_FrCEx_N/GenieMultisimFrCExN,
-    % GENIEReWeight_SBND_v1_multisim_FrInel_N/GenieMultisimFrInelN,
-    % GENIEReWeight_SBND_v1_multisim_FrAbs_N/GenieMultisimFrAbsN,
-    % GENIEReWeight_SBND_v1_multisim_FrPiProd_N/GenieMultisimFrPiProdN,
-    % GENIEReWeight_SBND_v1_multisim_CCQEPauliSupViaKF/GenieMultisimCCQEPauliSupViaKF,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nu/MinerVAE2p2hAnu,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nu/MinerVAE2p2hBnu,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nubar/MinerVAE2p2hAnubar,
-    % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nubar/MinerVAE2p2hBnubar,
-    % % MINERvAq0q3Weighting_SBND_v1_Mnv2p2hGaussEnhancement/MinerVAq0q3GaussEnhancement,
-    % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nu/MiscC12ToAr402p2hScalingnu,
-    % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nubar/MiscC12ToAr402p2hScalingnubar,
-    % % MiscInteractionSysts_SBND_v1_nuenuebar_xsec_ratio/MiscNueNuebarXsecRatio,
-    % % MiscInteractionSysts_SBND_v1_nuenumu_xsec_ratio/MiscNueNumuXsecRatio,
-    % MiscInteractionSysts_SBND_v1_SPPLowQ2Suppression/MiscSPPLowQ2Suppression,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_2Pi/NOvAnunCC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_3Pi/NOvAnunCC3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_2Pi/NOvAnupCC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_3Pi/NOvAnupCC3Pi,
-    % % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_np_CC_1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_1Pi/NOvAnunNC1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_2Pi/NOvAnunNC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_3Pi/NOvAnunNC3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_1Pi/NOvAnupNC1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_2Pi/NOvAnupNC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_3Pi/NOvAnupNC3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_1Pi/NOvAnunbarCC1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_2Pi/NOvAnunbarCC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_3Pi/NOvAnunbarCC3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_1Pi/NOvAnubarCC1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_2Pi/NOvAnubarCC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_3Pi/NOvAnubarCC3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_1Pi/NOvAnunbarNC1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_2Pi/NOvAnunbarNC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_3Pi/NOvAnunbarNC3Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_1Pi/NOvAnubarNC1Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_2Pi/NOvAnubarNC2Pi,
-    % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_3Pi/NOvAnubarNC3Pi
+% For newer files
+
+% \def\XSecSystList{
+%     GENIEReWeight_SBND_v1_multisigma_MaCCQE/GenieMaCCQE,
+%     GENIEReWeight_SBND_v1_multisigma_MaNCEL/GenieMaNCEL
+%         % GENIEReWeight_SBND_v1_multisigma_EtaNCEL/GenieEtaNCEL,
+%         % GENIEReWeight_SBND_v1_multisigma_MaCCRES/GenieMaCCRES,
+%         % GENIEReWeight_SBND_v1_multisigma_MvCCRES/GenieMvCCRES,
+%         % GENIEReWeight_SBND_v1_multisigma_MaNCRES/GenieMaNCRES,
+%         % GENIEReWeight_SBND_v1_multisigma_MvNCRES/GenieMvNCRES,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi/GenieNonResBGvpCC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi/GenieNonResBGvpCC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi/GenieNonResBGvpNC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi/GenieNonResBGvpNC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC1pi/GenieNonResBGvnCC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC2pi/GenieNonResBGvnCC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC1pi/GenieNonResBGvnNC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC2pi/GenieNonResBGvnNC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC1pi/GenieNonResBGvbarpCC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC2pi/GenieNonResBGvbarpCC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC1pi/GenieNonResBGvbarpNC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC2pi/GenieNonResBGvbarpNC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC1pi/GenieNonResBGvbarnCC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC2pi/GenieNonResBGvbarnCC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC1pi/GenieNonResBGvbarnNC1pi,
+%     % GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC2pi/GenieNonResBGvbarnNC2pi,
+%     % GENIEReWeight_SBND_v1_multisigma_RDecBR1gamma/GenieRDecBR1gamma,
+%     % GENIEReWeight_SBND_v1_multisigma_RDecBR1eta/GenieRDecBR1eta,
+%     % GENIEReWeight_SBND_v1_multisigma_Theta_Delta2Npi/GenieTheta_Delta2Npi,
+%     % GENIEReWeight_SBND_v1_multisigma_AhtBY/GenieAhtBY,
+%     % GENIEReWeight_SBND_v1_multisigma_BhtBY/GenieBhtBY,
+%     % GENIEReWeight_SBND_v1_multisigma_CV1uBY/GenieCV1uBY,
+%     % GENIEReWeight_SBND_v1_multisigma_CV2uBY/GenieCV2uBY,
+%     % GENIEReWeight_SBND_v1_multisigma_FormZone/GenieFormZone,
+%     % GENIEReWeight_SBND_v1_multisigma_MFP_pi/GenieMFPpi,
+%     % GENIEReWeight_SBND_v1_multisigma_FrCEx_pi/GenieFrCExpi,
+%     % GENIEReWeight_SBND_v1_multisigma_FrInel_pi/GenieFrInelpi,
+%     % GENIEReWeight_SBND_v1_multisigma_FrAbs_pi/GenieFrAbspi,
+%     % GENIEReWeight_SBND_v1_multisigma_FrPiProd_pi/GenieFrPiProdpi,
+%     % GENIEReWeight_SBND_v1_multisigma_MFP_N/GenieMFPN,
+%     % GENIEReWeight_SBND_v1_multisigma_FrCEx_N/GenieFrCExN,
+%     % GENIEReWeight_SBND_v1_multisigma_FrInel_N/GenieFrInelN,
+%     % GENIEReWeight_SBND_v1_multisigma_FrAbs_N/GenieFrAbsN,
+%     % GENIEReWeight_SBND_v1_multisigma_FrPiProd_N/GenieFrPiProdN,
+%     % GENIEReWeight_SBND_v1_multisigma_CCQEPauliSupViaKF/GenieCCQEPauliSupViaKF,
+%     % GENIEReWeight_SBND_v1_multisigma_CCQEMomDistroFGtoSF/GenieCCQEMomDistroFGtoSF,
+%         % GENIEReWeight_SBND_v1_multisim_MaCCQE/GenieMultisimMaCCQE, 
+%         % GENIEReWeight_SBND_v1_multisim_MaNCEL/GenieMultisimMaNCEL,
+%         % GENIEReWeight_SBND_v1_multisim_EtaNCEL/GenieMultisimEtaNCEL,
+%         % GENIEReWeight_SBND_v1_multisim_MaCCRES/GenieMultisimMaCCRES,
+%         % GENIEReWeight_SBND_v1_multisim_MvCCRES/GenieMultisimMvCCRES,
+%         % GENIEReWeight_SBND_v1_multisim_MaNCRES/GenieMultisimMaNCRES,
+%         % GENIEReWeight_SBND_v1_multisim_MvNCRES/GenieMultisimMvNCRES
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC1pi/GenieMultisimNonResBGvpCC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC2pi/GenieMultisimNonResBGvpCC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi/GenieMultisimNonResBGvpNC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi/GenieMultisimNonResBGvpNC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC1pi/GenieMultisimNonResBGvnCC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC2pi/GenieMultisimNonResBGvnCC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC1pi/GenieMultisimNonResBGvnNC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC2pi/GenieMultisimNonResBGvnNC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC1pi/GenieMultisimNonResBGvbarpCC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC2pi/GenieMultisimNonResBGvbarpCC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC1pi/GenieMultisimNonResBGvbarpNC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC2pi/GenieMultisimNonResBGvbarpNC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC1pi/GenieMultisimNonResBGvbarnCC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC2pi/GenieMultisimNonResBGvbarnCC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC1pi/GenieMultisimNonResBGvbarnNC1pi,
+%     % GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC2pi/GenieMultisimNonResBGvbarnNC2pi,
+%     % GENIEReWeight_SBND_v1_multisim_RDecBR1gamma/GenieMultisimRDecBR1gamma,
+%     % GENIEReWeight_SBND_v1_multisim_RDecBR1eta/GenieMultisimRDecBR1eta,
+%     % GENIEReWeight_SBND_v1_multisim_AhtBY/GenieMultisimAhtBY,
+%     % GENIEReWeight_SBND_v1_multisim_BhtBY/GenieMultisimBhtBY,
+%     % GENIEReWeight_SBND_v1_multisim_CV1uBY/GenieMultisimCV1uBY,
+%     % GENIEReWeight_SBND_v1_multisim_CV2uBY/GenieMultisimCV2uBY,
+%     % GENIEReWeight_SBND_v1_multisim_FormZone/GenieMultisimFormZone, 
+%     % GENIEReWeight_SBND_v1_multisim_MFP_pi/GenieMultisimMFPpi, 
+%     % GENIEReWeight_SBND_v1_multisim_FrCEx_pi/GenieMultisimFrCExpi, 
+%     % GENIEReWeight_SBND_v1_multisim_FrInel_pi/GenieMultisimFrInelpi, 
+%     % GENIEReWeight_SBND_v1_multisim_FrAbs_pi/GenieMultisimFrAbspi,
+%     % GENIEReWeight_SBND_v1_multisim_FrPiProd_pi/GenieMultisimFrPiProdpi,
+%     % GENIEReWeight_SBND_v1_multisim_MFP_N/GenieMultisimMFPN,
+%     % GENIEReWeight_SBND_v1_multisim_FrCEx_N/GenieMultisimFrCExN,
+%     % GENIEReWeight_SBND_v1_multisim_FrInel_N/GenieMultisimFrInelN,
+%     % GENIEReWeight_SBND_v1_multisim_FrAbs_N/GenieMultisimFrAbsN,
+%     % GENIEReWeight_SBND_v1_multisim_FrPiProd_N/GenieMultisimFrPiProdN,
+%     % GENIEReWeight_SBND_v1_multisim_CCQEPauliSupViaKF/GenieMultisimCCQEPauliSupViaKF,
+%     % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nu/MinerVAE2p2hAnu,
+%     % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nu/MinerVAE2p2hBnu,
+%     % MINERvAE2p2h_ICARUS_v1_E2p2h_A_nubar/MinerVAE2p2hAnubar,
+%     % MINERvAE2p2h_ICARUS_v1_E2p2h_B_nubar/MinerVAE2p2hBnubar,
+%     % % MINERvAq0q3Weighting_SBND_v1_Mnv2p2hGaussEnhancement/MinerVAq0q3GaussEnhancement,
+%     % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nu/MiscC12ToAr402p2hScalingnu,
+%     % MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nubar/MiscC12ToAr402p2hScalingnubar,
+%     % % MiscInteractionSysts_SBND_v1_nuenuebar_xsec_ratio/MiscNueNuebarXsecRatio,
+%     % % MiscInteractionSysts_SBND_v1_nuenumu_xsec_ratio/MiscNueNumuXsecRatio,
+%     % MiscInteractionSysts_SBND_v1_SPPLowQ2Suppression/MiscSPPLowQ2Suppression,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_2Pi/NOvAnunCC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_3Pi/NOvAnunCC3Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_2Pi/NOvAnupCC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_3Pi/NOvAnupCC3Pi,
+%     % % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_np_CC_1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_1Pi/NOvAnunNC1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_2Pi/NOvAnunNC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_3Pi/NOvAnunNC3Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_1Pi/NOvAnupNC1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_2Pi/NOvAnupNC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_3Pi/NOvAnupNC3Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_1Pi/NOvAnunbarCC1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_2Pi/NOvAnunbarCC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_3Pi/NOvAnunbarCC3Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_1Pi/NOvAnubarCC1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_2Pi/NOvAnubarCC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_3Pi/NOvAnubarCC3Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_1Pi/NOvAnunbarNC1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_2Pi/NOvAnunbarNC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_3Pi/NOvAnunbarNC3Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_1Pi/NOvAnubarNC1Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_2Pi/NOvAnubarNC2Pi,
+%     % NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_3Pi/NOvAnubarNC3Pi
+% }
+
+\def\XSecSystList{
+    AhtBY_multisigma_Genie/AhtBY,
+    BhtBY_multisigma_Genie/BhtBY,
+    CV1uBY_multisigma_Genie/CV1uBY,
+    CV2uBY_multisigma_Genie/CV2uBY,
+    EtaNCEL_multisigma_Genie/EtaNCEL,
+    FormZone_multisigma_Genie/FormZone,
+    FrAbs_N_multisigma_Genie/FrAbsN,
+    FrAbs_pi_multisigma_Genie/FrAbspi,
+    FrCEx_N_multisigma_Genie/FrCExN,
+    FrCEx_pi_multisigma_Genie/FrCExpi,
+    FrInel_N_multisigma_Genie/FrInelN,
+    FrInel_pi_multisigma_Genie/FrInelpi,
+    FrPiProd_N_multisigma_Genie/FrPiProdN,
+    FrPiProd_pi_multisigma_Genie/FrPiProdpi,
+    MFP_N_multisigma_Genie/MFPN,
+    MFP_pi_multisigma_Genie/MFPpi,
+    MaCCQE_multisigma_Genie/MaCCQE,
+    MaCCRES_multisigma_Genie/MaCCRES,
+    MaNCEL_multisigma_Genie/MaNCEL,
+    MaNCRES_multisigma_Genie/MaNCRES,
+    MvCCRES_multisigma_Genie/MvCCRES,
+    MvNCRES_multisigma_Genie/MvNCRES,
+    NonRESBGvbarnCC1pi_multisigma_Genie/NonRESBGvbarnCC1pi,
+    NonRESBGvbarnCC2pi_multisigma_Genie/NonRESBGvbarnCC2pi,
+    NonRESBGvbarnNC1pi_multisigma_Genie/NonRESBGvbarnNC1pi,
+    NonRESBGvbarnNC2pi_multisigma_Genie/NonRESBGvbarnNC2pi,
+    NonRESBGvbarpCC1pi_multisigma_Genie/NonRESBGvbarpCC1pi,
+    NonRESBGvbarpCC2pi_multisigma_Genie/NonRESBGvbarpCC2pi,
+    NonRESBGvbarpNC1pi_multisigma_Genie/NonRESBGvbarpNC1pi,
+    NonRESBGvbarpNC2pi_multisigma_Genie/NonRESBGvbarpNC2pi,
+    NonRESBGvnCC1pi_multisigma_Genie/NonRESBGvnCC1pi,
+    NonRESBGvnCC2pi_multisigma_Genie/NonRESBGvnCC2pi,
+    NonRESBGvnNC1pi_multisigma_Genie/NonRESBGvnNC1pi,
+    NonRESBGvnNC2pi_multisigma_Genie/NonRESBGvnNC2pi,
+    NonRESBGvpCC1pi_multisigma_Genie/NonRESBGvpCC1pi,
+    NonRESBGvpCC2pi_multisigma_Genie/NonRESBGvpCC2pi,
+    NonRESBGvpNC1pi_multisigma_Genie/NonRESBGvpNC1pi,
+    NonRESBGvpNC2pi_multisigma_Genie/NonRESBGvpNC2pi
+}
+
+\def\FluxSystList{
+    expskin_Flux/Expskin,
+    horncurrent_Flux/HornCurrent,
+    kminus_Flux/KMinus,
+    kplus_Flux/KPlus,
+    kzero_Flux/KZero,
+    nucleoninexsec_Flux/NucleonIneXSec,
+    nucleonqexsec_Flux/NucleonQeXSec,
+    nucleontotxsec_Flux/NucleonTotXSec,
+    piminus_Flux/PiMinus,
+    pioninexsec_Flux/PionIneXSec,
+    pionqexsec_Flux/PionQeXSec,
+    piontotxsec_Flux/PionTotXSec,
+    piplus_Flux/PiPlus
 }
 
 \def\VarList{
@@ -166,9 +225,9 @@
 }
 
 \newcounter{systcounter}
-\newcommand{\PrintAllSystematicVarPlots}{
-    \foreach \SystName/\SystLabel in \SystList {
-        \foreach \VarName/\VarLabel in \VarList {
+\newcommand{\PrintAllSystsPlots}[1]{
+    \foreach\SystName/\SystLabel in #1 {
+        \foreach\VarName/\VarLabel in \VarList {
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/\SystName/\VarName.png}
@@ -706,7 +765,7 @@ The CAF files used for this analysis are available in the Fermilab gpvms at the
 path 
 
 \begin{center}
-    \verb|/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root|    
+    \verb|/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv/*.flat.caf.root|
 \end{center}
 
 \noindent where the asterisk means that all the files in the directory with the extension 
@@ -813,6 +872,76 @@ Using all the variable definitions as we did when studying the event generators,
     \label{fig:sbnd-double-diff-sliced}
 \end{figure}
 
+\subsection{Interaction and topology breakdown}
+
+We perform an interaction and topology breakdown for the SBND data. For these breakdowns, 
+we look at the reconstructed events that pass our signal definitions cuts and see what 
+percentage of these are generated from different interaction modes and topologies. 
+This helps us get a better idea of what our background signal is composed of. For the
+interaction breakdown, we look at quasielastic (QE), MEC (meson-exchange current),
+RES (resonance), and DIS (deep inelastic scattering) events. For the topology breakdown,
+we look at the number of protons, pions, and muons in the final state. The topologies 
+we label are CC2p0$pi$ (our signal definition), CC1p0$pi$, CC($N>2$)p0$pi$, CC($N\geq0$)p1$pi$, and CC0p0$pi$.
+Any other topology is labeled as ``Other''.
+These breakdowns are shown in Figures~\labelcref{fig:inte-top-breakdown-vector,fig:inte-top-breakdown-opening-angles-transverse,fig:inte-top-breakdown-double-diff-transverse,fig:inte-top-breakdown-double-diff-opening-angles}.
+
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/MuonMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/MuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/LeadingProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/RecoilProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/RecoilProtonCosTheta.png}}
+    \caption{Interaction and topology breakdown for vector directions and magnitudes.}
+    \label{fig:inte-top-breakdown-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/DeltaAlphaT.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/TransverseMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/CosOpeningAngleProtons.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/CosOpeningAngleMuonTotalProton.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Interaction and topology breakdown for opening angles and transverse variables.}
+    \label{fig:inte-top-breakdown-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialDeltaAlphaT_InMuonCosTheta_0.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialDeltaAlphaT_InMuonCosTheta_1.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialTransverseMomentum_InMuonCosTheta_0.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialTransverseMomentum_InMuonCosTheta_1.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialTransverseMomentum_InMuonCosTheta_1.png}}
+    \caption{Interaction and topology breakdown for double differential transverse variables.}
+    \label{fig:inte-top-breakdown-double-diff-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Interaction and topology breakdown for double differential opening angles.}
+    \label{fig:inte-top-breakdown-double-diff-opening-angles}
+\end{figure}
+
 \subsection{Signal efficiency}
 
 Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. These plots are shown in Figure~\ref{fig:sbnd-signal-efficiency-vector-plots} and Figure~\ref{fig:sbnd-signal-efficiency-opening-angles-transverse} for single-differential variables and Figure~\ref{fig:sbnd-signal-efficiency-double-differential} for double differential variables.
@@ -853,6 +982,7 @@ Using the truth information about reconstructed events, we can also compute sign
     \label{fig:sbnd-signal-efficiency-double-differential}
 \end{figure}
 
+\clearpage
 \subsection{Migration and response matrices}
 
 Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. For the migration matrix, we consider true signal events that were reconstructed and satisfy our signal definition in the denominator. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
@@ -923,6 +1053,8 @@ Response matrices are computed in a similar manner, but using the total number o
     \label{fig:response-double-differential}
 \end{figure}
 
+\clearpage
+
 \subsection{Systematics}
 
 To include systematic uncertainties in our study, we first consider cross sectional systematics.
@@ -945,20 +1077,54 @@ And the correlation matrix is defined as
     \rho_{i,j} = \frac{E_{i,j}}{\sqrt{E_{i,i} E_{j,j}}}.
 \end{align}
 In the case of a multisigma systematic, $N_{\text{Univ}} = 1$, and for a multisim systematic, $N_{\text{Univ}} = 100$.
-The plots for all the individual cross sectional systematics are shown in Appendix~\ref{sec:xsec-systematics}.
-There are a few systematics that are currently crashing when trying to produce all plots. This are:
-\begin{itemize}
-    \item MINERvAq0q3Weighting\_SBND\_v1\_Mnv2p2hGaussEnhancement
-    \item MiscInteractionSysts\_SBND\_v1\_nuenuebar\_xsec\_ratio
-    \item MiscInteractionSysts\_SBND\_v1\_nuenumu\_xsec\_ratio
-    \item NOvAStyleNonResPionNorm\_SBND\_v1\_NR\_nu\_np\_CC\_1Pi
-\end{itemize}
+The plots for all the individual cross sectional systematics are shown in Appendix~\ref{sec:xsec-systematics}. 
+The corresponding plots for the individual flux systematics are shown in Appendix~\ref{sec:flux-systematics}.
+The total covariance matrices for each variable are shown in Figures~\labelcref{fig:total-cov-single-diff,fig:total-cov-double-diff}.
 
+% There are a few systematics that are currently crashing when trying to produce all plots. This are:
+% \begin{itemize}
+%     \item MINERvAq0q3Weighting\_SBND\_v1\_Mnv2p2hGaussEnhancement
+%     \item MiscInteractionSysts\_SBND\_v1\_nuenuebar\_xsec\_ratio
+%     \item MiscInteractionSysts\_SBND\_v1\_nuenumu\_xsec\_ratio
+%     \item NOvAStyleNonResPionNorm\_SBND\_v1\_NR\_nu\_np\_CC\_1Pi
+% \end{itemize}
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovLeadingProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovRecoilProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovTransverseMomentum.png}} \\ 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovCosOpeningAngleMuonTotalProton.png}}
+    \caption{Total covariance matrices for single differential variables.}
+    \label{fig:total-cov-single-diff}
+\end{figure}
 
-\clearpage
-\section{Closure test}
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovSerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovSerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovSerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Total covariance matrices for double differential variables.}
+    \label{fig:total-cov-double-diff}
+\end{figure}
 
-To ensure that the unfolding techniques that we will implement work correctly, we perform a closure test, meaning that we will perform the unfolding on simulated true signal events and check that the unfolded data matches the true signal data with added smearing. We can see that the plots that perform this test in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. We also note that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. \textbf{TODO: stop using dummy covariance matrices.}
+\subsection{Closure test}
+
+We use the total covariance matrices obtained from all the systematics and shown in the previous section
+to unfold our data. We perform this unfolding following the Wiener-SVD method~\cite{Tang_2017}, which
+for a given variable takes as input a response matrix, true signal histogram, a reconstructed signal histogram, and the 
+covariance matrix. The output is the unfolded spectrum and a smearing matrix that can be used to smear 
+true signal histograms.
+
+To ensure that the unfolding techniques that we will implement work correctly, we perform a closure test,
+meaning that we will perform the unfolding on simulated true signal events and check that the unfolded 
+data matches the true signal data with added smearing. We can see that the plots that perform this test 
+in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. We also note
+that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. 
 
 \begin{figure}
     \centering
@@ -988,19 +1154,27 @@ To ensure that the unfolding techniques that we will implement work correctly, w
     \label{fig:closure-test-double-diff}
 \end{figure}
 
+\clearpage
 \section{Cross-section results}
 Placeholder.
 
 \clearpage
-
 \section{Appendices}
 
 \subsection{Cross section systematics}\label{sec:xsec-systematics}
 In this appendix, the variations, covariance matrices, fractional covariance matrices, 
 and correlation matrices are plotted for all of the cross section systematics and variables.
 
-\PrintAllSystematicVarPlots
+\PrintAllSystsPlots{\XSecSystList}
 
+\clearpage
+
+\subsection{Flux systematics}\label{sec:flux-systematics}
+
+In this appendix, the variations, covariance matrices, fractional covariance matrices,
+and correlation matrices are plotted for all of the flux systematics and variables.
+
+\PrintAllSystsPlots{\FluxSystList}
 
 \clearpage
 
