@@ -55,11 +55,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
-    // We now create overlaid plots for several reconstructed variables and three lines:
-    //     1. all selected reconstructed events
-    //     2. reco signal events
-    //     3. reco background events
-
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
@@ -155,7 +150,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = false;
+    const bool ConstructSpectra = true;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<

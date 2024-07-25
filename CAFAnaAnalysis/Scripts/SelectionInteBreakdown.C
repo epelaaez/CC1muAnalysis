@@ -38,11 +38,6 @@ void SelectionInteBreakdown() {
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
-    // We now create overlaid plots for several reconstructed variables and three lines:
-    //     1. all selected reconstructed events
-    //     2. reco signal events
-    //     3. reco background events
-
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
 
