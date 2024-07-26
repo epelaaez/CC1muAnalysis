@@ -59,12 +59,18 @@ namespace ana
     ///////////
 
     // Create the binning schemes for the Vars we wish to plot.
-    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
+    const Binning bEventCount = Binning::Simple(1, 0, 1.0);
     const Binning bAngleBins = Binning::Simple(10, -1.0, 1.0);
     const Binning bDeltaAlphaBins = Binning::Simple(6, 0.0, 180.0);
     const Binning bTransverseMomentumBins = Binning::Simple(6, 0.0, 1.0);
     const Binning bMuonMomentumBins = Binning::Simple(6, 0.1, 1.2);
     const Binning bProtonMomentumBins = Binning::Simple(6, 0.3, 1.0);
+
+    // Bins for cut plots
+    const Binning bNuScore = Binning::Simple(30, 0, 1.0);
+    const Binning bFMatchScore = Binning::Simple(40, 0, 40.0);
+    const Binning bFMatchTime = Binning::Simple(20, 0, 5.0);
+    const Binning bMuChi2 = Binning::Simple(30, 0, 60.0);
 
     // Double differential bins
     Tools tools; // tools for double differential bins
@@ -397,17 +403,224 @@ namespace ana
     // Vars
     //////////////
 
-    // For all vars, there are three variations:
+    // Dummy variables to keep track of events
+    const Var kEventCount([](const caf::SRSliceProxy* slc) -> double {
+        return 0.5;
+    });
+    const TruthVar kTrueEventCount([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return 0.5;
+    });
+
+    // Cosmic cut variables
+    const Var kNuScore([](const caf::SRSliceProxy* slc) -> double {
+        return slc->nu_score;
+    });
+    const Var kFMatchScore([](const caf::SRSliceProxy* slc) -> double {
+        return slc->fmatch.score;
+    });
+    const Var kFMatchTime([](const caf::SRSliceProxy* slc) -> double {
+        return slc->fmatch.time;
+    });
+
+    // Mu chi2 for muon
+    const Var kMuMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 13) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for muon
+    const Var kMuProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 13) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Mu chi2 for proton
+    const Var kProtonMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for proton
+    const Var kProtonProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Mu chi2 for second proton
+    const Var kSecondProtonMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for second proton
+    const Var kSecondProtonProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Mu chi2 for pion
+    const Var kPionMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 211 || pfp.trk.truth.p.pdg == -211) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for pion
+    const Var kPionProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 211 || pfp.trk.truth.p.pdg == -211) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // For all the following vars, there are three variations:
     //     1. Reconstructed value `Var`
     //     2. True value `TruthVar`
     //     3. True value accessed through truth information of 
     //        a `SRSlice`, and stored as `Var`
     // The difference between 1 and 3 is that the latter can be
     // used in a `Spectrum` that uses a `Cut` instead of a `TruthCut`.
-
-    // Primary energy
-    const Var kPrimaryEnergy = SIMPLEVAR(truth.E);
-    const TruthVar kTrueEnergy = SIMPLETRUTHVAR(E);
 
     // Muon angle
     const Var kMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
@@ -766,6 +979,47 @@ namespace ana
             slc->fmatch.time > 0. &&   // check flash is in beam
             slc->fmatch.time < 1.8
         );
+    });
+    const Cut kIsCosmic([](const caf::SRSliceProxy* slc) {
+        return (slc->truth.genie_mode == -1);
+    });
+    const Cut kIsNotCosmic([](const caf::SRSliceProxy* slc) {
+        return (slc->truth.genie_mode != -1);
+    });
+
+    const Cut kHasMuon([](const caf::SRSliceProxy* slc) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 13) {
+                return true;
+            }
+        }
+        return false;
+    });
+    const Cut kHasProton([](const caf::SRSliceProxy* slc) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                return true;
+            }
+        }
+        return false;
+    });
+    const Cut kHasSecondProton([](const caf::SRSliceProxy* slc) {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                if (!firstProton) firstProton = true;
+                else if (firstProton) return true;
+            }
+        }
+        return false;
+    });
+    const Cut kHasPion([](const caf::SRSliceProxy* slc) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 211 || pfp.trk.truth.p.pdg == -211) {
+                return true;
+            }
+        }
+        return false;
     });
 
     // Check reconstructed event is signal

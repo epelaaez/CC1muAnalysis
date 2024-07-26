@@ -134,34 +134,34 @@ void Selection() {
     // These spectra are going to use the primary energy as a variable
 
     // Spectrum with all events
-    Spectrum sAllEvents("AllEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kValidEnergyTruthCut, kNoSpillCut);
+    Spectrum sAllEvents("AllEvents", bEventCount, NuLoader, kTrueEventCount, kValidEnergyTruthCut, kNoSpillCut);
     // Spectrum with all reco events
-    Spectrum sAllRecoEvents("AllRecoEvents", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kValidEnergyCut);
+    Spectrum sAllRecoEvents("AllRecoEvents", bEventCount, NuLoader, kEventCount, kNoSpillCut, kValidEnergyCut);
     // Spectrum with all true signal events
-    Spectrum sAllTrueEvents("AllTrueEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignalAndEnergy, kNoSpillCut);
+    Spectrum sAllTrueEvents("AllTrueEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignalAndEnergy, kNoSpillCut);
     // Spectrum with all true signal events that were reconstructed
-    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignalAndEnergy, kNoSpillCut, kNoCut);
+    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignalAndEnergy, kNoSpillCut, kNoCut);
     // Spectrum with first cut (cosmic)
-    Spectrum sFirstCut("FirstCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCut);
-    Spectrum sFirstCutTrue("FirstCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCutTrue);
+    Spectrum sFirstCut("FirstCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFirstCut);
+    Spectrum sFirstCutTrue("FirstCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFirstCutTrue);
     // Spectrum with second cut (cosmic and vertex FV)
-    Spectrum sSecondCut("SecondCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSecondCut);
-    Spectrum sSecondCutTrue("SecondCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSecondCutTrue);
+    Spectrum sSecondCut("SecondCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSecondCut);
+    Spectrum sSecondCutTrue("SecondCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSecondCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, and one muon)
-    Spectrum sThirdCut("ThirdCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kThirdCut);
-    Spectrum sThirdCutTrue("ThirdCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kThirdCutTrue);
+    Spectrum sThirdCut("ThirdCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kThirdCut);
+    Spectrum sThirdCutTrue("ThirdCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kThirdCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, one muon, and two protons)
-    Spectrum sFourthCut("FourthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFourthCut);
-    Spectrum sFourthCutTrue("FourthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFourthCutTrue);
+    Spectrum sFourthCut("FourthCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFourthCut);
+    Spectrum sFourthCutTrue("FourthCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFourthCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, one muon, two protons, and no charged pions)
-    Spectrum sFifthCut("FifthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFifthCut);
-    Spectrum sFifthCutTrue("FifthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFifthCutTrue);
+    Spectrum sFifthCut("FifthCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFifthCut);
+    Spectrum sFifthCutTrue("FifthCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFifthCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, one muon, two protons, no charged pions, and no neutral pions)
-    Spectrum sSixthCut("SixthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSixthCut);
-    Spectrum sSixthCutTrue("SixthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSixthCutTrue);
+    Spectrum sSixthCut("SixthCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSixthCut);
+    Spectrum sSixthCutTrue("SixthCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSixthCutTrue);
     // Spectrum with overall signal definition to sanity check it matches
-    Spectrum sRecoSignal("RecoSignal", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kRecoIsSignal); 
-    Spectrum sRecoTrueSignal("RecoTrueSignal", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kRecoIsTrueReco); 
+    Spectrum sRecoSignal("RecoSignal", bEventCount, NuLoader, kEventCount, kNoSpillCut, kRecoIsSignal); 
+    Spectrum sRecoTrueSignal("RecoTrueSignal", bEventCount, NuLoader, kEventCount, kNoSpillCut, kRecoIsTrueReco); 
 
     NuLoader.Go();
 
