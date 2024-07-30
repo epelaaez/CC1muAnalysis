@@ -216,15 +216,14 @@
     DeltaAlphaT/$\delta\alpha_T$,
     TransverseMomentum/$\delta P_T$,
     MuonMomentum/$|\vm|$,
-    % LeadingProtonMomentum/$|\vlp|$,
-    % RecoilProtonMomentum/$|\vrp|$,
+    LeadingProtonMomentum/$|\vlp|$,
+    RecoilProtonMomentum/$|\vrp|$,
     SerialTransverseMomentum_InMuonCosTheta/$\delta P_T$ in $\cos(\theta_{\vm})$,
     SerialDeltaAlphaT_InMuonCosTheta/$\delta \alpha_T$ in $\cos(\theta_{\vm})$,
     SerialCosOpeningAngleProtons_InMuonCosTheta/$\cos(\theta_{\vlp,\vrp})$ in $\cos(\theta_{\vm})$,
     SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta/$\cos(\theta_{\vm, \vtp})$ in $\cos(\theta_{\vm})$
 }
 
-\newcounter{systcounter}
 \newcommand{\PrintAllSystsPlots}[1]{
     \foreach\SystName/\SystLabel in #1 {
         \foreach\VarName/\VarLabel in \VarList {
@@ -238,6 +237,18 @@
                 \label{fig:\SystName-\VarName}
             \end{figure}
         }
+    }
+}
+
+\newcommand{\PrintAllStatSystsPlots}{
+    \foreach\VarName/\VarLabel in \VarList {
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png}
+            \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CovBkg\VarName.png} \\
+            \caption{Statistical covariance matrix for reconstructed and background~\VarLabel.}
+            \label{fig:Statistical-\VarName}
+        \end{figure}
     }
 }
 
@@ -807,6 +818,25 @@ it is a signal event. We perform the following cuts:
     \item No neutrial pions: that there are no reconstructed particles with a positive \verb|trackScore| less than 0.5 indicating a shower, so we don't allow any neutral pions.
 \end{enumerate}
 Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events.
+To get a better sense of what values the variables chosen to do the cuts take on for each true particle, we plot
+the flash matching score, time, and $\nu$ score in Figures~\ref{fig:cosmic-cut-variables}, and the $\chi^2$ values for muons and protons in Figure~\ref{fig:chi-2-variables}.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Cuts/NoCutNuScore.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Cuts/NoCutFMatchScore.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Cuts/NoCutFMatchTime.png}}
+    \caption{Cosmic cut variables before rejecting cosmic events.}
+    \label{fig:cosmic-cut-variables}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Cuts/ParticleCutChi2Muon.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Cuts/ParticleCutChi2Proton.png}} 
+    \caption{Muon and proton $\chi^2$ values for all particles.}
+    \label{fig:chi-2-variables}
+\end{figure}
 
 We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts described above is applied to the reconstructed events. 
 These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()|. Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and the all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
@@ -1078,7 +1108,11 @@ And the correlation matrix is defined as
 \end{align}
 In the case of a multisigma systematic, $N_{\text{Univ}} = 1$, and for a multisim systematic, $N_{\text{Univ}} = 100$.
 The plots for all the individual cross sectional systematics are shown in Appendix~\ref{sec:xsec-systematics}. 
+Flux systematics are computed in the same way, but each universe varies a flux parameter.
 The corresponding plots for the individual flux systematics are shown in Appendix~\ref{sec:flux-systematics}.
+Finally, we also consider statistical systematics. This are straightforward to compute, as the covariance matrix 
+is given by the square root of the number of elements in the corresponding bin in the histogram. These statistical
+covariance matrices are shown in Appendix~\ref{sec:stat-systematics}.
 The total covariance matrices for each variable are shown in Figures~\labelcref{fig:total-cov-single-diff,fig:total-cov-double-diff}.
 
 % There are a few systematics that are currently crashing when trying to produce all plots. This are:
@@ -1175,6 +1209,14 @@ In this appendix, the variations, covariance matrices, fractional covariance mat
 and correlation matrices are plotted for all of the flux systematics and variables.
 
 \PrintAllSystsPlots{\FluxSystList}
+
+\clearpage
+
+\subsection{Statistical systematics}\label{sec:stat-systematics}
+
+In this appendix, the covariance matrices for the statistical systematics are plotted.
+
+\PrintAllStatSystsPlots
 
 \clearpage
 
