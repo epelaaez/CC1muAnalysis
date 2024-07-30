@@ -57,6 +57,10 @@ void Selection() {
     // Single differential variables
     ////////////////////////////////
 
+    // Dummy variable
+    Vars.push_back(kEventCount); VarBins.push_back(bEventCount); 
+    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
+
     // Muon angle
     Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
     PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
