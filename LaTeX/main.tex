@@ -244,9 +244,11 @@
     \foreach\VarName/\VarLabel in \VarList {
         \begin{figure}[H]
             \centering
-            \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png}
-            \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CovBkg\VarName.png} \\
-            \caption{Statistical covariance matrix for reconstructed and background~\VarLabel.}
+            \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/\VarName.png}
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png} \\
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/FracCovReco\VarName.png}
+                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CorrReco\VarName.png}
+            \caption{Statistical variations for~\VarLabel.}
             \label{fig:Statistical-\VarName}
         \end{figure}
     }
