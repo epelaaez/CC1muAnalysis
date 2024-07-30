@@ -73,6 +73,10 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     // Single differential variables
     ////////////////////////////////
 
+    // Event count 
+    Vars.push_back(kEventCount); VarBins.push_back(bEventCount);
+    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
+
     // Muon angle
     Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
     PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
@@ -408,8 +412,8 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
 
                     // Debugging
-                    std::cout << XEventRateCV << "     " << XEventRateVar << std::endl;
-                    std::cout << YEventRateCV << "     " << YEventRateVar << std::endl;
+                    // std::cout << XEventRateCV << "     " << XEventRateVar << std::endl;
+                    // std::cout << YEventRateCV << "     " << YEventRateVar << std::endl;
 
                     // Fill covariance matrix
                     CovMatrix->Fill(
