@@ -54,7 +54,7 @@ void SelectionPOTSystematics() {
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsPOT.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
     std::vector<Var> Vars; std::vector<Binning> VarBins;
