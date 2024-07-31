@@ -15,66 +15,10 @@
 
 // Generator analysis includes.
 #include "../../GeneratorAnalysis/Scripts/Constants.h"
+#include "Helpers.cpp"
 
 using namespace std;
 using namespace Constants;
-
-// https://github.com/SBNSoftware/sbnana/blob/245aecf3f422e54820ffcdc53db326e5cd8e8fe0/sbnana/CAFAna/Core/EnsembleSpectrum.cxx#L196C3-L224C4
-void DrawErrorBand(TH1* nom, TGraphAsymmErrors* band, int bandCol, double alpha) {
-    if(bandCol == -1) bandCol = nom->GetLineColor()-10; // hopefully a lighter version
-
-    // Check if this pad has already been drawn in
-    const bool same = gPad && !gPad->GetListOfPrimitives()->IsEmpty();
-
-    nom->Draw(same ? "hist same" : "hist");
-
-    band->SetFillColorAlpha(bandCol, alpha);
-    band->Draw("e2 same");
-
-    nom->Draw("hist same");
-
-    // If we are the first spectrum to draw, scale the y-axis appropriately to
-    // fit the error band as well as the nominal
-    if(!same){
-      double maxY = 0;
-      // Don't consider underflow or overflow bins when determining maximum
-      for(int i = 1; i < band->GetN()-1; ++i){
-        maxY = std::max(maxY, band->GetY()[i] + band->GetErrorYhigh(i));
-      }
-
-      // Use non-zero lower value so that SetLogy() still works
-      nom->GetYaxis()->SetRangeUser(1e-10, 1.1 * maxY);
-    }
-    gPad->RedrawAxis();
-}
-
-// https://github.com/SBNSoftware/sbnana/blob/245aecf3f422e54820ffcdc53db326e5cd8e8fe0/sbnana/CAFAna/Core/Utilities.cxx#L974-L1000
-double FindQuantile(double frac, std::vector<double>& xs) {
-    // This turns out to be a much more fraught issue than you would naively
-    // expect. This algorithm is equivalent to R-6 here:
-    // https://en.wikipedia.org/wiki/Quantile#Estimating_quantiles_from_a_sample
-
-    // In principle we could use std::nth_element(). Probably doesn't matter
-    // much in practice since this is only for plotting.
-    std::sort(xs.begin(), xs.end());
-
-    const int N = xs.size();
-    // The index we would ideally be sampling at
-    const double h = frac*(N+1);
-    // The indices on either side where we have to actually evaluate
-    const unsigned int h0 = std::floor(h);
-    const unsigned int h1 = std::ceil(h);
-    if(h0 == 0) return xs[0]; // Don't underflow indexing
-    if(h1 > xs.size()) return xs.back(); // Don't overflow indexing
-    // The values at those indices
-    const double x0 = xs[h0-1]; // wikipedia is using 1-based indexing
-    const double x1 = xs[h1-1];
-
-    if(h0 == h1) return x0;
-
-    // Linear interpolation
-    return (h1-h)*x0 + (h-h0)*x1;
-}
 
 void StatSystematics() {
     // Set defaults and load tools
@@ -152,8 +96,8 @@ void StatSystematics() {
         BkgHist->SetLineWidth(4);
 
         int n = RecoHist->GetXaxis()->GetNbins();
-        int max = RecoHist->GetXaxis()->GetXmax();
-        int min = RecoHist->GetXaxis()->GetXmin();
+        double max = RecoHist->GetXaxis()->GetXmax();
+        double min = RecoHist->GetXaxis()->GetXmin();
 
         // Get graph with error bands
         TGraphAsymmErrors* RecoErrorBand = new TGraphAsymmErrors;
@@ -176,18 +120,18 @@ void StatSystematics() {
 
             std::vector<double> recoys;
             recoys.push_back(RecoHist->GetBinContent(binIdx)+TMath::Sqrt(RecoHist->GetBinContent(binIdx)));
-            const double recoy0 = FindQuantile(.5-0.6827/2, recoys);
-            const double recoy1 = FindQuantile(.5+0.6827/2, recoys);
+            const double recoy0 = SelectionHelpers::FindQuantile(.5-0.6827/2, recoys);
+            const double recoy1 = SelectionHelpers::FindQuantile(.5+0.6827/2, recoys);
 
             std::vector<double> bkgys;
             bkgys.push_back(BkgHist->GetBinContent(binIdx)+TMath::Sqrt(BkgHist->GetBinContent(binIdx)));
-            const double bkgy0 = FindQuantile(.5-0.6827/2, bkgys);
-            const double bkgy1 = FindQuantile(.5+0.6827/2, bkgys);
+            const double bkgy0 = SelectionHelpers::FindQuantile(.5-0.6827/2, bkgys);
+            const double bkgy1 = SelectionHelpers::FindQuantile(.5+0.6827/2, bkgys);
 
             std::vector<double> recotrueys;
             recotrueys.push_back(RecoTrueHist->GetBinContent(binIdx)+TMath::Sqrt(RecoTrueHist->GetBinContent(binIdx)));
-            const double recotruey0 = FindQuantile(.5-0.6827/2, recotrueys);
-            const double recotruey1 = FindQuantile(.5+0.6827/2, recotrueys);
+            const double recotruey0 = SelectionHelpers::FindQuantile(.5-0.6827/2, recotrueys);
+            const double recotruey1 = SelectionHelpers::FindQuantile(.5+0.6827/2, recotrueys);
 
             RecoErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(recoxnom-recoy0, 0.), std::max(recoy1-recoynom, 0.));
             BkgErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(bkgxnom-bkgy0, 0.), std::max(bkgy1-bkgynom, 0.));
@@ -206,11 +150,11 @@ void StatSystematics() {
         BkgHist->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
         RecoHist->Draw("hist");
-        DrawErrorBand(RecoHist, RecoErrorBand, -1, 1);
+        SelectionHelpers::DrawErrorBand(RecoHist, RecoErrorBand, -1, 1);
         RecoTrueHist->Draw("hist same");
-        DrawErrorBand(RecoTrueHist, RecoTrueErrorBand, -1, 1);
+        SelectionHelpers::DrawErrorBand(RecoTrueHist, RecoTrueErrorBand, -1, 1);
         BkgHist->Draw("hist same");
-        DrawErrorBand(BkgHist, BkgErrorBand, -1, 1);
+        SelectionHelpers::DrawErrorBand(BkgHist, BkgErrorBand, -1, 1);
         leg->Draw();
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/Statistical/"+PlotNames[iVar]+".png");
 
@@ -385,9 +329,7 @@ void StatSystematics() {
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/Statistical/FracCovBkg"+PlotNames[iVar]+".png");
 
         // Plot reco corr matrix
-        double RecoCorrMin = RecoCorrMatrix->GetMinimum();
-        double RecoCorrMax = RecoCorrMatrix->GetMaximum();
-        RecoCorrMatrix->GetZaxis()->SetRangeUser(RecoCorrMin,RecoCorrMax);
+        RecoCorrMatrix->GetZaxis()->SetRangeUser(-1,1);
         RecoCorrMatrix->GetZaxis()->CenterTitle();
         RecoCorrMatrix->GetZaxis()->SetTitleFont(FontStyle);
         RecoCorrMatrix->GetZaxis()->SetTitleSize(TextSize);
@@ -399,13 +341,11 @@ void StatSystematics() {
         RecoCorrMatrix->GetYaxis()->SetTitle(AxisTitle.c_str());
 
         PlotCanvas->cd();
-        RecoCorrMatrix->Draw("colz");
+        RecoCorrMatrix->Draw("colz text");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/Statistical/CorrReco"+PlotNames[iVar]+".png");
 
         // Plot bkg corr matrix
-        double BkgCorrMin = BkgCorrMatrix->GetMinimum();
-        double BkgCorrMax = BkgCorrMatrix->GetMaximum();
-        BkgCorrMatrix->GetZaxis()->SetRangeUser(BkgCorrMin,BkgCorrMax);
+        BkgCorrMatrix->GetZaxis()->SetRangeUser(-1,1);
         BkgCorrMatrix->GetZaxis()->CenterTitle();
         BkgCorrMatrix->GetZaxis()->SetTitleFont(FontStyle);
         BkgCorrMatrix->GetZaxis()->SetTitleSize(TextSize);
@@ -417,7 +357,7 @@ void StatSystematics() {
         BkgCorrMatrix->GetYaxis()->SetTitle(AxisTitle.c_str());
 
         PlotCanvas->cd();
-        BkgCorrMatrix->Draw("colz");
+        BkgCorrMatrix->Draw("colz text");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/Statistical/CorrBkg"+PlotNames[iVar]+".png");
 
         SaveFile->WriteObject(RecoCovMatrix, PlotNames[iVar]+"_cov");
