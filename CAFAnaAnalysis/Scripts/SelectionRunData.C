@@ -39,10 +39,10 @@ void SelectionRunData() {
 
     Spectrum sRecoSignals(
         "RecoSignals",
-        bPrimaryEnergy, // does not really matter
+        bEventCount, // does not really matter
         NuLoader,
         kSpillData,
-        kSpillDatacut
+        kNoSpillCut
     );
 
     NuLoader.Go();

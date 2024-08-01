@@ -353,24 +353,6 @@ namespace ana
         return vars;
     }
 
-    ///////////
-    // SpillVar
-    ///////////
-
-    const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
-        fstream file; 
-        file.open(
-            "/exp/sbnd/data/users/epelaez/CAFAnaOutput/EventData.csv",
-            fstream::out | fstream::app
-        );
-        file << sr->hdr.fno << ",";
-        file << sr->hdr.run << ",";
-        file << sr->hdr.subrun << ",";
-        file << sr->hdr.evt << ",";
-        file << sr->hdr.subevt << std::endl;
-        return 1;
-    });
-
     ////////////
     // MultiVars
     ////////////
@@ -1191,16 +1173,27 @@ namespace ana
 
         return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
     });
-    
+
     ///////////
-    // SpillCut
+    // SpillVar
     ///////////
-    
-    const SpillCut kSpillDatacut([](const caf::StandardRecordProxy* sr) {
+
+    const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
+        fstream file; 
+        file.open(
+            "/exp/sbnd/data/users/epelaez/CAFAnaOutput/EventData.csv",
+            fstream::out | fstream::app
+        );
         for (auto const& slc : sr->slc) {
-            if (kRecoIsSignal(&slc)) return true;
+            if (kRecoIsSignal(&slc)) {
+                file << sr->hdr.fno << ",";
+                file << sr->hdr.run << ",";
+                file << sr->hdr.subrun << ",";
+                file << sr->hdr.evt << ",";
+                file << sr->hdr.subevt << std::endl;       
+            }
         }
-        return false;
+        return 0.5;
     });
 }
 
