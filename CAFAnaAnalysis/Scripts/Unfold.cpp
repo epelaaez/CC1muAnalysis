@@ -45,6 +45,10 @@ void Unfold() {
 
     Tools tools;
 
+    // Root file to store objects in
+    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Unfolded.root";
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
+
     // Load root file(s) with histograms and matrices
     TString SelectionRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
     TString MatrixRootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
@@ -70,8 +74,13 @@ void Unfold() {
     // Single differential variables
     ////////////////////////////////
 
+    // Event count
+    PlotNames.push_back("EventCount");
+    XLabels.push_back("");
+    YLabels.push_back("# events #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Muon angle
-    PlotNames.push_back("MuonCosTheta"); 
+    PlotNames.push_back("MuonCosTheta");
     XLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
     YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
@@ -200,6 +209,8 @@ void Unfold() {
             UnfoldCov,
             CovRotation
         );
+        // Get transpose cov rotation matrix
+        TMatrixD CovRotationT (TMatrixD::kTransposed, CovRotation);
 
         // Add smear to signal
         TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges);
@@ -210,6 +221,15 @@ void Unfold() {
         TVectorD SmearedVector = AddSmear * SignalVector;
         V2H(SmearedVector, SmearedSignal);
         ReweightXSec(SmearedSignal);
+
+        // Save unfolded cov
+        TH2D* UnfoldedCovHisto = new TH2D("UnfoldCov"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges,m,edges);
+
+        
+
+        M2H(UnfoldCov, UnfoldedCovHisto);
+        SaveFile->WriteObject(UnfoldedCovHisto, PlotNames[iPlot]+"_unfold_cov");
+        SaveFile->WriteObject(UnfoldedSpectrum, PlotNames[iPlot]+"_unfolded_spectrum");
 
         // Declare canvas
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);

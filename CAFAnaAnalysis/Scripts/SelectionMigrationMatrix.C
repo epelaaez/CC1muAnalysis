@@ -52,6 +52,10 @@ void SelectionMigrationMatrix() {
     std::vector<std::tuple<Var, Var, TruthVar>> Vars; std::vector<Binning> VarBins;
     std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
 
+    // Dummy variable
+    Vars.push_back({kEventCount, kEventCount, kTrueEventCount}); VarBins.push_back(bEventCount); 
+    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
+
     // Muon angle
     Vars.push_back({kMuonCosTheta, kRecoTruthMuonCosTheta, kTruthMuonCosTheta}); VarBins.push_back(bAngleBins);
     PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");

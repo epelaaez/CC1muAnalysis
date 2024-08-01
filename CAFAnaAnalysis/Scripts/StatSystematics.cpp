@@ -221,18 +221,20 @@ void StatSystematics() {
             for (int y = 1; y <= x; y++) {
                 if (x == y) {
                     double RecoBinContent = RecoHist->GetBinContent(x);
+                    double RecoBinContentScaled = RecoBinContent * (Units / (IntegratedFlux * NTargets));
                     double RecoValue = TMath::Sqrt(RecoBinContent) * (Units / (IntegratedFlux * NTargets));
                     RecoCovMatrix->SetBinContent(x, y, TMath::Max(RecoValue, 1e-8));
 
-                    double RecoFracValue = (RecoBinContent == 0.) ? 0. : RecoValue / (RecoBinContent * RecoBinContent);
+                    double RecoFracValue = (RecoBinContent == 0.) ? 0. : RecoValue / (RecoBinContentScaled * RecoBinContentScaled);
                     RecoFracCovMatrix->SetBinContent(x, y, TMath::Max(RecoFracValue, 1e-8));
                     RecoCorrMatrix->SetBinContent(x, y, 1.);
 
                     double BkgBinContent = BkgHist->GetBinContent(x);
+                    double BkgBinContentScaled = BkgBinContent * (Units / (IntegratedFlux * NTargets));
                     double BkgValue = TMath::Sqrt(BkgBinContent) * (Units / (IntegratedFlux * NTargets));
                     BkgCovMatrix->SetBinContent(x, y, TMath::Max(BkgValue, 1e-8));
 
-                    double BkgFracValue = (BkgBinContent == 0.) ? 0. : BkgValue / (BkgBinContent * BkgBinContent);
+                    double BkgFracValue = (BkgBinContent == 0.) ? 0. : BkgValue / (BkgBinContentScaled * BkgBinContentScaled);
                     BkgFracCovMatrix->SetBinContent(x, y, TMath::Max(BkgFracValue, 1e-8));
                     BkgCorrMatrix->SetBinContent(x, y, 1.);
                 } else {
@@ -362,5 +364,11 @@ void StatSystematics() {
 
         SaveFile->WriteObject(RecoCovMatrix, PlotNames[iVar]+"_cov");
         SaveFile->WriteObject(BkgCovMatrix, PlotNames[iVar]+"bkg_cov");
+
+        SaveFile->WriteObject(RecoFracCovMatrix, PlotNames[iVar]+"_fraccov");
+        SaveFile->WriteObject(BkgFracCovMatrix, PlotNames[iVar]+"bkg_fraccov");
+
+        SaveFile->WriteObject(RecoCorrMatrix, PlotNames[iVar]+"_corr");
+        SaveFile->WriteObject(BkgCorrMatrix, PlotNames[iVar]+"bkg_corr");
     }
 }
