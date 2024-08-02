@@ -16,6 +16,7 @@
 #include "../../Utils/Tools.cxx"
 #include "../../Utils/Util.C"
 #include "../../Utils/WienerSVD.C"
+#include "Helpers.cpp"
 
 using namespace std;
 using namespace Constants;
@@ -222,13 +223,21 @@ void Unfold() {
         V2H(SmearedVector, SmearedSignal);
         ReweightXSec(SmearedSignal);
 
-        // Save unfolded cov
+        // Save unfolded cov, frac cov, and corr matrices
         TH2D* UnfoldedCovHisto = new TH2D("UnfoldCov"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges,m,edges);
-
-        
-
         M2H(UnfoldCov, UnfoldedCovHisto);
+        TH2D* UnfoldedFracCovHisto = new TH2D("UnfoldFracCov"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges,m,edges);
+        TH2D* UnfoldedCorrHisto = new TH2D("UnfoldCorr"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,edges,m,edges);
+        SelectionHelpers::GetFracCovAndCorrMatrix(
+            UnfoldedSpectrum,
+            UnfoldedCovHisto,
+            UnfoldedFracCovHisto,
+            UnfoldedCorrHisto,
+            n
+        );
         SaveFile->WriteObject(UnfoldedCovHisto, PlotNames[iPlot]+"_unfold_cov");
+        SaveFile->WriteObject(UnfoldedFracCovHisto, PlotNames[iPlot]+"_unfold_fraccov");
+        SaveFile->WriteObject(UnfoldedCorrHisto, PlotNames[iPlot]+"_unfold_corr");
         SaveFile->WriteObject(UnfoldedSpectrum, PlotNames[iPlot]+"_unfolded_spectrum");
 
         // Declare canvas

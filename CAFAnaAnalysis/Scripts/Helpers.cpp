@@ -175,6 +175,32 @@ namespace SelectionHelpers {
         delete PlotCanvas; delete leg;
     }
 
+    void GetFracCovAndCorrMatrix(
+        TH1* RecoHisto,
+        TH2* CovMatrix,
+        TH2* FracCovMatrix,
+        TH2* CorrMatrix,
+        int n
+    ) {
+        for (int x = 1; x < n + 1; x++) {
+            double XEventRateCV = RecoHisto->GetBinContent(x);
+            for (int y = 1; y < n + 1; y++) {
+                double YEventRateCV = RecoHisto->GetBinContent(y);
+                double CovBinValue = CovMatrix->GetBinContent(x,y);
+                double XBinValue = CovMatrix->GetBinContent(x,x);
+                double YBinValue = CovMatrix->GetBinContent(y,y);
+
+                // Fill frac cov matrix
+                double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 1e-8 : CovBinValue / (XEventRateCV * YEventRateCV);
+                FracCovMatrix->SetBinContent(x, y, FracValue);
+
+                // Fill corr matrix
+                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 1e-8 : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
+                CorrMatrix->SetBinContent(x, y, CorrValue);
+            }
+        }
+    }
+
     void DrawMatrices(
         TH1D* RecoHisto, 
         TH1D* RecoTrueHisto, 
@@ -250,24 +276,14 @@ namespace SelectionHelpers {
             }
         }
 
-        // Create fractional covariance and correlation matrices
-        for (int x = 1; x < n + 1; x++) {
-            double XEventRateCV = RecoHisto->GetBinContent(x);
-            for (int y = 1; y < n + 1; y++) {
-                double YEventRateCV = RecoHisto->GetBinContent(y);
-                double CovBinValue = CovMatrix->GetBinContent(x,y);
-                double XBinValue = CovMatrix->GetBinContent(x,x);
-                double YBinValue = CovMatrix->GetBinContent(y,y);
-
-                // Fill frac cov matrix
-                double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 1e-8 : CovBinValue / (XEventRateCV * YEventRateCV);
-                FracCovMatrix->SetBinContent(x, y, FracValue);
-
-                // Fill corr matrix
-                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 1e-8 : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                CorrMatrix->SetBinContent(x, y, CorrValue);
-            }
-        }
+        // Fill in frac cov and corr matrix
+        SelectionHelpers::GetFracCovAndCorrMatrix(
+            RecoHisto,
+            CovMatrix,
+            FracCovMatrix,
+            CorrMatrix,
+            n
+        );
 
         // Plot cov matrix
         double CovMin = CovMatrix->GetMinimum();

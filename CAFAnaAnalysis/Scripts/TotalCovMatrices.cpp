@@ -88,133 +88,23 @@ void TotalCovMatrices() {
     std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
     CovFiles.push_back(std::move(ReinteractionFile));
 
+    // File with reco histograms
+    TString HistoFile = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
+    std::unique_ptr<TFile> File(TFile::Open(HistoFile));
+
     // File to store total cov matrices
     TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/TotalCovMatrices.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
+
+    // Get integrated flux
+    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
+    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
+    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
 
     TCanvas* PlotCanvas = new TCanvas("Cov","Cov",205,34,1124,768);
 
     // Loop over all vars
     for (int iVar = 0; iVar < (int) PlotNames.size(); iVar++) {
-        // Get sigle bin uncertainties
-        if (PlotNames[iVar] == "EventCount") {
-            // Margins for single bin plot
-            PlotCanvas->SetTopMargin(0.13);
-            PlotCanvas->SetLeftMargin(0.17);
-            PlotCanvas->SetRightMargin(0.05);
-            PlotCanvas->SetBottomMargin(0.16);
-
-            TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
-            leg->SetBorderSize(0);
-            leg->SetNColumns(3);
-            leg->SetTextSize(TextSize*0.8);
-            leg->SetTextFont(FontStyle);
-
-            // Add xsec uncertainties
-            TMatrixD XSecFracCov(1, 1);
-            for (int iSyst = 0; iSyst < (int) XSecSystsVector.size(); iSyst++) {
-                TH2D* FracCovHist = (TH2D*)(CovFiles[iSyst]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-                TMatrixD FracCovMatrix(1, 1); H2M(FracCovHist, FracCovMatrix, kTRUE);
-                XSecFracCov += FracCovMatrix;
-            }
-            TH1D* XSecHisto = new TH1D("XSec", ";;Uncertainty [%]", 1, 0, 1);
-            XSecHisto->SetBinContent(1, TMath::Sqrt(XSecFracCov(0, 0)) * 100);
-            TLegendEntry* legXSec = leg->AddEntry(XSecHisto,"XSec","l");
-            XSecHisto->SetLineColor(kBlue+2);
-            XSecHisto->SetLineWidth(4);
-
-            // Style 
-            XSecHisto->GetXaxis()->SetNdivisions(5);
-            XSecHisto->GetXaxis()->SetLabelSize(0);
-            XSecHisto->GetXaxis()->SetTitleSize(0);
-
-            XSecHisto->GetYaxis()->SetTitleFont(FontStyle);
-            XSecHisto->GetYaxis()->SetLabelFont(FontStyle);
-            XSecHisto->GetYaxis()->SetLabelSize(TextSize);
-            XSecHisto->GetYaxis()->SetTitleSize(TextSize);
-            XSecHisto->GetYaxis()->SetNdivisions(6);
-            XSecHisto->GetYaxis()->SetTitleOffset(1.);
-            XSecHisto->GetYaxis()->SetTickSize(0);
-            XSecHisto->GetYaxis()->CenterTitle();
-            XSecHisto->GetYaxis()->SetRangeUser(0.,20);
-            XSecHisto->Draw("hist");
-
-            // Add flux uncertainties
-            TMatrixD FluxFracCov(1, 1);
-            for (int iSyst = 0; iSyst < (int) FluxSystsVector.size(); iSyst++) {
-                TH2D* FracCovHist = (TH2D*)(CovFiles[iSyst + (int)XSecSystsVector.size()]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-                TMatrixD FracCovMatrix(1, 1); H2M(FracCovHist, FracCovMatrix, kTRUE);
-                FluxFracCov += FracCovMatrix;
-            }
-            TH1D* FluxHisto = new TH1D("Flux", ";;Uncertainty [%]", 1, 0, 1);
-            FluxHisto->SetBinContent(1, TMath::Sqrt(FluxFracCov(0, 0)) * 100);
-            TLegendEntry* legFlux = leg->AddEntry(FluxHisto,"Flux","l");
-            FluxHisto->SetLineColor(kRed+1);
-            FluxHisto->SetLineWidth(4);
-            FluxHisto->Draw("hist same");
-
-            int offset = XSecSystsVector.size() + FluxSystsVector.size();
-
-            // Add Stat systematics
-            TMatrixD StatFracCov(1, 1);
-            TH2D* StatFracCovHist = (TH2D*)(CovFiles[offset]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-            H2M(StatFracCovHist, StatFracCov, kTRUE);
-            TH1D* StatsHisto = new TH1D("Stats", ";;Uncertainty [%]", 1, 0, 1);
-            StatsHisto->SetBinContent(1, TMath::Sqrt(StatFracCov(0, 0)) * 100);
-            TLegendEntry* legStats= leg->AddEntry(StatsHisto,"Stat","l");
-            StatsHisto->SetLineColor(kMagenta+1);
-            StatsHisto->SetLineWidth(4);
-            StatsHisto->Draw("hist same");
-
-            // Add POT systematics
-            TMatrixD POTFracCov(1, 1);
-            TH2D* POTFracCovHist = (TH2D*)(CovFiles[offset + 1]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-            H2M(POTFracCovHist, POTFracCov, kTRUE);
-            TH1D* POTHisto = new TH1D("POT", ";;Uncertainty [%]", 1, 0, 1);
-            POTHisto->SetBinContent(1, TMath::Sqrt(POTFracCov(0, 0)) * 100);
-            TLegendEntry* legPOT= leg->AddEntry(POTHisto,"POT","l");
-            POTHisto->SetLineColor(kGreen);
-            POTHisto->SetLineWidth(4);
-            POTHisto->Draw("hist same");
-
-            // Add NTargets systematics
-            TMatrixD NTargetsFracCov(1, 1);
-            TH2D* NTargetsFracCovHist = (TH2D*)(CovFiles[offset + 2]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-            H2M(NTargetsFracCovHist, NTargetsFracCov, kTRUE);
-            TH1D* NTargetsHisto = new TH1D("NTargets", ";;Uncertainty [%]", 1, 0, 1);
-            NTargetsHisto->SetBinContent(1, TMath::Sqrt(NTargetsFracCov(0, 0)) * 100);
-            TLegendEntry* legNTargets= leg->AddEntry(NTargetsHisto,"NTargets","l");
-            NTargetsHisto->SetLineColor(kYellow + 1);
-            NTargetsHisto->SetLineWidth(4);
-            NTargetsHisto->Draw("hist same");
-
-            // Add Detector systematics
-            TMatrixD DetectorFracCov(1, 1);
-            TH2D* DetectorFracCovHist = (TH2D*)(CovFiles[offset + 3]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-            H2M(DetectorFracCovHist, DetectorFracCov, kTRUE);
-            TH1D* DetectorHisto = new TH1D("Detector", ";;Uncertainty [%]", 1, 0, 1);
-            DetectorHisto->SetBinContent(1, TMath::Sqrt(DetectorFracCov(0, 0)) * 100);
-            TLegendEntry* legDetector= leg->AddEntry(DetectorHisto,"Detector","l");
-            DetectorHisto->SetLineColor(kCyan - 3);
-            DetectorHisto->SetLineWidth(4);
-            DetectorHisto->Draw("hist same");
-
-            // Add Reinteraction systematics
-            TMatrixD ReinteractionFracCov(1, 1);
-            TH2D* ReinteractionFracCovHist = (TH2D*)(CovFiles[offset + 4]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
-            H2M(ReinteractionFracCovHist, ReinteractionFracCov, kTRUE);
-            TH1D* ReinteractionHisto = new TH1D("Reinteraction", ";;Uncertainty [%]", 1, 0, 1);
-            ReinteractionHisto->SetBinContent(1, TMath::Sqrt(ReinteractionFracCov(0, 0)) * 100);
-            TLegendEntry* legReinteraction= leg->AddEntry(ReinteractionHisto,"Reinteraction","l");
-            ReinteractionHisto->SetLineColor(kTeal + 3);
-            ReinteractionHisto->SetLineWidth(4);
-            ReinteractionHisto->Draw("hist same");
-
-            // Save plot
-            leg->Draw();
-            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/SingleBinUnc.png");
-        }
-
         // Margins for matrices
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.15);
@@ -224,8 +114,8 @@ void TotalCovMatrices() {
         // Get first matrix to get correct dimensions
         TH2D* FirstCovHist = (TH2D*)(CovFiles[0]->Get<TH2D>(PlotNames[iVar]+"_cov"));
         int n = FirstCovHist->GetXaxis()->GetNbins();
-        int max = FirstCovHist->GetXaxis()->GetXmax();
-        int min = FirstCovHist->GetXaxis()->GetXmin();
+        double max = FirstCovHist->GetXaxis()->GetXmax();
+        double min = FirstCovHist->GetXaxis()->GetXmin();
         TMatrixD TotalCovMatrix(n, n); H2M(FirstCovHist, TotalCovMatrix, kTRUE);
 
         // Add cross section uncertainties
@@ -261,5 +151,148 @@ void TotalCovMatrices() {
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/TotalCov"+PlotNames[iVar]+".png");
 
         SaveFile->WriteObject(TotalCovHist, PlotNames[iVar]);
+
+        // Get bin uncertainties
+        if (PlotNames[iVar] == "EventCount") {
+            double Total = 0.;
+
+            // Margins for single bin plot
+            PlotCanvas->SetTopMargin(0.13);
+            PlotCanvas->SetLeftMargin(0.17);
+            PlotCanvas->SetRightMargin(0.05);
+            PlotCanvas->SetBottomMargin(0.16);
+
+            TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+            leg->SetBorderSize(0);
+            leg->SetNColumns(3);
+            leg->SetTextSize(TextSize*0.8);
+            leg->SetTextFont(FontStyle);
+
+            // Add xsec uncertainties
+            TMatrixD XSecFracCov(1, 1);
+            for (int iSyst = 0; iSyst < (int) XSecSystsVector.size(); iSyst++) {
+                TH2D* FracCovHist = (TH2D*)(CovFiles[iSyst]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+                TMatrixD FracCovMatrix(1, 1); H2M(FracCovHist, FracCovMatrix, kTRUE);
+                XSecFracCov += FracCovMatrix;
+            }
+            TH1D* XSecHisto = new TH1D("XSec", ";;Uncertainty [%]", 1, 0, 1);
+            XSecHisto->SetBinContent(1, TMath::Sqrt(XSecFracCov(0, 0)) * 100);
+            Total += TMath::Power(TMath::Sqrt(XSecFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legXSec = leg->AddEntry(XSecHisto,"XSec","l");
+            XSecHisto->SetLineColor(kBlue+2);
+            XSecHisto->SetLineWidth(4);
+
+            // Style 
+            XSecHisto->GetXaxis()->SetNdivisions(5);
+            XSecHisto->GetXaxis()->SetLabelSize(0);
+            XSecHisto->GetXaxis()->SetTitleSize(0);
+
+            XSecHisto->GetYaxis()->SetTitleFont(FontStyle);
+            XSecHisto->GetYaxis()->SetLabelFont(FontStyle);
+            XSecHisto->GetYaxis()->SetLabelSize(TextSize);
+            XSecHisto->GetYaxis()->SetTitleSize(TextSize);
+            XSecHisto->GetYaxis()->SetNdivisions(6);
+            XSecHisto->GetYaxis()->SetTitleOffset(1.);
+            XSecHisto->GetYaxis()->SetTickSize(0);
+            XSecHisto->GetYaxis()->CenterTitle();
+            XSecHisto->GetYaxis()->SetRangeUser(0.,35);
+            XSecHisto->Draw("hist");
+
+            // Add flux uncertainties
+            TMatrixD FluxFracCov(1, 1);
+            for (int iSyst = 0; iSyst < (int) FluxSystsVector.size(); iSyst++) {
+                TH2D* FracCovHist = (TH2D*)(CovFiles[iSyst + (int)XSecSystsVector.size()]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+                TMatrixD FracCovMatrix(1, 1); H2M(FracCovHist, FracCovMatrix, kTRUE);
+                FluxFracCov += FracCovMatrix;
+            }
+            TH1D* FluxHisto = new TH1D("Flux", ";;Uncertainty [%]", 1, 0, 1);
+            FluxHisto->SetBinContent(1, TMath::Sqrt(FluxFracCov(0, 0)) * 100);
+            Total +=  TMath::Power(TMath::Sqrt(FluxFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legFlux = leg->AddEntry(FluxHisto,"Flux","l");
+            FluxHisto->SetLineColor(kRed+1);
+            FluxHisto->SetLineWidth(4);
+            FluxHisto->Draw("hist same");
+
+            int offset = XSecSystsVector.size() + FluxSystsVector.size();
+
+            // Add Stat systematics
+            TMatrixD StatFracCov(1, 1);
+            TH2D* StatFracCovHist = (TH2D*)(CovFiles[offset]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+            H2M(StatFracCovHist, StatFracCov, kTRUE);
+            TH1D* StatsHisto = new TH1D("Stats", ";;Uncertainty [%]", 1, 0, 1);
+            StatsHisto->SetBinContent(1, TMath::Sqrt(StatFracCov(0, 0)) * 100);
+            Total += TMath::Power(TMath::Sqrt(StatFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legStats= leg->AddEntry(StatsHisto,"Stat","l");
+            StatsHisto->SetLineColor(kMagenta+1);
+            StatsHisto->SetLineWidth(4);
+            StatsHisto->Draw("hist same");
+
+            // Add POT systematics
+            TMatrixD POTFracCov(1, 1);
+            TH2D* POTFracCovHist = (TH2D*)(CovFiles[offset + 1]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+            H2M(POTFracCovHist, POTFracCov, kTRUE);
+            TH1D* POTHisto = new TH1D("POT", ";;Uncertainty [%]", 1, 0, 1);
+            POTHisto->SetBinContent(1, TMath::Sqrt(POTFracCov(0, 0)) * 100);
+            Total += TMath::Power(TMath::Sqrt(POTFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legPOT= leg->AddEntry(POTHisto,"POT","l");
+            POTHisto->SetLineColor(kGreen);
+            POTHisto->SetLineWidth(4);
+            POTHisto->Draw("hist same");
+
+            // Add NTargets systematics
+            TMatrixD NTargetsFracCov(1, 1);
+            TH2D* NTargetsFracCovHist = (TH2D*)(CovFiles[offset + 2]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+            H2M(NTargetsFracCovHist, NTargetsFracCov, kTRUE);
+            TH1D* NTargetsHisto = new TH1D("NTargets", ";;Uncertainty [%]", 1, 0, 1);
+            NTargetsHisto->SetBinContent(1, TMath::Sqrt(NTargetsFracCov(0, 0)) * 100);
+            Total += TMath::Power(TMath::Sqrt(NTargetsFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legNTargets= leg->AddEntry(NTargetsHisto,"NTargets","l");
+            NTargetsHisto->SetLineColor(kYellow + 1);
+            NTargetsHisto->SetLineWidth(4);
+            NTargetsHisto->Draw("hist same");
+
+            // Add Detector systematics
+            TMatrixD DetectorFracCov(1, 1);
+            TH2D* DetectorFracCovHist = (TH2D*)(CovFiles[offset + 3]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+            H2M(DetectorFracCovHist, DetectorFracCov, kTRUE);
+            TH1D* DetectorHisto = new TH1D("Detector", ";;Uncertainty [%]", 1, 0, 1);
+            DetectorHisto->SetBinContent(1, TMath::Sqrt(DetectorFracCov(0, 0)) * 100);
+            Total += TMath::Power(TMath::Sqrt(DetectorFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legDetector= leg->AddEntry(DetectorHisto,"Detector","l");
+            DetectorHisto->SetLineColor(kCyan - 3);
+            DetectorHisto->SetLineWidth(4);
+            DetectorHisto->Draw("hist same");
+
+            // Add Reinteraction systematics
+            TMatrixD ReinteractionFracCov(1, 1);
+            TH2D* ReinteractionFracCovHist = (TH2D*)(CovFiles[offset + 4]->Get<TH2D>(PlotNames[iVar]+"_fraccov"));
+            H2M(ReinteractionFracCovHist, ReinteractionFracCov, kTRUE);
+            TH1D* ReinteractionHisto = new TH1D("Reinteraction", ";;Uncertainty [%]", 1, 0, 1);
+            ReinteractionHisto->SetBinContent(1, TMath::Sqrt(ReinteractionFracCov(0, 0)) * 100);
+            Total += TMath::Power(TMath::Sqrt(ReinteractionFracCov(0, 0)) * 100, 2);
+            TLegendEntry* legReinteraction= leg->AddEntry(ReinteractionHisto,"Reinteraction","l");
+            ReinteractionHisto->SetLineColor(kTeal + 3);
+            ReinteractionHisto->SetLineWidth(4);
+            ReinteractionHisto->Draw("hist same");
+
+            // Total 
+            TH1D* RecoHist = (TH1D*)(File->Get<TH1D>(PlotNames[iVar] + (TString) "_reco"));
+            double BinContentScaled = RecoHist->GetBinContent(1) * (Units / (IntegratedFlux * NTargets));
+            double TotalFromCovMatrix = TMath::Sqrt(TotalCovMatrix(0, 0) / (BinContentScaled * BinContentScaled));
+            TH1D* TotalHisto = new TH1D("Total", ";;Uncertainty [%]", 1, 0, 1);
+            TotalHisto->SetBinContent(1, TotalFromCovMatrix * 100);
+            TLegendEntry* legTotal= leg->AddEntry(TotalHisto,"Total","l");
+            TotalHisto->SetLineColor(kBlack);
+            TotalHisto->SetLineWidth(4);
+            TotalHisto->Draw("hist same");
+
+            // These should be the same
+            std::cout << TotalFromCovMatrix * 100 << std::endl;
+            std::cout << TMath::Sqrt(Total) << std::endl;
+
+            // Save plot
+            leg->Draw();
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/SingleBinUnc.png");
+        }
     }
 }
