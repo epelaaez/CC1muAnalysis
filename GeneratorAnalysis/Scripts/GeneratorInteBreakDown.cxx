@@ -34,7 +34,7 @@ void GeneratorInteBreakDown() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
 
     Tools tools;
 
@@ -46,8 +46,8 @@ void GeneratorInteBreakDown() {
     std::vector<TString> Process{"","QE","MEC","RES","DIS"};
     std::vector<int> Colors{kBlack,kBlue,kRed+1,kOrange+7,kGreen+1,kMagenta+1};
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
-    Labels.push_back("GENIE_AR23");
+    //Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
+    //Labels.push_back("GENIE_AR23");
 
     // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
     // Labels.push_back("GENIE_AR23_Emp2015");
@@ -69,8 +69,8 @@ void GeneratorInteBreakDown() {
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU.root"); 
     Labels.push_back("GiBUU");
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
-    Labels.push_back("GiBUU_NoFSI");
+    //Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    //Labels.push_back("GiBUU_NoFSI");
 
     const int NSamples = Names.size();
     const int NColors = Colors.size();
@@ -118,6 +118,16 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    //Added - GKI
+    PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
@@ -149,6 +159,16 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueDeltaAlphaTPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    //Added - GKI
+    PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueMissingMomentumPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueAlphaThreeDPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
@@ -162,6 +182,17 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    //Added - GKI
+    PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+
     // Double differential pre FSI
     PlotNames.push_back("TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
@@ -174,6 +205,16 @@ void GeneratorInteBreakDown() {
 
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    //Added - GKI
+    PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
 
     //------------------------------//
@@ -199,6 +240,10 @@ void GeneratorInteBreakDown() {
     // Loop over the plots to be compared
 
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
+
+      //added
+      TString PlotNameDuplicate = PlotNames[iPlot];
+      TString GeneralPlotName = PlotNameDuplicate.ReplaceAll("NoFSI","");
 
         for (int iSample = 0; iSample < NSamples; iSample++) {	
             if (PlotNames[iPlot].Contains("NoFSI") && Labels[iSample] == "GiBUU_NoFSI") {
@@ -267,16 +312,25 @@ void GeneratorInteBreakDown() {
 
             PlotCanvas->cd();
             leg->Draw();
-
+            
             TLatex *textSlice = new TLatex();
             textSlice->SetTextFont(FontStyle);
             textSlice->SetTextSize(TextSize);
             TString PlotNameDuplicate = PlotNames[iPlot];
             TString ReducedPlotName = PlotNameDuplicate.ReplaceAll("True","") ;
-            textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
+
+            if (GeneralPlotName.Contains("TrueSerial")) {
+              auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator[GeneralPlotName];
+              auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
+              TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[0], 1) + " < " + PlotNameToSliceLabel[GeneralPlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[NSlices], 1);
+              textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events","") \
+              + "         " + SliceLabel);
+            } else {
+              textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
+            }
 
             gPad->RedrawAxis();
-            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/theobal1/BuildEventGenerators/CC1muAnalysis";
             TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
             PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;

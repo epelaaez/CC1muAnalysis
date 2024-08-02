@@ -26,7 +26,7 @@ void SerialGeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
 
     Tools tools;
 
@@ -36,9 +36,9 @@ void SerialGeneratorOverlay() {
 
     std::vector<TString> Names; std::vector<TString> Labels; std::vector<int> Colors;
     
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
+    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
     Labels.push_back("GENIE AR23");
-    Colors.push_back(kBlue+8);
+    Colors.push_back(kBlue+8);*/
 
     // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
     // Labels.push_back("GENIE AR23 Emp2015");
@@ -64,9 +64,9 @@ void SerialGeneratorOverlay() {
     Labels.push_back("GiBUU");
     Colors.push_back(kGreen+1);
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
     Labels.push_back("GiBUU NoFSI");
-    Colors.push_back(kGreen+1);
+    Colors.push_back(kGreen+1);*/
 
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);
@@ -96,6 +96,19 @@ void SerialGeneratorOverlay() {
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    //Added - GKI
+    PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("p_{n}");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Double differential pre FSI
     PlotNames.push_back("TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot");
     XAxisLabel.push_back("#delta P_{T}");
@@ -112,6 +125,20 @@ void SerialGeneratorOverlay() {
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    //Added - GKI
+    PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("p_{n}");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
 
     const int NPlots = PlotNames.size();
 
@@ -247,7 +274,7 @@ void SerialGeneratorOverlay() {
             TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[GeneralPlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
-            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/theobal1/BuildEventGenerators/CC1muAnalysis";
             PlotCanvas->SaveAs(dir+"/Figs/Overlay/Serial/"+SlicePlotName+".png");
             delete PlotCanvas;
 

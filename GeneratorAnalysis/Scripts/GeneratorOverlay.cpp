@@ -2,14 +2,18 @@
 #include <TTree.h>
 #include <TString.h>
 
-using namespace std;
-
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <stdlib.h>
+
+#include "Constants.h"
+#include "../../Utils/Tools.cxx"
+
+using namespace std;
+using namespace Constants;
 
 void GeneratorOverlay() {
 
@@ -22,7 +26,9 @@ void GeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
+
+    Tools tools;
 
     //------------------------------//
 
@@ -30,9 +36,9 @@ void GeneratorOverlay() {
 
     std::vector<TString> Names; std::vector<TString> Labels; std::vector<int> Colors;
     
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
-    Labels.push_back("GENIE AR23");
-    Colors.push_back(kBlue+8);
+    //Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
+    //Labels.push_back("GENIE AR23");
+    //Colors.push_back(kBlue+8);
 
     // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
     // Labels.push_back("GENIE AR23 Emp2015");
@@ -58,9 +64,9 @@ void GeneratorOverlay() {
     Labels.push_back("GiBUU");
     Colors.push_back(kGreen+1);
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
-    Labels.push_back("GiBUU NoFSI");
-    Colors.push_back(kGreen+1);
+    //Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    //Labels.push_back("GiBUU NoFSI");
+    //Colors.push_back(kGreen+1);
 
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);
@@ -81,6 +87,10 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
     PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
+    //Added
+    PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
+    PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
+    PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
@@ -93,18 +103,30 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
+    //Added
+    PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
+    PlotNames.push_back("TrueMissingMomentumPlot");
+    PlotNames.push_back("TrueAlphaThreeDPlot");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    //Added
+    PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
 
     // Double differential pre FSI
     PlotNames.push_back("TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    //Added
+    PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
 
     const int NPlots = PlotNames.size();
 
@@ -193,7 +215,21 @@ void GeneratorOverlay() {
         PlotCanvas->cd();
         leg->Draw();
         
-        TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+        TLatex *textSlice = new TLatex();
+        textSlice->SetTextFont(FontStyle);
+        textSlice->SetTextSize(TextSize);
+        TString PlotNameDuplicate = PlotNames[iPlot];
+        TString GeneralPlotName = PlotNameDuplicate.ReplaceAll("NoFSI","");
+        TString ReducedPlotName = PlotNameDuplicate.ReplaceAll("True","");
+
+        if (GeneralPlotName.Contains("TrueSerial")) {
+            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator[GeneralPlotName];
+            auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
+            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[0], 1) + " < " + PlotNameToSliceLabel[GeneralPlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[NSlices], 1);
+            textSlice->DrawLatexNDC(0.16, 0.93, SliceLabel);
+        }
+
+        TString dir = "/exp/sbnd/app/users/theobal1/BuildEventGenerators/CC1muAnalysis";
         TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;

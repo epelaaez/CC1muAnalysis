@@ -26,7 +26,7 @@ void MECSerialGeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
 
     Tools tools;
 
@@ -201,7 +201,7 @@ void MECSerialGeneratorOverlay() {
             TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[PlotNameDuplicate] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
-            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/theobal1/CC1muAnalysis";
             PlotCanvas->SaveAs(dir+"/Figs/Overlay/MEC/Serial/"+SlicePlotName+".png");
             delete PlotCanvas;
 

@@ -22,7 +22,7 @@ void MECGeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
 
     //------------------------------//
 
@@ -63,11 +63,21 @@ void MECGeneratorOverlay() {
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
 
+    //Added - GKI
+    PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
+    PlotNames.push_back("TrueMissingMomentumPlot");
+    PlotNames.push_back("TrueAlphaThreeDPlot");
+
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+
+    //Added - GKI
+    PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
 
     const int NPlots = PlotNames.size();
 
@@ -149,7 +159,7 @@ void MECGeneratorOverlay() {
         PlotCanvas->cd();
         leg->Draw();
         
-        TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+        TString dir = "/exp/sbnd/app/users/theobal1/CC1muAnalysis";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay/MEC/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
 
