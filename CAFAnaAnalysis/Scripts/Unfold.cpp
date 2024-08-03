@@ -282,6 +282,8 @@ void Unfold() {
         SmearMatrixHisto->GetZaxis()->SetNdivisions(6);
         SmearMatrixHisto->GetXaxis()->SetTitle(SmearMatrixHisto->GetXaxis()->GetTitle());
         SmearMatrixHisto->GetYaxis()->SetTitle(SmearMatrixHisto->GetYaxis()->GetTitle());
+        SmearMatrixHisto->GetXaxis()->SetTitle("bin i " + XLabels.at(iPlot));
+        SmearMatrixHisto->GetYaxis()->SetTitle("bin j " + XLabels.at(iPlot));
 
         PlotCanvas->cd();
         SmearMatrixHisto->Draw("colz");
