@@ -247,16 +247,20 @@ void Unfold() {
             UnfoldCov,
             CovRotation
         );
+        // Reweight unfolded covariance matrix
+        TH2D* UnfTotalCovHisto = new TH2D("UnfTotalCov"+PlotNames[iPlot],"UnfTotalCov" + PlotNames[iPlot],n, min, max, n, min, max);
+        M2H(UnfoldCov, UnfTotalCovHisto); tools.Reweight2D(UnfTotalCovHisto);
+
         // Get transpose cov rotation matrix
         TMatrixD CovRotationT (TMatrixD::kTransposed, CovRotation);
 
         // Add smear to signal
         TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,min,max);
-        V2H(unfold, UnfoldedSpectrum); ReweightXSec(UnfoldedSpectrum);
+        V2H(unfold, UnfoldedSpectrum); tools.Reweight(UnfoldedSpectrum);
 
         TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot],n,min,max);
         TVectorD SmearedVector = AddSmear * SignalVector;
-        V2H(SmearedVector, SmearedSignal); ReweightXSec(SmearedSignal);
+        V2H(SmearedVector, SmearedSignal); tools.Reweight(SmearedSignal);
 
         // Declare canvas
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);
@@ -419,7 +423,7 @@ void Unfold() {
         TH2D* UnfXSecCovHist = new TH2D("UnfCovXSec"+PlotNames[iPlot], "UnfCovXSec"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfXSecFracCovHist = new TH2D("UnfFracCovXSec"+PlotNames[iPlot], "UnfFracCovXSec"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfXSecCorrHist = new TH2D("UnfCorrXSec"+PlotNames[iPlot], "UnfCorrXSec"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfXSecCov, UnfXSecCovHist);
+        M2H(UnfXSecCov, UnfXSecCovHist); tools.Reweight2D(UnfXSecCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfXSecCovHist, UnfXSecFracCovHist, UnfXSecCorrHist, n);
         TMatrixD UnfXSecFracCov(n, n); H2M(UnfXSecFracCovHist, UnfXSecFracCov, kTRUE);
 
@@ -434,7 +438,7 @@ void Unfold() {
         TH2D* UnfFluxCovHist = new TH2D("UnfCovFlux"+PlotNames[iPlot], "UnfCovFlux"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfFluxFracCovHist = new TH2D("UnfFracCovFlux"+PlotNames[iPlot], "UnfFracCovFlux"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfFluxCorrHist = new TH2D("UnfCorrFlux"+PlotNames[iPlot], "UnfCorrFlux"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfFluxCov, UnfFluxCovHist);
+        M2H(UnfFluxCov, UnfFluxCovHist); tools.Reweight2D(UnfFluxCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfFluxCovHist, UnfFluxFracCovHist, UnfFluxCorrHist, n);
         TMatrixD UnfFluxFracCov(n, n); H2M(UnfFluxFracCovHist, UnfFluxFracCov, kTRUE);
 
@@ -446,7 +450,7 @@ void Unfold() {
         TH2D* UnfStatCovHist = new TH2D("UnfCovStat"+PlotNames[iPlot], "UnfCovStat"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfStatFracCovHist = new TH2D("UnfFracCovStat"+PlotNames[iPlot], "UnfFracCovStat"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfStatCorrHist = new TH2D("UnfCorrStat"+PlotNames[iPlot], "UnfCorrStat"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfStatCov, UnfStatCovHist);
+        M2H(UnfStatCov, UnfStatCovHist); tools.Reweight2D(UnfStatCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfStatCovHist, UnfStatFracCovHist, UnfStatCorrHist, n);
         TMatrixD UnfStatFracCov(n, n); H2M(UnfStatFracCovHist, UnfStatFracCov, kTRUE);
 
@@ -456,7 +460,7 @@ void Unfold() {
         TH2D* UnfPOTCovHist = new TH2D("UnfCovPOT"+PlotNames[iPlot], "UnfCovPOT"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfPOTFracCovHist = new TH2D("UnfFracCovPOT"+PlotNames[iPlot], "UnfFracCovPOT"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfPOTCorrHist = new TH2D("UnfCorrPOT"+PlotNames[iPlot], "UnfCorrPOT"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfPOTCov, UnfPOTCovHist);
+        M2H(UnfPOTCov, UnfPOTCovHist); tools.Reweight2D(UnfPOTCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfPOTCovHist, UnfPOTFracCovHist, UnfPOTCorrHist, n);
         TMatrixD UnfPOTFracCov(n, n); H2M(UnfPOTFracCovHist, UnfPOTFracCov, kTRUE);
 
@@ -466,7 +470,7 @@ void Unfold() {
         TH2D* UnfNTargetsCovHist = new TH2D("UnfCovNTargets"+PlotNames[iPlot], "UnfCovNTargets"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfNTargetsFracCovHist = new TH2D("UnfFracCovNTargets"+PlotNames[iPlot], "UnfFracCovNTargets"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfNTargetsCorrHist = new TH2D("UnfCorrNTargets"+PlotNames[iPlot], "UnfCorrNTargets"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfNTargetsCov, UnfNTargetsCovHist);
+        M2H(UnfNTargetsCov, UnfNTargetsCovHist); tools.Reweight2D(UnfNTargetsCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfNTargetsCovHist, UnfNTargetsFracCovHist,UnfNTargetsCorrHist, n);
         TMatrixD UnfNTargetsFracCov(n, n); H2M(UnfNTargetsFracCovHist, UnfNTargetsFracCov, kTRUE);
 
@@ -476,7 +480,7 @@ void Unfold() {
         TH2D* UnfDetectorCovHist = new TH2D("UnfCovDetector"+PlotNames[iPlot], "UnfCovDetector"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfDetectorFracCovHist = new TH2D("UnfFracCovDetector"+PlotNames[iPlot], "UnfFracCovDetector"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfDetectorCorrHist = new TH2D("UnfCorrDetector"+PlotNames[iPlot], "UnfCorrDetector"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfDetectorCov, UnfDetectorCovHist);
+        M2H(UnfDetectorCov, UnfDetectorCovHist); tools.Reweight2D(UnfDetectorCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfDetectorCovHist, UnfDetectorFracCovHist, UnfDetectorCorrHist, n);
         TMatrixD UnfDetectorFracCov(n, n); H2M(UnfDetectorFracCovHist, UnfDetectorFracCov, kTRUE);
 
@@ -486,7 +490,7 @@ void Unfold() {
         TH2D* UnfReinteractionCovHist = new TH2D("UnfCovReinteraction"+PlotNames[iPlot], "UnfCovReinteraction"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfReinteractionFracCovHist = new TH2D("UnfFracCovReinteraction"+PlotNames[iPlot], "UnfFracCovReinteraction"+PlotNames[iPlot], n, min, max, n, min, max);
         TH2D* UnfReinteractionCorrHist = new TH2D("UnfCorrReinteraction"+PlotNames[iPlot], "UnfCorrReinteraction"+PlotNames[iPlot], n, min, max, n, min, max);
-        M2H(UnfReinteractionCov, UnfReinteractionCovHist);
+        M2H(UnfReinteractionCov, UnfReinteractionCovHist); tools.Reweight2D(UnfReinteractionCovHist);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfReinteractionCovHist, UnfReinteractionFracCovHist, UnfReinteractionCorrHist, n);
         TMatrixD UnfReinteractionFracCov(n, n); H2M(UnfReinteractionFracCovHist, UnfReinteractionFracCov, kTRUE);
 
@@ -501,10 +505,8 @@ void Unfold() {
         TH1D* TotalHisto = new TH1D("Total"+PlotNames[iPlot], ";;Uncertainty [%]", n, min, max);
 
         // Histograms to store total frac cov and corr
-        TH2D* UnfTotalCovHisto = new TH2D("UnfTotalCov"+PlotNames[iPlot],"UnfTotalCov" + PlotNames[iPlot],n, min, max, n, min, max);
         TH2D* UnfTotalFracCovHisto = new TH2D("UnfTotalFracCov"+PlotNames[iPlot],"UnfTotalFracCov" + PlotNames[iPlot],n, min, max, n, min, max);
         TH2D* UnfTotalCorrHisto = new TH2D("UnfTotalCorr"+PlotNames[iPlot],"UnfTotalCorr" + PlotNames[iPlot],n, min, max, n, min, max);
-        M2H(UnfoldCov, UnfTotalCovHisto);
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfTotalCovHisto, UnfTotalFracCovHisto, UnfTotalCorrHisto, n);
         TMatrixD UnfTotalFracCov(n, n); H2M(UnfTotalFracCovHisto, UnfTotalFracCov, kTRUE);
 
