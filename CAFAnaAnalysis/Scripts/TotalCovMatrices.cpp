@@ -12,8 +12,9 @@
 // Generator analysis includes.
 #include "../../GeneratorAnalysis/Scripts/Constants.h"
 
-// Generator analysis includes.
+// Utils includes.
 #include "../../Utils/Util.C"
+#include "Helpers.cpp"
 
 using namespace std;
 using namespace Constants;
@@ -50,7 +51,7 @@ void TotalCovMatrices() {
     PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
     PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
 
-    // Vector with all cross section systematic files
+    // Vector with all systematic files
     std::vector<std::unique_ptr<TFile>> CovFiles;
 
     // Add xsec systematics
@@ -206,6 +207,13 @@ void TotalCovMatrices() {
         TH1D* TotalHisto = new TH1D("Total"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
         TH1D* RecoHist = (TH1D*)(File->Get<TH1D>(PlotNames[iVar] + (TString) "_reco"));
 
+        // Histograms to store total frac cov and corr
+        TH2D* TotalFracCovHisto = new TH2D("TotalFracCov"+PlotNames[iVar],"TotalFracCov" + PlotNames[iVar],n, min, max, n, min, max);
+        TH2D* TotalCorrHisto = new TH2D("TotalCorr"+PlotNames[iVar],"TotalCorr" + PlotNames[iVar],n, min, max, n, min, max);
+        RecoHist->Scale(Units / (IntegratedFlux * NTargets));
+        SelectionHelpers::GetFracCovAndCorrMatrix(RecoHist, TotalCovHist, TotalFracCovHisto, TotalCorrHisto, n);
+        TMatrixD TotalFracCov(n, n); H2M(TotalFracCovHisto, TotalFracCov, kTRUE);
+
         // Loop over each bin
         for (int iBin = 0; iBin < n; iBin++) {
             double Total = 0.;
@@ -239,12 +247,10 @@ void TotalCovMatrices() {
             Total += TMath::Power(TMath::Sqrt(ReinteractionFracCov(iBin, iBin)) * 100, 2);
 
             // Total 
-            double BinContentScaled = RecoHist->GetBinContent(iBin + 1) * (Units / (IntegratedFlux * NTargets));
-            double TotalFromCovMatrix = TMath::Sqrt(TotalCovMatrix(iBin, iBin) / (BinContentScaled * BinContentScaled));
-            TotalHisto->SetBinContent(iBin + 1, TotalFromCovMatrix * 100);
+            TotalHisto->SetBinContent(iBin + 1, TMath::Sqrt(TotalFracCov(iBin, iBin)) * 100);
 
             // These should be the same
-            std::cout << TotalFromCovMatrix * 100 << " ==? ";
+            std::cout << TMath::Sqrt(TotalFracCov(iBin, iBin)) * 100 << " ==? ";
             std::cout << TMath::Sqrt(Total) << std::endl;;
         }
         // Margins for bin by bin uncertainties plot
