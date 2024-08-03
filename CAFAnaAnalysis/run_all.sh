@@ -6,6 +6,10 @@ cafe -bq Scripts/SelectionRunData.C
 cafe -bq Scripts/SelectionEfficiency.C
 cafe -bq Scripts/SelectionMigrationMatrix.C
 cafe -bq Scripts/RunAllSystematics.C
+cafe -bq Scripts/SelectionNTargetSystematics.C
+cafe -bq Scripts/SelectionPOTSystematics.C
+cafe -bq Scripts/SelectionReinteractionSystematics.C
+cafe -bq Scripts/SelectionDetectorSystematics.C
 root -b -q Scripts/StatSystematics.cpp
 root -b -q Scripts/TotalCovMatrices.cpp
 root -b -q Scripts/Unfold.cpp
