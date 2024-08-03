@@ -189,7 +189,7 @@ void SelectionEfficiency() {
 
                 // Create efficiency plot
                 TEfficiency* Eff = new TEfficiency(*SlicedRecoTrueHisto, *SlicedTrueHisto);
-                Eff->SetTitle((";True " + VarLabels.at(i) + ";").c_str());
+                Eff->SetTitle((";True " + VarLabels.at(i) + ";Efficiency").c_str());
 
                 PlotCanvas->cd();
                 Eff->SetMarkerStyle(21);
@@ -197,6 +197,8 @@ void SelectionEfficiency() {
                 Eff->Draw("AP");
                 gPad->Update();
                 Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(SerialSliceBinning.at(0),SerialSliceBinning.at(SerialSliceBinning.size() - 1));
+                double max = Eff->GetPaintedGraph()->GetYaxis()->GetBinUpEdge(Eff->GetPaintedGraph()->GetYaxis()->GetNbins());
+                Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0., max*1.2);
 
                 // Slice label
                 TLatex *textSlice = new TLatex();
@@ -212,15 +214,16 @@ void SelectionEfficiency() {
         } else {
             // Create efficiency plot
             TEfficiency* Eff = new TEfficiency(*RecoTrueHisto, *TrueHisto);
-            Eff->SetTitle((";True " + VarLabels.at(i) + ";").c_str());
+            Eff->SetTitle(("All events;True " + VarLabels.at(i) + ";Efficiency").c_str());
 
             PlotCanvas->cd();
             Eff->SetMarkerStyle(21);
             Eff->SetMarkerColor(kBlack);
-            Eff->SetTitle("All events");
             Eff->Draw("AP");
             gPad->Update();
             Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(VarBins.at(i).Min(),VarBins.at(i).Max());
+            double max = Eff->GetPaintedGraph()->GetYaxis()->GetBinUpEdge(Eff->GetPaintedGraph()->GetYaxis()->GetNbins());
+            Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0., max*1.2);
 
             // Save as png
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Efficiency/"+PlotNames[i]+".png");
