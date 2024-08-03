@@ -261,6 +261,33 @@ void Unfold() {
         // Declare canvas
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);
 
+        // Plot smearing matrix
+        TH2D* SmearMatrixHisto = new TH2D("Smearing"+PlotNames[iPlot], "Smearing"+PlotNames[iPlot], n, min, max, n, min, max);
+        M2H(AddSmear, SmearMatrixHisto);
+
+        // Margins for matrices
+        PlotCanvas->SetTopMargin(0.13);
+        PlotCanvas->SetLeftMargin(0.15);
+        PlotCanvas->SetRightMargin(0.15);
+        PlotCanvas->SetBottomMargin(0.16);
+
+        double SmearMin = SmearMatrixHisto->GetMinimum();
+        double SmearMax = SmearMatrixHisto->GetMaximum();
+        SmearMatrixHisto->GetZaxis()->SetRangeUser(SmearMin,SmearMax);
+        TotalCovHist->GetZaxis()->CenterTitle();
+        SmearMatrixHisto->GetZaxis()->SetTitleFont(FontStyle);
+        SmearMatrixHisto->GetZaxis()->SetTitleSize(TextSize);
+        SmearMatrixHisto->GetZaxis()->SetLabelFont(FontStyle);
+        SmearMatrixHisto->GetZaxis()->SetLabelSize(TextSize);
+        SmearMatrixHisto->GetZaxis()->SetNdivisions(6);
+        SmearMatrixHisto->GetXaxis()->SetTitle(SmearMatrixHisto->GetXaxis()->GetTitle());
+        SmearMatrixHisto->GetYaxis()->SetTitle(SmearMatrixHisto->GetYaxis()->GetTitle());
+
+        PlotCanvas->cd();
+        SmearMatrixHisto->Draw("colz");
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Smear/"+PlotNames[iPlot]+".png");
+
+        // Margins for unfolded xsecs
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.17);
         PlotCanvas->SetRightMargin(0.05);
