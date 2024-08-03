@@ -25,10 +25,12 @@ void Unfold() {
     // Set defaults and load tools
     TH1D::SetDefaultSumw2();
     TH2D::SetDefaultSumw2();
-    gStyle->SetOptStat(0);
 
     int FontStyle = 132;
     double TextSize = 0.06;	
+
+    gStyle->SetOptStat(0);
+    gStyle->SetPaintTextFormat("4.1f");
 
     Tools tools;
 
