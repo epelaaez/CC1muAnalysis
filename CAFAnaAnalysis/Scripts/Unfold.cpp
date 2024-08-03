@@ -21,20 +21,6 @@
 using namespace std;
 using namespace Constants;
 
-void ReweightXSec(TH1D* h, double SF = 1.) {
-	int NBins = h->GetXaxis()->GetNbins();
-	for (int i = 0; i < NBins; i++) {
-		double CurrentEntry = h->GetBinContent(i+1);
-		double NewEntry = CurrentEntry * SF / h->GetBinWidth(i+1);
-
-		double CurrentError = h->GetBinError(i+1);
-		double NewError = CurrentError * SF / h->GetBinWidth(i+1);
-
-		h->SetBinContent(i+1,NewEntry); 
-		h->SetBinError(i+1,NewError); 
-	}
-}
-
 void Unfold() {
     // Set defaults and load tools
     TH1D::SetDefaultSumw2();
