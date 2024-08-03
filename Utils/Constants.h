@@ -11,9 +11,7 @@
 #include <map>
 #include <tuple>
 
-using namespace std;
-
-namespace Constants { 
+namespace Constants {
     const double Units = 1E38;
 
     const double TargetPOT(6.6e20);
@@ -22,25 +20,49 @@ namespace Constants {
     double Nominal_UB_XY_Surface = 175.*180.*2.*2.; // cm2
 	double POTPerSpill = 4997.*5e8;
 
+    // Binning for single differential analysis
+    static const int NBinsEventCount = 1;
+    static const std::vector<double> ArrayNBinsEventCount{0., 1.};
+
+    static const int NBinsAngle = 10;
+    static const std::vector<double> ArrayNBinsAngle{-1.,-.8,-.6,-.4,-.2,0.,.2,.4,.6,.8,1.};
+
+    static const int NBinsDeltaAlphaT = 6;
+    static const std::vector<double> ArrayNBinsDeltaAlphaT{0.,30.,60.,90.,120.,150.,180.};
+
+    static const int NBinsTransverseMomentum = 5;
+    static const std::vector<double> ArrayNBinsTransverseMomentum{0.,0.2,0.4,0.6,0.8,1.};
+
+    // 0.183 spacing
+    static const int NBinsMuonMomentum = 6;
+    static const std::vector<double> ArrayNBinsMuonMomentum{0.1, 0.283, 0.466, 0.649, 0.832, 1.015, 1.2};
+
+    // 0.116 spacing
+    static const int NBinsLeadingProtonMomentum = 6;
+    static const std::vector<double> ArrayNBinsLeadingProtonMomentum{0.3, 0.416, 0.532, 0.648, 0.764, 0.880, 1.};
+
+    static const int NBinsRecoilProtonMomentum = 5;
+    static const std::vector<double> ArrayNBinsRecoilProtonMomentum{0.3, 0.416, 0.532, 0.648, 0.764, 1.};
+
     // Variables for double differential analysis
     static const int TwoDNBinsMuonCosTheta = 2; 
     std::vector<double> TwoDArrayNBinsMuonCosTheta{-1.0,0.5,1.0};
 
-    static const int TwoDNBinsTransverseMomentum = 10;
-    std::vector<double> TwoDArrayTransverseMomentum{0.,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.};
+    static const int TwoDNBinsTransverseMomentum = 5;
+    std::vector<double> TwoDArrayTransverseMomentum{0.,0.2,0.4,0.6,0.8,1.};
 
-    static const int TwoDNBinsDeltaAlphaT = 9;
-    std::vector<double> TwoDArrayDeltaAlphaT{0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
+    static const int TwoDNBinsDeltaAlphaT = 6;
+    std::vector<double> TwoDArrayDeltaAlphaT{0.,30.,60.,90.,120.,150.,180.};
 
     std::vector<std::vector<double>> TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices{
-        {0.,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.},
-        {0.,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.},
+        {0.,0.2,0.4,0.6,0.8,1.},
+        {0.,0.2,0.4,0.6,0.8,1.},
     };
     static const TString LabelXAxisTwoDTransverseMomentumInMuonCosTheta = ";#deltap_{T} [bin #]";
 
     std::vector<std::vector<double>> TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices{
-        {0.,20.,40.,60.,80.,100.,120.,140.,160.,180.},
-        {0.,20.,40.,60.,80.,100.,120.,140.,160.,180.},
+        {0.,30.,60.,90.,120.,150.,180.},
+        {0.,30.,60.,90.,120.,150.,180.},
     };
     static const TString LabelXAxisTwoDDeltaAlphaTInMuonCosTheta = ";#delta #alpha_{T} [bin #]";
 

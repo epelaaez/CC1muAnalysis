@@ -19,8 +19,8 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Utils includes.
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace ana;

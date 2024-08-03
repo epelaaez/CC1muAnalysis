@@ -13,8 +13,10 @@
 #include <vector>
 #include <memory>
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Utils includes.
+#include "../../Utils/Constants.h"
+
+// Helpers includes.
 #include "Helpers.cpp"
 
 using namespace std;

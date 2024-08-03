@@ -20,10 +20,10 @@
 
 // Generator analysis includes.
 #include "../../GeneratorAnalysis/Selections/TwoPTools.cxx"
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
 
 // Utils includes.
 #include "../../Utils/Tools.cxx"
+#include "../../Utils/Constants.h"
 
 using namespace Constants;
 
@@ -59,12 +59,13 @@ namespace ana
     ///////////
 
     // Create the binning schemes for the Vars we wish to plot.
-    const Binning bEventCount = Binning::Simple(1, 0, 1.0);
-    const Binning bAngleBins = Binning::Simple(10, -1.0, 1.0);
-    const Binning bDeltaAlphaBins = Binning::Simple(6, 0.0, 180.0);
-    const Binning bTransverseMomentumBins = Binning::Simple(6, 0.0, 1.0);
-    const Binning bMuonMomentumBins = Binning::Simple(6, 0.1, 1.2);
-    const Binning bProtonMomentumBins = Binning::Simple(6, 0.3, 1.0);
+    const Binning bEventCount = Binning::Custom(ArrayNBinsEventCount);
+    const Binning bAngleBins = Binning::Custom(ArrayNBinsAngle);
+    const Binning bDeltaAlphaBins = Binning::Custom(ArrayNBinsDeltaAlphaT);
+    const Binning bTransverseMomentumBins = Binning::Custom(ArrayNBinsTransverseMomentum);
+    const Binning bMuonMomentumBins = Binning::Custom(ArrayNBinsMuonMomentum);
+    const Binning bLeadingProtonMomentumBins = Binning::Custom(ArrayNBinsLeadingProtonMomentum);
+    const Binning bRecoilProtonMomentumBins = Binning::Custom(ArrayNBinsRecoilProtonMomentum);
 
     // Bins for cut plots
     const Binning bNuScore = Binning::Simple(30, 0, 1.0);

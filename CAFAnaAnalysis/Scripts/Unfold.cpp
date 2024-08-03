@@ -9,14 +9,14 @@
 // std includes.
 #include <vector>
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Helpers includes.
+#include "Helpers.cpp"
 
 // Utils includes.
 #include "../../Utils/Tools.cxx"
 #include "../../Utils/Util.C"
 #include "../../Utils/WienerSVD.C"
-#include "Helpers.cpp"
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace Constants;

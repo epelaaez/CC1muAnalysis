@@ -21,10 +21,10 @@
 
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
-
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
 #include "Helpers.cpp"
+
+// Utils includes.
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace ana;
@@ -101,11 +101,11 @@ void SelectionNTargetSystematics() {
     PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
 
     // Leading proton momentum 
-    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
     PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
 
     // Recoil proton momentum 
-    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     //////////////////////////////

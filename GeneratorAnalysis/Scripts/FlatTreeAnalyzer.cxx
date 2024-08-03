@@ -2,7 +2,7 @@
 #include "FlatTreeAnalyzer.h"
 #include "./Selections/TwoPTools.h"
 #include "../../Utils/Tools.h"
-#include "Constants.h"
+#include "../../Utils/Constants.h"
 
 #include <TH1D.h>
 #include <TFile.h>
@@ -96,27 +96,27 @@ void FlatTreeAnalyzer::Loop() {
         //--------------------------------------------------//
 
         // Final state
-        TrueMuonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonCosThetaPlot",";cos(#theta_{#vec{p}_{#mu}})",10,-1.,1.);
-        TrueLeadingProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonCosThetaPlot",";cos(#theta_{#vec{p}_{L}})",10,-1.,1.);
-        TrueRecoilProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonCosThetaPlot",";cos(#theta_{#vec{p}_{R}})",10,-1.,1.);
-        TrueLeadingProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonMomentumPlot",";|#vec{p}_{L}|",10,0.3,1);
-        TrueRecoilProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonMomentumPlot",";|#vec{p}_{R}|",10,0.3,1);
-        TrueMuonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonMomentumPlot",";|#vec{p}_{#mu}|",10,0.1,1.2);
-        TrueCosOpeningAngleProtonsPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleProtonsPlot",";cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",10,-1.,1.);
-        TrueCosOpeningAngleMuonTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleMuonTotalProtonPlot",";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",10,-1.,1.);
-        TrueTransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueTransverseMomentumPlot",";#delta P_{T}",10,0.,1.);
-        TrueDeltaAlphaTPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueDeltaAlphaTPlot",";#delta #alpha_{T}",10,0.,180.);
+        TrueMuonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonCosThetaPlot",";cos(#theta_{#vec{p}_{#mu}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueLeadingProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonCosThetaPlot",";cos(#theta_{#vec{p}_{L}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueRecoilProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonCosThetaPlot",";cos(#theta_{#vec{p}_{R}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueLeadingProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueLeadingProtonMomentumPlot",";|#vec{p}_{L}|",NBinsLeadingProtonMomentum,ArrayNBinsLeadingProtonMomentum.data());
+        TrueRecoilProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueRecoilProtonMomentumPlot",";|#vec{p}_{R}|",NBinsRecoilProtonMomentum,ArrayNBinsRecoilProtonMomentum.data());
+        TrueMuonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueMuonMomentumPlot",";|#vec{p}_{#mu}|",NBinsDeltaAlphaT,ArrayNBinsDeltaAlphaT.data());
+        TrueCosOpeningAngleProtonsPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleProtonsPlot",";cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueCosOpeningAngleMuonTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueCosOpeningAngleMuonTotalProtonPlot",";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueTransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueTransverseMomentumPlot",";#delta P_{T}",NBinsTransverseMomentum,ArrayNBinsTransverseMomentum.data());
+        TrueDeltaAlphaTPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueDeltaAlphaTPlot",";#delta #alpha_{T}",NBinsDeltaAlphaT,ArrayNBinsDeltaAlphaT.data());
 
         // Before final state interactions
-        TrueNoFSILeadingProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSILeadingProtonCosThetaPlot",";cos(#theta_{#vec{p}_{L}})",10,-1.,1.);
-        TrueNoFSIRecoilProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIRecoilProtonCosThetaPlot",";cos(#theta_{#vec{p}_{R}})",10,-1.,1.);
-        TrueNoFSILeadingProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSILeadingProtonMomentumPlot",";|#vec{p}_{L}|",10,0.3,1);
-        TrueNoFSIRecoilProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIRecoilProtonMomentumPlot",";|#vec{p}_{R}|",10,0.3,1);
-        TrueNoFSIMuonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIMuonMomentumPlot",";|#vec{p}_{#mu}|",10,0.1,1.2);
-        TrueNoFSICosOpeningAngleProtonsPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSICosOpeningAngleProtonsPlot",";cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",10,-1.,1.);
-        TrueNoFSICosOpeningAngleMuonTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSICosOpeningAngleMuonTotalProtonPlot",";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",10,-1.,1.);
-        TrueNoFSITransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSITransverseMomentumPlot",";#delta P_{T}",10,0.,1.);
-        TrueNoFSIDeltaAlphaTPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIDeltaAlphaTPlot",";#delta #alpha_{T}",10,0.,180.);
+        TrueNoFSILeadingProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSILeadingProtonCosThetaPlot",";cos(#theta_{#vec{p}_{L}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueNoFSIRecoilProtonCosThetaPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIRecoilProtonCosThetaPlot",";cos(#theta_{#vec{p}_{R}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueNoFSILeadingProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSILeadingProtonMomentumPlot",";|#vec{p}_{L}|",NBinsLeadingProtonMomentum,ArrayNBinsLeadingProtonMomentum.data());
+        TrueNoFSIRecoilProtonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIRecoilProtonMomentumPlot",";|#vec{p}_{R}|",NBinsRecoilProtonMomentum,ArrayNBinsRecoilProtonMomentum.data());
+        TrueNoFSIMuonMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIMuonMomentumPlot",";|#vec{p}_{#mu}|",NBinsDeltaAlphaT,ArrayNBinsDeltaAlphaT.data());
+        TrueNoFSICosOpeningAngleProtonsPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSICosOpeningAngleProtonsPlot",";cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueNoFSICosOpeningAngleMuonTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSICosOpeningAngleMuonTotalProtonPlot",";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",NBinsAngle,ArrayNBinsAngle.data());
+        TrueNoFSITransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSITransverseMomentumPlot",";#delta P_{T}",NBinsTransverseMomentum,ArrayNBinsTransverseMomentum.data());
+        TrueNoFSIDeltaAlphaTPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIDeltaAlphaTPlot",";#delta #alpha_{T}",NBinsDeltaAlphaT,ArrayNBinsDeltaAlphaT.data());
 
         // Double differential final state
         TrueSerialTransverseMomentum_InMuonCosThetaPlot[inte] = new TH1D(
