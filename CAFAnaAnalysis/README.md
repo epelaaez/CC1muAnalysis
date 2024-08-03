@@ -39,7 +39,7 @@ cafe -bq Scripts/Selection.C
 This will generate the cuts defined in `Definitions.h` and will produce the corresponding figures under `Figs/`. For scripts that do not process the events direclty but rather load the already created histogram and create new plots, you have to run, for example
 
 ```bash
-root -l Scripts/SerialPlotGenerator.cpp
+root -b -q Scripts/SerialPlotGenerator.cpp
 ```
 
 For the systematic study, in which we produce the covariance matrices and error bands for each systematic and plotted variable, we split up the selection code from the script that runs it. This way, we can get results in a stream instead of having to wait many hours for all the results to come at once. The selection logic is stored in `Scripts/SelectionSytematics.C`, and it can be run with all the systematics defined in `Scripts/Definitions.h` by doing
