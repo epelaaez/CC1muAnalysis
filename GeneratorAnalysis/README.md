@@ -29,7 +29,7 @@ root -b -q Scripts/${filename}
 where `${filename}` can be one of the following:
 
 - `GeneratorOverlay.cpp`: creates overlaid plots for all the available variables and generators.
-- `GeneratorInteBreakDown.cxx`: creates a plot with event interaction type breakdown for each plot and generator.
+- `GeneratorInteBreakDown.cpp`: creates a plot with event interaction type breakdown for each plot and generator.
 - `SerialGeneratorOverlay.cpp`: creates sliced plots for the double differential variables and normal generators.
 - `MECGeneratorOverlay.cpp`: same as `GeneratorOverlay.cpp` but for purely MEC generators.
 - `MECSerialGeneratorOverlay.cpp`: same as `SerialGeneratorOverlay.cpp` but for purely MEC generators.
