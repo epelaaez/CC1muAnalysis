@@ -27,6 +27,7 @@ void TotalCovMatrices() {
     double TextSize = 0.06;
 
     gStyle->SetOptStat(0);
+    gStyle->SetPaintTextFormat("4.1f");
 
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
@@ -118,7 +119,7 @@ void TotalCovMatrices() {
         double min = FirstCovHist->GetXaxis()->GetXmin();
         TMatrixD TotalCovMatrix(n, n); H2M(FirstCovHist, TotalCovMatrix, kTRUE);
 
-        // Add cross section uncertainties
+        // Add all uncertainties
         for (int iCov = 1; iCov < (int) CovFiles.size(); iCov++) {
             TH2D* CovHist = (TH2D*)(CovFiles[iCov]->Get<TH2D>(PlotNames[iVar]+"_cov"));
             TMatrixD CovMatrix(n, n); H2M(CovHist, CovMatrix, kTRUE);
@@ -152,7 +153,7 @@ void TotalCovMatrices() {
 
         SaveFile->WriteObject(TotalCovHist, PlotNames[iVar]);
 
-        // Get bin uncertainties
+        // Get bin by bin uncertainties
         if (PlotNames[iVar] == "EventCount") {
             double Total = 0.;
 
@@ -181,6 +182,8 @@ void TotalCovMatrices() {
             TLegendEntry* legXSec = leg->AddEntry(XSecHisto,"XSec","l");
             XSecHisto->SetLineColor(kBlue+2);
             XSecHisto->SetLineWidth(4);
+            XSecHisto->SetMarkerSize(1.5);
+            XSecHisto->SetMarkerColor(kBlue+2);
 
             // Style 
             XSecHisto->GetXaxis()->SetNdivisions(5);
@@ -196,7 +199,7 @@ void TotalCovMatrices() {
             XSecHisto->GetYaxis()->SetTickSize(0);
             XSecHisto->GetYaxis()->CenterTitle();
             XSecHisto->GetYaxis()->SetRangeUser(0.,35);
-            XSecHisto->Draw("hist");
+            XSecHisto->Draw("hist text0");
 
             // Add flux uncertainties
             TMatrixD FluxFracCov(1, 1);
@@ -211,7 +214,9 @@ void TotalCovMatrices() {
             TLegendEntry* legFlux = leg->AddEntry(FluxHisto,"Flux","l");
             FluxHisto->SetLineColor(kRed+1);
             FluxHisto->SetLineWidth(4);
-            FluxHisto->Draw("hist same");
+            FluxHisto->SetMarkerSize(1.5);
+            FluxHisto->SetMarkerColor(kRed+1);
+            FluxHisto->Draw("hist text0 same");
 
             int offset = XSecSystsVector.size() + FluxSystsVector.size();
 
@@ -225,7 +230,9 @@ void TotalCovMatrices() {
             TLegendEntry* legStats= leg->AddEntry(StatsHisto,"Stat","l");
             StatsHisto->SetLineColor(kMagenta+1);
             StatsHisto->SetLineWidth(4);
-            StatsHisto->Draw("hist same");
+            StatsHisto->SetMarkerSize(1.5);
+            StatsHisto->SetMarkerColor(kMagenta+1);
+            StatsHisto->Draw("hist text0 same");
 
             // Add POT systematics
             TMatrixD POTFracCov(1, 1);
@@ -237,7 +244,9 @@ void TotalCovMatrices() {
             TLegendEntry* legPOT= leg->AddEntry(POTHisto,"POT","l");
             POTHisto->SetLineColor(kGreen);
             POTHisto->SetLineWidth(4);
-            POTHisto->Draw("hist same");
+            POTHisto->SetMarkerSize(1.5);
+            POTHisto->SetMarkerColor(kGreen);
+            POTHisto->Draw("hist text0 same");
 
             // Add NTargets systematics
             TMatrixD NTargetsFracCov(1, 1);
@@ -247,9 +256,11 @@ void TotalCovMatrices() {
             NTargetsHisto->SetBinContent(1, TMath::Sqrt(NTargetsFracCov(0, 0)) * 100);
             Total += TMath::Power(TMath::Sqrt(NTargetsFracCov(0, 0)) * 100, 2);
             TLegendEntry* legNTargets= leg->AddEntry(NTargetsHisto,"NTargets","l");
-            NTargetsHisto->SetLineColor(kYellow + 1);
+            NTargetsHisto->SetLineColor(kYellow+1);
             NTargetsHisto->SetLineWidth(4);
-            NTargetsHisto->Draw("hist same");
+            NTargetsHisto->SetMarkerSize(1.5);
+            NTargetsHisto->SetMarkerColor(kYellow+1);
+            NTargetsHisto->Draw("hist text0 same");
 
             // Add Detector systematics
             TMatrixD DetectorFracCov(1, 1);
@@ -259,9 +270,11 @@ void TotalCovMatrices() {
             DetectorHisto->SetBinContent(1, TMath::Sqrt(DetectorFracCov(0, 0)) * 100);
             Total += TMath::Power(TMath::Sqrt(DetectorFracCov(0, 0)) * 100, 2);
             TLegendEntry* legDetector= leg->AddEntry(DetectorHisto,"Detector","l");
-            DetectorHisto->SetLineColor(kCyan - 3);
+            DetectorHisto->SetLineColor(kCyan-3);
             DetectorHisto->SetLineWidth(4);
-            DetectorHisto->Draw("hist same");
+            DetectorHisto->SetMarkerSize(1.5);
+            DetectorHisto->SetMarkerColor(kCyan-3);
+            DetectorHisto->Draw("hist text0 same");
 
             // Add Reinteraction systematics
             TMatrixD ReinteractionFracCov(1, 1);
@@ -273,7 +286,9 @@ void TotalCovMatrices() {
             TLegendEntry* legReinteraction= leg->AddEntry(ReinteractionHisto,"Reinteraction","l");
             ReinteractionHisto->SetLineColor(kTeal + 3);
             ReinteractionHisto->SetLineWidth(4);
-            ReinteractionHisto->Draw("hist same");
+            ReinteractionHisto->SetMarkerSize(1.5);
+            ReinteractionHisto->SetMarkerColor(kTeal+3);
+            ReinteractionHisto->Draw("hist text0 same");
 
             // Total 
             TH1D* RecoHist = (TH1D*)(File->Get<TH1D>(PlotNames[iVar] + (TString) "_reco"));
@@ -284,7 +299,9 @@ void TotalCovMatrices() {
             TLegendEntry* legTotal= leg->AddEntry(TotalHisto,"Total","l");
             TotalHisto->SetLineColor(kBlack);
             TotalHisto->SetLineWidth(4);
-            TotalHisto->Draw("hist same");
+            TotalHisto->SetMarkerSize(1.5);
+            TotalHisto->SetMarkerColor(kBlack);
+            TotalHisto->Draw("hist text0 same");
 
             // These should be the same
             std::cout << TotalFromCovMatrix * 100 << std::endl;
