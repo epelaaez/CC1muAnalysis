@@ -116,8 +116,8 @@ void TotalCovMatrices() {
         // Get first matrix to get correct dimensions
         TH2D* FirstCovHist = (TH2D*)(CovFiles[0]->Get<TH2D>(PlotNames[iVar]+"_cov"));
         int n = FirstCovHist->GetXaxis()->GetNbins();
-        double max = FirstCovHist->GetXaxis()->GetXmax();
-        double min = FirstCovHist->GetXaxis()->GetXmin();
+        double edges[n+1];
+        for (int i = 0; i < n+1; i++) { edges[i] = FirstCovHist->GetBinLowEdge(i+1); }
         TMatrixD TotalCovMatrix(n, n); H2M(FirstCovHist, TotalCovMatrix, kTRUE);
 
         // Add all uncertainties
@@ -130,8 +130,8 @@ void TotalCovMatrices() {
         TH2D* TotalCovHist = new TH2D(
             "TotalCov" + PlotNames[iVar],
             "TotalCov" + PlotNames[iVar],
-            n, min, max, 
-            n, min, max
+            n, edges, 
+            n, edges
         );
         M2H(TotalCovMatrix, TotalCovHist);
 
@@ -197,19 +197,19 @@ void TotalCovMatrices() {
         H2M(ReinteractionFracCovHist, ReinteractionFracCov, kTRUE);
 
         // Histograms for uncertainties
-        TH1D* XSecHisto = new TH1D("XSec"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* FluxHisto = new TH1D("Flux"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* StatsHisto = new TH1D("Stats"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* POTHisto = new TH1D("POT"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* NTargetsHisto = new TH1D("NTargets"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* DetectorHisto = new TH1D("Detector"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* ReinteractionHisto = new TH1D("Reinteraction"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
-        TH1D* TotalHisto = new TH1D("Total"+PlotNames[iVar], ";;Uncertainty [%]", n, min, max);
+        TH1D* XSecHisto = new TH1D("XSec"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* FluxHisto = new TH1D("Flux"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* StatsHisto = new TH1D("Stats"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* POTHisto = new TH1D("POT"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* NTargetsHisto = new TH1D("NTargets"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* DetectorHisto = new TH1D("Detector"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* ReinteractionHisto = new TH1D("Reinteraction"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
+        TH1D* TotalHisto = new TH1D("Total"+PlotNames[iVar], ";;Uncertainty [%]", n, edges);
         TH1D* RecoHist = (TH1D*)(File->Get<TH1D>(PlotNames[iVar] + (TString) "_reco"));
 
         // Histograms to store total frac cov and corr
-        TH2D* TotalFracCovHisto = new TH2D("TotalFracCov"+PlotNames[iVar],"TotalFracCov" + PlotNames[iVar],n, min, max, n, min, max);
-        TH2D* TotalCorrHisto = new TH2D("TotalCorr"+PlotNames[iVar],"TotalCorr" + PlotNames[iVar],n, min, max, n, min, max);
+        TH2D* TotalFracCovHisto = new TH2D("TotalFracCov"+PlotNames[iVar],"TotalFracCov" + PlotNames[iVar],n, edges, n, edges);
+        TH2D* TotalCorrHisto = new TH2D("TotalCorr"+PlotNames[iVar],"TotalCorr" + PlotNames[iVar],n, edges, n, edges);
         RecoHist->Scale(Units / (IntegratedFlux * NTargets));
         SelectionHelpers::GetFracCovAndCorrMatrix(RecoHist, TotalCovHist, TotalFracCovHisto, TotalCorrHisto, n);
         TMatrixD TotalFracCov(n, n); H2M(TotalFracCovHisto, TotalFracCov, kTRUE);

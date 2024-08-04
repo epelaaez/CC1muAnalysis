@@ -104,9 +104,9 @@ namespace SelectionHelpers {
         RecoBkgHisto->SetLineColor(kOrange+7);
         RecoBkgHisto->SetLineWidth(4);
 
-        int n = RecoHisto->GetXaxis()->GetNbins();
-        double max = RecoHisto->GetXaxis()->GetXmax();
-        double min = RecoHisto->GetXaxis()->GetXmin();
+        int n = RecoHisto->GetNbinsX();
+        double edges[n+1];
+        for (int i = 0; i < n+1; i++) { edges[i] = RecoHisto->GetBinLowEdge(i+1); }
 
         // Get graph with error bands
         TGraphAsymmErrors* RecoErrorBand = new TGraphAsymmErrors;
@@ -222,8 +222,8 @@ namespace SelectionHelpers {
         int NUniv = UnivRecoHisto.size();
 
         int n = RecoHisto->GetXaxis()->GetNbins();
-        double max = RecoHisto->GetXaxis()->GetXmax();
-        double min = RecoHisto->GetXaxis()->GetXmin();
+        double edges[n+1];
+        for (int i = 0; i < n+1; i++) { edges[i] = RecoHisto->GetBinLowEdge(i+1); }
 
         // Create canvas for plots
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
@@ -233,8 +233,8 @@ namespace SelectionHelpers {
         TH2* CovMatrix = new TH2D(
             (CovName + (std::string)PlotName).c_str(),
             CovName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         // Create fractional covariance matrix
@@ -242,8 +242,8 @@ namespace SelectionHelpers {
         TH2* FracCovMatrix = new TH2D(
             (FracCovName + (std::string)PlotName).c_str(),
             FracCovName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         // Create correlation matrix
@@ -251,8 +251,8 @@ namespace SelectionHelpers {
         TH2* CorrMatrix = new TH2D(
             (CorrName + (std::string)PlotName).c_str(),
             CorrName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         // Create covariance matrices 

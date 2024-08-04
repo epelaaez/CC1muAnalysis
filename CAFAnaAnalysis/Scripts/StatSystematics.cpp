@@ -98,8 +98,8 @@ void StatSystematics() {
         BkgHist->SetLineWidth(4);
 
         int n = RecoHist->GetXaxis()->GetNbins();
-        double max = RecoHist->GetXaxis()->GetXmax();
-        double min = RecoHist->GetXaxis()->GetXmin();
+        double edges[n+1];
+        for (int i = 0; i < n+1; i++) { edges[i] = RecoHist->GetBinLowEdge(i+1); }
 
         // Get graph with error bands
         TGraphAsymmErrors* RecoErrorBand = new TGraphAsymmErrors;
@@ -172,16 +172,16 @@ void StatSystematics() {
         TH2* RecoCovMatrix = new TH2D(
             (RecoCovName + (std::string)PlotNames[iVar]).c_str(),
             RecoCovName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         std::string BkgCovName = "CovStatBkg";
         TH2* BkgCovMatrix = new TH2D(
             (BkgCovName + (std::string)PlotNames[iVar]).c_str(),
             BkgCovName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         // Create fractional covariance matrices
@@ -189,16 +189,16 @@ void StatSystematics() {
         TH2* RecoFracCovMatrix = new TH2D(
             (RecoFracCovName + (std::string)PlotNames[iVar]).c_str(),
             RecoFracCovName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         std::string BkgFracCovName = "FracCovStatBkg";
         TH2* BkgFracCovMatrix = new TH2D(
             (BkgFracCovName + (std::string)PlotNames[iVar]).c_str(),
             BkgFracCovName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         // Create correlation matrices
@@ -206,16 +206,16 @@ void StatSystematics() {
         TH2* RecoCorrMatrix = new TH2D(
             (RecoCorrName + (std::string)PlotNames[iVar]).c_str(),
             RecoCorrName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         std::string BkgCorrName = "CorrStatBkg";
         TH2* BkgCorrMatrix = new TH2D(
             (BkgCorrName + (std::string)PlotNames[iVar]).c_str(),
             BkgCorrName.c_str(),
-            n, min, max,
-            n, min, max
+            n, edges,
+            n, edges
         );
 
         // Create matrices 

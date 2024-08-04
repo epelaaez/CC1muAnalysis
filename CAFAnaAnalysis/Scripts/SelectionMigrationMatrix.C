@@ -164,25 +164,21 @@ void SelectionMigrationMatrix() {
         TruthValuesHist->SetBinContent(1, TruthValuesHist->GetBinContent(0) + TruthValuesHist->GetBinContent(1));
         RecoTruthValuesHist->SetBinContent(1, RecoTruthValuesHist->GetBinContent(0) + RecoTruthValuesHist->GetBinContent(1));
 
+        // Get bins for matrices
+        const int NBins = VarBins.at(i).NBins();
+        const std::vector<double>& BinEdges = VarBins.at(i).Edges();
+
         TH2* MigrationMatrix = new TH2D(
             "Migration",
             "Migration",
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
         TH2* ResponseMatrix = new TH2D(
             "Response",
             "Response",
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
 
         std::vector<TH1*> RecoValuesHistos;

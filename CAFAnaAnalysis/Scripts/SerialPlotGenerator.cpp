@@ -9,6 +9,7 @@
 
 // Utils includes.
 #include "../../Utils/Constants.h"
+#include "../../Utils/Tools.cxx"
 
 using namespace std;
 using namespace Constants;

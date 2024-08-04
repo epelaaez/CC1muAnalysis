@@ -154,7 +154,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = true;
+    const bool ConstructSpectra = false;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -328,17 +328,17 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         RecoBkgHisto->SetLineColor(kOrange+7);
         RecoBkgHisto->SetLineWidth(4);
 
+        // Get bins for matrices
+        const int NBins = VarBins.at(i).NBins();
+        const std::vector<double>& BinEdges = VarBins.at(i).Edges();
+
         // Create covariance matrix
         std::string CovName = "Cov" + SystName;
         TH2* CovMatrix = new TH2D(
             (CovName + (std::string)PlotNames[i]).c_str(),
             CovName.c_str(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
 
         // Create fractional covariance matrix
@@ -346,12 +346,8 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         TH2* FracCovMatrix = new TH2D(
             (FracCovName + (std::string)PlotNames[i]).c_str(),
             FracCovName.c_str(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
 
         // Create correlation matrix
@@ -359,12 +355,8 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         TH2* CorrMatrix = new TH2D(
             (CorrName + (std::string)PlotNames[i]).c_str(),
             CorrName.c_str(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
 
         // Loop over all universes
