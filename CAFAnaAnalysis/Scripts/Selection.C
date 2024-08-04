@@ -135,16 +135,15 @@ void Selection() {
     }
 
     // We now create spectra that will help us get the efficiency and purity data for each of the cuts
-    // These spectra are going to use the primary energy as a variable
 
     // Spectrum with all events
-    Spectrum sAllEvents("AllEvents", bEventCount, NuLoader, kTrueEventCount, kValidEnergyTruthCut, kNoSpillCut);
+    Spectrum sAllEvents("AllEvents", bEventCount, NuLoader, kTrueEventCount, kNoTruthCut, kNoSpillCut);
     // Spectrum with all reco events
-    Spectrum sAllRecoEvents("AllRecoEvents", bEventCount, NuLoader, kEventCount, kNoSpillCut, kValidEnergyCut);
+    Spectrum sAllRecoEvents("AllRecoEvents", bEventCount, NuLoader, kEventCount, kNoSpillCut, kNoCut);
     // Spectrum with all true signal events
-    Spectrum sAllTrueEvents("AllTrueEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignalAndEnergy, kNoSpillCut);
+    Spectrum sAllTrueEvents("AllTrueEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignal, kNoSpillCut);
     // Spectrum with all true signal events that were reconstructed
-    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignalAndEnergy, kNoSpillCut, kNoCut);
+    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignal, kNoSpillCut, kNoCut);
     // Spectrum with first cut (cosmic)
     Spectrum sFirstCut("FirstCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFirstCut);
     Spectrum sFirstCutTrue("FirstCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFirstCutTrue);

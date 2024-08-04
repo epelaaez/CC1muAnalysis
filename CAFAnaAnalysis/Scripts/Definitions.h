@@ -30,7 +30,6 @@ using namespace Constants;
 namespace ana
 {
     // Files with samples
-    // const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
     const std::string TargetFile = "/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv/*.flat.caf.root";
 
     // Constants
@@ -862,14 +861,6 @@ namespace ana
         return !kTruthIsSignal(nu);
     });
 
-    const TruthCut kValidEnergyTruthCut([](const caf::SRTrueInteractionProxy* nu) {
-        return !std::isnan(nu->E);
-    });
-
-    const TruthCut kTruthIsSignalAndEnergy([](const caf::SRTrueInteractionProxy* nu) {
-        return (kTruthIsSignal(nu) && kValidEnergyTruthCut(nu));
-    });
-
     // Truth cuts for other topologies
     const TruthCut kCCNgt0p1pi([](const caf::SRTrueInteractionProxy* nu) {
         int nChargedPions = iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) + iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211)));
@@ -1079,22 +1070,18 @@ namespace ana
     //     5. No charged pions cut
     //     6. No neutral pions cut
 
-    const Cut kValidEnergyCut([](const caf::SRSliceProxy* slc) {
-        return !std::isnan(slc->truth.E);
-    });
-
     const Cut kFirstCut([](const caf::SRSliceProxy* slc) {
-        return (kCosmicCut(slc) && kValidEnergyCut(slc));
+        return kCosmicCut(slc);
     });
     const Cut kFirstCutTrue([](const caf::SRSliceProxy* slc) {
-        return (kCosmicCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kFirstCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kSecondCut([](const caf::SRSliceProxy* slc) {
         return (kFirstCut(slc) && bIsInFV(&slc->vertex));
     });
     const Cut kSecondCutTrue([](const caf::SRSliceProxy* slc) {
-        return (kFirstCut(slc) && bIsInFV(&slc->vertex) && kTruthIsSignal(&slc->truth));
+        return (kSecondCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kThirdCut([](const caf::SRSliceProxy* slc) {
@@ -1102,8 +1089,7 @@ namespace ana
         return (OneMuon && kSecondCut(slc));
     });
     const Cut kThirdCutTrue([](const caf::SRSliceProxy* slc) {
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        return (OneMuon && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kThirdCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kFourthCut([](const caf::SRSliceProxy* slc) {
@@ -1114,11 +1100,7 @@ namespace ana
         return (TwoProtons && kSecondCut(slc)); 
     });
     const Cut kFourthCutTrue([](const caf::SRSliceProxy* slc) {
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        if (!OneMuon) return false;
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        
-        return (TwoProtons && kSecondCut(slc) && kTruthIsSignal(&slc->truth)); 
+        return (kFourthCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kFifthCut([](const caf::SRSliceProxy* slc) {
@@ -1135,17 +1117,7 @@ namespace ana
         return (bNoChargedPions(slc, TaggedIDs) && kSecondCut(slc));
     });
     const Cut kFifthCutTrue([](const caf::SRSliceProxy* slc) {
-        std::vector<int> TaggedIDs;
-
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        if (!OneMuon) return false;
-        TaggedIDs.push_back(MuonID);
-
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        if (!TwoProtons) return false;
-        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
-
-        return (bNoChargedPions(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kFifthCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kSixthCut([](const caf::SRSliceProxy* slc) {
@@ -1162,17 +1134,7 @@ namespace ana
         return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc));
     });
     const Cut kSixthCutTrue([](const caf::SRSliceProxy* slc) {
-        std::vector<int> TaggedIDs;
-
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        if (!OneMuon) return false;
-        TaggedIDs.push_back(MuonID);
-
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        if (!TwoProtons) return false;
-        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
-
-        return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kSixthCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     ///////////
