@@ -117,7 +117,7 @@ void TotalCovMatrices() {
         TH2D* FirstCovHist = (TH2D*)(CovFiles[0]->Get<TH2D>(PlotNames[iVar]+"_cov"));
         int n = FirstCovHist->GetXaxis()->GetNbins();
         double edges[n+1];
-        for (int i = 0; i < n+1; i++) { edges[i] = FirstCovHist->GetBinLowEdge(i+1); }
+        for (int i = 0; i < n+1; i++) { edges[i] = FirstCovHist->GetXaxis()->GetBinLowEdge(i+1); }
         TMatrixD TotalCovMatrix(n, n); H2M(FirstCovHist, TotalCovMatrix, kTRUE);
 
         // Add all uncertainties
