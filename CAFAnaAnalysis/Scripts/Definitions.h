@@ -71,6 +71,7 @@ namespace ana
     const Binning bFMatchScore = Binning::Simple(40, 0, 40.0);
     const Binning bFMatchTime = Binning::Simple(20, 0, 5.0);
     const Binning bMuChi2 = Binning::Simple(30, 0, 60.0);
+    const Binning bProtonChi2 = Binning::Simple(100, 0, 200.0);
 
     // Double differential bins
     Tools tools; // tools for double differential bins

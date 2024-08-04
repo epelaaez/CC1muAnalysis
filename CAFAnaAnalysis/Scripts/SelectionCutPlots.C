@@ -77,7 +77,7 @@ void SelectionCutPlots() {
     HistosCuts.push_back({kHasMuon, kHasProton, kHasSecondProton, kHasPion}); HistosLabels.push_back({"#mu", "p1", "p2", "#pi"});
 
     // Proton chi square for muon cut
-    Vars.push_back({kMuProtonChi2, kProtonProtonChi2, kSecondProtonProtonChi2, kPionProtonChi2}); VarBins.push_back(bMuChi2); SignalCuts.push_back(kCosmicCut);
+    Vars.push_back({kMuProtonChi2, kProtonProtonChi2, kSecondProtonProtonChi2, kPionProtonChi2}); VarBins.push_back(bProtonChi2); SignalCuts.push_back(kCosmicCut);
     PlotNames.push_back("ParticleCutChi2Proton"); VarLabels.push_back("#chi^{2}_{p}"); 
     HistosCuts.push_back({kHasMuon, kHasProton, kHasSecondProton, kHasPion}); HistosLabels.push_back({"#mu", "p1", "p2", "#pi"});
 
