@@ -7,9 +7,6 @@
 // std includes.
 #include <vector>
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
-
 // Utils includes.
 #include "../../Utils/Constants.h"
 
