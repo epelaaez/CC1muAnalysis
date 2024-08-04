@@ -138,8 +138,8 @@ void Selection() {
 
     // Spectrum with all events
     Spectrum sAllEvents("AllEvents", bEventCount, NuLoader, kTrueEventCount, kNoTruthCut, kNoSpillCut);
-    // Spectrum with all reco events
-    Spectrum sAllRecoEvents("AllRecoEvents", bEventCount, NuLoader, kEventCount, kNoSpillCut, kNoCut);
+    // Spectrum with all events that were reconstructed
+    Spectrum sAllRecoEvents("AllRecoEvents", bEventCount, NuLoader, kTrueEventCount, kNoTruthCut, kNoSpillCut, kNoCut);
     // Spectrum with all true signal events
     Spectrum sAllTrueEvents("AllTrueEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignal, kNoSpillCut);
     // Spectrum with all true signal events that were reconstructed
