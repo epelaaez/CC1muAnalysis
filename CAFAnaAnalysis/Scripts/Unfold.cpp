@@ -70,23 +70,23 @@ void Unfold() {
     }
 
     // Add stat systematics
-    std::unique_ptr<TFile> StatsFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsStats.root"));
+    std::unique_ptr<TFile> StatsFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsStats.root"));
     CovFiles.push_back(std::move(StatsFile));
 
     // Add POT systematics
-    std::unique_ptr<TFile> POTFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsPOT.root"));
+    std::unique_ptr<TFile> POTFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsPOT.root"));
     CovFiles.push_back(std::move(POTFile));
 
     // Add NTargets systematics
-    std::unique_ptr<TFile> NTargetsFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsNTargets.root"));
+    std::unique_ptr<TFile> NTargetsFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsNTargets.root"));
     CovFiles.push_back(std::move(NTargetsFile));
 
     // Add Detector systematics
-    std::unique_ptr<TFile> DetectorFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsDetector.root"));
+    std::unique_ptr<TFile> DetectorFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsDetector.root"));
     CovFiles.push_back(std::move(DetectorFile));
 
     // Add Reinteraction systematics
-    std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
+    std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
     CovFiles.push_back(std::move(ReinteractionFile));
 
     // Dir to save plots
