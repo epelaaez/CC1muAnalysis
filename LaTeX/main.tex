@@ -244,12 +244,35 @@
     \foreach\VarName/\VarLabel in \VarList {
         \begin{figure}[H]
             \centering
-            \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/\VarName.png}
-                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png} \\
-                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/FracCovReco\VarName.png}
-                \includegraphics[width=3in]{./../Figs/CAFAna/Uncertainties/Statistical/CorrReco\VarName.png}
+                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png}
+                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/FracCovReco\VarName.png}
+                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/CorrReco\VarName.png}
             \caption{Statistical variations for~\VarLabel.}
             \label{fig:Statistical-\VarName}
+        \end{figure}
+    }
+}
+
+\newcommand{\PrintAllSystsPlotsSimple}[1]{
+    \foreach\VarName/\VarLabel in \VarList {
+        \begin{figure}[H]
+            \centering
+                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/#1/Cov\VarName.png}
+                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/#1/FracCov\VarName.png}
+                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/#1/Corr\VarName.png}
+            \caption{#1 variations for~\VarLabel.}
+            \label{fig:#1-\VarName}
+        \end{figure}
+    }
+}
+
+\newcommand{\PrintAllSmearing}{
+    \foreach\VarName/\VarLabel in \VarList {
+        \begin{figure}[H]
+            \centering
+                \includegraphics[width=2in]{./../Figs/CAFAna/Smear/\VarName.png}
+            \caption{Additional smearing matrix for~\VarLabel.}
+            \label{fig:smear-\VarName}
         \end{figure}
     }
 }
@@ -851,13 +874,13 @@ The numbers reported in this table are POT normalized to $6.6 \times 10^{20}$.
         \textbf{Cut}         & \textbf{Number of events} & \textbf{Global efficiency} & \textbf{Signal efficiency} & \textbf{Purity} \\ \hline
         All                  & $1.3938\cdot10^7$ & -       & -       & -      \\
         True signal events   & 272161 & -       & -       & -      \\
-        All reco events      & $7.09465\cdot10^6$ & 100\%   & -       & -      \\
-        Cosmic cut           & $5.74938\cdot10^6$ & 81.0381\% & 89.6205\% & 4.24241\% \\
-        Vertex in FV cut     & $3.23953\cdot10^6$ & 45.6616\% & 88.2885\% & 7.41734\% \\
-        One muon cut         & $2.20417\cdot10^6$ & 31.068\% & 70.5202\% & 8.70753\% \\
-        Two protons cut      & 146443 & 2.06413\%  & 17.517\% & 32.5549\% \\
-        No charged pions cut & 67441.8 & 0.9506\%  & 12.6665\% & 51.1156\% \\
-        No neutral pions cut & 54514.3 & 0.768385\%  & 11.3094\% & 56.4617\% \\ \hline
+        All reco events      & $6.82359\cdot10^6$ & 100\%   & -       & -      \\
+        Cosmic cut           & $5.88624\cdot10^6$ & 86.2632\% & 89.6205\% & 4.14377\% \\
+        Vertex in FV cut     & $3.29309\cdot10^6$ & 48.2603\% & 88.2885\% & 7.29671\% \\
+        One muon cut         & $2.23536e\cdot10^6$ & 32.7593\% & 70.5202\% & 8.58603\% \\
+        Two protons cut      & 146922 & 2.15315\%  & 17.517\% & 32.4488\% \\
+        No charged pions cut & 67852.2 & 0.994377\%  & 12.6665\% & 50.8065\% \\
+        No neutral pions cut & 54719.5 & 0.801917\%  & 11.3094\% & 56.25\% \\ \hline
         \end{tabular}
     \end{center}
     \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition.}
@@ -1190,6 +1213,102 @@ that the overall shape and magnitude of our histograms match previously reported
     \label{fig:closure-test-double-diff}
 \end{figure}
 
+\clearpage 
+
+\subsection{Bin by bin uncertainties}
+
+Figure~\ref{fig:single-bin-uncertainties-event-rates} shows the single bin uncertainty breakdown 
+using the event rates. We used the square root of the relevant fractional covariance matrix for 
+each of the outlined sources of uncertainty to obtain the figure.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=4in]{../Figs/CAFAna/BinUncertainties/EventCount.png}
+    \caption{Fractional contribution for the sources of uncertainty using the event rates.}
+    \label{fig:single-bin-uncertainties-event-rates}
+\end{figure}
+
+Figure~\ref{fig:single-bin-uncertainties-cross-sections} shows the single bin uncertainty breakdown 
+using the cross sections. We used the unfolded covariances obtained with the Wiener-SVD filter 
+for each of the sources of uncertainty. The square root of the corresponding fractional covariance 
+matrix is normalized to teh CV cross-section value for the uncertainties to be obtained.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=4in]{../Figs/CAFAna/UnfBinUncertainties/EventCount.png}
+    \caption{Fractional contribution for the sources of uncertainty using the cross sections.}
+    \label{fig:single-bin-uncertainties-cross-sections}
+\end{figure}
+
+The bin by bin event rate uncertainties for all our variables are shown in 
+Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rates-opening-angles-transverse,fig:bin-uncertainties-rates-double-differential}.
+The bin by bin cross section uncertainties for all our variables are shown in
+Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-opening-angles-transverse,fig:bin-uncertainties-xsec-double-differential}.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/RecoilProtonCosTheta.png}} 
+    \caption{Bin by bin event rate uncertainties for single differential vector directions and magnitudes.}
+    \label{fig:bin-uncertainties-rates-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Bin by bin event rate uncertainties for single differential vector opening angles and transverse momentum.}
+    \label{fig:bin-uncertainties-rates-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Bin by bin event rate uncertainties for double differential variables.}
+    \label{fig:bin-uncertainties-rates-double-differential}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/RecoilProtonCosTheta.png}} 
+    \caption{Bin by bin event cross-section uncertainties for single differential vector directions and magnitudes.}
+    \label{fig:bin-uncertainties-xsec-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Bin by bin cross-section uncertainties for single differential vector opening angles and transverse momentum.}
+    \label{fig:bin-uncertainties-xsec-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Bin by bin cross-section uncertainties for double differential variables.}
+    \label{fig:bin-uncertainties-xsec-double-differential}
+\end{figure}
+
 \clearpage
 \section{Cross-section results}
 Placeholder.
@@ -1197,12 +1316,18 @@ Placeholder.
 \clearpage
 \section{Appendices}
 
+\subsection{Wiener-SVD additional smearing matrices}\label{sec:wiener-svd-smearing-matrices}
+
+The additional smearing matrices obtained from the Wiener-SVD unfolding are shown in this section.
+
+\PrintAllSmearing
+\clearpage
+
 \subsection{Cross section systematics}\label{sec:xsec-systematics}
 In this appendix, the variations, covariance matrices, fractional covariance matrices, 
 and correlation matrices are plotted for all of the cross section systematics and variables.
 
 \PrintAllSystsPlots{\XSecSystList}
-
 \clearpage
 
 \subsection{Flux systematics}\label{sec:flux-systematics}
@@ -1211,15 +1336,46 @@ In this appendix, the variations, covariance matrices, fractional covariance mat
 and correlation matrices are plotted for all of the flux systematics and variables.
 
 \PrintAllSystsPlots{\FluxSystList}
-
 \clearpage
 
 \subsection{Statistical systematics}\label{sec:stat-systematics}
 
-In this appendix, the covariance matrices for the statistical systematics are plotted.
+In this appendix, the covariance, fractional covariance, and 
+correlation matrices for the statistical systematics are plotted.
 
 \PrintAllStatSystsPlots
+\clearpage
 
+\subsection{POT}\label{sec:pot-systematics}
+
+In this appendix, the covariance, fractional covariance, and 
+correlation matrices for the POT systematics are plotted.
+
+\PrintAllSystsPlotsSimple{POT}
+\clearpage
+
+\subsection{Number of targets}\label{sec:number-of-targets-systematics}
+
+In this appendix, the covariance, fractional covariance, and 
+correlation matrices for the number of targets systematics are plotted.
+
+\PrintAllSystsPlotsSimple{NTargets}
+\clearpage
+
+\subsection{Detector}\label{sec:detector-systematics}
+
+In this appendix, the covariance, fractional covariance, and 
+correlation matrices for the detector systematics are plotted.
+
+\PrintAllSystsPlotsSimple{Detector}
+\clearpage
+
+\subsection{Reinteraction}\label{sec:reinteraction-systematics}
+
+In this appendix, the covariance, fractional covariance, and 
+correlation matrices for the reinteraction systematics are plotted.
+
+\PrintAllSystsPlotsSimple{Reinteraction}
 \clearpage
 
 \bibliographystyle{plain}
