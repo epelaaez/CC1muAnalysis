@@ -19,8 +19,8 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Utils includes.
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace ana;
@@ -34,10 +34,6 @@ void Selection() {
     int FontStyle = 132;
     double TextSize = 0.06;	
 
-    // Some useful variables for later.
-    // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -47,11 +43,11 @@ void Selection() {
     //     3. reco background events
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Selection.root";
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
     std::vector<Var> Vars; std::vector<Binning> VarBins;
@@ -60,6 +56,10 @@ void Selection() {
     ////////////////////////////////
     // Single differential variables
     ////////////////////////////////
+
+    // Dummy variable
+    Vars.push_back(kEventCount); VarBins.push_back(bEventCount); 
+    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
 
     // Muon angle
     Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
@@ -94,11 +94,11 @@ void Selection() {
     PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
 
     // Leading proton momentum 
-    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
     PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
 
     // Recoil proton momentum 
-    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     ////////////////////////////////
@@ -135,37 +135,36 @@ void Selection() {
     }
 
     // We now create spectra that will help us get the efficiency and purity data for each of the cuts
-    // These spectra are going to use the primary energy as a variable
 
     // Spectrum with all events
-    Spectrum sAllEvents("AllEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kValidEnergyTruthCut, kNoSpillCut);
-    // Spectrum with all reco events
-    Spectrum sAllRecoEvents("AllRecoEvents", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kValidEnergyCut);
+    Spectrum sAllEvents("AllEvents", bEventCount, NuLoader, kTrueEventCount, kNoTruthCut, kNoSpillCut);
+    // Spectrum with all events that were reconstructed
+    Spectrum sAllRecoEvents("AllRecoEvents", bEventCount, NuLoader, kTrueEventCount, kNoTruthCut, kNoSpillCut, kNoCut);
     // Spectrum with all true signal events
-    Spectrum sAllTrueEvents("AllTrueEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignalAndEnergy, kNoSpillCut);
+    Spectrum sAllTrueEvents("AllTrueEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignal, kNoSpillCut);
     // Spectrum with all true signal events that were reconstructed
-    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bPrimaryEnergy, NuLoader, kTrueEnergy, kTruthIsSignalAndEnergy, kNoSpillCut, kNoCut);
+    Spectrum sAllTrueRecoEvents("AllTrueRecoEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignal, kNoSpillCut, kNoCut);
     // Spectrum with first cut (cosmic)
-    Spectrum sFirstCut("FirstCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCut);
-    Spectrum sFirstCutTrue("FirstCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFirstCutTrue);
+    Spectrum sFirstCut("FirstCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFirstCut);
+    Spectrum sFirstCutTrue("FirstCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFirstCutTrue);
     // Spectrum with second cut (cosmic and vertex FV)
-    Spectrum sSecondCut("SecondCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSecondCut);
-    Spectrum sSecondCutTrue("SecondCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSecondCutTrue);
+    Spectrum sSecondCut("SecondCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSecondCut);
+    Spectrum sSecondCutTrue("SecondCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSecondCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, and one muon)
-    Spectrum sThirdCut("ThirdCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kThirdCut);
-    Spectrum sThirdCutTrue("ThirdCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kThirdCutTrue);
+    Spectrum sThirdCut("ThirdCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kThirdCut);
+    Spectrum sThirdCutTrue("ThirdCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kThirdCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, one muon, and two protons)
-    Spectrum sFourthCut("FourthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFourthCut);
-    Spectrum sFourthCutTrue("FourthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFourthCutTrue);
+    Spectrum sFourthCut("FourthCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFourthCut);
+    Spectrum sFourthCutTrue("FourthCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFourthCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, one muon, two protons, and no charged pions)
-    Spectrum sFifthCut("FifthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFifthCut);
-    Spectrum sFifthCutTrue("FifthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kFifthCutTrue);
+    Spectrum sFifthCut("FifthCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFifthCut);
+    Spectrum sFifthCutTrue("FifthCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kFifthCutTrue);
     // Spectrum with second cut (cosmic, vertex FV, one muon, two protons, no charged pions, and no neutral pions)
-    Spectrum sSixthCut("SixthCut", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSixthCut);
-    Spectrum sSixthCutTrue("SixthCutTrue", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kSixthCutTrue);
+    Spectrum sSixthCut("SixthCut", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSixthCut);
+    Spectrum sSixthCutTrue("SixthCutTrue", bEventCount, NuLoader, kEventCount, kNoSpillCut, kSixthCutTrue);
     // Spectrum with overall signal definition to sanity check it matches
-    Spectrum sRecoSignal("RecoSignal", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kRecoIsSignal); 
-    Spectrum sRecoTrueSignal("RecoTrueSignal", bPrimaryEnergy, NuLoader, kPrimaryEnergy, kNoSpillCut, kRecoIsTrueReco); 
+    Spectrum sRecoSignal("RecoSignal", bEventCount, NuLoader, kEventCount, kNoSpillCut, kRecoIsSignal); 
+    Spectrum sRecoTrueSignal("RecoTrueSignal", bEventCount, NuLoader, kEventCount, kNoSpillCut, kRecoIsTrueReco); 
 
     NuLoader.Go();
 
@@ -177,6 +176,15 @@ void Selection() {
         TH1D* RecoHisto = RecoSignals->ToTH1(TargetPOT);
         TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
         TH1D* RecoBkgHisto = RecoBkgSignals->ToTH1(TargetPOT);
+
+        // Manage under/overflow bins
+        RecoHisto->SetBinContent(RecoHisto->GetNbinsX(), RecoHisto->GetBinContent(RecoHisto->GetNbinsX()) + RecoHisto->GetBinContent(RecoHisto->GetNbinsX() + 1));
+        RecoTrueHisto->SetBinContent(RecoTrueHisto->GetNbinsX(), RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX()) + RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX() + 1));
+        RecoBkgHisto->SetBinContent(RecoBkgHisto->GetNbinsX(), RecoBkgHisto->GetBinContent(RecoBkgHisto->GetNbinsX()) + RecoBkgHisto->GetBinContent(RecoBkgHisto->GetNbinsX() + 1));
+
+        RecoHisto->SetBinContent(1, RecoHisto->GetBinContent(0) + RecoHisto->GetBinContent(1));
+        RecoTrueHisto->SetBinContent(1, RecoTrueHisto->GetBinContent(0) + RecoTrueHisto->GetBinContent(1));
+        RecoBkgHisto->SetBinContent(1, RecoBkgHisto->GetBinContent(0) + RecoBkgHisto->GetBinContent(1));
 
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.17);

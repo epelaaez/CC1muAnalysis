@@ -9,7 +9,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "Constants.h"
+#include "../../Utils/Constants.h"
 #include "../../Utils/Tools.cxx"
 
 using namespace std;
@@ -26,7 +26,7 @@ void SerialGeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/FlatTree/";
 
     Tools tools;
 
@@ -274,7 +274,7 @@ void SerialGeneratorOverlay() {
             TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[GeneralPlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
-            TString dir = "/exp/sbnd/app/users/theobal1/BuildEventGenerators/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
             PlotCanvas->SaveAs(dir+"/Figs/Overlay/Serial/"+SlicePlotName+".png");
             delete PlotCanvas;
 

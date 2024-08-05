@@ -16,6 +16,8 @@ __pycache__/
 Selection_C_ACLiC*
 SelectionEfficiency_C_ACLiC*
 SelectionMigrationMatrix_C_ACLiC*
+SelectionTopologyBreakdown_C_ACLiC
+*_C_ACLiC*
 
 # sbnana local build
 v09_75_03/

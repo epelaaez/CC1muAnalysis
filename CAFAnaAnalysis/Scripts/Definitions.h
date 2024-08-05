@@ -20,15 +20,18 @@
 
 // Generator analysis includes.
 #include "../../GeneratorAnalysis/Selections/TwoPTools.cxx"
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
 
 // Utils includes.
 #include "../../Utils/Tools.cxx"
+#include "../../Utils/Constants.h"
 
 using namespace Constants;
 
 namespace ana
 {
+    // Files with samples
+    const std::string TargetFile = "/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv/*.flat.caf.root";
+
     // Constants
     const float fFVXMax = 180.f;
     const float fFVXMin =   5.f;
@@ -50,138 +53,25 @@ namespace ana
         {111, {0.0f, std::numeric_limits<float>::max()}} // Pi zero
     };
 
-    // Systematic name and number of universes
-    std::vector<std::tuple<std::string, int>> SystsVector = {
-        {"GENIEReWeight_SBND_v1_multisigma_MaCCQE", 6}, // 0
-        {"GENIEReWeight_SBND_v1_multisigma_MaNCEL", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_EtaNCEL", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_MaCCRES", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_MvCCRES", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_MaNCRES", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_MvNCRES", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpCC2pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvpNC2pi", 6}, // 10
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvnCC2pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvnNC2pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpCC2pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarpNC2pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnCC2pi", 6}, // 20
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC1pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_NonRESBGvbarnNC2pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_RDecBR1gamma", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_RDecBR1eta", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_Theta_Delta2Npi", 10},
-        {"GENIEReWeight_SBND_v1_multisigma_AhtBY", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_BhtBY", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_CV1uBY", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_CV2uBY", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FormZone", 6}, // 30
-        {"GENIEReWeight_SBND_v1_multisigma_MFP_pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrCEx_pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrInel_pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrAbs_pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrPiProd_pi", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_MFP_N", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrCEx_N", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrInel_N", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrAbs_N", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_FrPiProd_N", 6}, // 40
-        {"GENIEReWeight_SBND_v1_multisigma_CCQEPauliSupViaKF", 6},
-        {"GENIEReWeight_SBND_v1_multisigma_CCQEMomDistroFGtoSF", 10},
-        {"GENIEReWeight_SBND_v1_multisim_MaCCQE", 100}, 
-        {"GENIEReWeight_SBND_v1_multisim_MaNCEL", 100},
-        {"GENIEReWeight_SBND_v1_multisim_EtaNCEL", 100},
-        {"GENIEReWeight_SBND_v1_multisim_MaCCRES", 100},
-        {"GENIEReWeight_SBND_v1_multisim_MvCCRES", 100},
-        {"GENIEReWeight_SBND_v1_multisim_MaNCRES", 100},
-        {"GENIEReWeight_SBND_v1_multisim_MvNCRES", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC1pi", 100}, // 50
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvpCC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvpNC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvnCC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvnNC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpCC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC1pi", 100}, // 60
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarpNC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnCC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC1pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_NonRESBGvbarnNC2pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_RDecBR1gamma", 100},
-        {"GENIEReWeight_SBND_v1_multisim_RDecBR1eta", 100},
-        {"GENIEReWeight_SBND_v1_multisim_AhtBY", 100},
-        {"GENIEReWeight_SBND_v1_multisim_BhtBY", 100},
-        {"GENIEReWeight_SBND_v1_multisim_CV1uBY", 100}, // 70
-        {"GENIEReWeight_SBND_v1_multisim_CV2uBY", 100},
-        {"GENIEReWeight_SBND_v1_multisim_FormZone", 100}, 
-        {"GENIEReWeight_SBND_v1_multisim_MFP_pi", 100}, 
-        {"GENIEReWeight_SBND_v1_multisim_FrCEx_pi", 100}, 
-        {"GENIEReWeight_SBND_v1_multisim_FrInel_pi", 100}, 
-        {"GENIEReWeight_SBND_v1_multisim_FrAbs_pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_FrPiProd_pi", 100},
-        {"GENIEReWeight_SBND_v1_multisim_MFP_N", 100},
-        {"GENIEReWeight_SBND_v1_multisim_FrCEx_N", 100},
-        {"GENIEReWeight_SBND_v1_multisim_FrInel_N", 100}, // 80
-        {"GENIEReWeight_SBND_v1_multisim_FrAbs_N", 100},
-        {"GENIEReWeight_SBND_v1_multisim_FrPiProd_N", 100},
-        {"GENIEReWeight_SBND_v1_multisim_CCQEPauliSupViaKF", 100},
-        {"MINERvAE2p2h_ICARUS_v1_E2p2h_A_nu", 6},
-        {"MINERvAE2p2h_ICARUS_v1_E2p2h_B_nu", 6},
-        {"MINERvAE2p2h_ICARUS_v1_E2p2h_A_nubar", 6},
-        {"MINERvAE2p2h_ICARUS_v1_E2p2h_B_nubar", 6},
-        // {"MINERvAq0q3Weighting_SBND_v1_Mnv2p2hGaussEnhancement", 4},
-        {"MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nu", 6},
-        {"MiscInteractionSysts_SBND_v1_C12ToAr40_2p2hScaling_nubar", 6}, // 90
-        // {"MiscInteractionSysts_SBND_v1_nuenuebar_xsec_ratio", 2},
-        // {"MiscInteractionSysts_SBND_v1_nuenumu_xsec_ratio", 2},
-        {"MiscInteractionSysts_SBND_v1_SPPLowQ2Suppression", 10},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_CC_3Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_CC_3Pi", 6},
-        // {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_np_CC_1Pi", 7},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_1Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_2Pi", 6}, // 100
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_n_NC_3Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_1Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nu_p_NC_3Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_1Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_CC_3Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_1Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_CC_3Pi", 6}, // 110
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_1Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_n_NC_3Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_1Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_2Pi", 6},
-        {"NOvAStyleNonResPionNorm_SBND_v1_NR_nubar_p_NC_3Pi", 6}	
-    };
-
     ///////////
     // Binning
     ///////////
 
     // Create the binning schemes for the Vars we wish to plot.
-    const Binning bPrimaryEnergy = Binning::Simple(1, 0, 3.0); // one bin
-    const Binning bAngleBins = Binning::Simple(6, 0.0, 1.0);
-    const Binning bDeltaAlphaBins = Binning::Simple(6, 0.0, 180.0);
-    const Binning bTransverseMomentumBins = Binning::Simple(6, 0.0, 1.0);
-    const Binning bMuonMomentumBins = Binning::Simple(6, 0.1, 1.2);
-    const Binning bProtonMomentumBins = Binning::Simple(6, 0.3, 1.0);
+    const Binning bEventCount = Binning::Custom(ArrayNBinsEventCount);
+    const Binning bAngleBins = Binning::Custom(ArrayNBinsAngle);
+    const Binning bDeltaAlphaBins = Binning::Custom(ArrayNBinsDeltaAlphaT);
+    const Binning bTransverseMomentumBins = Binning::Custom(ArrayNBinsTransverseMomentum);
+    const Binning bMuonMomentumBins = Binning::Custom(ArrayNBinsMuonMomentum);
+    const Binning bLeadingProtonMomentumBins = Binning::Custom(ArrayNBinsLeadingProtonMomentum);
+    const Binning bRecoilProtonMomentumBins = Binning::Custom(ArrayNBinsRecoilProtonMomentum);
+
+    // Bins for cut plots
+    const Binning bNuScore = Binning::Simple(30, 0, 1.0);
+    const Binning bFMatchScore = Binning::Simple(40, 0, 40.0);
+    const Binning bFMatchTime = Binning::Simple(20, 0, 5.0);
+    const Binning bMuChi2 = Binning::Simple(30, 0, 60.0);
+    const Binning bProtonChi2 = Binning::Simple(100, 0, 200.0);
 
     // Double differential bins
     Tools tools; // tools for double differential bins
@@ -217,8 +107,8 @@ namespace ana
     int iCountMultParticle(const caf::SRTrueInteractionProxy* nu, int pdg, float lb, float up) {
         int count = 0;
         for (auto const& prim : nu->prim) {
-            float totp = std::sqrt(std::pow(prim.startp.x, 2) + std::pow(prim.startp.y, 2) + std::pow(prim.startp.z, 2));
-            if (prim.pdg == pdg && totp > lb && totp < up) {
+            float totp = std::sqrt(std::pow(prim.genp.x, 2) + std::pow(prim.genp.y, 2) + std::pow(prim.genp.z, 2));
+            if (prim.pdg == pdg && totp >= lb && totp < up) {
                 count++;
             }
         }
@@ -233,9 +123,9 @@ namespace ana
 
         std::vector<int> CandidateMuons;
         std::vector<int> CandidateMuonsTrkLen;
-        bool bSkipPFP = false;
 
         for (auto const& pfp : slc -> reco.pfp) {
+            bool bSkipPFP = false;
             float fMuAverage = 0.0f;
             float fPrAverage = 0.0f;
             for (int i = 0; i < 3; i++) {
@@ -270,7 +160,7 @@ namespace ana
                 fMuAverage < fMuCutMuScore &&
                 fPrAverage > fMuCutPrScore &&
                 pfp.trk.len > fMuCutLength &&
-                fMomentum > lb &&
+                fMomentum >= lb &&
                 fMomentum < ub
             ) {
                 CandidateMuons.push_back(pfp.id);
@@ -324,7 +214,7 @@ namespace ana
 
             if (
                 fPrAverage < fPrCutPrScore && 
-                fMomentum > lb &&
+                fMomentum >= lb &&
                 fMomentum < ub
             ) ProtonIDs.push_back(pfp.id);
         }
@@ -341,7 +231,7 @@ namespace ana
             if (!(bIsInFV(&pfp.trk.start) && bIsInFV(&pfp.trk.end))) continue;
 
             float fMomentum = pfp.trk.rangeP.p_pion;
-            if (fMomentum > lb && fMomentum < ub) return false; // tag pion
+            if (fMomentum >= lb && fMomentum < ub) return false; // tag pion
         }
         return true;
     }
@@ -388,18 +278,42 @@ namespace ana
         TVector3 Muon(1, 1, 1);
         TVector3 LeadingProton(1, 1, 1);
         TVector3 RecoilProton(1, 1, 1);
-        bool FirstProton = true;
+        bool FirstMuon = false;
+        bool FirstProton = false;
+        bool SecondProton = false;
 
         for (auto const& prim : nu->prim) {
-            if (prim.pdg == 13) {
+            float totp = std::sqrt(std::pow(prim.genp.x, 2) + std::pow(prim.genp.y, 2) + std::pow(prim.genp.z, 2));
+            if (
+                (prim.pdg == 13) && 
+                (totp >= std::get<0>(PDGToThreshold.at(13))) && 
+                (totp < std::get<1>(PDGToThreshold.at(13)))
+            ) {
                 Muon.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
-            } else if ((prim.pdg == 2212) && FirstProton) {
+                FirstMuon = true;
+            } else if (
+                (prim.pdg == 2212) && 
+                (totp >= std::get<0>(PDGToThreshold.at(2212))) && 
+                (totp < std::get<1>(PDGToThreshold.at(2212))) &&
+                !FirstProton
+            ) {
                 LeadingProton.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
-                FirstProton = false;
-            } else if (prim.pdg == 2212) {
+                FirstProton = true;
+            } else if (
+                (prim.pdg == 2212) && 
+                (totp >= std::get<0>(PDGToThreshold.at(2212))) && 
+                (totp < std::get<1>(PDGToThreshold.at(2212)))
+            ) {
                 RecoilProton.SetXYZ(prim.genp.x, prim.genp.y, prim.genp.z);
+                SecondProton = true;
             }
         }
+
+        if (!(FirstMuon && FirstProton && SecondProton)) {
+            std::cout << "All particles not found" << std::endl;
+            exit(-1);
+        }
+
         return {Muon, LeadingProton, RecoilProton};
     }
 
@@ -472,17 +386,224 @@ namespace ana
     // Vars
     //////////////
 
-    // For all vars, there are three variations:
+    // Dummy variables to keep track of events
+    const Var kEventCount([](const caf::SRSliceProxy* slc) -> double {
+        return 0.5;
+    });
+    const TruthVar kTrueEventCount([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return 0.5;
+    });
+
+    // Cosmic cut variables
+    const Var kNuScore([](const caf::SRSliceProxy* slc) -> double {
+        return slc->nu_score;
+    });
+    const Var kFMatchScore([](const caf::SRSliceProxy* slc) -> double {
+        return slc->fmatch.score;
+    });
+    const Var kFMatchTime([](const caf::SRSliceProxy* slc) -> double {
+        return slc->fmatch.time;
+    });
+
+    // Mu chi2 for muon
+    const Var kMuMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 13) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for muon
+    const Var kMuProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 13) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Mu chi2 for proton
+    const Var kProtonMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for proton
+    const Var kProtonProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Mu chi2 for second proton
+    const Var kSecondProtonMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for second proton
+    const Var kSecondProtonProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Mu chi2 for pion
+    const Var kPionMuChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 211 || pfp.trk.truth.p.pdg == -211) {
+                bool bSkipPFP = false;
+                double fMuAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_muon) ||
+                        pfp.trk.chi2pid[i].chi2_muon == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fMuAverage += pfp.trk.chi2pid[i].chi2_muon / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fMuAverage;
+            }
+        }
+        return 0;
+    });
+
+    // Proton chi2 for pion
+    const Var kPionProtonChi2([](const caf::SRSliceProxy* slc) -> double {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 211 || pfp.trk.truth.p.pdg == -211) {
+                bool bSkipPFP = false;
+                double fPrAverage = 0.;
+                for (int i = 0; i < 3; i++) { 
+                    if (
+                        std::isnan(pfp.trk.chi2pid[i].chi2_proton) ||
+                        pfp.trk.chi2pid[i].chi2_proton == 0.
+                    ) {
+                        bSkipPFP = true;
+                        break;
+                    } else {
+                        fPrAverage += pfp.trk.chi2pid[i].chi2_proton / 3;
+                    }
+                }
+                if (!firstProton && !bSkipPFP) firstProton = true;
+                else if (firstProton && !bSkipPFP) return fPrAverage;
+            }
+        }
+        return 0;
+    });
+
+    // For all the following vars, there are three variations:
     //     1. Reconstructed value `Var`
     //     2. True value `TruthVar`
     //     3. True value accessed through truth information of 
     //        a `SRSlice`, and stored as `Var`
     // The difference between 1 and 3 is that the latter can be
     // used in a `Spectrum` that uses a `Cut` instead of a `TruthCut`.
-
-    // Primary energy
-    const Var kPrimaryEnergy = SIMPLEVAR(truth.E);
-    const TruthVar kTrueEnergy = SIMPLETRUTHVAR(E);
 
     // Muon angle
     const Var kMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
@@ -741,12 +862,79 @@ namespace ana
         return !kTruthIsSignal(nu);
     });
 
-    const TruthCut kValidEnergyTruthCut([](const caf::SRTrueInteractionProxy* nu) {
-        return !std::isnan(nu->E);
+    // Truth cuts for other topologies
+    const TruthCut kCCNgt0p1pi([](const caf::SRTrueInteractionProxy* nu) {
+        int nChargedPions = iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) + iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211)));
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 && // check for one muon
+            nChargedPions == 1 &&                                                                                      // one charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0 // no neutral pions
+        );
     });
 
-    const TruthCut kTruthIsSignalAndEnergy([](const caf::SRTrueInteractionProxy* nu) {
-        return (kTruthIsSignal(nu) && kValidEnergyTruthCut(nu));
+    const TruthCut kCCNg2p0pi([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) > 2 &&  // check for more than two protons
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pion
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kCC1p0pi([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 1 && // check for one proton
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pion
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kCC0p0pi([](const caf::SRTrueInteractionProxy* nu) {
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 &&       // check for one muon
+            iCountMultParticle(nu, 2212, std::get<0>(PDGToThreshold.at(2212)), std::get<1>(PDGToThreshold.at(2212))) == 0 && // no protons
+            iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) == 0 &&    // no positively charged pion
+            iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211))) == 0 && // no negatively charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0       // no neutral pions
+        );
+    });
+
+    const TruthCut kCCNgt0pNg1pi([](const caf::SRTrueInteractionProxy* nu) {
+        int nChargedPions = iCountMultParticle(nu, 211, std::get<0>(PDGToThreshold.at(211)), std::get<1>(PDGToThreshold.at(211))) + iCountMultParticle(nu, -211, std::get<0>(PDGToThreshold.at(-211)), std::get<1>(PDGToThreshold.at(-211)));
+        return (
+            bIsInFV(&nu->position) &&
+            nu->iscc &&
+            nu->pdg == 14 &&
+            iCountMultParticle(nu, 13, std::get<0>(PDGToThreshold.at(13)), std::get<1>(PDGToThreshold.at(13))) == 1 && // check for one muon
+            nChargedPions > 1 &&                                                                                       // more than one charged pion
+            iCountMultParticle(nu, 111, std::get<0>(PDGToThreshold.at(111)), std::get<1>(PDGToThreshold.at(111))) == 0 // no neutral pions
+        );
+    });
+
+    const TruthCut kOtherTopology([](const caf::SRTrueInteractionProxy* nu) {
+        return !(
+            kTruthIsSignal(nu) ||
+            kCC1p0pi(nu) ||
+            kCCNg2p0pi(nu) ||
+            kCCNgt0p1pi(nu) ||
+            kCC0p0pi(nu)
+            // kCCNgt0pNg1pi
+        );
     });
 
     //////////////
@@ -758,6 +946,7 @@ namespace ana
         return ((slc->fmatch.time > 0.) && (slc->fmatch.time < 1.800));
     });
 
+    // Check for cosmics
     const Cut kCosmicCut([](const caf::SRSliceProxy* slc) {
         return (
             slc->nu_score > 0.4 &&     // check how neutrino like slice is
@@ -765,6 +954,47 @@ namespace ana
             slc->fmatch.time > 0. &&   // check flash is in beam
             slc->fmatch.time < 1.8
         );
+    });
+    const Cut kIsCosmic([](const caf::SRSliceProxy* slc) {
+        return (slc->truth.genie_mode == -1);
+    });
+    const Cut kIsNotCosmic([](const caf::SRSliceProxy* slc) {
+        return (slc->truth.genie_mode != -1);
+    });
+
+    const Cut kHasMuon([](const caf::SRSliceProxy* slc) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 13) {
+                return true;
+            }
+        }
+        return false;
+    });
+    const Cut kHasProton([](const caf::SRSliceProxy* slc) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                return true;
+            }
+        }
+        return false;
+    });
+    const Cut kHasSecondProton([](const caf::SRSliceProxy* slc) {
+        bool firstProton = false;
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 2212) {
+                if (!firstProton) firstProton = true;
+                else if (firstProton) return true;
+            }
+        }
+        return false;
+    });
+    const Cut kHasPion([](const caf::SRSliceProxy* slc) {
+        for (auto const& pfp : slc -> reco.pfp) {
+            if (pfp.trk.truth.p.pdg == 211 || pfp.trk.truth.p.pdg == -211) {
+                return true;
+            }
+        }
+        return false;
     });
 
     // Check reconstructed event is signal
@@ -841,22 +1071,18 @@ namespace ana
     //     5. No charged pions cut
     //     6. No neutral pions cut
 
-    const Cut kValidEnergyCut([](const caf::SRSliceProxy* slc) {
-        return !std::isnan(slc->truth.E);
-    });
-
     const Cut kFirstCut([](const caf::SRSliceProxy* slc) {
-        return (kCosmicCut(slc) && kValidEnergyCut(slc));
+        return kCosmicCut(slc);
     });
     const Cut kFirstCutTrue([](const caf::SRSliceProxy* slc) {
-        return (kCosmicCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kFirstCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kSecondCut([](const caf::SRSliceProxy* slc) {
         return (kFirstCut(slc) && bIsInFV(&slc->vertex));
     });
     const Cut kSecondCutTrue([](const caf::SRSliceProxy* slc) {
-        return (kFirstCut(slc) && bIsInFV(&slc->vertex) && kTruthIsSignal(&slc->truth));
+        return (kSecondCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kThirdCut([](const caf::SRSliceProxy* slc) {
@@ -864,8 +1090,7 @@ namespace ana
         return (OneMuon && kSecondCut(slc));
     });
     const Cut kThirdCutTrue([](const caf::SRSliceProxy* slc) {
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        return (OneMuon && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kThirdCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kFourthCut([](const caf::SRSliceProxy* slc) {
@@ -876,11 +1101,7 @@ namespace ana
         return (TwoProtons && kSecondCut(slc)); 
     });
     const Cut kFourthCutTrue([](const caf::SRSliceProxy* slc) {
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        if (!OneMuon) return false;
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        
-        return (TwoProtons && kSecondCut(slc) && kTruthIsSignal(&slc->truth)); 
+        return (kFourthCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kFifthCut([](const caf::SRSliceProxy* slc) {
@@ -897,17 +1118,7 @@ namespace ana
         return (bNoChargedPions(slc, TaggedIDs) && kSecondCut(slc));
     });
     const Cut kFifthCutTrue([](const caf::SRSliceProxy* slc) {
-        std::vector<int> TaggedIDs;
-
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        if (!OneMuon) return false;
-        TaggedIDs.push_back(MuonID);
-
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        if (!TwoProtons) return false;
-        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
-
-        return (bNoChargedPions(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+        return (kFifthCut(slc) && kTruthIsSignal(&slc->truth));
     });
 
     const Cut kSixthCut([](const caf::SRSliceProxy* slc) {
@@ -924,17 +1135,27 @@ namespace ana
         return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc));
     });
     const Cut kSixthCutTrue([](const caf::SRSliceProxy* slc) {
-        std::vector<int> TaggedIDs;
+        return (kSixthCut(slc) && kTruthIsSignal(&slc->truth));
+    });
 
-        auto [OneMuon, MuonID] = bOneMuon(slc);
-        if (!OneMuon) return false;
-        TaggedIDs.push_back(MuonID);
+    ///////////
+    // SpillVar
+    ///////////
 
-        auto [TwoProtons, ProtonIDs] = bTwoProtons(slc, MuonID);
-        if (!TwoProtons) return false;
-        TaggedIDs.insert(TaggedIDs.end(), ProtonIDs.begin(), ProtonIDs.end());
-
-        return (bNoChargedPions(slc, TaggedIDs) && bNoShowers(slc, TaggedIDs) && kSecondCut(slc) && kTruthIsSignal(&slc->truth));
+    const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
+        fstream file;
+        std::string FileName = "/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/EventData.csv";
+        file.open(FileName, fstream::out | fstream::app);
+        for (auto const& slc : sr->slc) {
+            if (kRecoIsSignal(&slc)) {
+                file << sr->hdr.fno << ",";
+                file << sr->hdr.run << ",";
+                file << sr->hdr.subrun << ",";
+                file << sr->hdr.evt << ",";
+                file << sr->hdr.subevt << std::endl;       
+            }
+        }
+        return 0.5;
     });
 }
 

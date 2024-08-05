@@ -22,7 +22,7 @@ void MECGeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/FlatTree/";
 
     //------------------------------//
 
@@ -159,7 +159,7 @@ void MECGeneratorOverlay() {
         PlotCanvas->cd();
         leg->Draw();
         
-        TString dir = "/exp/sbnd/app/users/theobal1/CC1muAnalysis";
+        TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay/MEC/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
 

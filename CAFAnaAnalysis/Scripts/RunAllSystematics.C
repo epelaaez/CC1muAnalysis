@@ -28,8 +28,8 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Utils includes.
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace ana;
@@ -38,18 +38,23 @@ using namespace Constants;
 void RunAllSystematics() {
     gROOT->ProcessLine(".L ./Scripts/SelectionSystematics.C");
 
+    std::vector<std::tuple<std::string, int>> SystsVector(XSecSystsVector);
+    SystsVector.insert(SystsVector.end(), FluxSystsVector.begin(), FluxSystsVector.end());
+
     int nSysts = SystsVector.size();
-    for (int i = 0; i < nSysts; i++) {
+    for (int SystIndex = 0; SystIndex < nSysts; SystIndex++) {
         std::cout << std::endl;
         std::cout << "========================================" << std::endl;
-        std::cout << "Starting systematic " << i << std::endl;
+        std::cout << "Starting systematic " << SystIndex << std::endl;
         std::cout << "========================================" << std::endl;
 
-        gROOT->ProcessLine(("SelectionSystematics(" + std::to_string(i) + ")").c_str()); 
+        std::string SystName = std::get<0>(SystsVector.at(SystIndex));
+        int SystNUniv = std::get<1>(SystsVector.at(SystIndex));
+        gROOT->ProcessLine(("SelectionSystematics(\"" + SystName + "\", " + std::to_string(SystNUniv) + ")").c_str()); 
 
         std::cout << "========================================" << std::endl;
-        std::cout << "Done with systematic " << i << std::endl;
-        std::cout << ((i + 1.) / nSysts) * 100 << "\% done" << std::endl;
+        std::cout << "Done with systematic " << SystIndex << std::endl;
+        std::cout << ((SystIndex + 1.) / nSysts) * 100 << "\% done" << std::endl;
         std::cout << "========================================" << std::endl;
         std::cout << std::endl;
     }

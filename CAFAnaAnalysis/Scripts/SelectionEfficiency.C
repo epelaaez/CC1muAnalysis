@@ -22,18 +22,14 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Utils includes.
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace ana;
 using namespace Constants;
 
 void SelectionEfficiency() {
-    // Some useful variables for later.
-    // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -42,11 +38,11 @@ void SelectionEfficiency() {
     // signal events over the total true signal events; these two histograms are plotted
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/pnfs/sbnd/persistent/users/epelaez/CAFAnaOutput/SelectionEfficiency.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionEfficiency.root";
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
     std::vector<TruthVar> Vars; std::vector<Binning> VarBins;
@@ -89,11 +85,11 @@ void SelectionEfficiency() {
     PlotNames.push_back("TruthMuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
 
     // Leading proton momentum 
-    Vars.push_back(kTruthLeadingProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back(kTruthLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
     PlotNames.push_back("TruthLeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
 
     // Recoil proton momentum 
-    Vars.push_back(kTruthRecoilProtonMomentum); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back(kTruthRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
     PlotNames.push_back("TruthRecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     ////////////////////////////////
@@ -132,6 +128,13 @@ void SelectionEfficiency() {
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         TH1D* TrueHisto = TrueSignals->ToTH1(TargetPOT);
         TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
+
+        // Manage under/overflow bins
+        TrueHisto->SetBinContent(TrueHisto->GetNbinsX(), TrueHisto->GetBinContent(TrueHisto->GetNbinsX()) + TrueHisto->GetBinContent(TrueHisto->GetNbinsX() + 1));
+        RecoTrueHisto->SetBinContent(RecoTrueHisto->GetNbinsX(), RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX()) + RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX() + 1));
+
+        TrueHisto->SetBinContent(1, TrueHisto->GetBinContent(0) + TrueHisto->GetBinContent(1));
+        RecoTrueHisto->SetBinContent(1, RecoTrueHisto->GetBinContent(0) + RecoTrueHisto->GetBinContent(1));
 
         // Change y axis title so efficiency plot inherits it
         TrueHisto->GetYaxis()->SetTitle("Signal efficiency");
@@ -186,7 +189,7 @@ void SelectionEfficiency() {
 
                 // Create efficiency plot
                 TEfficiency* Eff = new TEfficiency(*SlicedRecoTrueHisto, *SlicedTrueHisto);
-                Eff->SetTitle((";True " + VarLabels.at(i) + ";").c_str());
+                Eff->SetTitle((";True " + VarLabels.at(i) + ";Efficiency").c_str());
 
                 PlotCanvas->cd();
                 Eff->SetMarkerStyle(21);
@@ -194,6 +197,8 @@ void SelectionEfficiency() {
                 Eff->Draw("AP");
                 gPad->Update();
                 Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(SerialSliceBinning.at(0),SerialSliceBinning.at(SerialSliceBinning.size() - 1));
+                double max = Eff->GetPaintedGraph()->GetYaxis()->GetBinUpEdge(Eff->GetPaintedGraph()->GetYaxis()->GetNbins());
+                Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0., max*1.2);
 
                 // Slice label
                 TLatex *textSlice = new TLatex();
@@ -209,15 +214,16 @@ void SelectionEfficiency() {
         } else {
             // Create efficiency plot
             TEfficiency* Eff = new TEfficiency(*RecoTrueHisto, *TrueHisto);
-            Eff->SetTitle((";True " + VarLabels.at(i) + ";").c_str());
+            Eff->SetTitle(("All events;True " + VarLabels.at(i) + ";Efficiency").c_str());
 
             PlotCanvas->cd();
             Eff->SetMarkerStyle(21);
             Eff->SetMarkerColor(kBlack);
-            Eff->SetTitle("All events");
             Eff->Draw("AP");
             gPad->Update();
             Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(VarBins.at(i).Min(),VarBins.at(i).Max());
+            double max = Eff->GetPaintedGraph()->GetYaxis()->GetBinUpEdge(Eff->GetPaintedGraph()->GetYaxis()->GetNbins());
+            Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0., max*1.2);
 
             // Save as png
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Efficiency/"+PlotNames[i]+".png");

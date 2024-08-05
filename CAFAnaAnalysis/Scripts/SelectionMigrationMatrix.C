@@ -23,18 +23,14 @@
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Scripts/Constants.h"
+// Utils includes.
+#include "../../Utils/Constants.h"
 
 using namespace std;
 using namespace ana;
 using namespace Constants;
 
 void SelectionMigrationMatrix() {
-    // Some useful variables for later.
-    // const std::string TargetFile = "/exp/sbnd/data/users/munjung/SBND/2023B/cnnid/cnnid.flat.caf.root";
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/apapadop/CAF_Files/*.flat.caf.root";
-
     int FontStyle = 132;
     double TextSize = 0.06;	
 
@@ -46,15 +42,19 @@ void SelectionMigrationMatrix() {
     // with true value in bin i
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Matrix.root";
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variable pairs and information to plot
     std::vector<std::tuple<Var, Var, TruthVar>> Vars; std::vector<Binning> VarBins;
     std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
+
+    // Dummy variable
+    Vars.push_back({kEventCount, kEventCount, kTrueEventCount}); VarBins.push_back(bEventCount); 
+    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
 
     // Muon angle
     Vars.push_back({kMuonCosTheta, kRecoTruthMuonCosTheta, kTruthMuonCosTheta}); VarBins.push_back(bAngleBins);
@@ -89,11 +89,11 @@ void SelectionMigrationMatrix() {
     PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
 
     // Leading proton momentum 
-    Vars.push_back({kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum, kTruthLeadingProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back({kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum, kTruthLeadingProtonMomentum}); VarBins.push_back(bLeadingProtonMomentumBins);
     PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
 
     // Recoil proton momentum 
-    Vars.push_back({kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum, kTruthRecoilProtonMomentum}); VarBins.push_back(bProtonMomentumBins);
+    Vars.push_back({kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum, kTruthRecoilProtonMomentum}); VarBins.push_back(bRecoilProtonMomentumBins);
     PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
 
     ////////////////////////////////
@@ -156,25 +156,29 @@ void SelectionMigrationMatrix() {
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         TH1* TruthValuesHist = TruthValues->ToTH1(TargetPOT);
         TH1* RecoTruthValuesHist = RecoTruthValues->ToTH1(TargetPOT);
+
+        // Manage under/overflow bins
+        TruthValuesHist->SetBinContent(TruthValuesHist->GetNbinsX(), TruthValuesHist->GetBinContent(TruthValuesHist->GetNbinsX()) + TruthValuesHist->GetBinContent(TruthValuesHist->GetNbinsX() + 1));
+        RecoTruthValuesHist->SetBinContent(RecoTruthValuesHist->GetNbinsX(), RecoTruthValuesHist->GetBinContent(RecoTruthValuesHist->GetNbinsX()) + RecoTruthValuesHist->GetBinContent(RecoTruthValuesHist->GetNbinsX() + 1));
+
+        TruthValuesHist->SetBinContent(1, TruthValuesHist->GetBinContent(0) + TruthValuesHist->GetBinContent(1));
+        RecoTruthValuesHist->SetBinContent(1, RecoTruthValuesHist->GetBinContent(0) + RecoTruthValuesHist->GetBinContent(1));
+
+        // Get bins for matrices
+        const int NBins = VarBins.at(i).NBins();
+        const std::vector<double>& BinEdges = VarBins.at(i).Edges();
+
         TH2* MigrationMatrix = new TH2D(
             "Migration",
             "Migration",
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
         TH2* ResponseMatrix = new TH2D(
             "Response",
             "Response",
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max(),
-            VarBins.at(i).NBins(),
-            VarBins.at(i).Min(),
-            VarBins.at(i).Max()
+            NBins, BinEdges.data(),
+            NBins, BinEdges.data()
         );
 
         std::vector<TH1*> RecoValuesHistos;
@@ -188,7 +192,12 @@ void SelectionMigrationMatrix() {
         for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
             double RecoTruthCounts = RecoTruthValuesHist->GetBinContent(x);
             double TruthCounts = TruthValuesHist->GetBinContent(x);
-            TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT lables bins starting from 1
+            TH1* RecoValuesHist = RecoValuesHistos.at(x - 1); // -1 because ROOT labels bins starting from 1
+
+            // Manage under/overflow bins
+            RecoValuesHist->SetBinContent(RecoValuesHist->GetNbinsX(), RecoValuesHist->GetBinContent(RecoValuesHist->GetNbinsX()) + RecoValuesHist->GetBinContent(RecoValuesHist->GetNbinsX() + 1));
+            RecoValuesHist->SetBinContent(1, RecoValuesHist->GetBinContent(0) + RecoValuesHist->GetBinContent(1));
+
             for (int y = 1; y < VarBins.at(i).NBins() + 1; y++) {
                 double RecoCounts = RecoValuesHist->GetBinContent(y);
 
@@ -203,7 +212,9 @@ void SelectionMigrationMatrix() {
                 // Debugging
                 std::cout << "Reco low bin: " << y << ". Counts: " << RecoCounts << std::endl;
                 std::cout << "True low bin: " << x << ". Counts: " << TruthCounts << std::endl;
+                std::cout << "Reco truth counts: " << RecoTruthCounts << std::endl;
                 std::cout << "Migration ratio: " << MigrationRatio << std::endl;
+                std::cout << "Response ratio: " << ResponseRatio << std::endl;
                 std::cout << std::endl;
 
                 MigrationMatrix->Fill(
@@ -225,7 +236,9 @@ void SelectionMigrationMatrix() {
 
         MigrationMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         MigrationMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
-        MigrationMatrix->GetZaxis()->SetRangeUser(0,1);
+        double MigrationMin = MigrationMatrix->GetMinimum();
+        double MigrationMax = MigrationMatrix->GetMaximum();
+        MigrationMatrix->GetZaxis()->SetRangeUser(MigrationMin,MigrationMax);
         MigrationMatrix->GetZaxis()->CenterTitle();
         MigrationMatrix->GetZaxis()->SetTitleFont(FontStyle);
         MigrationMatrix->GetZaxis()->SetTitleSize(TextSize);
@@ -235,7 +248,9 @@ void SelectionMigrationMatrix() {
 
         ResponseMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
         ResponseMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
-        ResponseMatrix->GetZaxis()->SetRangeUser(0,1);
+        double ResponseMin = ResponseMatrix->GetMinimum();
+        double ResponseMax = ResponseMatrix->GetMaximum();
+        ResponseMatrix->GetZaxis()->SetRangeUser(ResponseMin,ResponseMax);
         ResponseMatrix->GetZaxis()->CenterTitle();
         ResponseMatrix->GetZaxis()->SetTitleFont(FontStyle);
         ResponseMatrix->GetZaxis()->SetTitleSize(TextSize);

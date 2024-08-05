@@ -26,9 +26,7 @@ void GeneratorOverlay() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/theobal1/HighSamples/FlatTree/";
-
-    Tools tools;
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/FlatTree/";
 
     //------------------------------//
 
@@ -229,7 +227,7 @@ void GeneratorOverlay() {
             textSlice->DrawLatexNDC(0.16, 0.93, SliceLabel);
         }
 
-        TString dir = "/exp/sbnd/app/users/theobal1/BuildEventGenerators/CC1muAnalysis";
+        TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
         TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
