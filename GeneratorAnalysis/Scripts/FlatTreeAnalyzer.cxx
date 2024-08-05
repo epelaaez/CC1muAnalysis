@@ -46,7 +46,7 @@ void FlatTreeAnalyzer::Loop() {
     //----------------------------------------//	
 
     // Output file
-    TString Directory = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/";
+    TString Directory = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/";
     TString FileNameAndPath = Directory+"FlatTree/FlatTreeAnalyzerOutput_"+fOutputFile+".root";
     TFile* file = new TFile(FileNameAndPath,"recreate");
 

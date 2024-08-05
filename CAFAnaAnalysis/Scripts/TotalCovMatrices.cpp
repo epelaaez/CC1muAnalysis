@@ -31,7 +31,7 @@ void TotalCovMatrices() {
     gStyle->SetPaintTextFormat("4.1f");
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Plot names
     std::vector<TString> PlotNames;
@@ -57,7 +57,7 @@ void TotalCovMatrices() {
     // Add xsec systematics
     for (int iSyst = 0; iSyst < (int) XSecSystsVector.size(); iSyst++) {
         std::string SystName = std::get<0>(XSecSystsVector.at(iSyst));
-        TString FilePath =  "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
+        TString FilePath =  "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
         std::unique_ptr<TFile> File(TFile::Open(FilePath));
         CovFiles.push_back(std::move(File));
     }
@@ -65,37 +65,37 @@ void TotalCovMatrices() {
     // Add flux systematics
     for (int iSyst = 0; iSyst < (int) FluxSystsVector.size(); iSyst++) {
         std::string SystName = std::get<0>(FluxSystsVector.at(iSyst));
-        TString FilePath =  "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
+        TString FilePath =  "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
         std::unique_ptr<TFile> File(TFile::Open(FilePath));
         CovFiles.push_back(std::move(File));
     }
 
     // Add stat systematics
-    std::unique_ptr<TFile> StatsFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsStats.root"));
+    std::unique_ptr<TFile> StatsFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsStats.root"));
     CovFiles.push_back(std::move(StatsFile));
 
     // Add POT systematics
-    std::unique_ptr<TFile> POTFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsPOT.root"));
+    std::unique_ptr<TFile> POTFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsPOT.root"));
     CovFiles.push_back(std::move(POTFile));
 
     // Add NTargets systematics
-    std::unique_ptr<TFile> NTargetsFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsNTargets.root"));
+    std::unique_ptr<TFile> NTargetsFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsNTargets.root"));
     CovFiles.push_back(std::move(NTargetsFile));
 
     // Add Detector systematics
-    std::unique_ptr<TFile> DetectorFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsDetector.root"));
+    std::unique_ptr<TFile> DetectorFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsDetector.root"));
     CovFiles.push_back(std::move(DetectorFile));
 
     // Add Reinteraction systematics
-    std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
+    std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
     CovFiles.push_back(std::move(ReinteractionFile));
 
     // File with reco histograms
-    TString HistoFile = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
+    TString HistoFile = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Selection.root";
     std::unique_ptr<TFile> File(TFile::Open(HistoFile));
 
     // File to store total cov matrices
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/TotalCovMatrices.root";
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/TotalCovMatrices.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Get integrated flux

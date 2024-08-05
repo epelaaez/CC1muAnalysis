@@ -1143,11 +1143,9 @@ namespace ana
     ///////////
 
     const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
-        fstream file; 
-        file.open(
-            "/exp/sbnd/data/users/epelaez/CAFAnaOutput/EventData.csv",
-            fstream::out | fstream::app
-        );
+        fstream file;
+        std::string FileName = "/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/EventData.csv";
+        file.open(FileName, fstream::out | fstream::app);
         for (auto const& slc : sr->slc) {
             if (kRecoIsSignal(&slc)) {
                 file << sr->hdr.fno << ",";

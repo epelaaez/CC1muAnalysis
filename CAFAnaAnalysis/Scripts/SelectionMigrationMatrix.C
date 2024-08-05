@@ -42,10 +42,10 @@ void SelectionMigrationMatrix() {
     // with true value in bin i
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Matrix.root";
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Matrix.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variable pairs and information to plot

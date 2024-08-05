@@ -12,6 +12,9 @@
 #include <tuple>
 
 namespace Constants {
+    // User to access
+    const std::string UserName = "epelaez";
+
     const double Units = 1E38;
 
     const double TargetPOT(6.6e20);

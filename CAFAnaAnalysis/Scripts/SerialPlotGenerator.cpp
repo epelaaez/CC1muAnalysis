@@ -26,7 +26,7 @@ void SerialPlotGenerator() {
     Tools tools;
 
     // Load root file with histograms
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/Selection.root";
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Selection.root";
     std::unique_ptr<TFile> File(TFile::Open(RootFilePath));
 
     // Double differential plots to deserialize
@@ -159,7 +159,7 @@ void SerialPlotGenerator() {
             TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel["True"+PlotNames[iPlot]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
             textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
-            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Serial/"+SlicePlotName+".png");
             delete PlotCanvas;
 

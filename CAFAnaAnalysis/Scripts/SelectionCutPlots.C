@@ -38,10 +38,10 @@ void SelectionCutPlots() {
     SpectrumLoader NuLoader(TargetFile);
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionCutPlots.root";
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionCutPlots.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Colors to use

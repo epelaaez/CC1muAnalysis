@@ -34,7 +34,7 @@ void GeneratorInteBreakDown() {
     int FontStyle = 132;
     double TextSize = 0.06;			
 
-    TString OutFilePath = "/pnfs/sbnd/persistent/users/epelaez/HighSamples/FlatTree/";
+    TString OutFilePath = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/FlatTree/";
 
     Tools tools;
 
@@ -299,7 +299,7 @@ void GeneratorInteBreakDown() {
             textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
 
             gPad->RedrawAxis();
-            TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
             TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
             PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;
@@ -428,7 +428,7 @@ void GeneratorInteBreakDown() {
                     textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events","") + SliceLabel);
 
                     gPad->RedrawAxis();
-                    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+                    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
                     TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
                     PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+SlicePlotName+".png");
                     delete PlotCanvas;

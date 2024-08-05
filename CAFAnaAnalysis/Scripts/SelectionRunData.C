@@ -32,7 +32,7 @@ void SelectionRunData() {
     SpectrumLoader NuLoader(TargetFile);
 
     // Open csv file to store data
-    std::string FilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/EventData.csv";
+    std::string FilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/EventData.csv";
     fstream file; file.open(FilePath, fstream::out); 
     file << "fno,run,subrun,evt,subevt" << std::endl;
     file.close();

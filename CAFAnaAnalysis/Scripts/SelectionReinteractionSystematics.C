@@ -47,13 +47,13 @@ void SelectionReinteractionSystematics() {
     SpectrumLoader NuLoader(TargetFile);
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/epelaez/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
     // Create directory for this sytematic if it does not exist yet
     std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/Reinteraction");
 
     // Root file to store objects in
-    TString RootFilePath = "/exp/sbnd/data/users/epelaez/CAFAnaOutput/SelectionSystematicsReinteraction.root";
+    TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsReinteraction.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Vectors to fill with variables and variable information to plot
