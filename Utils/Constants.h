@@ -33,8 +33,8 @@ namespace Constants {
     static const int NBinsDeltaAlphaT = 6;
     static const std::vector<double> ArrayNBinsDeltaAlphaT{0.,30.,60.,90.,120.,150.,180.};
 
-    static const int NBinsTransverseMomentum = 5;
-    static const std::vector<double> ArrayNBinsTransverseMomentum{0.,0.2,0.4,0.6,0.8,1.};
+    static const int NBinsTransverseMomentum = 7;
+    static const std::vector<double> ArrayNBinsTransverseMomentum{0.,0.1,0.2,0.3,0.4,0.5,0.6,1.};
 
     // 0.183 spacing
     static const int NBinsMuonMomentum = 6;
@@ -58,8 +58,8 @@ namespace Constants {
     std::vector<double> TwoDArrayDeltaAlphaT{0.,30.,60.,90.,120.,150.,180.};
 
     std::vector<std::vector<double>> TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices{
-        {0.,0.2,0.4,0.6,0.8,1.},
-        {0.,0.2,0.4,0.6,0.8,1.},
+        {0.,0.1,0.2,0.3,0.4,0.5,0.6,1.},
+        {0.,0.1,0.2,0.3,0.4,0.5,0.6,1.},
     };
     static const TString LabelXAxisTwoDTransverseMomentumInMuonCosTheta = ";#deltap_{T} [bin #]";
 
