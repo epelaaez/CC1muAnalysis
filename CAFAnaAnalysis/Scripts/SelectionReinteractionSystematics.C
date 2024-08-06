@@ -157,16 +157,32 @@ void SelectionReinteractionSystematics() {
         TH1D* ModifiedRecoTrueHisto = RecoTrueSpectra->ToTH1(TargetPOT);
         TH1D* ModifiedRecoBkgHisto = RecoBkgSpectra->ToTH1(TargetPOT);
 
+        // Scale 2%
+        ModifiedRecoHisto->Scale(1.02);
+        ModifiedRecoTrueHisto->Scale(1.02);
+        ModifiedRecoBkgHisto->Scale(1.02);
+
+        SelectionHelpers::DrawHistosWithErrorBands(
+            RecoHisto,
+            RecoTrueHisto,
+            RecoBkgHisto,
+            {ModifiedRecoHisto},
+            {ModifiedRecoTrueHisto},
+            {ModifiedRecoBkgHisto},
+            dir,
+            "Reinteraction",
+            PlotNames[iVar]
+        );
+
         // Scale histograms for cov matrices
         RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
         RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
         RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
 
-        // Scale modified histograms for cov matrices, add flat
-        // 2% scaling, this will be replaced by other histos later
-        ModifiedRecoHisto->Scale(1.02 * Units / (IntegratedFlux * NTargets));
-        ModifiedRecoTrueHisto->Scale(1.02 * Units / (IntegratedFlux * NTargets));
-        ModifiedRecoBkgHisto->Scale(1.02 * Units / (IntegratedFlux * NTargets));
+        // Scale modified histograms for cov matrices
+        ModifiedRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+        ModifiedRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+        ModifiedRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
 
         // Plot cov, frac cov, and corr matrices
         SelectionHelpers::DrawMatrices(

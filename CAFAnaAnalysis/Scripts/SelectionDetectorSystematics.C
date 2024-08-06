@@ -157,16 +157,32 @@ void SelectionDetectorSystematics() {
         TH1D* ModifiedRecoTrueHisto = RecoTrueSpectra->ToTH1(TargetPOT);
         TH1D* ModifiedRecoBkgHisto = RecoBkgSpectra->ToTH1(TargetPOT);
 
+        // Scale 15%
+        ModifiedRecoHisto->Scale(1.15);
+        ModifiedRecoTrueHisto->Scale(1.15);
+        ModifiedRecoBkgHisto->Scale(1.15);
+
+        SelectionHelpers::DrawHistosWithErrorBands(
+            RecoHisto,
+            RecoTrueHisto,
+            RecoBkgHisto,
+            {ModifiedRecoHisto},
+            {ModifiedRecoTrueHisto},
+            {ModifiedRecoBkgHisto},
+            dir,
+            "Detector",
+            PlotNames[iVar]
+        );
+
         // Scale histograms for cov matrices
         RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
         RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
         RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
 
-        // Scale modified histograms for cov matrices, add flat
-        // 15% scaling, this will be replaced by other files later
-        ModifiedRecoHisto->Scale(1.15 * Units / (IntegratedFlux * NTargets));
-        ModifiedRecoTrueHisto->Scale(1.15 * Units / (IntegratedFlux * NTargets));
-        ModifiedRecoBkgHisto->Scale(1.15 * Units / (IntegratedFlux * NTargets));
+        // Scale modified histograms for cov matrices
+        ModifiedRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+        ModifiedRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+        ModifiedRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
 
         // Plot cov, frac cov, and corr matrices
         SelectionHelpers::DrawMatrices(
