@@ -31,14 +31,19 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     TVector3 TotalProtonVectorTrans(TotalProtonVector.X(), TotalProtonVector.Y(), 0);
     TVector3 DeltaPVectorTrans = MuonVectorTrans + TotalProtonVectorTrans;
 
-    // GKI vectors
+    // For GKI calculations
     double TotalProtonMomentum = TotalProtonVector.Mag();
-    double Ecal = (TMath::Sqrt((MuonVector.Mag()*MuonVector.Mag()) + (0.106*0.106)) + 
+    double Ecal = (TMath::Sqrt((fMuonMomentum*fMuonMomentum) + (0.106*0.106)) + 
         TMath::Sqrt((TotalProtonMomentum*TotalProtonMomentum) + (0.938272*0.938272)) - 0.938272 + 0.0309);
     TVector3 EcalLongVector(0, 0, Ecal);
-    //Momentum Transfer vector
+
+    //Momentum transfer vector
     TVector3 QVector = EcalLongVector - MuonVector;
+
+    //Missing momentum vector
     TVector3 PVectorN = MuonVector + TotalProtonVector - EcalLongVector;
+
+    //GKI opening angle
     fCosOpeningAngleMomentumTransferTotalProton = std::cos(QVector.Angle(TotalProtonVector));
 
     // Transverse momentum variable
@@ -97,7 +102,6 @@ double TwoPTools::ReturnCosOpeningAngleMuonTotalProton() {
 }
 
 double TwoPTools::ReturnTransverseMomentum() {
-    //printf("The transverse momentum is %f", fTransverseMomentum);
     return fTransverseMomentum;
 }
 
@@ -106,12 +110,10 @@ double TwoPTools::ReturnDeltaAlphaT() {
 }
 
 double TwoPTools::ReturnMissingMomentum() {
-    //printf("The missing momentum is %f", fMissingMomentum);
     return fMissingMomentum;
 }
 
 double TwoPTools::ReturnAlphaThreeD() {
-    //printf(fAlphaThreeD);
     return fAlphaThreeD;
 }
 

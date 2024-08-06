@@ -13,7 +13,7 @@
 
 namespace Constants {
     // User to access
-    const std::string UserName = "epelaez";
+    const std::string UserName = "theobal1";
 
     const double Units = 1E38;
 
@@ -35,6 +35,12 @@ namespace Constants {
 
     static const int NBinsTransverseMomentum = 5;
     static const std::vector<double> ArrayNBinsTransverseMomentum{0.,0.2,0.4,0.6,0.8,1.};
+
+    static const int NBinsAlphaThreeD = 6;
+    static const std::vector<double> ArrayNBinsAlphaThreeD{0.,30.,60.,90.,120.,150.,180.};
+
+    static const int NBinsMissingMomentum = 5;
+    static const std::vector<double> ArrayNBinsMissingMomentum{0.,0.2,0.4,0.6,0.8,1.};
 
     // 0.183 spacing
     static const int NBinsMuonMomentum = 6;
@@ -82,9 +88,6 @@ namespace Constants {
     static const TString LabelXAxisTwoDCosOpeningMuonTotalProtonInMuonCosTheta = ";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) [bin #]";
 
     // Variables for double differential analysis - GKI case
-    static const int TwoDNBinsMuonCosThetaThreeD = 2; 
-    std::vector<double> TwoDArrayNBinsMuonCosThetaThreeD{-1.0,0.5,1.0};
-
     static const int TwoDNBinsMissingMomentum = 11;
     std::vector<double> TwoDArrayMissingMomentum{0.,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2};
 
@@ -131,9 +134,9 @@ namespace Constants {
         {"TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices}},
         {"TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices}},
         //added - GKI
-        {"TrueSerialMissingMomentum_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosThetaThreeD, TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices}},
-        {"TrueSerialAlphaThreeD_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosThetaThreeD, TwoDArrayNBinsAlphaThreeDInMuonCosThetaSlices}},
-        {"TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosThetaThreeD, TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices}}
+        {"TrueSerialMissingMomentum_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices}},
+        {"TrueSerialAlphaThreeD_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsAlphaThreeDInMuonCosThetaSlices}},
+        {"TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices}}
     };
 
     static std::map<TString, TString> PlotNameToSliceLabel = {
@@ -146,7 +149,6 @@ namespace Constants {
         {"TrueSerialAlphaThreeD_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"},
         {"TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"}
     };
-  };
 
     ///////////////
     // Systematics

@@ -9,7 +9,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "Constants.h"
+#include "../../Utils/Constants.h"
 #include "../../Utils/Tools.cxx"
 
 using namespace std;
@@ -27,6 +27,10 @@ void GeneratorOverlay() {
     double TextSize = 0.06;			
 
     TString OutFilePath = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/FlatTree/";
+
+    //------------------------------//
+
+    Tools tools;
 
     //------------------------------//
 

@@ -46,8 +46,8 @@ void GeneratorInteBreakDown() {
     std::vector<TString> Process{"","QE","MEC","RES","DIS"};
     std::vector<int> Colors{kBlack,kBlue,kRed+1,kOrange+7,kGreen+1,kMagenta+1};
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
-    Labels.push_back("GENIE_AR23");
+    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
+    Labels.push_back("GENIE_AR23");*/
 
     // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
     // Labels.push_back("GENIE_AR23_Emp2015");
@@ -69,8 +69,8 @@ void GeneratorInteBreakDown() {
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU.root"); 
     Labels.push_back("GiBUU");
 
-    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
-    Labels.push_back("GiBUU_NoFSI");
+    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    Labels.push_back("GiBUU_NoFSI");*/
 
     const int NSamples = Names.size();
     const int NColors = Colors.size();
@@ -130,12 +130,15 @@ void GeneratorInteBreakDown() {
 
     //Added - GKI
     PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
+    XAxisLabel.push_back("p_{n}");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
     YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     // Post FSI
@@ -181,12 +184,15 @@ void GeneratorInteBreakDown() {
 
     //Added - GKI
     PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueMissingMomentumPlot");
+    XAxisLabel.push_back("p_{n}");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueAlphaThreeDPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
     YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     // Double differential final state
@@ -208,12 +214,15 @@ void GeneratorInteBreakDown() {
 
     //Added - GKI
     PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("p_{n}");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
     YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     // Double differential pre FSI
@@ -235,12 +244,15 @@ void GeneratorInteBreakDown() {
 
     //Added - GKI
     PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("p_{n}");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
     YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
 
