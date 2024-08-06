@@ -7,6 +7,8 @@
 #include <TString.h>
 #include "../../Utils/Constants.h"
 
+#include "../../Utils/Constants.h"
+
 class FlatTreeAnalyzer {
 
 private:
@@ -101,7 +103,7 @@ FlatTreeAnalyzer::FlatTreeAnalyzer(TString InputFile, TString OutputFile, TTree 
 {
     fInputFile = InputFile;
     fOutputFile = OutputFile;
-    TString Directory = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/";
+    TString Directory = "/pnfs/sbnd/persistent/users/" + (TString)Constants::UserName + "/HighSamples/";
     TString FullName = Directory + fInputFile;
 
     if (tree == 0) {

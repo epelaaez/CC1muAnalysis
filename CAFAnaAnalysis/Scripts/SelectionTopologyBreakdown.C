@@ -227,7 +227,7 @@ void SelectionTopologyBreakdown() {
                     double YAxisRange = 1.4*imax;
                     Histos[iSlice][iTop]->GetYaxis()->SetRangeUser(0.,YAxisRange);
 
-                    double frac = Histos[iSlice][iTop]->Integral("width") / Histos[iSlice][0]->Integral("width") * 100.;
+                    double frac = Histos[iSlice][iTop]->Integral() / Histos[iSlice][0]->Integral() * 100.;
                     std::string TopLabel = (iTop == 0) ? "All" : std::get<0>(Topologies[iTop - 1]);
                     TString LegLabel = (TString)TopLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
                     TLegendEntry* legReco = leg->AddEntry(Histos[iSlice][iTop],LegLabel,"l");
@@ -274,7 +274,7 @@ void SelectionTopologyBreakdown() {
                 Histos[iTop]->SetBinContent(Histos[iTop]->GetNbinsX(), Histos[iTop]->GetBinContent(Histos[iTop]->GetNbinsX()) + Histos[iTop]->GetBinContent(Histos[iTop]->GetNbinsX() + 1));
                 Histos[iTop]->SetBinContent(1, Histos[iTop]->GetBinContent(0) + Histos[iTop]->GetBinContent(1));
 
-                double frac = Histos[iTop]->Integral("width") / Histos[0]->Integral("width") * 100.;
+                double frac = Histos[iTop]->Integral() / Histos[0]->Integral() * 100.;
                 std::string TopLabel = (iTop == 0) ? "All" : std::get<0>(Topologies[iTop - 1]);
                 TString LegLabel = (TString)TopLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
                 TLegendEntry* legReco = leg->AddEntry(Histos[iTop],LegLabel,"l");

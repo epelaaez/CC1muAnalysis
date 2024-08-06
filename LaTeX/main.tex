@@ -1115,15 +1115,44 @@ Response matrices are computed in a similar manner, but using the total number o
 To include systematic uncertainties in our study, we first consider cross sectional systematics.
 These are variations in the cross section models used to generate the events. They can be of two types:
 multisigma and multisim. For the former, we consider a $1\sigma$ variation of the affected parameters, 
-and in the latter we consider one hundred universes, each with a random variation picked from a 
+and in the latter we consider some number of universes, each with a random variation picked from a 
 Gaussian distribution between $0\sigma$ and $1\sigma$. From these variations, we compute the covariance matrix 
 as 
 \begin{align}
     E_{i,j} = \frac{1}{N_{\text{Univ}}} \sum_{s = 1}^{N_{\text{Univ}}} (\tilde{\sigma}_i^{\text{Var}, s} - \tilde{\sigma}_i^\text{CV})(\tilde{\sigma}_j^{\text{Var}, s} - \tilde{\sigma}_j^\text{CV})
 \end{align}
-where $\tilde{\sigma}_i^{\text{Var}, s}$ represents the variaton cross section of the variable in the $i$-th 
+where $\tilde{\sigma}_i^{\text{Var}, s}$ represents the variaton flux-integrated event rate of the variable in the $i$-th 
 bin in the $s$-th universe, and $\tilde{\sigma}_i^\text{CV}$ is the central value (without any variation) 
-of the cross section in the $i$-th bin. Then, the fractional covariance matrix is defined as 
+of the flux-integrated event rate in the $i$-th bin. More formally,
+\begin{align}
+    \tilde{\sigma}_i = \frac{N^\text{reco i}}{\Phi_\nu^\text{CV} \times N_{\text{targets}}},
+\end{align}
+where $N^\text{reco i}$ is the number of reconstructed events in bin \verb|i|, 
+$\Phi_\nu^\text{CV}$ is the central value of the neutrino flux (which remains the same for each variation),
+and $N_{\text{targets}}$ is the number of target Argon nuclei. Further, we have that 
+$N^\text{reco i} = M_{i,j} \times S^{\text{true j}} + B^{\text{reco i}}$, 
+where $M_{i,j}$ is the response matrix corresponding to the true bin \verb|j| and reco 
+bin \verb|i|, $S^{\text{true j}}$ is the number of true signal events in bin \verb|j|, and
+$B^{\text{reco i}}$ is the number of reconstructed background events in bin \verb|i|. Therefore, we 
+have that 
+\begin{align}
+    \tilde{\sigma}_i = \frac{M^{\text{univ}}_{i,j} \times S^{\text{true j CV}} + B^{\text{reco i univ}}}{\Phi_\nu^\text{CV} \times N_{\text{targets}}},
+\end{align}
+where 
+\begin{align}
+    M_{i,j}^{\text{univ}} = \frac{RS^{\text{true j, reco i univ}}}{S^{\text{true j CV}}},
+\end{align}
+with $RS^{\text{true j, reco i univ}}$ being the number of signal events generated in bin \verb|j| and reconstructed in bin \verb|i|,
+and $S^{\text{true j}}$ being the number of signal events generated in bin \verb|j|. For each variation, 
+terms labeled with \verb|univ| are modified according to the variation, and terms labeled with \verb|CV| remain the same.
+
+% When considering the cross-section variations, the response matrix is modified via the normalization to the true signal 
+% in a given universe as 
+% \begin{align}
+%     M_{i,j}^{\text{univ}} = \frac{RS^{\text{true j, reco i univ}}}{S^{\text{true j univ}}}.
+% \end{align}
+
+Then, the fractional covariance matrix is defined as 
 \begin{align}
     F_{i,j} = \frac{E_{i,j}}{\tilde{\sigma}_i^\text{CV} \tilde{\sigma}_j^\text{CV}}.
 \end{align}
@@ -1131,13 +1160,21 @@ And the correlation matrix is defined as
 \begin{align}
     \rho_{i,j} = \frac{E_{i,j}}{\sqrt{E_{i,i} E_{j,j}}}.
 \end{align}
-In the case of a multisigma systematic, $N_{\text{Univ}} = 1$, and for a multisim systematic, $N_{\text{Univ}} = 100$.
+In the case of a multisigma systematic, $N_{\text{Univ}} = 1$, and for a multisim systematic, this number varies but is usually 
+100 or 1000.
+
 The plots for all the individual cross sectional systematics are shown in Appendix~\ref{sec:xsec-systematics}. 
 Flux systematics are computed in the same way, but each universe varies a flux parameter.
 The corresponding plots for the individual flux systematics are shown in Appendix~\ref{sec:flux-systematics}.
-Finally, we also consider statistical systematics. This are straightforward to compute, as the covariance matrix 
+We also consider statistical systematics. This are straightforward to compute, as the covariance matrix 
 is given by the square root of the number of elements in the corresponding bin in the histogram. These statistical
 covariance matrices are shown in Appendix~\ref{sec:stat-systematics}.
+For POT systematics, we consider a $2\%$ variation in the number of protons on target and treat it as a 
+$1\sigma$ variation. The corresponding plots are shown in Appendix~\ref{sec:pot-systematics}.
+For number of target systematics, we likewise consider a $1\%$ variation in the number of target nuclei and treat it as a
+$1\sigma$ variation. The corresponding plots are shown in Appendix~\ref{sec:target-systematics}.
+We consider detector variations of $15\%$ flat for the moment, and these are shown in Appendix~\ref{sec:detector-systematics}.
+We consider reinteraction systematics as a $2\%$ flat variation, and these are shown in Appendix~\ref{sec:reinteraction-systematics}.
 The total covariance matrices for each variable are shown in Figures~\labelcref{fig:total-cov-single-diff,fig:total-cov-double-diff}.
 
 % There are a few systematics that are currently crashing when trying to produce all plots. This are:
@@ -1171,19 +1208,52 @@ The total covariance matrices for each variable are shown in Figures~\labelcref{
     \label{fig:total-cov-double-diff}
 \end{figure}
 
-\subsection{Closure test}
+\clearpage
+
+\subsection{Wiener-SVD unfolding}
 
 We use the total covariance matrices obtained from all the systematics and shown in the previous section
 to unfold our data. We perform this unfolding following the Wiener-SVD method~\cite{Tang_2017}, which
 for a given variable takes as input a response matrix, true signal histogram, a reconstructed signal histogram, and the 
-covariance matrix. The output is the unfolded spectrum and a smearing matrix that can be used to smear 
-true signal histograms.
+covariance matrix. 
 
-To ensure that the unfolding techniques that we will implement work correctly, we perform a closure test,
-meaning that we will perform the unfolding on simulated true signal events and check that the unfolded 
-data matches the true signal data with added smearing. We can see that the plots that perform this test 
-in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. We also note
-that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. 
+The output is the unfolded spectrum, a smearing matrix that can be used to smear 
+true signal histograms, and a covariance rotation matrix to consider uncertainties in the regularized space as 
+opposed to the true space. The additional smearing matrices obtained from the Wiener-SVD unfolding 
+are shown in Figures~\labelcref{fig:smear-single-diff,fig:smear-double-diff}.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/LeadingProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/RecoilProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/TransverseMomentum.png}} \\ 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Additional smearing matrices for single differential variables.}
+    \label{fig:smear-single-diff}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Additional smearing matrices for double differential variables.}
+    \label{fig:smear-double-diff}
+\end{figure}
+
+% \PrintAllSmearing
+
+\subsection{Closure test}
+
+To ensure that the unfolding techniques implemented work correctly, we use the true signal part of our Monte-Carlo data  
+as our signal, and compare it to the truth level signal prediction to see that they are identical.
+The plots showing they are identical are in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. 
+We also note that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. 
 
 \begin{figure}
     \centering
@@ -1195,7 +1265,7 @@ that the overall shape and magnitude of our histograms match previously reported
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/DeltaAlphaT.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/TransverseMomentum.png}}
-    \caption{Closure test single differential plots.}
+    \caption{Closure test for single differential plots.}
     \label{fig:closure-test-single-diff}
 \end{figure}
 
@@ -1209,17 +1279,19 @@ that the overall shape and magnitude of our histograms match previously reported
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
-    \caption{Closure test double differential plots.}
+    \caption{Closure test for double differential plots.}
     \label{fig:closure-test-double-diff}
 \end{figure}
 
 \clearpage 
 
-\subsection{Bin by bin uncertainties}
+\subsection{Event rate uncertainties}
 
 Figure~\ref{fig:single-bin-uncertainties-event-rates} shows the single bin uncertainty breakdown 
 using the event rates. We used the square root of the relevant fractional covariance matrix for 
 each of the outlined sources of uncertainty to obtain the figure.
+The bin by bin event rate uncertainties for all our variables are shown in 
+Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rates-opening-angles-transverse,fig:bin-uncertainties-rates-double-differential}.
 
 \begin{figure}[H]
     \centering 
@@ -1227,23 +1299,6 @@ each of the outlined sources of uncertainty to obtain the figure.
     \caption{Fractional contribution for the sources of uncertainty using the event rates.}
     \label{fig:single-bin-uncertainties-event-rates}
 \end{figure}
-
-Figure~\ref{fig:single-bin-uncertainties-cross-sections} shows the single bin uncertainty breakdown 
-using the cross sections. We used the unfolded covariances obtained with the Wiener-SVD filter 
-for each of the sources of uncertainty. The square root of the corresponding fractional covariance 
-matrix is normalized to teh CV cross-section value for the uncertainties to be obtained.
-
-\begin{figure}[H]
-    \centering 
-    \includegraphics[width=4in]{../Figs/CAFAna/UnfBinUncertainties/EventCount.png}
-    \caption{Fractional contribution for the sources of uncertainty using the cross sections.}
-    \label{fig:single-bin-uncertainties-cross-sections}
-\end{figure}
-
-The bin by bin event rate uncertainties for all our variables are shown in 
-Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rates-opening-angles-transverse,fig:bin-uncertainties-rates-double-differential}.
-The bin by bin cross section uncertainties for all our variables are shown in
-Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-opening-angles-transverse,fig:bin-uncertainties-xsec-double-differential}.
 
 \begin{figure}
     \centering
@@ -1275,6 +1330,27 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
     \caption{Bin by bin event rate uncertainties for double differential variables.}
     \label{fig:bin-uncertainties-rates-double-differential}
+\end{figure}
+
+\clearpage
+
+\section{Cross-section results}
+Placeholder.
+
+\subsection{Cross-section uncertainties}
+
+Figure~\ref{fig:single-bin-uncertainties-cross-sections} shows the single bin uncertainty breakdown 
+using the cross sections. We used the unfolded covariances obtained with the Wiener-SVD filter 
+for each of the sources of uncertainty. The square root of the corresponding fractional covariance 
+matrix is normalized to teh CV cross-section value for the uncertainties to be obtained.
+The bin by bin cross section uncertainties for all our variables are shown in
+Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-opening-angles-transverse,fig:bin-uncertainties-xsec-double-differential}.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=4in]{../Figs/CAFAna/UnfBinUncertainties/EventCount.png}
+    \caption{Fractional contribution for the sources of uncertainty using the cross sections.}
+    \label{fig:single-bin-uncertainties-cross-sections}
 \end{figure}
 
 \begin{figure}
@@ -1309,19 +1385,9 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
     \label{fig:bin-uncertainties-xsec-double-differential}
 \end{figure}
 
-\clearpage
-\section{Cross-section results}
-Placeholder.
 
 \clearpage
 \section{Appendices}
-
-\subsection{Wiener-SVD additional smearing matrices}\label{sec:wiener-svd-smearing-matrices}
-
-The additional smearing matrices obtained from the Wiener-SVD unfolding are shown in this section.
-
-\PrintAllSmearing
-\clearpage
 
 \subsection{Cross section systematics}\label{sec:xsec-systematics}
 In this appendix, the variations, covariance matrices, fractional covariance matrices, 

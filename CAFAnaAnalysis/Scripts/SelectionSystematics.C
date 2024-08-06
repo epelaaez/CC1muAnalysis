@@ -403,15 +403,12 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
 
-                    // Debugging
-                    // std::cout << XEventRateCV << "     " << XEventRateVar << std::endl;
-                    // std::cout << YEventRateCV << "     " << YEventRateVar << std::endl;
-
                     // Fill covariance matrix
+                    if (TMath::Abs(Value) < 1e-8) Value = 1e-8;
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
                         RecoHisto->GetXaxis()->GetBinCenter(y),
-                        TMath::Max(Value, 1e-8)
+                        Value
                     );
                 }
 	        }
@@ -428,11 +425,13 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
                 // Fill frac cov matrix
                 double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
-                FracCovMatrix->SetBinContent(x, y, TMath::Max(FracValue, 1e-8));
+                if (TMath::Abs(FracValue) < 1e-8) FracValue = 1e-8;
+                FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                CorrMatrix->SetBinContent(x, y, TMath::Max(CorrValue, 1e-8));
+                if (TMath::Abs(CorrValue) < 1e-8) CorrValue = 1e-8;
+                CorrMatrix->SetBinContent(x, y, CorrValue);
             }
         }
             

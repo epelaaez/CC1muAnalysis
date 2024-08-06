@@ -353,7 +353,7 @@ int Tools::Return2DNBins(std::vector< std::vector<double> > BinEdgeVector) {
 
 //----------------------------------------//
 
-int Tools::ConcatRunSubRunEvent(int run, int subrun, int event, int universe) { 
+int Tools::ConcatRunSubRunEvent(int run, int subrun, int event, int universe) const { 
 
 	// Convert the integers to string 
 	std::string srun    = std::to_string(run); 
@@ -376,7 +376,7 @@ int Tools::ConcatRunSubRunEvent(int run, int subrun, int event, int universe) {
 
 //----------------------------------------//
 
-double Tools::PoissonRandomNumber(int seed) {
+double Tools::PoissonRandomNumber(int seed) const {
 
 	// Set the seed of the TRandom 3 based on the run,subrun,event
 	TRandom3* rand = new TRandom3();

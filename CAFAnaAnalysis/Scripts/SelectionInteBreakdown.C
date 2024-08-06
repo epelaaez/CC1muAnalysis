@@ -228,7 +228,7 @@ void SelectionInteBreakdown() {
                     Histos[iSlice][iInt]->GetYaxis()->SetRangeUser(0.,YAxisRange);
                     Histos[iSlice][0]->GetYaxis()->SetRangeUser(0.,YAxisRange);			
 
-                    double frac = Histos[iSlice][iInt]->Integral("width") / Histos[iSlice][0]->Integral("width") * 100.;
+                    double frac = Histos[iSlice][iInt]->Integral() / Histos[iSlice][0]->Integral() * 100.;
                     std::string IntLabel = (iInt == 0) ? "All" : std::get<0>(IntModes[iInt - 1]);
                     TString LegLabel = (TString)IntLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
                     TLegendEntry* legReco = leg->AddEntry(Histos[iSlice][iInt],LegLabel,"l");
@@ -275,7 +275,7 @@ void SelectionInteBreakdown() {
                 Histos[iInt]->SetBinContent(Histos[iInt]->GetNbinsX(), Histos[iInt]->GetBinContent(Histos[iInt]->GetNbinsX()) + Histos[iInt]->GetBinContent(Histos[iInt]->GetNbinsX() + 1));
                 Histos[iInt]->SetBinContent(1, Histos[iInt]->GetBinContent(0) + Histos[iInt]->GetBinContent(1));
 
-                double frac = Histos[iInt]->Integral("width") / Histos[0]->Integral("width") * 100.;
+                double frac = Histos[iInt]->Integral() / Histos[0]->Integral() * 100.;
                 std::string IntLabel = (iInt == 0) ? "All" : std::get<0>(IntModes[iInt - 1]);
                 TString LegLabel = (TString)IntLabel + " (" + tools.to_string_with_precision(frac,1) + "%)";
                 TLegendEntry* legReco = leg->AddEntry(Histos[iInt],LegLabel,"l");

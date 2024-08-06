@@ -192,10 +192,12 @@ namespace SelectionHelpers {
 
                 // Fill frac cov matrix
                 double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 1e-8 : CovBinValue / (XEventRateCV * YEventRateCV);
+                if (TMath::Abs(FracValue) < 1e-8) FracValue = 1e-8;
                 FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 1e-8 : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
+                if (TMath::Abs(CorrValue) < 1e-8) CorrValue = 1e-8;
                 CorrMatrix->SetBinContent(x, y, CorrValue);
             }
         }
@@ -265,7 +267,12 @@ namespace SelectionHelpers {
                     double YEventRateVar = UnivRecoHisto[iUniv]->GetBinContent(y);
 
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
-                    if (Value == 0.) Value = 1e-8;
+                    std::cout << Value << std::endl;
+                    std::cout << XEventRateVar << "  " << XEventRateCV << "  " << XEventRateVar - XEventRateCV << std::endl;
+                    std::cout << YEventRateVar << "  " << YEventRateCV << "  " << YEventRateVar - YEventRateCV << std::endl;
+                    if (TMath::Abs(Value) < 1e-8) Value = 1e-8;
+                    std::cout << Value << std::endl;
+                    std::cout << std::endl;
 
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
