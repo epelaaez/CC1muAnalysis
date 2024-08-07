@@ -568,6 +568,8 @@ and in the latter the event generation was done without any final state interact
     \label{fig:gibuu-no-fsi}
 \end{figure}
 
+\clearpage
+
 \subsection{Double differential plots}
 
 For our double differential variables, we look at $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
@@ -758,6 +760,8 @@ breakdown plots are in Figures~\labelcref{fig:inte-breakdown-double-delta-alpha-
     \label{fig:inte-breakdown-double-cos-opening-angle-muon-total-proton-no-fsi}
 \end{figure}
 
+\clearpage
+
 \subsection{Pure MEC events}
 
 We also generated pure meson exchange current events using different configurations to get the MEC splines. 
@@ -877,7 +881,7 @@ The numbers reported in this table are POT normalized to $6.6 \times 10^{20}$.
         All reco events      & $6.82359\cdot10^6$ & 100\%   & -       & -      \\
         Cosmic cut           & $5.88624\cdot10^6$ & 86.2632\% & 89.6205\% & 4.14377\% \\
         Vertex in FV cut     & $3.29309\cdot10^6$ & 48.2603\% & 88.2885\% & 7.29671\% \\
-        One muon cut         & $2.23536e\cdot10^6$ & 32.7593\% & 70.5202\% & 8.58603\% \\
+        One muon cut         & $2.23536\cdot10^6$ & 32.7593\% & 70.5202\% & 8.58603\% \\
         Two protons cut      & 146922 & 2.15315\%  & 17.517\% & 32.4488\% \\
         No charged pions cut & 67852.2 & 0.994377\%  & 12.6665\% & 50.8065\% \\
         No neutral pions cut & 54719.5 & 0.801917\%  & 11.3094\% & 56.25\% \\ \hline
@@ -886,6 +890,8 @@ The numbers reported in this table are POT normalized to $6.6 \times 10^{20}$.
     \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition.}
     \label{table:cut-efficiency-purity}
 \end{table}
+
+\clearpage
 
 \subsection{Variable plots}
 
@@ -927,6 +933,8 @@ Using all the variable definitions as we did when studying the event generators,
     \label{fig:sbnd-double-diff-sliced}
 \end{figure}
 
+\clearpage
+
 \subsection{Interaction and topology breakdown}
 
 We perform an interaction and topology breakdown for the SBND data. For these breakdowns, 
@@ -939,7 +947,6 @@ we look at the number of protons, pions, and muons in the final state. The topol
 we label are CC2p0$pi$ (our signal definition), CC1p0$pi$, CC($N>2$)p0$pi$, CC($N\geq0$)p1$pi$, and CC0p0$pi$.
 Any other topology is labeled as ``Other''.
 These breakdowns are shown in Figures~\labelcref{fig:inte-top-breakdown-vector,fig:inte-top-breakdown-opening-angles-transverse,fig:inte-top-breakdown-double-diff-transverse,fig:inte-top-breakdown-double-diff-opening-angles}.
-
 
 \begin{figure}
     \centering
@@ -997,6 +1004,8 @@ These breakdowns are shown in Figures~\labelcref{fig:inte-top-breakdown-vector,f
     \label{fig:inte-top-breakdown-double-diff-opening-angles}
 \end{figure}
 
+\clearpage
+
 \subsection{Signal efficiency}
 
 Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. These plots are shown in Figure~\ref{fig:sbnd-signal-efficiency-vector-plots} and Figure~\ref{fig:sbnd-signal-efficiency-opening-angles-transverse} for single-differential variables and Figure~\ref{fig:sbnd-signal-efficiency-double-differential} for double differential variables.
@@ -1038,11 +1047,13 @@ Using the truth information about reconstructed events, we can also compute sign
 \end{figure}
 
 \clearpage
+
 \subsection{Migration and response matrices}
 
 Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. For the migration matrix, we consider true signal events that were reconstructed and satisfy our signal definition in the denominator. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
 
 Response matrices are computed in a similar manner, but using the total number of generated events in the denominator when computing the ratios, i.e., without requiring the events to be successfully reconstructed. Therefore, for these matrices, the columns of the response matrices do not have to add up to $1$. The response matrices for single differential variables are presented in Figure~\ref{fig:response-vector-plots} and Figure~\ref{fig:response-opening-angles-transverse}, and the double differential response matrices are given in Figure~\ref{fig:response-double-differential}.
+A mathematical definition of the response matrix is given in Equation~\eqref{eq:response-matrix}.
 
 \begin{figure}
     \centering
@@ -1139,18 +1150,17 @@ have that
     \tilde{\sigma}_i = \frac{M^{\text{univ}}_{i,j} \times S^{\text{true j CV}} + B^{\text{reco i univ}}}{\Phi_\nu^\text{CV} \times N_{\text{targets}}},
 \end{align}
 where 
-\begin{align}
+\begin{align}\label{eq:response-matrix}
     M_{i,j}^{\text{univ}} = \frac{RS^{\text{true j, reco i univ}}}{S^{\text{true j CV}}},
 \end{align}
 with $RS^{\text{true j, reco i univ}}$ being the number of signal events generated in bin \verb|j| and reconstructed in bin \verb|i|,
 and $S^{\text{true j}}$ being the number of signal events generated in bin \verb|j|. For each variation, 
 terms labeled with \verb|univ| are modified according to the variation, and terms labeled with \verb|CV| remain the same.
-
-% When considering the cross-section variations, the response matrix is modified via the normalization to the true signal 
-% in a given universe as 
-% \begin{align}
-%     M_{i,j}^{\text{univ}} = \frac{RS^{\text{true j, reco i univ}}}{S^{\text{true j univ}}}.
-% \end{align}
+When considering the cross-section variations, the response matrix is modified via the normalization to the true signal 
+in a given universe as 
+\begin{align}
+    M_{i,j}^{\text{univ}} = \frac{RS^{\text{true j, reco i univ}}}{S^{\text{true j univ}}}.
+\end{align}
 
 Then, the fractional covariance matrix is defined as 
 \begin{align}
@@ -1172,7 +1182,7 @@ covariance matrices are shown in Appendix~\ref{sec:stat-systematics}.
 For POT systematics, we consider a $2\%$ variation in the number of protons on target and treat it as a 
 $1\sigma$ variation. The corresponding plots are shown in Appendix~\ref{sec:pot-systematics}.
 For number of target systematics, we likewise consider a $1\%$ variation in the number of target nuclei and treat it as a
-$1\sigma$ variation. The corresponding plots are shown in Appendix~\ref{sec:target-systematics}.
+$1\sigma$ variation. The corresponding plots are shown in Appendix~\ref{sec:number-of-targets-systematics}.
 We consider detector variations of $15\%$ flat for the moment, and these are shown in Appendix~\ref{sec:detector-systematics}.
 We consider reinteraction systematics as a $2\%$ flat variation, and these are shown in Appendix~\ref{sec:reinteraction-systematics}.
 The total covariance matrices for each variable are shown in Figures~\labelcref{fig:total-cov-single-diff,fig:total-cov-double-diff}.
@@ -1246,7 +1256,7 @@ are shown in Figures~\labelcref{fig:smear-single-diff,fig:smear-double-diff}.
     \label{fig:smear-double-diff}
 \end{figure}
 
-% \PrintAllSmearing
+\clearpage
 
 \subsection{Closure test}
 
@@ -1254,6 +1264,11 @@ To ensure that the unfolding techniques implemented work correctly, we use the t
 as our signal, and compare it to the truth level signal prediction to see that they are identical.
 The plots showing they are identical are in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. 
 We also note that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. 
+
+The error bands for the unfolded spectra are given by the cross-section uncertainties, which are shown in a
+bin-by-bin basis in the Section~\ref{sec:cross-section-uncertainties}. For the sliced double 
+differential measurements, we make sure to divide by the slice and bin widths to obtain the correct error bands.
+In the single differential measurements, we only have to divide by the bin width. 
 
 \begin{figure}
     \centering
@@ -1337,7 +1352,7 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
 \section{Cross-section results}
 Placeholder.
 
-\subsection{Cross-section uncertainties}
+\subsection{Cross-section uncertainties}\label{sec:cross-section-uncertainties}
 
 Figure~\ref{fig:single-bin-uncertainties-cross-sections} shows the single bin uncertainty breakdown 
 using the cross sections. We used the unfolded covariances obtained with the Wiener-SVD filter 

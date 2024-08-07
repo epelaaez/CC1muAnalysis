@@ -135,9 +135,9 @@ void StatSystematics() {
             const double recotruey0 = SelectionHelpers::FindQuantile(.5-0.6827/2, recotrueys);
             const double recotruey1 = SelectionHelpers::FindQuantile(.5+0.6827/2, recotrueys);
 
-            RecoErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(recoxnom-recoy0, 0.), std::max(recoy1-recoynom, 0.));
-            BkgErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(bkgxnom-bkgy0, 0.), std::max(bkgy1-bkgynom, 0.));
-            RecoTrueErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(recotruexnom-recotruey0, 0.), std::max(recotruey1-recotrueynom, 0.));
+            RecoErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(recoynom-recoy0, 0.), std::max(recoy1-recoynom, 0.));
+            BkgErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(bkgynom-bkgy0, 0.), std::max(bkgy1-bkgynom, 0.));
+            RecoTrueErrorBand->SetPointError(binIdx, dx/2, dx/2, std::max(recotrueynom-recotruey0, 0.), std::max(recotruey1-recotrueynom, 0.));
         }
         PlotCanvas->cd();
         PlotCanvas->SetTopMargin(0.13);

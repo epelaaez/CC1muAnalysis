@@ -1,10 +1,11 @@
 // ROOT includes.
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TCanvas.h>
-#include <TVectorD.h>
-#include <TMatrixD.h>
+#include "TFile.h"
+#include "TTree.h"
+#include "TString.h"
+#include "TCanvas.h"
+#include "TVectorD.h"
+#include "TMatrixD.h"
+#include "TGraphAsymmErrors.h"
 
 // std includes.
 #include <vector>
@@ -237,10 +238,11 @@ void Unfold() {
         // Get transpose cov rotation matrix
         TMatrixD CovRotationT (TMatrixD::kTransposed, CovRotation);
 
-        // Add smear to signal
+        // Get unfolded cross-section
         TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot], n, edges);
         V2H(unfold, UnfoldedSpectrum); tools.Reweight(UnfoldedSpectrum);
 
+        // Add smear to signal
         TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot], n, edges);
         TVectorD SmearedVector = AddSmear * SignalVector;
         V2H(SmearedVector, SmearedSignal); tools.Reweight(SmearedSignal);
@@ -248,11 +250,14 @@ void Unfold() {
         // Declare canvas
         TCanvas* PlotCanvas = new TCanvas(PlotNames[iPlot],PlotNames[iPlot],205,34,1124,768);
 
-        // Plot smearing matrix
+        //////////////////
+        // Smearing matrix
+        //////////////////
+
         TH2D* SmearMatrixHisto = new TH2D("Smearing"+PlotNames[iPlot], "Smearing"+PlotNames[iPlot], n, edges, n, edges);
         M2H(AddSmear, SmearMatrixHisto);
 
-        // Margins for matrices
+        // Margins for matrix
         PlotCanvas->SetTopMargin(0.13);
         PlotCanvas->SetLeftMargin(0.15);
         PlotCanvas->SetRightMargin(0.15);
@@ -275,121 +280,6 @@ void Unfold() {
         PlotCanvas->cd();
         SmearMatrixHisto->Draw("colz");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Smear/"+PlotNames[iPlot]+".png");
-
-        // Margins for unfolded xsecs
-        PlotCanvas->SetTopMargin(0.13);
-        PlotCanvas->SetLeftMargin(0.17);
-        PlotCanvas->SetRightMargin(0.05);
-        PlotCanvas->SetBottomMargin(0.16);
-
-        // Deserialize double differential plots
-        if (PlotNames[iPlot].Contains("Serial")) {
-            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
-            auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
-            int StartIndex = 0;
-
-            // Loop over slices
-            for (int iSlice = 0; iSlice < NSlices; iSlice++) {
-                // Slice name
-                TString SlicePlotName = PlotNames[iPlot] + "_" + TString(std::to_string(iSlice));
-
-                // Get slice width
-                double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
-
-                // Get number of bins
-                int SliceNBins = SerialVectorBins.at(iSlice);
-                std::vector<double> SerialSliceBinning;
-
-                for (int iBin = 0; iBin < SliceNBins + 1; iBin++) {
-                    double value = SerialVectorRanges.at(StartIndex + iBin);
-                    SerialSliceBinning.push_back(value);
-                } // End of the number of bins and the bin ranges declaration
-
-                // Slice true and reco true histos
-                TH1D* SlicedSmearedSignal = tools.GetHistoBins(
-                    SmearedSignal,
-                    SerialVectorLowBin.at(iSlice),
-                    SerialVectorHighBin.at(iSlice),
-                    SliceWidth,
-                    SerialSliceBinning,
-                    "SmearedSignal"
-                );
-                TH1D* SlicedUnfoldedSpectrum = tools.GetHistoBins(
-                    UnfoldedSpectrum,
-                    SerialVectorLowBin.at(iSlice),
-                    SerialVectorHighBin.at(iSlice),
-                    SliceWidth,
-                    SerialSliceBinning,
-                    "UnfoldedSpectrum"
-                );
-
-                // Create legend object
-                TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
-                leg->SetBorderSize(0);
-                leg->SetNColumns(3);
-                leg->SetTextSize(TextSize*0.8);
-                leg->SetTextFont(FontStyle);
-
-                TLegendEntry* legRecoTrue = leg->AddEntry(SlicedSmearedSignal,"True","l");
-                SlicedSmearedSignal->SetLineColor(kRed+1);
-                SlicedSmearedSignal->SetLineWidth(4);
-
-                TLegendEntry* legRecoBkg = leg->AddEntry(SlicedUnfoldedSpectrum,"Unfolded","l");
-                SlicedUnfoldedSpectrum->SetLineColor(kOrange+7);
-                SlicedUnfoldedSpectrum->SetLineWidth(4);
-                SlicedUnfoldedSpectrum->SetMarkerColor(kOrange+7);
-                SlicedUnfoldedSpectrum->SetMarkerStyle(20);
-                SlicedUnfoldedSpectrum->SetMarkerSize(1.);
-
-                double imax = TMath::Max(SlicedUnfoldedSpectrum->GetMaximum(),SlicedSmearedSignal->GetMaximum());
-                double YAxisRange = 1.35*imax;
-                SlicedUnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
-                SlicedSmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);
-
-                PlotCanvas->cd();
-                SlicedSmearedSignal->Draw("hist");
-                SlicedUnfoldedSpectrum->Draw("p0 hist same");
-                leg->Draw();
-
-                // Slice label
-                TLatex *textSlice = new TLatex();
-                TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel["True"+PlotNames[iPlot]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
-                textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
-
-                // Save histogram
-                PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+SlicePlotName+".png");	
-            }
-        } else {
-            TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
-            leg->SetBorderSize(0);
-            leg->SetNColumns(3);
-            leg->SetTextSize(TextSize*0.8);
-            leg->SetTextFont(FontStyle);
-
-            TLegendEntry* legRecoTrue = leg->AddEntry(SmearedSignal,"True","l");
-            SmearedSignal->SetLineColor(kRed+1);
-            SmearedSignal->SetLineWidth(4);
-
-            TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
-            UnfoldedSpectrum->SetLineColor(kOrange+7);
-            UnfoldedSpectrum->SetLineWidth(4);
-            UnfoldedSpectrum->SetMarkerColor(kOrange+7);
-			UnfoldedSpectrum->SetMarkerStyle(20);
-			UnfoldedSpectrum->SetMarkerSize(1.);
-
-            double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
-            double YAxisRange = 1.35*imax;
-            UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
-            SmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);	
-
-            PlotCanvas->cd();
-            UnfoldedSpectrum->Draw("p0 hist");
-            SmearedSignal->Draw("hist same");
-            leg->Draw();
-
-            // Save histogram
-            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+PlotNames[iPlot]+".png");
-        }
 
         ///////////////////////////
         // Bin by bin uncertainties
@@ -629,6 +519,162 @@ void Unfold() {
         leg->Draw();
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/UnfBinUncertainties/"+PlotNames[iPlot]+".png");
 
+        leg->Clear();
+
+        //////////////////////////
+        // Unfolded cross-sections
+        //////////////////////////
+
+        // Margins for unfolded xsecs
+        PlotCanvas->SetTopMargin(0.13);
+        PlotCanvas->SetLeftMargin(0.17);
+        PlotCanvas->SetRightMargin(0.05);
+        PlotCanvas->SetBottomMargin(0.16);
+
+        // Deserialize double differential plots
+        if (PlotNames[iPlot].Contains("Serial")) {
+            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
+            auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
+            int StartIndex = 0;
+
+            // Loop over slices
+            for (int iSlice = 0; iSlice < NSlices; iSlice++) {
+                // Slice name
+                TString SlicePlotName = PlotNames[iPlot] + "_" + TString(std::to_string(iSlice));
+
+                // Get slice width
+                double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
+
+                // Get number of bins
+                int SliceNBins = SerialVectorBins.at(iSlice);
+                std::vector<double> SerialSliceBinning;
+
+                for (int iBin = 0; iBin < SliceNBins + 1; iBin++) {
+                    double value = SerialVectorRanges.at(StartIndex + iBin);
+                    SerialSliceBinning.push_back(value);
+                } // End of the number of bins and the bin ranges declaration
+
+                // Slice true and reco true histos
+                TH1D* SlicedSmearedSignal = tools.GetHistoBins(
+                    SmearedSignal,
+                    SerialVectorLowBin.at(iSlice),
+                    SerialVectorHighBin.at(iSlice),
+                    SliceWidth,
+                    SerialSliceBinning,
+                    "SmearedSignal"
+                );
+                TH1D* SlicedUnfoldedSpectrum = tools.GetHistoBins(
+                    UnfoldedSpectrum,
+                    SerialVectorLowBin.at(iSlice),
+                    SerialVectorHighBin.at(iSlice),
+                    SliceWidth,
+                    SerialSliceBinning,
+                    "UnfoldedSpectrum"
+                );
+
+                // Create error band
+                TGraphAsymmErrors* ErrorBand = new TGraphAsymmErrors;
+                for (int iBin = 1; iBin < SliceNBins + 1; ++iBin) {
+                    const double xnom = SlicedUnfoldedSpectrum->GetXaxis()->GetBinCenter(iBin);
+                    const double ynom = SlicedUnfoldedSpectrum->GetBinContent(iBin);
+                    ErrorBand->SetPoint(iBin, xnom, ynom);
+                    const double dx = SlicedUnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
+                    ErrorBand->SetPointError(
+                        iBin, dx/2, dx/2,
+                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx),
+                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx)
+                    );
+                }
+
+                // Create legend object
+                TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
+                leg->SetBorderSize(0);
+                leg->SetNColumns(3);
+                leg->SetTextSize(TextSize*0.8);
+                leg->SetTextFont(FontStyle);
+
+                TLegendEntry* legRecoTrue = leg->AddEntry(SlicedSmearedSignal,"True","l");
+                SlicedSmearedSignal->SetLineColor(kRed+1);
+                SlicedSmearedSignal->SetLineWidth(4);
+
+                TLegendEntry* legRecoBkg = leg->AddEntry(SlicedUnfoldedSpectrum,"Unfolded","l");
+                SlicedUnfoldedSpectrum->SetLineColor(kOrange+7);
+                SlicedUnfoldedSpectrum->SetLineWidth(4);
+                SlicedUnfoldedSpectrum->SetMarkerColor(kOrange+7);
+                SlicedUnfoldedSpectrum->SetMarkerStyle(20);
+                SlicedUnfoldedSpectrum->SetMarkerSize(1.);
+
+                double imax = TMath::Max(SlicedUnfoldedSpectrum->GetMaximum(),SlicedSmearedSignal->GetMaximum());
+                double YAxisRange = 1.35*imax;
+                SlicedUnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
+                SlicedSmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);
+
+                PlotCanvas->cd();
+                SlicedSmearedSignal->Draw("hist");
+                SlicedUnfoldedSpectrum->Draw("p0 hist same");
+                ErrorBand->Draw("e1 same");
+                leg->Draw();
+
+                // Slice label
+                TLatex *textSlice = new TLatex();
+                TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel["True"+PlotNames[iPlot]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
+                textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
+
+                // Save histogram
+                PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+SlicePlotName+".png");	
+            }
+        } else {
+            // Create error band
+            TGraphAsymmErrors* ErrorBand = new TGraphAsymmErrors;
+            for (int iBin = 1; iBin < UnfoldedSpectrum->GetNbinsX() + 1; ++iBin) {
+                const double xnom = UnfoldedSpectrum->GetXaxis()->GetBinCenter(iBin);
+                const double ynom = UnfoldedSpectrum->GetBinContent(iBin);
+                ErrorBand->SetPoint(iBin, xnom, ynom);
+                const double dx = UnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
+                ErrorBand->SetPointError(
+                    iBin, dx/2, dx/2,
+                    TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin)),
+                    TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin))
+                );
+            }
+
+            TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
+            leg->SetBorderSize(0);
+            leg->SetNColumns(3);
+            leg->SetTextSize(TextSize*0.8);
+            leg->SetTextFont(FontStyle);
+
+            TLegendEntry* legRecoTrue = leg->AddEntry(SmearedSignal,"True","l");
+            SmearedSignal->SetLineColor(kRed+1);
+            SmearedSignal->SetLineWidth(4);
+
+            TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
+            UnfoldedSpectrum->SetLineColor(kOrange+7);
+            UnfoldedSpectrum->SetLineWidth(4);
+            UnfoldedSpectrum->SetMarkerColor(kOrange+7);
+			UnfoldedSpectrum->SetMarkerStyle(20);
+			UnfoldedSpectrum->SetMarkerSize(1.);
+
+            double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
+            double YAxisRange = 1.35*imax;
+
+            double maxY = 0;
+            for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
+                maxY = std::max(maxY, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+            }
+            std::cout << maxY << std::endl;
+            UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,1.3 * maxY);
+            SmearedSignal->GetYaxis()->SetRangeUser(0.,1.3 * maxY);	
+
+            PlotCanvas->cd();
+            UnfoldedSpectrum->Draw("p0 hist");
+            SmearedSignal->Draw("hist same");
+            ErrorBand->Draw("e1 same");
+            leg->Draw();
+
+            // Save histogram
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+PlotNames[iPlot]+".png");
+        }
         delete PlotCanvas;
     }
 }
