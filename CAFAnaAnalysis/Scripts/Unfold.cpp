@@ -93,13 +93,6 @@ void Unfold() {
     // Dir to save plots
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
-    // Flux file
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
-	TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-
-    // Integrated flux
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
-
     // Plots to unfold
     std::vector<TString> PlotNames; std::vector<TString> XLabels; std::vector<TString> YLabels;
 

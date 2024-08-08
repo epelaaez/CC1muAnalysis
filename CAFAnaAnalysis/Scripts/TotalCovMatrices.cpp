@@ -98,11 +98,6 @@ void TotalCovMatrices() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/TotalCovMatrices.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
-    // Get integrated flux
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
-    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
-
     TCanvas* PlotCanvas = new TCanvas("Cov","Cov",205,34,1124,768);
 
     // Loop over all vars

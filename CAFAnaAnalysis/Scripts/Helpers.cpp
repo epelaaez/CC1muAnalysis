@@ -191,13 +191,13 @@ namespace SelectionHelpers {
                 double YBinValue = CovMatrix->GetBinContent(y,y);
 
                 // Fill frac cov matrix
-                double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 1e-8 : CovBinValue / (XEventRateCV * YEventRateCV);
-                if (TMath::Abs(FracValue) < 1e-8) FracValue = 1e-8;
+                double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 1e-14 : CovBinValue / (XEventRateCV * YEventRateCV);
+                if (TMath::Abs(FracValue) < 1e-14) FracValue = 1e-14;
                 FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
-                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 1e-8 : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                if (TMath::Abs(CorrValue) < 1e-8) CorrValue = 1e-8;
+                double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 1e-14 : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
+                if (TMath::Abs(CorrValue) < 1e-14) CorrValue = 1e-14;
                 CorrMatrix->SetBinContent(x, y, CorrValue);
             }
         }
@@ -231,7 +231,7 @@ namespace SelectionHelpers {
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
 
         // Create covariance matrix
-        std::string CovName = "CovPOT";
+        std::string CovName = "Cov" + (std::string) SystName;
         TH2* CovMatrix = new TH2D(
             (CovName + (std::string)PlotName).c_str(),
             CovName.c_str(),
@@ -240,7 +240,7 @@ namespace SelectionHelpers {
         );
 
         // Create fractional covariance matrix
-        std::string FracCovName = "FracCovPOT";
+        std::string FracCovName = "FracCov" + (std::string) SystName;
         TH2* FracCovMatrix = new TH2D(
             (FracCovName + (std::string)PlotName).c_str(),
             FracCovName.c_str(),
@@ -249,7 +249,7 @@ namespace SelectionHelpers {
         );
 
         // Create correlation matrix
-        std::string CorrName = "CorrPOT";
+        std::string CorrName = "Corr" + (std::string) SystName;
         TH2* CorrMatrix = new TH2D(
             (CorrName + (std::string)PlotName).c_str(),
             CorrName.c_str(),
@@ -267,12 +267,12 @@ namespace SelectionHelpers {
                     double YEventRateVar = UnivRecoHisto[iUniv]->GetBinContent(y);
 
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
-                    std::cout << Value << std::endl;
-                    std::cout << XEventRateVar << "  " << XEventRateCV << "  " << XEventRateVar - XEventRateCV << std::endl;
-                    std::cout << YEventRateVar << "  " << YEventRateCV << "  " << YEventRateVar - YEventRateCV << std::endl;
-                    if (TMath::Abs(Value) < 1e-8) Value = 1e-8;
-                    std::cout << Value << std::endl;
-                    std::cout << std::endl;
+                    // std::cout << Value << std::endl;
+                    // std::cout << XEventRateVar << "  " << XEventRateCV << "  " << XEventRateVar - XEventRateCV << std::endl;
+                    // std::cout << YEventRateVar << "  " << YEventRateCV << "  " << YEventRateVar - YEventRateCV << std::endl;
+                    if (TMath::Abs(Value) < 1e-14) Value = 1e-14;
+                    // std::cout << Value << std::endl;
+                    // std::cout << std::endl;
 
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),

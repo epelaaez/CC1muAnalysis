@@ -50,7 +50,11 @@ void RunAllSystematics() {
 
         std::string SystName = std::get<0>(SystsVector.at(SystIndex));
         int SystNUniv = std::get<1>(SystsVector.at(SystIndex));
-        gROOT->ProcessLine(("SelectionSystematics(\"" + SystName + "\", " + std::to_string(SystNUniv) + ")").c_str()); 
+        if (SystIndex < (int) XSecSystsVector.size()) {
+            gROOT->ProcessLine(("SelectionSystematics(\"" + SystName + "\", " + std::to_string(SystNUniv) + ", true)").c_str()); 
+        } else {
+            gROOT->ProcessLine(("SelectionSystematics(\"" + SystName + "\", " + std::to_string(SystNUniv) + ", false)").c_str()); 
+        }
 
         std::cout << "========================================" << std::endl;
         std::cout << "Done with systematic " << SystIndex << std::endl;
