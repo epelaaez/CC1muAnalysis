@@ -90,6 +90,10 @@ void Unfold() {
     std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
     CovFiles.push_back(std::move(ReinteractionFile));
 
+    // Add MCStat systematics
+    std::unique_ptr<TFile> MCStatFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsMCStat.root"));
+    CovFiles.push_back(std::move(MCStatFile));
+
     // Dir to save plots
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
@@ -360,6 +364,16 @@ void Unfold() {
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfReinteractionCovHist, UnfReinteractionFracCovHist, UnfReinteractionCorrHist, n);
         TMatrixD UnfReinteractionFracCov(n, n); H2M(UnfReinteractionFracCovHist, UnfReinteractionFracCov, kTRUE);
 
+        // Get MCStat cov matrix
+        TH2D* MCStatCovHist = (TH2D*)(CovFiles[offset + 5]->Get<TH2D>(PlotNames[iPlot]+"_cov"));
+        TMatrixD MCStatCov(n, n); H2M(MCStatCovHist, MCStatCov, kTRUE); TMatrixD UnfMCStatCov = CovRotation * MCStatCov * CovRotationT;
+        TH2D* UnfMCStatCovHist = new TH2D("UnfCovMCStat"+PlotNames[iPlot], "UnfCovMCStat"+PlotNames[iPlot], n, edges, n, edges);
+        TH2D* UnfMCStatFracCovHist = new TH2D("UnfFracCovMCStat"+PlotNames[iPlot], "UnfFracCovMCStat"+PlotNames[iPlot], n, edges, n, edges);
+        TH2D* UnfMCStatCorrHist = new TH2D("UnfCorrMCStat"+PlotNames[iPlot], "UnfCorrMCStat"+PlotNames[iPlot], n, edges, n, edges);
+        M2H(UnfMCStatCov, UnfMCStatCovHist); tools.Reweight2D(UnfMCStatCovHist);
+        SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfMCStatCovHist, UnfMCStatFracCovHist, UnfMCStatCorrHist, n);
+        TMatrixD UnfMCStatFracCov(n, n); H2M(UnfMCStatFracCovHist, UnfMCStatFracCov, kTRUE);
+
         // Histograms for uncertainties
         TH1D* XSecHisto = new TH1D("XSec"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* FluxHisto = new TH1D("Flux"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
@@ -368,6 +382,7 @@ void Unfold() {
         TH1D* NTargetsHisto = new TH1D("NTargets"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* DetectorHisto = new TH1D("Detector"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* ReinteractionHisto = new TH1D("Reinteraction"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
+        TH1D* MCStatHisto = new TH1D("MCStat"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* TotalHisto = new TH1D("Total"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
 
         // Histograms to store total frac cov and corr
@@ -407,6 +422,10 @@ void Unfold() {
             // Add Reinteraction systematics
             ReinteractionHisto->SetBinContent(iBin + 1, TMath::Sqrt(UnfReinteractionFracCov(iBin, iBin)) * 100);
             Total += TMath::Power(TMath::Sqrt(UnfReinteractionFracCov(iBin, iBin)) * 100, 2);
+
+            // Add MCStat systematics
+            MCStatHisto->SetBinContent(iBin + 1, TMath::Sqrt(UnfMCStatFracCov(iBin, iBin)) * 100);
+            Total += TMath::Power(TMath::Sqrt(UnfMCStatFracCov(iBin, iBin)) * 100, 2);
 
             // Total 
             TotalHisto->SetBinContent(iBin + 1, TMath::Sqrt(UnfTotalFracCov(iBin, iBin)) * 100);
@@ -500,6 +519,13 @@ void Unfold() {
         ReinteractionHisto->SetMarkerSize(1.5);
         ReinteractionHisto->SetMarkerColor(kTeal+3);
         ReinteractionHisto->Draw("hist text0 same");
+
+        TLegendEntry* legMCStat= leg->AddEntry(MCStatHisto,"MCStat","l");
+        MCStatHisto->SetLineColor(kSpring+9);
+        MCStatHisto->SetLineWidth(4);
+        MCStatHisto->SetMarkerSize(1.5);
+        MCStatHisto->SetMarkerColor(kSpring+9);
+        MCStatHisto->Draw("hist text0 same");
 
         TLegendEntry* legTotal= leg->AddEntry(TotalHisto,"Total","l");
         TotalHisto->SetLineColor(kBlack);

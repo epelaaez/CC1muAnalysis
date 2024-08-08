@@ -150,7 +150,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = false;
+    const bool ConstructSpectra = true;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<

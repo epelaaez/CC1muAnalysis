@@ -138,6 +138,7 @@ void SelectionMCStatSystematics() {
             MCStatSyst(int UnivIndex) : ISyst("MCStat", "MCStat"), UnivIndex(UnivIndex) {}
 
             // Use fmatch time to create random seed
+            // This might need to be revisited in the future
             void Shift(double sigma, caf::SRSliceProxy* slc, double& weight) const {
                 int seed = 1;
                 if (slc->fmatch.time > 0) {
