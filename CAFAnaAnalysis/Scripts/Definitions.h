@@ -73,6 +73,9 @@ namespace ana
     const Binning bMuChi2 = Binning::Simple(30, 0, 60.0);
     const Binning bProtonChi2 = Binning::Simple(100, 0, 200.0);
 
+    // Resolution bins
+    const Binning bActualResolution = Binning::Simple(51, -1., 1.);
+
     // Double differential bins
     Tools tools; // tools for double differential bins
 
