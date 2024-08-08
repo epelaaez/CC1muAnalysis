@@ -22,11 +22,11 @@
 using namespace std;
 using namespace Constants;
 
-void SqrtHisto(TH1* hist) {
+void PowHisto(TH1* hist, double pow) {
     for (int i = 0; i < hist->GetNbinsX() + 1; ++i) {
         double content = hist->GetBinContent(i);
-        double sqrtContent = std::sqrt(content);
-        hist->SetBinContent(i, sqrtContent);
+        double powContent = TMath::Power(content, pow);
+        hist->SetBinContent(i, powContent);
     }
 }
 
@@ -82,13 +82,13 @@ void StatSystematics() {
         TH1D* RecoBkgHist = (TH1D*)(File->Get<TH1D>(PlotNames[iVar] + (TString) "_bkg"));
 
         // Make modified plots
-        TH1D* SqrtRecoHist = (TH1D*) RecoHist->Clone("hnew"); SqrtHisto(SqrtRecoHist);
-        TH1D* SqrtRecoTrueHist = (TH1D*) RecoTrueHist->Clone("hnew"); SqrtHisto(SqrtRecoTrueHist);
-        TH1D* SqrtRecoBkgHist = (TH1D*) RecoBkgHist->Clone("hnew"); SqrtHisto(SqrtRecoBkgHist);
+        TH1D* PowRecoHist = (TH1D*) RecoHist->Clone("hnew"); PowHisto(PowRecoHist, 0.5);
+        TH1D* PowRecoTrueHist = (TH1D*) RecoTrueHist->Clone("hnew"); PowHisto(PowRecoTrueHist, 0.5);
+        TH1D* PowRecoBkgHist = (TH1D*) RecoBkgHist->Clone("hnew"); PowHisto(PowRecoBkgHist, 0.5);
 
-        TH1D* UnivRecoHist = (TH1D*) RecoHist->Clone("hnew"); UnivRecoHist->Add(SqrtRecoHist);
-        TH1D* UnivRecoTrueHist = (TH1D*) RecoTrueHist->Clone("hnew"); UnivRecoTrueHist->Add(SqrtRecoTrueHist);
-        TH1D* UnivRecoBkgHist = (TH1D*) RecoBkgHist->Clone("hnew"); UnivRecoBkgHist->Add(SqrtRecoBkgHist);
+        TH1D* UnivRecoHist = (TH1D*) RecoHist->Clone("hnew"); UnivRecoHist->Add(PowRecoHist, -1);
+        TH1D* UnivRecoTrueHist = (TH1D*) RecoTrueHist->Clone("hnew"); UnivRecoTrueHist->Add(PowRecoTrueHist, -1);
+        TH1D* UnivRecoBkgHist = (TH1D*) RecoBkgHist->Clone("hnew"); UnivRecoBkgHist->Add(PowRecoBkgHist, -1);
 
         // Plot histograms with error band
         SelectionHelpers::DrawHistosWithErrorBands(
