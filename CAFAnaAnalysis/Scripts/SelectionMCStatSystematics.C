@@ -45,11 +45,6 @@ void SelectionMCStatSystematics() {
     // Initialize tools
     Tools tools;
 
-    // Get integrated flux
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
-    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -142,15 +137,20 @@ void SelectionMCStatSystematics() {
         public:
             MCStatSyst(int UnivIndex) : ISyst("MCStat", "MCStat"), UnivIndex(UnivIndex) {}
 
-            // Use time to create random seed
+            // Use fmatch time to create random seed
             void Shift(double sigma, caf::SRSliceProxy* slc, double& weight) const {
-                int seed = (int) slc->truth.time * 1000;
+                int seed = 1;
+                if (slc->fmatch.time > 0) {
+                    seed = slc->fmatch.time * 10000 + UnivIndex;
+                } 
+                // in the case time is negative, the event is
+                // not going to be used so we don't care about the seed
                 weight *= tools.PoissonRandomNumber(seed);
             }
 
+            // does not get called in our systematics, so we don't really care about the seed
             void Shift(double sigma, caf::SRTrueInteractionProxy* nu, double& weight) const {
-                int seed = (int) nu->time * 1000;
-                weight *= tools.PoissonRandomNumber(seed);
+                weight *= tools.PoissonRandomNumber(1);
             }
 
             const Tools tools;
