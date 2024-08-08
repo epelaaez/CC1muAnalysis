@@ -150,7 +150,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = true;
+    const bool ConstructSpectra = false;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -512,22 +512,19 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
                     double YEventRateVar = UnivRecoHisto->GetBinContent(y);
 
                     if (ModifiedResponse) {
-                        XEventRateVar = 0;
-                        YEventRateVar = 0;
+                        XEventRateVar = UnivRecoBkgHisto->GetBinContent(x);
+                        YEventRateVar = UnivRecoBkgHisto->GetBinContent(y);
 
                         for (int iBin = 0; iBin < VarBins.at(i).NBins(); ++iBin) {
                             double factor = CVTrueSignalHisto->GetBinContent(iBin + 1) / UnivTrueSignalHisto->GetBinContent(iBin + 1);
                             XEventRateVar += UnivTruthValuesHistos[iBin]->GetBinContent(x) * factor;
                             YEventRateVar += UnivTruthValuesHistos[iBin]->GetBinContent(y) * factor;
                         }
-
-                        XEventRateVar += RecoBkgHisto->GetBinContent(x);
-                        YEventRateVar += RecoBkgHisto->GetBinContent(y);
                     }
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
 
                     // Fill covariance matrix
-                    if (TMath::Abs(Value) < 1e-8) Value = 1e-8;
+                    if (TMath::Abs(Value) < 1e-14) Value = 1e-14;
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
                         RecoHisto->GetXaxis()->GetBinCenter(y),
@@ -548,13 +545,12 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
                 // Fill frac cov matrix
                 double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
-                if (TMath::Abs(FracValue) < 1e-8) FracValue = 1e-8;
-
+                if (TMath::Abs(FracValue) < 1e-14) FracValue = 1e-14;
                 FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                if (TMath::Abs(CorrValue) < 1e-8) CorrValue = 1e-8;
+                if (TMath::Abs(CorrValue) < 1e-14) CorrValue = 1e-14;
                 CorrMatrix->SetBinContent(x, y, CorrValue);
             }
         }
@@ -562,7 +558,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
         // Plot cov matrix
         double CovMin = CovMatrix->GetMinimum();
         double CovMax = CovMatrix->GetMaximum();
-        CovMatrix->GetZaxis()->SetRangeUser(CovMin,CovMax); // set the ranges accordingly, for frac cov should be [0,100], for corr matrices [-1,1]
+        CovMatrix->GetZaxis()->SetRangeUser(CovMin,CovMax);
         CovMatrix->GetZaxis()->CenterTitle();
         CovMatrix->GetZaxis()->SetTitleFont(FontStyle);
         CovMatrix->GetZaxis()->SetTitleSize(TextSize);
