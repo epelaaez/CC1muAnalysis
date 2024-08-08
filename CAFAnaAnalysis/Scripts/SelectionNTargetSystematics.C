@@ -38,11 +38,6 @@ void SelectionNTargetSystematics() {
     int FontStyle = 132;
     double TextSize = 0.06;
 
-    // Get integrated flux
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
-    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
