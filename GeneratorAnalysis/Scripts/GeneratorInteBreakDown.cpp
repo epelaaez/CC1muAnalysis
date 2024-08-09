@@ -46,8 +46,8 @@ void GeneratorInteBreakDown() {
     std::vector<TString> Process{"","QE","MEC","RES","DIS"};
     std::vector<int> Colors{kBlack,kBlue,kRed+1,kOrange+7,kGreen+1,kMagenta+1};
 
-    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
-    Labels.push_back("GENIE_AR23");*/
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
+    Labels.push_back("GENIE_AR23");
 
     // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
     // Labels.push_back("GENIE_AR23_Emp2015");
@@ -69,8 +69,8 @@ void GeneratorInteBreakDown() {
     Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU.root"); 
     Labels.push_back("GiBUU");
 
-    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
-    Labels.push_back("GiBUU_NoFSI");*/
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    Labels.push_back("GiBUU_NoFSI");
 
     const int NSamples = Names.size();
     const int NColors = Colors.size();

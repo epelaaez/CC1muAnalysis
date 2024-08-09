@@ -36,9 +36,9 @@ void SerialGeneratorOverlay() {
 
     std::vector<TString> Names; std::vector<TString> Labels; std::vector<int> Colors;
     
-    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23.root"); 
     Labels.push_back("GENIE AR23");
-    Colors.push_back(kBlue+8);*/
+    Colors.push_back(kBlue+8);
 
     // Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GENIE_AR23_Emp2015.root"); 
     // Labels.push_back("GENIE AR23 Emp2015");
@@ -64,9 +64,9 @@ void SerialGeneratorOverlay() {
     Labels.push_back("GiBUU");
     Colors.push_back(kGreen+1);
 
-    /*Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
+    Names.push_back(OutFilePath+"FlatTreeAnalyzerOutput_GiBUU_NoFSI.root"); 
     Labels.push_back("GiBUU NoFSI");
-    Colors.push_back(kGreen+1);*/
+    Colors.push_back(kGreen+1);
 
     const int NSamples = Names.size();
     std::vector<TFile*> Files; Files.resize(NSamples);

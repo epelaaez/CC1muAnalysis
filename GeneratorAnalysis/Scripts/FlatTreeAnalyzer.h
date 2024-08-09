@@ -7,8 +7,6 @@
 #include <TString.h>
 #include "../../Utils/Constants.h"
 
-#include "../../Utils/Constants.h"
-
 class FlatTreeAnalyzer {
 
 private:
