@@ -22,7 +22,7 @@
     //----------------------------------------//
 
     gROOT->ProcessLine(".L ./../Utils/Tools.cxx+");
-    gROOT->ProcessLine(".L ./Selections/TwoPTools.cxx+");
+    gROOT->ProcessLine(".L ./../Utils/TwoPTools.cxx+");
     gROOT->ProcessLine(".L ./Scripts/FlatTreeAnalyzer.cxx+");
 
     for (int i =0;i < (int)(WhichSample.size()); i++) {

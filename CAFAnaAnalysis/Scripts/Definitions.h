@@ -18,12 +18,10 @@
 #include <limits>
 #include <tuple>
 
-// Generator analysis includes.
-#include "../../GeneratorAnalysis/Selections/TwoPTools.cxx"
-
 // Utils includes.
 #include "../../Utils/Tools.cxx"
 #include "../../Utils/Constants.h"
+#include "../../Utils/TwoPTools.cxx"
 
 using namespace Constants;
 
