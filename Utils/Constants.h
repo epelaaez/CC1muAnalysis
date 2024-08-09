@@ -3,6 +3,7 @@
 
 #include "TString.h"
 #include "TMath.h"
+#include "TH1D.h"
 
 #include <iostream>
 #include <fstream>
