@@ -15,3 +15,4 @@ cafe -bq Scripts/SelectionMCStatSystematics.C
 root -b -q Scripts/StatSystematics.cpp
 root -b -q Scripts/TotalCovMatrices.cpp
 root -b -q Scripts/Unfold.cpp
+root -b -q Scripts/WienerSVDOverlay.cpp

@@ -542,7 +542,22 @@ void Tools::Reweight(TH1D* h, double SF = 1.) {
 		h->SetBinError(i+1,0.000001); 
 
 	}
+}
 
+//----------------------------------------//
+
+void Tools::Unweight(TH1D* h, double SF = 1.) {
+	int NBins = h->GetXaxis()->GetNbins();
+	for (int i = 0; i < NBins; i++) {
+		double CurrentEntry = h->GetBinContent(i+1);
+		double NewEntry = CurrentEntry * SF * h->GetBinWidth(i+1);
+
+		double CurrentError = h->GetBinError(i+1);
+		double NewError = CurrentError * SF * h->GetBinWidth(i+1);
+
+		h->SetBinContent(i+1,NewEntry); 
+		h->SetBinError(i+1,0.000001); 
+	}
 }
 
 //----------------------------------------//
