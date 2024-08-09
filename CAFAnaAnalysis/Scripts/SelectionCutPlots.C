@@ -16,7 +16,7 @@
 #include <vector>
 #include <memory>
 
-// Definitions for Vars and Cuts.
+// Definitions for CutVars and Cuts.
 #include "Definitions.h"
 
 // Utils includes.
@@ -51,46 +51,46 @@ void SelectionCutPlots() {
     Colors.push_back(kOrange+7);
     Colors.push_back(kMagenta+1);
 
-    // Cuts and vars to plot
-    std::vector<std::vector<Var>> Vars; std::vector<Binning> VarBins; std::vector<Cut> SignalCuts;
-    std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
+    // Cuts and CutVars to plot
+    std::vector<std::vector<Var>> CutVars; std::vector<Binning> CutVarBins; std::vector<Cut> SignalCuts;
+    std::vector<TString> PlotNames; std::vector<std::string> CutVarLabels;
     std::vector<std::vector<Cut>> HistosCuts; std::vector<std::vector<TString>> HistosLabels;
 
     // Nu score before any cut
-    Vars.push_back({kNuScore}); VarBins.push_back(bNuScore); SignalCuts.push_back(kNoCut);
-    PlotNames.push_back("NoCutNuScore"); VarLabels.push_back("#nu score");
+    CutVars.push_back({kNuScore}); CutVarBins.push_back(bNuScore); SignalCuts.push_back(kNoCut);
+    PlotNames.push_back("NoCutNuScore"); CutVarLabels.push_back("#nu score");
     HistosCuts.push_back({kIsNotCosmic, kIsCosmic}); HistosLabels.push_back({"Not cosmic", "Cosmic"});
 
     // Fmatch score before any cut
-    Vars.push_back({kFMatchScore}); VarBins.push_back(bFMatchScore); SignalCuts.push_back(kNoCut);
-    PlotNames.push_back("NoCutFMatchScore"); VarLabels.push_back("flash matching score");
+    CutVars.push_back({kFMatchScore}); CutVarBins.push_back(bFMatchScore); SignalCuts.push_back(kNoCut);
+    PlotNames.push_back("NoCutFMatchScore"); CutVarLabels.push_back("flash matching score");
     HistosCuts.push_back({kIsNotCosmic, kIsCosmic}); HistosLabels.push_back({"Not cosmic", "Cosmic"});
 
     // Fmatch time before any cut
-    Vars.push_back({kFMatchTime}); VarBins.push_back(bFMatchTime); SignalCuts.push_back(kNoCut);
-    PlotNames.push_back("NoCutFMatchTime"); VarLabels.push_back("flash matching time");
+    CutVars.push_back({kFMatchTime}); CutVarBins.push_back(bFMatchTime); SignalCuts.push_back(kNoCut);
+    PlotNames.push_back("NoCutFMatchTime"); CutVarLabels.push_back("flash matching time");
     HistosCuts.push_back({kIsNotCosmic, kIsCosmic}); HistosLabels.push_back({"Not cosmic", "Cosmic"});
 
     // Muon chi square for muon cut
-    Vars.push_back({kMuMuChi2, kProtonMuChi2, kSecondProtonMuChi2, kPionMuChi2}); VarBins.push_back(bMuChi2); SignalCuts.push_back(kCosmicCut);
-    PlotNames.push_back("ParticleCutChi2Muon"); VarLabels.push_back("#chi^{2}_{#mu}"); 
+    CutVars.push_back({kMuMuChi2, kProtonMuChi2, kSecondProtonMuChi2, kPionMuChi2}); CutVarBins.push_back(bMuChi2); SignalCuts.push_back(kCosmicCut);
+    PlotNames.push_back("ParticleCutChi2Muon"); CutVarLabels.push_back("#chi^{2}_{#mu}"); 
     HistosCuts.push_back({kHasMuon, kHasProton, kHasSecondProton, kHasPion}); HistosLabels.push_back({"#mu", "p1", "p2", "#pi"});
 
     // Proton chi square for muon cut
-    Vars.push_back({kMuProtonChi2, kProtonProtonChi2, kSecondProtonProtonChi2, kPionProtonChi2}); VarBins.push_back(bProtonChi2); SignalCuts.push_back(kCosmicCut);
-    PlotNames.push_back("ParticleCutChi2Proton"); VarLabels.push_back("#chi^{2}_{p}"); 
+    CutVars.push_back({kMuProtonChi2, kProtonProtonChi2, kSecondProtonProtonChi2, kPionProtonChi2}); CutVarBins.push_back(bProtonChi2); SignalCuts.push_back(kCosmicCut);
+    PlotNames.push_back("ParticleCutChi2Proton"); CutVarLabels.push_back("#chi^{2}_{p}"); 
     HistosCuts.push_back({kHasMuon, kHasProton, kHasSecondProton, kHasPion}); HistosLabels.push_back({"#mu", "p1", "p2", "#pi"});
 
     // Construct all spectra
     std::vector<std::vector<std::unique_ptr<Spectrum>>> Spectra;
-    for (std::size_t i = 0; i < Vars.size(); i++) {
+    for (std::size_t i = 0; i < CutVars.size(); i++) {
         std::vector<std::unique_ptr<Spectrum>> InnerSpectra;
         for (std::size_t j = 0; j < HistosCuts[i].size(); j++) {
             std::unique_ptr<Spectrum> Signals;
-            if (Vars[i].size() == 1) {
-                Signals = std::make_unique<Spectrum>(VarLabels[i], VarBins[i], NuLoader, Vars[i][0], kNoSpillCut, SignalCuts[i] && HistosCuts[i][j]);
+            if (CutVars[i].size() == 1) {
+                Signals = std::make_unique<Spectrum>(CutVarLabels[i], CutVarBins[i], NuLoader, CutVars[i][0], kNoSpillCut, SignalCuts[i] && HistosCuts[i][j]);
             } else {
-                Signals = std::make_unique<Spectrum>(VarLabels[i], VarBins[i], NuLoader, Vars[i][j], kNoSpillCut, SignalCuts[i] && HistosCuts[i][j]);
+                Signals = std::make_unique<Spectrum>(CutVarLabels[i], CutVarBins[i], NuLoader, CutVars[i][j], kNoSpillCut, SignalCuts[i] && HistosCuts[i][j]);
             }
             InnerSpectra.push_back(std::move(Signals));
         }
@@ -99,7 +99,7 @@ void SelectionCutPlots() {
 
     NuLoader.Go();
 
-    for (std::size_t i = 0; i < Vars.size(); i++) {
+    for (std::size_t i = 0; i < CutVars.size(); i++) {
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
 
         PlotCanvas->SetTopMargin(0.13);
@@ -129,7 +129,7 @@ void SelectionCutPlots() {
             Histos[j]->GetXaxis()->SetTitleSize(TextSize);
             Histos[j]->GetXaxis()->SetTitleOffset(1.1);
             Histos[j]->GetXaxis()->CenterTitle();
-            Histos[j]->GetXaxis()->SetTitle((VarLabels[i]).c_str());
+            Histos[j]->GetXaxis()->SetTitle((CutVarLabels[i]).c_str());
 
             Histos[j]->GetYaxis()->SetTitleFont(FontStyle);
             Histos[j]->GetYaxis()->SetLabelFont(FontStyle);

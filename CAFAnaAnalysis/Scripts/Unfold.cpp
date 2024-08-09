@@ -90,101 +90,12 @@ void Unfold() {
     std::unique_ptr<TFile> ReinteractionFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsReinteraction.root"));
     CovFiles.push_back(std::move(ReinteractionFile));
 
+    // Add MCStat systematics
+    std::unique_ptr<TFile> MCStatFile(TFile::Open("/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsMCStat.root"));
+    CovFiles.push_back(std::move(MCStatFile));
+
     // Dir to save plots
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
-
-    // Flux file
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
-	TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-
-    // Integrated flux
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
-
-    // Plots to unfold
-    std::vector<TString> PlotNames; std::vector<TString> XLabels; std::vector<TString> YLabels;
-
-    ////////////////////////////////
-    // Single differential variables
-    ////////////////////////////////
-
-    // Event count
-    PlotNames.push_back("EventCount");
-    XLabels.push_back("");
-    YLabels.push_back("# events #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Muon angle
-    PlotNames.push_back("MuonCosTheta");
-    XLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Leading proton angle
-    PlotNames.push_back("LeadingProtonCosTheta");
-    XLabels.push_back("cos(#theta_{#vec{p}_{L}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{L}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Recoil proton angle
-    PlotNames.push_back("RecoilProtonCosTheta");
-    XLabels.push_back("cos(#theta_{#vec{p}_{R}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{R}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Opening angle between protons
-    PlotNames.push_back("CosOpeningAngleProtons"); 
-    XLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Opening angle between muon and total proton
-    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); 
-    XLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Delta alpha transverse
-    PlotNames.push_back("DeltaAlphaT"); 
-    XLabels.push_back("#delta #alpha_{T}");
-    YLabels.push_back("#frac{d#delta #alpha_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Transverse momentum
-    PlotNames.push_back("TransverseMomentum"); 
-    XLabels.push_back("#delta P_{T}");
-    YLabels.push_back("#frac{d#delta P_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Muon momentum    
-    PlotNames.push_back("MuonMomentum"); 
-    XLabels.push_back("|#vec{p}_{#mu}|");
-    YLabels.push_back("#frac{d|#vec{p}_{#mu}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Leading proton momentum 
-    PlotNames.push_back("LeadingProtonMomentum"); 
-    XLabels.push_back("|#vec{p}_{L}|");
-    YLabels.push_back("#frac{d|#vec{p}_{L}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Recoil proton momentum 
-    PlotNames.push_back("RecoilProtonMomentum"); 
-    XLabels.push_back("|#vec{p}_{R}|");
-    YLabels.push_back("#frac{d|#vec{p}_{R}|}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    ////////////////////////////////
-    // Double differential variables
-    ////////////////////////////////
-
-    // Serial transverse momentum in muon cos theta
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); 
-    XLabels.push_back("#delta P_{T}");
-    YLabels.push_back("#frac{d#delta P_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Delta alpha transverse in muon cos theta
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); 
-    XLabels.push_back("#delta #alpha_{T}");
-    YLabels.push_back("#frac{d#delta #alpha_{T}}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    // Opening angle between protons in muon cos theta
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); 
-    XLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-    
-    // Opening angle between muon and protons in muon cos theta
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); 
-    XLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-    YLabels.push_back("#frac{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     const int NPlots = PlotNames.size();
 
@@ -239,11 +150,11 @@ void Unfold() {
         TMatrixD CovRotationT (TMatrixD::kTransposed, CovRotation);
 
         // Get unfolded cross-section
-        TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot], n, edges);
+        TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+(TString)VarLabels[iPlot]+";"+(TString)YLabels[iPlot], n, edges);
         V2H(unfold, UnfoldedSpectrum); tools.Reweight(UnfoldedSpectrum);
 
         // Add smear to signal
-        TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+XLabels[iPlot]+";"+YLabels[iPlot], n, edges);
+        TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+(TString)VarLabels[iPlot]+";"+(TString)YLabels[iPlot], n, edges);
         TVectorD SmearedVector = AddSmear * SignalVector;
         V2H(SmearedVector, SmearedSignal); tools.Reweight(SmearedSignal);
 
@@ -274,8 +185,8 @@ void Unfold() {
         SmearMatrixHisto->GetZaxis()->SetNdivisions(6);
         SmearMatrixHisto->GetXaxis()->SetTitle(SmearMatrixHisto->GetXaxis()->GetTitle());
         SmearMatrixHisto->GetYaxis()->SetTitle(SmearMatrixHisto->GetYaxis()->GetTitle());
-        SmearMatrixHisto->GetXaxis()->SetTitle("bin i " + XLabels.at(iPlot));
-        SmearMatrixHisto->GetYaxis()->SetTitle("bin j " + XLabels.at(iPlot));
+        SmearMatrixHisto->GetXaxis()->SetTitle("bin i " + (TString)VarLabels.at(iPlot));
+        SmearMatrixHisto->GetYaxis()->SetTitle("bin j " + (TString)VarLabels.at(iPlot));
 
         PlotCanvas->cd();
         SmearMatrixHisto->Draw("colz");
@@ -367,6 +278,16 @@ void Unfold() {
         SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfReinteractionCovHist, UnfReinteractionFracCovHist, UnfReinteractionCorrHist, n);
         TMatrixD UnfReinteractionFracCov(n, n); H2M(UnfReinteractionFracCovHist, UnfReinteractionFracCov, kTRUE);
 
+        // Get MCStat cov matrix
+        TH2D* MCStatCovHist = (TH2D*)(CovFiles[offset + 5]->Get<TH2D>(PlotNames[iPlot]+"_cov"));
+        TMatrixD MCStatCov(n, n); H2M(MCStatCovHist, MCStatCov, kTRUE); TMatrixD UnfMCStatCov = CovRotation * MCStatCov * CovRotationT;
+        TH2D* UnfMCStatCovHist = new TH2D("UnfCovMCStat"+PlotNames[iPlot], "UnfCovMCStat"+PlotNames[iPlot], n, edges, n, edges);
+        TH2D* UnfMCStatFracCovHist = new TH2D("UnfFracCovMCStat"+PlotNames[iPlot], "UnfFracCovMCStat"+PlotNames[iPlot], n, edges, n, edges);
+        TH2D* UnfMCStatCorrHist = new TH2D("UnfCorrMCStat"+PlotNames[iPlot], "UnfCorrMCStat"+PlotNames[iPlot], n, edges, n, edges);
+        M2H(UnfMCStatCov, UnfMCStatCovHist); tools.Reweight2D(UnfMCStatCovHist);
+        SelectionHelpers::GetFracCovAndCorrMatrix(UnfoldedSpectrum, UnfMCStatCovHist, UnfMCStatFracCovHist, UnfMCStatCorrHist, n);
+        TMatrixD UnfMCStatFracCov(n, n); H2M(UnfMCStatFracCovHist, UnfMCStatFracCov, kTRUE);
+
         // Histograms for uncertainties
         TH1D* XSecHisto = new TH1D("XSec"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* FluxHisto = new TH1D("Flux"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
@@ -375,6 +296,7 @@ void Unfold() {
         TH1D* NTargetsHisto = new TH1D("NTargets"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* DetectorHisto = new TH1D("Detector"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* ReinteractionHisto = new TH1D("Reinteraction"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
+        TH1D* MCStatHisto = new TH1D("MCStat"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
         TH1D* TotalHisto = new TH1D("Total"+PlotNames[iPlot], ";;Uncertainty [%]", n, edges);
 
         // Histograms to store total frac cov and corr
@@ -414,6 +336,10 @@ void Unfold() {
             // Add Reinteraction systematics
             ReinteractionHisto->SetBinContent(iBin + 1, TMath::Sqrt(UnfReinteractionFracCov(iBin, iBin)) * 100);
             Total += TMath::Power(TMath::Sqrt(UnfReinteractionFracCov(iBin, iBin)) * 100, 2);
+
+            // Add MCStat systematics
+            MCStatHisto->SetBinContent(iBin + 1, TMath::Sqrt(UnfMCStatFracCov(iBin, iBin)) * 100);
+            Total += TMath::Power(TMath::Sqrt(UnfMCStatFracCov(iBin, iBin)) * 100, 2);
 
             // Total 
             TotalHisto->SetBinContent(iBin + 1, TMath::Sqrt(UnfTotalFracCov(iBin, iBin)) * 100);
@@ -508,6 +434,13 @@ void Unfold() {
         ReinteractionHisto->SetMarkerColor(kTeal+3);
         ReinteractionHisto->Draw("hist text0 same");
 
+        TLegendEntry* legMCStat= leg->AddEntry(MCStatHisto,"MCStat","l");
+        MCStatHisto->SetLineColor(kSpring+9);
+        MCStatHisto->SetLineWidth(4);
+        MCStatHisto->SetMarkerSize(1.5);
+        MCStatHisto->SetMarkerColor(kSpring+9);
+        MCStatHisto->Draw("hist text0 same");
+
         TLegendEntry* legTotal= leg->AddEntry(TotalHisto,"Total","l");
         TotalHisto->SetLineColor(kBlack);
         TotalHisto->SetLineWidth(4);
@@ -586,6 +519,32 @@ void Unfold() {
                     );
                 }
 
+                // Style 
+                SlicedSmearedSignal->GetXaxis()->SetNdivisions(5);
+                if (PlotNames[iPlot] == "EventCount") {
+                    SlicedSmearedSignal->GetXaxis()->SetLabelSize(0);
+                    SlicedSmearedSignal->GetXaxis()->SetTitleSize(0);
+                } else {
+                    SlicedSmearedSignal->GetXaxis()->SetTitleFont(FontStyle);
+                    SlicedSmearedSignal->GetXaxis()->SetLabelFont(FontStyle);
+                    SlicedSmearedSignal->GetXaxis()->SetLabelSize(TextSize);
+                    SlicedSmearedSignal->GetXaxis()->SetTitleSize(TextSize);
+                    SlicedSmearedSignal->GetXaxis()->SetTitleOffset(1.);
+                    SlicedSmearedSignal->GetXaxis()->CenterTitle();
+
+                    std::string VarLabel = (std::string) VarLabels.at(iPlot);
+                    VarLabel.erase(VarLabel.end() - 7, VarLabel.end());
+                    SlicedSmearedSignal->GetXaxis()->SetTitle(VarLabel.c_str());
+                }
+                SlicedSmearedSignal->GetYaxis()->SetTitleFont(FontStyle);
+                SlicedSmearedSignal->GetYaxis()->SetLabelFont(FontStyle);
+                SlicedSmearedSignal->GetYaxis()->SetLabelSize(TextSize);
+                SlicedSmearedSignal->GetYaxis()->SetTitleSize(TextSize);
+                SlicedSmearedSignal->GetYaxis()->SetNdivisions(6);
+                SlicedSmearedSignal->GetYaxis()->SetTitleOffset(1.);
+                SlicedSmearedSignal->GetYaxis()->SetTickSize(0);
+                SlicedSmearedSignal->GetYaxis()->CenterTitle();
+
                 // Create legend object
                 TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
                 leg->SetBorderSize(0);
@@ -638,6 +597,29 @@ void Unfold() {
                 );
             }
 
+            // Style 
+            SmearedSignal->GetXaxis()->SetNdivisions(5);
+            if (PlotNames[iPlot] == "EventCount") {
+                SmearedSignal->GetXaxis()->SetLabelSize(0);
+                SmearedSignal->GetXaxis()->SetTitleSize(0);
+            } else {
+                SmearedSignal->GetXaxis()->SetTitleFont(FontStyle);
+                SmearedSignal->GetXaxis()->SetLabelFont(FontStyle);
+                SmearedSignal->GetXaxis()->SetLabelSize(TextSize);
+                SmearedSignal->GetXaxis()->SetTitleSize(TextSize);
+                SmearedSignal->GetXaxis()->SetTitleOffset(1.);
+                SmearedSignal->GetXaxis()->CenterTitle();
+                SmearedSignal->GetXaxis()->SetTitle(VarLabels.at(iPlot).c_str());
+            }
+            SmearedSignal->GetYaxis()->SetTitleFont(FontStyle);
+            SmearedSignal->GetYaxis()->SetLabelFont(FontStyle);
+            SmearedSignal->GetYaxis()->SetLabelSize(TextSize);
+            SmearedSignal->GetYaxis()->SetTitleSize(TextSize);
+            SmearedSignal->GetYaxis()->SetNdivisions(6);
+            SmearedSignal->GetYaxis()->SetTitleOffset(1.);
+            SmearedSignal->GetYaxis()->SetTickSize(0);
+            SmearedSignal->GetYaxis()->CenterTitle();
+
             TLegend* leg = new TLegend(0.2,0.73,0.55,0.83);
             leg->SetBorderSize(0);
             leg->SetNColumns(3);
@@ -667,8 +649,8 @@ void Unfold() {
             SmearedSignal->GetYaxis()->SetRangeUser(0.,1.3 * maxY);	
 
             PlotCanvas->cd();
-            UnfoldedSpectrum->Draw("p0 hist");
-            SmearedSignal->Draw("hist same");
+            SmearedSignal->Draw("hist");
+            UnfoldedSpectrum->Draw("p0 hist same");
             ErrorBand->Draw("e1 same");
             leg->Draw();
 

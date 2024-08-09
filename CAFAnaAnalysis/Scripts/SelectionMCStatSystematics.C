@@ -45,11 +45,6 @@ void SelectionMCStatSystematics() {
     // Initialize tools
     Tools tools;
 
-    // Get integrated flux
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
-    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -63,78 +58,6 @@ void SelectionMCStatSystematics() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsMCStat.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
-    // Vectors to fill with variables and variable information to plot
-    std::vector<Var> Vars; std::vector<Binning> VarBins;
-    std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
-
-    ////////////////////////////////
-    // Single differential variables
-    ////////////////////////////////
-
-    // Event count 
-    Vars.push_back(kEventCount); VarBins.push_back(bEventCount);
-    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
-
-    // Muon angle
-    Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
-
-    // Leading proton angle
-    Vars.push_back(kLeadingProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("LeadingProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L}})");
-
-    // Recoil proton angle
-    Vars.push_back(kRecoilProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("RecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
-
-    // Opening angle between protons
-    Vars.push_back(kCosOpeningAngleProtons); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("CosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-
-    // Opening angle between muon and total proton
-    Vars.push_back(kCosOpeningAngleMuonTotalProton); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-
-    // Delta alpha transverse
-    Vars.push_back(kDeltaAlphaT); VarBins.push_back(bDeltaAlphaBins);
-    PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
-
-    // Transverse momentum
-    Vars.push_back(kTransverseMomentum); VarBins.push_back(bTransverseMomentumBins);
-    PlotNames.push_back("TransverseMomentum"); VarLabels.push_back("#delta P_{T}");
-
-    // Muon momentum 
-    Vars.push_back(kMuonMomentum); VarBins.push_back(bMuonMomentumBins);
-    PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
-
-    // Leading proton momentum 
-    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
-    PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
-
-    // Recoil proton momentum 
-    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
-    PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
-
-    //////////////////////////////
-    // Double differential variables
-    //////////////////////////////
-
-    // Serial transverse momentum in muon cos theta
-    Vars.push_back(kTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
-
-    // Delta alpha transverse in muon cos theta
-    Vars.push_back(kDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
-
-    // Opening angle between protons in muon cos theta
-    Vars.push_back(kCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
-    
-    // Opening angle between muon and protons in muon cos theta
-    Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
-
     const int NVars = Vars.size();
 
     // Create ISyst that computes weight for each event
@@ -142,15 +65,21 @@ void SelectionMCStatSystematics() {
         public:
             MCStatSyst(int UnivIndex) : ISyst("MCStat", "MCStat"), UnivIndex(UnivIndex) {}
 
-            // Use time to create random seed
+            // Use fmatch time to create random seed
+            // This might need to be revisited in the future
             void Shift(double sigma, caf::SRSliceProxy* slc, double& weight) const {
-                int seed = (int) slc->truth.time * 1000;
+                int seed = 1;
+                if (slc->fmatch.time > 0) {
+                    seed = slc->fmatch.time * 10000 + UnivIndex;
+                } 
+                // in the case time is negative, the event is
+                // not going to be used so we don't care about the seed
                 weight *= tools.PoissonRandomNumber(seed);
             }
 
+            // does not get called in our systematics, so we don't really care about the seed
             void Shift(double sigma, caf::SRTrueInteractionProxy* nu, double& weight) const {
-                int seed = (int) nu->time * 1000;
-                weight *= tools.PoissonRandomNumber(seed);
+                weight *= tools.PoissonRandomNumber(1);
             }
 
             const Tools tools;
@@ -174,27 +103,27 @@ void SelectionMCStatSystematics() {
         std::unique_ptr<EnsembleSpectrum>
     >> Spectra;
     for (int iVar = 0; iVar < NVars; ++iVar) {
-        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NuLoader, Vars.at(iVar), kNoSpillCut, kRecoIsSignal); 
-        auto RecoTrueSignals = std::make_unique<Spectrum> (VarLabels.at(iVar), VarBins.at(iVar), NuLoader, Vars.at(iVar), kNoSpillCut, kRecoIsTrueReco); 
-        auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NuLoader, Vars.at(iVar), kNoSpillCut, kRecoIsBackground); 
+        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
+        auto RecoTrueSignals = std::make_unique<Spectrum> (VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsTrueReco); 
+        auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsBackground); 
 
         auto UnivRecoSignals = std::make_unique<EnsembleSpectrum>(
             NuLoader,
-            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)), 
+            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))), 
             kNoSpillCut,
             kRecoIsSignal, 
             Shifts
         );
         auto UnivRecoTrueSignals = std::make_unique<EnsembleSpectrum>(
             NuLoader,
-            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)), 
+            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))), 
             kNoSpillCut,
             kRecoIsTrueReco, 
             Shifts
         ); 
         auto UnivRecoBkgSignals = std::make_unique<EnsembleSpectrum>(
             NuLoader,
-            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)), 
+            HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))), 
             kNoSpillCut,
             kRecoIsBackground, 
             Shifts

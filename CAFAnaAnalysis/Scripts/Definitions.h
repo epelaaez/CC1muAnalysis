@@ -73,6 +73,9 @@ namespace ana
     const Binning bMuChi2 = Binning::Simple(30, 0, 60.0);
     const Binning bProtonChi2 = Binning::Simple(100, 0, 200.0);
 
+    // Resolution bins
+    const Binning bActualResolution = Binning::Simple(51, -1., 1.);
+
     // Double differential bins
     Tools tools; // tools for double differential bins
 
@@ -1157,6 +1160,46 @@ namespace ana
         }
         return 0.5;
     });
+
+    /////////////////////////////
+    // Vector with varialbes/bins
+    /////////////////////////////
+
+    static const std::vector<std::tuple<Var, Var, TruthVar>> Vars = {
+        {kEventCount, kEventCount, kTrueEventCount},
+        {kMuonCosTheta, kRecoTruthMuonCosTheta, kTruthMuonCosTheta},
+        {kLeadingProtonCosTheta, kRecoTruthLeadingProtonCosTheta, kTruthLeadingProtonCosTheta},
+        {kRecoilProtonCosTheta, kRecoTruthRecoilProtonCosTheta, kTruthRecoilProtonCosTheta},
+        {kCosOpeningAngleProtons, kRecoTruthCosOpeningAngleProtons, kTruthCosOpeningAngleProtons},
+        {kCosOpeningAngleMuonTotalProton, kRecoTruthCosOpeningAngleMuonTotalProton, kTruthCosOpeningAngleMuonTotalProton},
+        {kDeltaAlphaT, kRecoTruthDeltaAlphaT, kTruthDeltaAlphaT},
+        {kTransverseMomentum, kRecoTruthTransverseMomentum, kTruthTransverseMomentum},
+        {kMuonMomentum, kRecoTruthMuonMomentum, kTruthMuonMomentum},
+        {kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum, kTruthLeadingProtonMomentum},
+        {kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum, kTruthRecoilProtonMomentum},
+        {kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta, kTruthTransverseMomentumInMuonCosTheta},
+        {kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta, kTruthDeltaAlphaTInMuonCosTheta},
+        {kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta, kTruthCosOpeningAngleProtonsInMuonCosTheta},
+        {kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta}
+    };
+
+    static const std::vector<Binning> VarBins = {
+        bEventCount,
+        bAngleBins,
+        bAngleBins,
+        bAngleBins,
+        bAngleBins,
+        bAngleBins,
+        bDeltaAlphaBins,
+        bTransverseMomentumBins,
+        bMuonMomentumBins,
+        bLeadingProtonMomentumBins,
+        bRecoilProtonMomentumBins,
+        bTransverseMomentumInMuonCosTheta,
+        bDeltaAlphaTInMuonCosTheta,
+        bCosOpeningAngleProtonsInMuonCosTheta,
+        bCosOpeningAngleMuonTotalProtonInMuonCosTheta
+    };
 }
 
 #endif

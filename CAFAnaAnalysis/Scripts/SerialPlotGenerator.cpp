@@ -29,25 +29,6 @@ void SerialPlotGenerator() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Selection.root";
     std::unique_ptr<TFile> File(TFile::Open(RootFilePath));
 
-    // Double differential plots to deserialize
-    std::vector<TString> PlotNames; std::vector<TString> XAxisLabel; std::vector<TString> YAxisLabel;
-
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta");
-    XAxisLabel.push_back("#delta P_{T}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta");
-    XAxisLabel.push_back("#delta #alpha_{T}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
-    XAxisLabel.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
-    XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
-
     const int NPlots = PlotNames.size();
 
     // Samples for each plot (all reco, reco true, bkg)
@@ -58,7 +39,8 @@ void SerialPlotGenerator() {
 
     const int NSamples = SampleNames.size();
 
-    for (int iPlot = 0; iPlot < NPlots; iPlot++) {
+    // start at 11 to start with double diff variables
+    for (int iPlot = 11; iPlot < NPlots; iPlot++) {
         // Load true plots
         std::vector<TH1D*> TruePlots; TruePlots.resize(NSamples);
         for (int iSample = 0; iSample < NSamples; iSample++) {
@@ -123,7 +105,9 @@ void SerialPlotGenerator() {
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelFont(FontStyle);
                 Histos[iSlice][iSample]->GetXaxis()->SetNdivisions(8);
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelSize(TextSize);
-                Histos[iSlice][iSample]->GetXaxis()->SetTitle("Reco " + XAxisLabel.at(iPlot));
+                std::string VarLabel = (std::string) VarLabels.at(iPlot);
+                VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
+                Histos[iSlice][iSample]->GetXaxis()->SetTitle(("Reco " + VarLabel).c_str());
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleSize(TextSize);
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleOffset(1.1);
                 Histos[iSlice][iSample]->GetXaxis()->CenterTitle();

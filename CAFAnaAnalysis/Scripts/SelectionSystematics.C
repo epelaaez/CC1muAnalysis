@@ -33,7 +33,7 @@ using namespace std;
 using namespace ana;
 using namespace Constants;
 
-void SelectionSystematics(std::string SystName, int SystNUniv) {
+void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResponse) {
     std::cout << std::endl;
     std::cout << "========================================" << std::endl;
     std::cout << "Systematic with name " << SystName << ", and number of universes " << SystNUniv <<  std::endl;
@@ -47,11 +47,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     int FontStyle = 132;
     double TextSize = 0.06;
 
-    // Get integrated flux
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root");
-    TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-    double IntegratedFlux = (HistoFlux->Integral() * TargetPOT / POTPerSpill / Nominal_UB_XY_Surface);    
-
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -64,82 +59,10 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
-
-    // Vectors to fill with variables and variable information to plot
-    std::vector<Var> Vars; std::vector<Binning> VarBins;
-    std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
-    
-    ////////////////////////////////
-    // Single differential variables
-    ////////////////////////////////
-
-    // Event count 
-    Vars.push_back(kEventCount); VarBins.push_back(bEventCount);
-    PlotNames.push_back("EventCount"); VarLabels.push_back("single bin");
-
-    // Muon angle
-    Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
-
-    // Leading proton angle
-    Vars.push_back(kLeadingProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("LeadingProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L}})");
-
-    // Recoil proton angle
-    Vars.push_back(kRecoilProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("RecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
-
-    // Opening angle between protons
-    Vars.push_back(kCosOpeningAngleProtons); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("CosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-
-    // Opening angle between muon and total proton
-    Vars.push_back(kCosOpeningAngleMuonTotalProton); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-
-    // Delta alpha transverse
-    Vars.push_back(kDeltaAlphaT); VarBins.push_back(bDeltaAlphaBins);
-    PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
-
-    // Transverse momentum
-    Vars.push_back(kTransverseMomentum); VarBins.push_back(bTransverseMomentumBins);
-    PlotNames.push_back("TransverseMomentum"); VarLabels.push_back("#delta P_{T}");
-
-    // Muon momentum 
-    Vars.push_back(kMuonMomentum); VarBins.push_back(bMuonMomentumBins);
-    PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
-
-    // Leading proton momentum 
-    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
-    PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
-
-    // Recoil proton momentum 
-    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
-    PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
-
-    ////////////////////////////////
-    // Double differential variables
-    ////////////////////////////////
-
-    // Serial transverse momentum in muon cos theta
-    Vars.push_back(kTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
-
-    // Delta alpha transverse in muon cos theta
-    Vars.push_back(kDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
-
-    // Opening angle between protons in muon cos theta
-    Vars.push_back(kCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
-    
-    // Opening angle between muon and protons in muon cos theta
-    Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
     
     // Create shift depending on number of universes
     ISyst* syst = new SBNWeightSyst(SystName);
-    std::vector<SystShifts> Shifts; std::vector<Var> Weis;
+    std::vector<SystShifts> Shifts; std::vector<Var> Weis; std::vector<TruthVar> TruthWeis;
 
     if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
     	// Add +1 sigma shift
@@ -149,12 +72,13 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         Weis.reserve(SystNUniv);
         for (int i = 0; i < SystNUniv; i++) {
             Weis.push_back(GetUniverseWeight(SystName, i));
+            TruthWeis.push_back(GetTruthUniverseWeight(SystName, i));
         }
     }
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = false;
+    const bool ConstructSpectra = true;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -163,8 +87,24 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         std::unique_ptr<EnsembleSpectrum>
     >> Spectra;
 
+    // Where we store spectra needed for computing response matrices for universes
+    // This will only be populated for cross section systematics
+    std::vector<std::tuple<
+        std::vector<std::unique_ptr<EnsembleSpectrum>>,
+        std::unique_ptr<EnsembleSpectrum>
+    >> ResponseMatrixSpectra;
+
     // Where we load histograms if we do not construct spectra
     std::vector<std::vector<std::tuple<TH1D*, TH1D*, TH1D*>>> LoadedHistos;
+
+    // Again will only be loaded for cross section systematics
+    std::vector<std::vector<std::tuple<
+        std::vector<TH1D*>, // vector with RS for each bin
+        TH1D*               // S_univ
+    >>> ResponseMatrixHistos;
+
+    // Finally also only loaded for cross section systematics
+    std::vector<TH1D*> CVTrueSignalHistos;
 
     if (ConstructSpectra) {
         // Construct all spectra
@@ -175,57 +115,96 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
             if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
                 RecoSpectra = std::make_unique<EnsembleSpectrum>(
-                    NuLoader,
-                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                    kNoSpillCut,
-                    kRecoIsSignal,
-                    Shifts
+                    NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                    kNoSpillCut, kRecoIsSignal, Shifts
                 );
                 RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
-                    NuLoader,
-                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                    kNoSpillCut,
-                    kRecoIsTrueReco,
-                    Shifts
+                    NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                    kNoSpillCut, kRecoIsTrueReco, Shifts
                 );
                 RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
-                    NuLoader,
-                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                    kNoSpillCut,
-                    kRecoIsBackground,
-                    Shifts
+                    NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                    kNoSpillCut, kRecoIsBackground, Shifts
                 );
             } else {
                 RecoSpectra = std::make_unique<EnsembleSpectrum>(
-                    NuLoader,
-                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                    kNoSpillCut,
-                    kRecoIsSignal,
-                    Weis
+                    NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                    kNoSpillCut, kRecoIsSignal, Weis
                 );
                 RecoTrueSpectra = std::make_unique<EnsembleSpectrum>(
-                    NuLoader,
-                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                    kNoSpillCut,
-                    kRecoIsTrueReco,
-                    Weis
+                    NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                    kNoSpillCut, kRecoIsTrueReco, Weis
                 );
                 RecoBkgSpectra = std::make_unique<EnsembleSpectrum>(
-                    NuLoader,
-                    HistAxis(VarLabels.at(iVar), VarBins.at(iVar), Vars.at(iVar)),
-                    kNoSpillCut,
-                    kRecoIsBackground,
-                    Weis
+                    NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                    kNoSpillCut, kRecoIsBackground, Weis
                 );
             }
             Spectra.push_back({std::move(RecoSpectra), std::move(RecoTrueSpectra), std::move(RecoBkgSpectra)});
+
+            // If we are dealing with cross section systematics, we have to use the modified response
+            //  matrices in which we use the true signal spectrum for the universe in the denominator
+            // instead of the central value true signal spectrum
+            if (ModifiedResponse) {
+                const std::vector<double>& BinEdges = VarBins.at(iVar).Edges();
+                std::vector<std::unique_ptr<EnsembleSpectrum>> InnerSpectra;
+                Var kCurrentVar = std::get<1>(Vars.at(iVar));
+
+                // This will get us the histograms neccesary to compute the response matrix using 
+                // the signal spectrum from the universe
+                for (int j = 0; j < VarBins.at(iVar).NBins(); j++) {
+                    double BinMin = BinEdges.at(j);
+                    double BinMax = (j == VarBins.at(iVar).NBins() - 1) ?  VarBins.at(iVar).Max() : BinEdges.at(j + 1);
+
+                    const Cut TempCut([=](const caf::SRSliceProxy* slc) {
+                        return (
+                            kRecoIsTrueReco(slc) && 
+                            kCurrentVar(slc) >= BinMin &&
+                            kCurrentVar(slc) < BinMax
+                        );
+                    });
+
+                    std::unique_ptr<EnsembleSpectrum> RecoBinValues = nullptr;
+                    std::unique_ptr<EnsembleSpectrum> TruthValues = nullptr;
+                    if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
+                        RecoBinValues = std::make_unique<EnsembleSpectrum>(
+                            NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                            kNoSpillCut, TempCut, Shifts
+                        );
+                        
+                    } else {
+                        RecoBinValues = std::make_unique<EnsembleSpectrum>(
+                            NuLoader, HistAxis(VarLabels.at(iVar), VarBins.at(iVar), std::get<0>(Vars.at(iVar))),
+                            kNoSpillCut, TempCut, Weis
+                        );
+                    }
+                    InnerSpectra.push_back(std::move(RecoBinValues));
+                }
+
+                // Get true signal for universes
+                std::unique_ptr<EnsembleSpectrum> TruthValues = nullptr;
+                if (SystNUniv == 6 || SystNUniv == 10 || SystNUniv == 4 || SystNUniv == 2 || SystNUniv == 7) {
+                    TruthValues = std::make_unique<EnsembleSpectrum>(
+                        VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<2>(Vars.at(iVar)),
+                        kTruthIsSignal, kNoSpillCut, Shifts
+                    );
+                } else {
+                    TruthValues = std::make_unique<EnsembleSpectrum>(
+                        VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<2>(Vars.at(iVar)),
+                        kTruthIsSignal, kNoSpillCut, TruthWeis
+                    );
+                }
+                ResponseMatrixSpectra.push_back({std::move(InnerSpectra), std::move(TruthValues)});
+            }
         }
         // Load spectra
         NuLoader.Go();
+
     } else {
         // Load previously constructed histograms from file
         for (std::size_t i = 0; i < Vars.size(); i++) {
             std::vector<std::tuple<TH1D*, TH1D*, TH1D*>> VarHistos;
+            std::vector<std::tuple<std::vector<TH1D*>, TH1D*>> ResponseHistos;
 
             // Nominal plots
             TH1D* RecoHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco"));
@@ -241,8 +220,28 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                 TH1D* UnivRecoTrueHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true"));
                 TH1D* UnivRecoBkgHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg"));
                 VarHistos.push_back({std::move(UnivRecoHisto), std::move(UnivRecoTrueHisto), std::move(UnivRecoBkgHisto)});
+
+                std::vector<TH1D*> ResponseVarBinHistos; TH1D* UnivTruthHisto;
+                if (ModifiedResponse) {
+                    for (int j = 0; j < VarBins.at(i).NBins(); j++) {
+                        TString BinString = TString(std::to_string(j));
+                        TH1D* TruthValuesBinHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_"+BinString));
+                        ResponseVarBinHistos.push_back(std::move(TruthValuesBinHisto));
+                    }
+                    UnivTruthHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_true"));
+                }
+                ResponseHistos.push_back({std::move(ResponseVarBinHistos), std::move(UnivTruthHisto)});
             }
+            
+            TH1D* CVTrueSignalHisto;
+            if (ModifiedResponse) {
+                CVTrueSignalHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_true"));
+            }
+            
+            // Push all histos for given variable
             LoadedHistos.push_back(std::move(VarHistos));
+            ResponseMatrixHistos.push_back(std::move(ResponseHistos));
+            CVTrueSignalHistos.push_back(std::move(CVTrueSignalHisto));
 
             // Resize Spectra so everything compiles correctly
             Spectra.resize(Vars.size());
@@ -252,7 +251,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
     // Loop over variables
     for (std::size_t i = 0; i < Vars.size(); i++) {
         // Get histograms
-        TH1D* RecoHisto; TH1D* RecoTrueHisto; TH1D* RecoBkgHisto;
+        TH1D* RecoHisto; TH1D* RecoTrueHisto; TH1D* RecoBkgHisto; TH1D* CVTrueSignalHisto;
         auto& [RecoSpectra, RecoTrueSpectra, RecoBkgSpectra] = Spectra.at(i);
         if (ConstructSpectra) {
             RecoHisto = RecoSpectra->Nominal().ToTH1(TargetPOT);
@@ -277,10 +276,22 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
             SaveFile->WriteObject(RecoHisto, PlotNames[i]+"_reco");
             SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
             SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
+
+            // Get central value true signal spectrum
+            if (ModifiedResponse) {
+                CVTrueSignalHisto = std::get<1>(ResponseMatrixSpectra[i])->Nominal().ToTH1(TargetPOT);
+                CVTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
+                CVTrueSignalHisto->SetBinContent(CVTrueSignalHisto->GetNbinsX(), CVTrueSignalHisto->GetBinContent(CVTrueSignalHisto->GetNbinsX()) + CVTrueSignalHisto->GetBinContent(CVTrueSignalHisto->GetNbinsX() + 1));
+                SaveFile->WriteObject(CVTrueSignalHisto, PlotNames[i]+"_true");
+            }
         } else {
             RecoHisto = std::get<0>(LoadedHistos.at(i)[0]);
             RecoTrueHisto = std::get<1>(LoadedHistos.at(i)[0]);
             RecoBkgHisto = std::get<2>(LoadedHistos.at(i)[0]);
+
+            if (ModifiedResponse) {
+                CVTrueSignalHisto = CVTrueSignalHistos.at(i);
+            }
         }
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
@@ -364,6 +375,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         for (int iUniv = 0; iUniv < NUniv; iUniv++) {
             // Get histograms
             TH1D* UnivRecoHisto; TH1D* UnivRecoTrueHisto; TH1D* UnivRecoBkgHisto;
+            std::vector<TH1D*> UnivTruthValuesHistos; TH1D* UnivTrueSignalHisto;
             if (ConstructSpectra) {
                 UnivRecoHisto = RecoSpectra->Universe(iUniv).ToTH1(TargetPOT);
                 UnivRecoTrueHisto = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
@@ -388,10 +400,36 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                 SaveFile->WriteObject(UnivRecoHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco");
                 SaveFile->WriteObject(UnivRecoTrueHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
                 SaveFile->WriteObject(UnivRecoBkgHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
+
+                // Load histograms needed for response matrix if systematic is cross section
+                if (ModifiedResponse) {
+                    for (int iBin = 0; iBin < VarBins.at(i).NBins(); ++iBin) {
+                        TH1D* TruthValuesBinHisto = std::get<0>(ResponseMatrixSpectra[i])[iBin]->Universe(iUniv).ToTH1(TargetPOT);
+                        TruthValuesBinHisto->Scale(Units / (IntegratedFlux * NTargets));
+                        TruthValuesBinHisto->SetBinContent(TruthValuesBinHisto->GetNbinsX(), TruthValuesBinHisto->GetBinContent(TruthValuesBinHisto->GetNbinsX()) + TruthValuesBinHisto->GetBinContent(TruthValuesBinHisto->GetNbinsX() + 1));
+
+                        // Save to root file
+                        TString BinString = TString(std::to_string(iBin));
+                        SaveFile->WriteObject(TruthValuesBinHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_"+BinString);
+                        UnivTruthValuesHistos.push_back(TruthValuesBinHisto);
+                    }
+                    UnivTrueSignalHisto = std::get<1>(ResponseMatrixSpectra[i])->Universe(iUniv).ToTH1(TargetPOT);
+                    UnivTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
+                    UnivTrueSignalHisto->SetBinContent(UnivTrueSignalHisto->GetNbinsX(), UnivTrueSignalHisto->GetBinContent(UnivTrueSignalHisto->GetNbinsX()) + UnivTrueSignalHisto->GetBinContent(UnivTrueSignalHisto->GetNbinsX() + 1));
+
+                    SaveFile->WriteObject(UnivTrueSignalHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_true");
+                } 
             } else {
                 UnivRecoHisto = std::get<0>(LoadedHistos.at(i)[iUniv + 1]);
                 UnivRecoTrueHisto = std::get<1>(LoadedHistos.at(i)[iUniv + 1]);
                 UnivRecoBkgHisto = std::get<2>(LoadedHistos.at(i)[iUniv + 1]);
+
+                if (ModifiedResponse) {
+                    for (int iBin = 0; iBin < VarBins.at(i).NBins(); ++iBin) {
+                        UnivTruthValuesHistos.push_back(std::get<0>(ResponseMatrixHistos[i][iUniv])[iBin]);
+                    }
+                    UnivTrueSignalHisto = std::get<1>(ResponseMatrixHistos[i][iUniv]);
+                }
             }
 
             for (int x = 1; x < VarBins.at(i).NBins() + 1; x++) {
@@ -401,10 +439,20 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
                     double YEventRateCV = RecoHisto->GetBinContent(y);
                     double YEventRateVar = UnivRecoHisto->GetBinContent(y);
 
+                    if (ModifiedResponse) {
+                        XEventRateVar = UnivRecoBkgHisto->GetBinContent(x);
+                        YEventRateVar = UnivRecoBkgHisto->GetBinContent(y);
+
+                        for (int iBin = 0; iBin < VarBins.at(i).NBins(); ++iBin) {
+                            double factor = CVTrueSignalHisto->GetBinContent(iBin + 1) / UnivTrueSignalHisto->GetBinContent(iBin + 1);
+                            XEventRateVar += UnivTruthValuesHistos[iBin]->GetBinContent(x) * factor;
+                            YEventRateVar += UnivTruthValuesHistos[iBin]->GetBinContent(y) * factor;
+                        }
+                    }
                     double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
 
                     // Fill covariance matrix
-                    if (TMath::Abs(Value) < 1e-8) Value = 1e-8;
+                    if (TMath::Abs(Value) < 1e-14) Value = 1e-14;
                     CovMatrix->Fill(
                         RecoHisto->GetXaxis()->GetBinCenter(x),
                         RecoHisto->GetXaxis()->GetBinCenter(y),
@@ -425,12 +473,12 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
 
                 // Fill frac cov matrix
                 double FracValue = (XEventRateCV == 0. || YEventRateCV == 0.) ? 0. : CovBinValue / (XEventRateCV * YEventRateCV);
-                if (TMath::Abs(FracValue) < 1e-8) FracValue = 1e-8;
+                if (TMath::Abs(FracValue) < 1e-14) FracValue = 1e-14;
                 FracCovMatrix->SetBinContent(x, y, FracValue);
 
                 // Fill corr matrix
                 double CorrValue = (XBinValue == 0. || YBinValue == 0.) ? 0. : CovBinValue / (TMath::Sqrt(XBinValue) * TMath::Sqrt(YBinValue));
-                if (TMath::Abs(CorrValue) < 1e-8) CorrValue = 1e-8;
+                if (TMath::Abs(CorrValue) < 1e-14) CorrValue = 1e-14;
                 CorrMatrix->SetBinContent(x, y, CorrValue);
             }
         }
@@ -438,7 +486,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv) {
         // Plot cov matrix
         double CovMin = CovMatrix->GetMinimum();
         double CovMax = CovMatrix->GetMaximum();
-        CovMatrix->GetZaxis()->SetRangeUser(CovMin,CovMax); // set the ranges accordingly, for frac cov should be [0,100], for corr matrices [-1,1]
+        CovMatrix->GetZaxis()->SetRangeUser(CovMin,CovMax);
         CovMatrix->GetZaxis()->CenterTitle();
         CovMatrix->GetZaxis()->SetTitleFont(FontStyle);
         CovMatrix->GetZaxis()->SetTitleSize(TextSize);

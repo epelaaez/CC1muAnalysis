@@ -45,74 +45,6 @@ void SelectionInteBreakdown() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionInteBreakdown.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
-    // Vectors to fill with variables and variable information to plot
-    std::vector<Var> Vars; std::vector<Binning> VarBins;
-    std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
-
-    ////////////////////////////////
-    // Single differential variables
-    ////////////////////////////////
-
-    // Muon angle
-    Vars.push_back(kMuonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("MuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
-
-    // Leading proton angle
-    Vars.push_back(kLeadingProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("LeadingProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L}})");
-
-    // Recoil proton angle
-    Vars.push_back(kRecoilProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("RecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
-
-    // Opening angle between protons
-    Vars.push_back(kCosOpeningAngleProtons); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("CosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-
-    // Opening angle between muon and total proton
-    Vars.push_back(kCosOpeningAngleMuonTotalProton); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("CosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-
-    // Delta alpha transverse
-    Vars.push_back(kDeltaAlphaT); VarBins.push_back(bDeltaAlphaBins);
-    PlotNames.push_back("DeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
-
-    // Transverse momentum
-    Vars.push_back(kTransverseMomentum); VarBins.push_back(bTransverseMomentumBins);
-    PlotNames.push_back("TransverseMomentum"); VarLabels.push_back("#delta P_{T}");
-
-    // Muon momentum 
-    Vars.push_back(kMuonMomentum); VarBins.push_back(bMuonMomentumBins);
-    PlotNames.push_back("MuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
-
-    // Leading proton momentum 
-    Vars.push_back(kLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
-    PlotNames.push_back("LeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
-
-    // Recoil proton momentum 
-    Vars.push_back(kRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
-    PlotNames.push_back("RecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
-
-    ////////////////////////////////
-    // Double differential variables
-    ////////////////////////////////
-
-    // Serial transverse momentum in muon cos theta
-    Vars.push_back(kTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T}");
-
-    // Delta alpha transverse in muon cos theta
-    Vars.push_back(kDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T}");
-
-    // Opening angle between protons in muon cos theta
-    Vars.push_back(kCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-    
-    // Opening angle between muon and protons in muon cos theta
-    Vars.push_back(kCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-
     ////////////////////
     // Interaction modes
     ////////////////////
@@ -130,7 +62,7 @@ void SelectionInteBreakdown() {
         std::vector<std::unique_ptr<Spectrum>> InnerSpectra;
 
         // Without any interaction discrimination
-        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoIsSignal); 
+        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsSignal); 
         InnerSpectra.push_back(std::move(RecoSignals));
 
         for (std::size_t j = 0; j < IntModes.size(); j++) {
@@ -142,7 +74,7 @@ void SelectionInteBreakdown() {
                     slc->truth.genie_mode == IntCode
                 );
             });
-            auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kNoSpillCut, kRecoSignalsCut); 
+            auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoSignalsCut); 
             InnerSpectra.push_back(std::move(RecoSignals));
         }
         Spectra.push_back(std::move(InnerSpectra));
