@@ -53,24 +53,6 @@ void StatSystematics() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematicsStats.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
-    // Plot names
-    std::vector<TString> PlotNames;
-    PlotNames.push_back("EventCount");
-    PlotNames.push_back("MuonCosTheta");
-    PlotNames.push_back("LeadingProtonCosTheta");
-    PlotNames.push_back("RecoilProtonCosTheta");
-    PlotNames.push_back("CosOpeningAngleProtons");
-    PlotNames.push_back("CosOpeningAngleMuonTotalProton");
-    PlotNames.push_back("DeltaAlphaT");
-    PlotNames.push_back("TransverseMomentum");
-    PlotNames.push_back("MuonMomentum");
-    PlotNames.push_back("LeadingProtonMomentum");
-    PlotNames.push_back("RecoilProtonMomentum");
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta");
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta");
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
-
     const int NVars = PlotNames.size();
 
     TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);

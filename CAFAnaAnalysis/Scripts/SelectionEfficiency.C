@@ -44,79 +44,11 @@ void SelectionEfficiency() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionEfficiency.root";
     TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
-    // Vectors to fill with variables and variable information to plot
-    std::vector<TruthVar> Vars; std::vector<Binning> VarBins;
-    std::vector<TString> PlotNames; std::vector<std::string> VarLabels;
-
-    ////////////////////////////////
-    // Single differential variables
-    ////////////////////////////////
-
-    // Muon angle
-    Vars.push_back(kTruthMuonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("TruthMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu}})");
-
-    // Leading proton angle
-    Vars.push_back(kTruthLeadingProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("TruthLeadingProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L}})");
-
-    // Recoil proton angle
-    Vars.push_back(kTruthRecoilProtonCosTheta); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("TruthRecoilProtonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{R}})");
-
-    // Opening angle between protons
-    Vars.push_back(kTruthCosOpeningAngleProtons); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("TruthCosOpeningAngleProtons"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}})");
-
-    // Opening angle between muon and total proton
-    Vars.push_back(kTruthCosOpeningAngleMuonTotalProton); VarBins.push_back(bAngleBins);
-    PlotNames.push_back("TruthCosOpeningAngleMuonTotalProton"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
-
-    // Delta alpha transverse
-    Vars.push_back(kTruthDeltaAlphaT); VarBins.push_back(bDeltaAlphaBins);
-    PlotNames.push_back("TruthDeltaAlphaT"); VarLabels.push_back("#delta #alpha_{T}");
-
-    // Transverse momentum
-    Vars.push_back(kTruthTransverseMomentum); VarBins.push_back(bTransverseMomentumBins);
-    PlotNames.push_back("TruthTransverseMomentum"); VarLabels.push_back("#delta P_{T}");
-
-    // Muon momentum 
-    Vars.push_back(kTruthMuonMomentum); VarBins.push_back(bMuonMomentumBins);
-    PlotNames.push_back("TruthMuonMomentum"); VarLabels.push_back("|#vec{p}_{#mu}|");
-
-    // Leading proton momentum 
-    Vars.push_back(kTruthLeadingProtonMomentum); VarBins.push_back(bLeadingProtonMomentumBins);
-    PlotNames.push_back("TruthLeadingProtonMomentum"); VarLabels.push_back("|#vec{p}_{L}|");
-
-    // Recoil proton momentum 
-    Vars.push_back(kTruthRecoilProtonMomentum); VarBins.push_back(bRecoilProtonMomentumBins);
-    PlotNames.push_back("TruthRecoilProtonMomentum"); VarLabels.push_back("|#vec{p}_{R}|");
-
-    ////////////////////////////////
-    // Double differential variables
-    ////////////////////////////////
-
-    // Serial transverse momentum in muon cos theta
-    Vars.push_back(kTruthTransverseMomentumInMuonCosTheta); VarBins.push_back(bTransverseMomentumInMuonCosTheta);
-    PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosTheta"); VarLabels.push_back("#delta P_{T} (bin #)");
-
-    // Delta alpha transverse in muon cos theta
-    Vars.push_back(kTruthDeltaAlphaTInMuonCosTheta); VarBins.push_back(bDeltaAlphaTInMuonCosTheta);
-    PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosTheta"); VarLabels.push_back("#delta #alpha_{T} (bin #)");
-
-    // Opening angle between protons in muon cos theta
-    Vars.push_back(kTruthCosOpeningAngleProtonsInMuonCosTheta); VarBins.push_back(bCosOpeningAngleProtonsInMuonCosTheta);
-    PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)");
-    
-    // Opening angle between muon and protons in muon cos theta
-    Vars.push_back(kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta); VarBins.push_back(bCosOpeningAngleMuonTotalProtonInMuonCosTheta);
-    PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"); VarLabels.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)");
-
     // Construct all spectra
     std::vector<std::tuple<std::unique_ptr<Spectrum>, std::unique_ptr<Spectrum>>> Spectra;
     for (std::size_t i = 0; i < Vars.size(); i++) {
-        auto TrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kTruthIsSignal, kNoSpillCut);
-        auto RecoTrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, Vars.at(i), kTruthIsSignal, kNoSpillCut, kRecoIsSignal);
+        auto TrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kTruthIsSignal, kNoSpillCut);
+        auto RecoTrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kTruthIsSignal, kNoSpillCut, kRecoIsSignal);
         Spectra.push_back({std::move(TrueSignals), std::move(RecoTrueSignals)});
     }
 

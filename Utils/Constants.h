@@ -113,6 +113,64 @@ namespace Constants {
         {"TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"}
     };
 
+    /////////////
+    // Plot names
+    /////////////
+
+    static const std::vector<TString> PlotNames = {
+        "EventCount",
+        "MuonCosTheta",
+        "LeadingProtonCosTheta",
+        "RecoilProtonCosTheta",
+        "CosOpeningAngleProtons",
+        "CosOpeningAngleMuonTotalProton",
+        "DeltaAlphaT",
+        "TransverseMomentum",
+        "MuonMomentum",
+        "LeadingProtonMomentum",
+        "RecoilProtonMomentum",
+        "SerialTransverseMomentum_InMuonCosTheta",
+        "SerialDeltaAlphaT_InMuonCosTheta",
+        "SerialCosOpeningAngleProtons_InMuonCosTheta",
+        "SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"
+    };
+
+    static const std::vector<std::string> VarLabels = {
+        "single bin",
+        "cos(#theta_{#vec{p}_{#mu}})",
+        "cos(#theta_{#vec{p}_{L}})",
+        "cos(#theta_{#vec{p}_{R}})",
+        "cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",
+        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",
+        "#delta #alpha_{T}",
+        "#delta P_{T}",
+        "|#vec{p}_{#mu}|",
+        "|#vec{p}_{L}|",
+        "|#vec{p}_{R}|",
+        "#delta P_{T} (bin #)",
+        "#delta #alpha_{T} (bin #)",
+        "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)",
+        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)"
+    };
+
+    static const std::vector<std::string> YLabels = {
+        "#frac{d#sigma}{# events} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{dcos(#theta_{#vec{p}_{L}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{dcos(#theta_{#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d|#vec{p}_{#mu}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d|#vec{p}_{L}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d|#vec{p}_{R}|} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]"
+    };
+
     ///////////////
     // Systematics
     ///////////////

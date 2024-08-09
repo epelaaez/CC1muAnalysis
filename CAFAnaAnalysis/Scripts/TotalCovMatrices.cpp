@@ -33,24 +33,6 @@ void TotalCovMatrices() {
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
-    // Plot names
-    std::vector<TString> PlotNames;
-    PlotNames.push_back("EventCount");
-    PlotNames.push_back("MuonCosTheta");
-    PlotNames.push_back("LeadingProtonCosTheta");
-    PlotNames.push_back("RecoilProtonCosTheta");
-    PlotNames.push_back("CosOpeningAngleProtons");
-    PlotNames.push_back("CosOpeningAngleMuonTotalProton");
-    PlotNames.push_back("DeltaAlphaT");
-    PlotNames.push_back("TransverseMomentum");
-    PlotNames.push_back("MuonMomentum");
-    PlotNames.push_back("LeadingProtonMomentum");
-    PlotNames.push_back("RecoilProtonMomentum");
-    PlotNames.push_back("SerialTransverseMomentum_InMuonCosTheta");
-    PlotNames.push_back("SerialDeltaAlphaT_InMuonCosTheta");
-    PlotNames.push_back("SerialCosOpeningAngleProtons_InMuonCosTheta");
-    PlotNames.push_back("SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta");
-
     // Vector with all systematic files
     std::vector<std::unique_ptr<TFile>> CovFiles;
 
