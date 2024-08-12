@@ -188,21 +188,24 @@ void WienerSVDOverlay() {
 				SlicedSmearedTrueHisto->GetXaxis()->SetLabelFont(FontStyle);
 				SlicedSmearedTrueHisto->GetXaxis()->SetLabelSize(TextSize);
 				SlicedSmearedTrueHisto->GetXaxis()->SetTitleSize(TextSize);
-				SlicedSmearedTrueHisto->GetXaxis()->SetTitleOffset(1.);
+				SlicedSmearedTrueHisto->GetXaxis()->SetTitleOffset(1.1);
 				SlicedSmearedTrueHisto->GetXaxis()->CenterTitle();
 
 				SlicedSmearedTrueHisto->GetYaxis()->SetTitleFont(FontStyle);
 				SlicedSmearedTrueHisto->GetYaxis()->SetLabelFont(FontStyle);
-				SlicedSmearedTrueHisto->GetYaxis()->SetLabelSize(TextSize);
-				SlicedSmearedTrueHisto->GetYaxis()->SetTitleSize(TextSize);
+				SlicedSmearedTrueHisto->GetYaxis()->SetLabelSize(TextSize*0.8);
+				SlicedSmearedTrueHisto->GetYaxis()->SetTitleSize(TextSize*0.9);
 				SlicedSmearedTrueHisto->GetYaxis()->SetNdivisions(6);
-				SlicedSmearedTrueHisto->GetYaxis()->SetTitleOffset(1.);
+				SlicedSmearedTrueHisto->GetYaxis()->SetTitleOffset(1.3);
 				SlicedSmearedTrueHisto->GetYaxis()->SetTickSize(0);
 				SlicedSmearedTrueHisto->GetYaxis()->CenterTitle();
 
 				double Max = 0;
-				for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
+				for (int i = 1; i < ErrorBand->GetN() - 1; ++i){
 					Max = std::max(Max, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+				}
+				for (int i = 0; i < NAltGen; ++i) {
+					Max = std::max(Max, SlicedAltGenHistos[i]->GetMaximum());
 				}
 				SlicedSmearedTrueHisto->GetYaxis()->SetRangeUser(0., 1.3 * Max);
 
@@ -257,7 +260,7 @@ void WienerSVDOverlay() {
 			SmearedTrueHisto->GetXaxis()->SetLabelFont(FontStyle);
 			SmearedTrueHisto->GetXaxis()->SetLabelSize(TextSize);
 			SmearedTrueHisto->GetXaxis()->SetTitleSize(TextSize);
-			SmearedTrueHisto->GetXaxis()->SetTitleOffset(1.);
+			SmearedTrueHisto->GetXaxis()->SetTitleOffset(1.1);
 			SmearedTrueHisto->GetXaxis()->CenterTitle();
 
 			SmearedTrueHisto->GetYaxis()->SetTitleFont(FontStyle);
@@ -265,13 +268,16 @@ void WienerSVDOverlay() {
 			SmearedTrueHisto->GetYaxis()->SetLabelSize(TextSize);
 			SmearedTrueHisto->GetYaxis()->SetTitleSize(TextSize);
 			SmearedTrueHisto->GetYaxis()->SetNdivisions(6);
-			SmearedTrueHisto->GetYaxis()->SetTitleOffset(1.);
+			SmearedTrueHisto->GetYaxis()->SetTitleOffset(1.2);
 			SmearedTrueHisto->GetYaxis()->SetTickSize(0);
 			SmearedTrueHisto->GetYaxis()->CenterTitle();
 
 			double Max = 0;
-			for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
+			for (int i = 1; i < ErrorBand->GetN() - 1; ++i){
 				Max = std::max(Max, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+			}
+			for (int i = 0; i < NAltGen; ++i) {
+				Max = std::max(Max, AltGenHistos[i]->GetMaximum());
 			}
 			SmearedTrueHisto->GetYaxis()->SetRangeUser(0., 1.3 * Max);
 
