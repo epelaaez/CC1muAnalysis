@@ -30,6 +30,12 @@ using namespace ana;
 using namespace Constants;
 
 void SelectionEfficiency() {
+    TH1D::SetDefaultSumw2();
+    TH2D::SetDefaultSumw2();
+
+    int FontStyle = 132;
+    double TextSize = 0.06;	
+    
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(TargetFile);
 
@@ -47,8 +53,8 @@ void SelectionEfficiency() {
     // Construct all spectra
     std::vector<std::tuple<std::unique_ptr<Spectrum>, std::unique_ptr<Spectrum>>> Spectra;
     for (std::size_t i = 0; i < Vars.size(); i++) {
-        auto TrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kTruthIsSignal, kNoSpillCut);
-        auto RecoTrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kTruthIsSignal, kNoSpillCut, kRecoIsSignal);
+        auto TrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<2>(Vars.at(i)), kTruthIsSignal, kNoSpillCut);
+        auto RecoTrueSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<2>(Vars.at(i)), kTruthIsSignal, kNoSpillCut, kRecoIsSignal);
         Spectra.push_back({std::move(TrueSignals), std::move(RecoTrueSignals)});
     }
 
@@ -68,7 +74,7 @@ void SelectionEfficiency() {
         TrueHisto->SetBinContent(1, TrueHisto->GetBinContent(0) + TrueHisto->GetBinContent(1));
         RecoTrueHisto->SetBinContent(1, RecoTrueHisto->GetBinContent(0) + RecoTrueHisto->GetBinContent(1));
 
-        // Change y axis title so efficiency plot inherits it
+        // Change axes title so efficiency plot inherits them
         TrueHisto->GetYaxis()->SetTitle("Signal efficiency");
         RecoTrueHisto->GetYaxis()->SetTitle("Signal efficiency");
 
@@ -80,7 +86,7 @@ void SelectionEfficiency() {
 
         if (PlotNames[i].Contains("Serial")) {
             // Flatten out double differential plots
-            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator[PlotNames[i]+"Plot"];
+            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[i]+"Plot"];
             auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
             int StartIndex = 0;
 
@@ -121,20 +127,40 @@ void SelectionEfficiency() {
 
                 // Create efficiency plot
                 TEfficiency* Eff = new TEfficiency(*SlicedRecoTrueHisto, *SlicedTrueHisto);
-                Eff->SetTitle((";True " + VarLabels.at(i) + ";Efficiency").c_str());
+                std::string VarLabel = (std::string) VarLabels.at(i);
+                VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
+                Eff->SetTitle((";True " + VarLabel + ";Efficiency").c_str());
 
                 PlotCanvas->cd();
                 Eff->SetMarkerStyle(21);
                 Eff->SetMarkerColor(kBlack);
                 Eff->Draw("AP");
+                
                 gPad->Update();
                 Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(SerialSliceBinning.at(0),SerialSliceBinning.at(SerialSliceBinning.size() - 1));
                 double max = Eff->GetPaintedGraph()->GetYaxis()->GetBinUpEdge(Eff->GetPaintedGraph()->GetYaxis()->GetNbins());
                 Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0., max*1.2);
 
+                Eff->GetPaintedGraph()->GetXaxis()->CenterTitle();
+                Eff->GetPaintedGraph()->GetXaxis()->SetTitleFont(FontStyle);
+                Eff->GetPaintedGraph()->GetXaxis()->SetLabelFont(FontStyle);
+                Eff->GetPaintedGraph()->GetXaxis()->SetNdivisions(8);
+                Eff->GetPaintedGraph()->GetXaxis()->SetLabelSize(TextSize);
+                Eff->GetPaintedGraph()->GetXaxis()->SetTitleSize(TextSize);
+                Eff->GetPaintedGraph()->GetXaxis()->SetTitleOffset(1.1);
+
+                Eff->GetPaintedGraph()->GetYaxis()->CenterTitle();
+                Eff->GetPaintedGraph()->GetYaxis()->SetTitleFont(FontStyle);
+                Eff->GetPaintedGraph()->GetYaxis()->SetLabelFont(FontStyle);
+                Eff->GetPaintedGraph()->GetYaxis()->SetNdivisions(6);
+                Eff->GetPaintedGraph()->GetYaxis()->SetLabelSize(TextSize);
+                Eff->GetPaintedGraph()->GetYaxis()->SetTitleSize(TextSize);
+                Eff->GetPaintedGraph()->GetYaxis()->SetTitleOffset(1.3);
+                Eff->GetPaintedGraph()->GetYaxis()->SetTickSize(0);
+
                 // Slice label
                 TLatex *textSlice = new TLatex();
-                TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel[PlotNames[i]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
+                TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel["True"+PlotNames[i]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
                 textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
 
                 // Save as png
@@ -146,16 +172,34 @@ void SelectionEfficiency() {
         } else {
             // Create efficiency plot
             TEfficiency* Eff = new TEfficiency(*RecoTrueHisto, *TrueHisto);
-            Eff->SetTitle(("All events;True " + VarLabels.at(i) + ";Efficiency").c_str());
+            Eff->SetTitle((";True " + VarLabels.at(i) + ";Efficiency").c_str());
 
             PlotCanvas->cd();
             Eff->SetMarkerStyle(21);
             Eff->SetMarkerColor(kBlack);
             Eff->Draw("AP");
+            
             gPad->Update();
             Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(VarBins.at(i).Min(),VarBins.at(i).Max());
             double max = Eff->GetPaintedGraph()->GetYaxis()->GetBinUpEdge(Eff->GetPaintedGraph()->GetYaxis()->GetNbins());
             Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0., max*1.2);
+
+            Eff->GetPaintedGraph()->GetXaxis()->CenterTitle();
+            Eff->GetPaintedGraph()->GetXaxis()->SetTitleFont(FontStyle);
+            Eff->GetPaintedGraph()->GetXaxis()->SetLabelFont(FontStyle);
+            Eff->GetPaintedGraph()->GetXaxis()->SetNdivisions(8);
+            Eff->GetPaintedGraph()->GetXaxis()->SetLabelSize(TextSize);
+            Eff->GetPaintedGraph()->GetXaxis()->SetTitleSize(TextSize);
+            Eff->GetPaintedGraph()->GetXaxis()->SetTitleOffset(1.1);
+
+            Eff->GetPaintedGraph()->GetYaxis()->CenterTitle();
+            Eff->GetPaintedGraph()->GetYaxis()->SetTitleFont(FontStyle);
+            Eff->GetPaintedGraph()->GetYaxis()->SetLabelFont(FontStyle);
+            Eff->GetPaintedGraph()->GetYaxis()->SetNdivisions(6);
+            Eff->GetPaintedGraph()->GetYaxis()->SetLabelSize(TextSize);
+            Eff->GetPaintedGraph()->GetYaxis()->SetTitleSize(TextSize);
+            Eff->GetPaintedGraph()->GetYaxis()->SetTitleOffset(1.3);
+            Eff->GetPaintedGraph()->GetYaxis()->SetTickSize(0);
 
             // Save as png
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Efficiency/"+PlotNames[i]+".png");
