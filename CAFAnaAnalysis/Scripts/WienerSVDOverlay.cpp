@@ -69,16 +69,6 @@ void WienerSVDOverlay() {
 
 	// Loop over variables, start at 1 to skip event count
 	for (int iVar = 1; iVar < PlotNames.size(); ++iVar) {
-		if (PlotNames[iVar].Contains("Serial")) {
-			continue;
-		}
-
-		TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
-        leg->SetBorderSize(0);
-        leg->SetNColumns(3);
-        leg->SetTextSize(TextSize*0.8);
-        leg->SetTextFont(FontStyle);
-
 		/////////////////////////
 		// Get unfolded spectrum
 		/////////////////////////
@@ -86,7 +76,6 @@ void WienerSVDOverlay() {
 		TH1D* UnfSpectrum = (TH1D*)UnfoldedFile->Get(PlotNames[iVar]+"_unf_spectrum");
         int n = UnfSpectrum->GetNbinsX();
 		double edges[n+1]; for (int i = 0; i < n+1; i++) { edges[i] = UnfSpectrum->GetBinLowEdge(i+1); }
-		TGraphAsymmErrors* ErrorBand = (TGraphAsymmErrors*)UnfoldedFile->Get(PlotNames[iVar]+"_band");
 
 		//////////////////////
 		// Get smearing matrix
@@ -126,55 +115,190 @@ void WienerSVDOverlay() {
 			AltGenHistos[iAltGen] = SmearedGenHisto;
 		}
 
-		//////////////////
-		// Plot everything
-		//////////////////
+		if (PlotNames[iVar].Contains("Serial")) {
+			auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iVar]+"Plot"];
+            auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
+            int StartIndex = 0;
 
-		SmearedTrueHisto->GetXaxis()->SetTitleFont(FontStyle);
-		SmearedTrueHisto->GetXaxis()->SetLabelFont(FontStyle);
-		SmearedTrueHisto->GetXaxis()->SetLabelSize(TextSize);
-		SmearedTrueHisto->GetXaxis()->SetTitleSize(TextSize);
-		SmearedTrueHisto->GetXaxis()->SetTitleOffset(1.);
-		SmearedTrueHisto->GetXaxis()->CenterTitle();
+			// Loop over slices
+			for (int iSlice = 0; iSlice < NSlices; ++iSlice) {
+				TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+				leg->SetBorderSize(0);
+				leg->SetNColumns(3);
+				leg->SetTextSize(TextSize*0.8);
+				leg->SetTextFont(FontStyle);
 
-		SmearedTrueHisto->GetYaxis()->SetTitleFont(FontStyle);
-		SmearedTrueHisto->GetYaxis()->SetLabelFont(FontStyle);
-		SmearedTrueHisto->GetYaxis()->SetLabelSize(TextSize);
-		SmearedTrueHisto->GetYaxis()->SetTitleSize(TextSize);
-		SmearedTrueHisto->GetYaxis()->SetNdivisions(6);
-		SmearedTrueHisto->GetYaxis()->SetTitleOffset(1.);
-		SmearedTrueHisto->GetYaxis()->SetTickSize(0);
-		SmearedTrueHisto->GetYaxis()->CenterTitle();
+				////////////////////
+				// Slice information
+				////////////////////
 
-		double Max = 0;
-		for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
-			Max = std::max(Max, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+				TString SlicePlotName = PlotNames[iVar] + "_" + TString(std::to_string(iSlice));
+				double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
+				int SliceNBins = SerialVectorBins.at(iSlice); std::vector<double> SerialSliceBinning;
+				for (int iBin = 0; iBin < SliceNBins + 1; iBin++) {
+					double value = SerialVectorRanges.at(StartIndex + iBin);
+					SerialSliceBinning.push_back(value);
+				}
+
+				//////////////////////////
+				// Get error band for data
+				//////////////////////////
+
+				TGraphAsymmErrors* ErrorBand = (TGraphAsymmErrors*)UnfoldedFile->Get(SlicePlotName+"_band");
+
+				////////////////
+				// Slice histos
+				////////////////
+
+				TH1D* SlicedSmearedTrueHisto = tools.GetHistoBins(
+					SmearedTrueHisto,
+					SerialVectorLowBin.at(iSlice),
+					SerialVectorHighBin.at(iSlice),
+					SliceWidth,
+					SerialSliceBinning,
+					"SmearedSignal"
+				);
+				
+				TH1D* SlicedUnfSpectrum = tools.GetHistoBins(
+					UnfSpectrum,
+					SerialVectorLowBin.at(iSlice),
+					SerialVectorHighBin.at(iSlice),
+					SliceWidth,
+					SerialSliceBinning,
+					"UnfoldedSpectrum"
+				);
+
+				std::vector<TH1D*> SlicedAltGenHistos; SlicedAltGenHistos.resize(NAltGen);
+				for (int iAltGen = 0; iAltGen < NAltGen; ++iAltGen) {
+					SlicedAltGenHistos[iAltGen] = tools.GetHistoBins(
+						AltGenHistos[iAltGen],
+						SerialVectorLowBin.at(iSlice),
+						SerialVectorHighBin.at(iSlice),
+						SliceWidth,
+						SerialSliceBinning,
+						"Unfolded" + AltGenNames[iAltGen]
+					);
+				}
+				
+				//////////////////
+				// Plot everything
+				//////////////////
+
+				SlicedSmearedTrueHisto->GetXaxis()->SetTitleFont(FontStyle);
+				SlicedSmearedTrueHisto->GetXaxis()->SetLabelFont(FontStyle);
+				SlicedSmearedTrueHisto->GetXaxis()->SetLabelSize(TextSize);
+				SlicedSmearedTrueHisto->GetXaxis()->SetTitleSize(TextSize);
+				SlicedSmearedTrueHisto->GetXaxis()->SetTitleOffset(1.);
+				SlicedSmearedTrueHisto->GetXaxis()->CenterTitle();
+
+				SlicedSmearedTrueHisto->GetYaxis()->SetTitleFont(FontStyle);
+				SlicedSmearedTrueHisto->GetYaxis()->SetLabelFont(FontStyle);
+				SlicedSmearedTrueHisto->GetYaxis()->SetLabelSize(TextSize);
+				SlicedSmearedTrueHisto->GetYaxis()->SetTitleSize(TextSize);
+				SlicedSmearedTrueHisto->GetYaxis()->SetNdivisions(6);
+				SlicedSmearedTrueHisto->GetYaxis()->SetTitleOffset(1.);
+				SlicedSmearedTrueHisto->GetYaxis()->SetTickSize(0);
+				SlicedSmearedTrueHisto->GetYaxis()->CenterTitle();
+
+				double Max = 0;
+				for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
+					Max = std::max(Max, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+				}
+				SlicedSmearedTrueHisto->GetYaxis()->SetRangeUser(0., 1.3 * Max);
+
+				TLegendEntry* legSmearedTrue = leg->AddEntry(SlicedSmearedTrueHisto,"True","l");
+				SlicedSmearedTrueHisto->SetLineColor(kBlue+2);
+				SlicedSmearedTrueHisto->SetLineWidth(4);
+				SlicedSmearedTrueHisto->Draw("hist");
+
+				for (int iAltGen = 0; iAltGen < NAltGen; ++iAltGen) {
+					TLegendEntry* legRecoTrue = leg->AddEntry(SlicedAltGenHistos[iAltGen],AltGenLabels[iAltGen],"l");
+					SlicedAltGenHistos[iAltGen]->SetLineColor(Colors[iAltGen]);
+					SlicedAltGenHistos[iAltGen]->SetLineWidth(4);
+					SlicedAltGenHistos[iAltGen]->Draw("hist same");
+				}
+
+				TLegendEntry* legUnfSpectrum = leg->AddEntry(SlicedUnfSpectrum,"Unfolded data","ep");
+				SlicedUnfSpectrum->SetLineColor(kBlack);
+				SlicedUnfSpectrum->SetMarkerColor(kBlack);
+				SlicedUnfSpectrum->SetMarkerStyle(20);
+				SlicedUnfSpectrum->SetMarkerSize(1.);
+				SlicedUnfSpectrum->Draw("e1x0  same");
+				ErrorBand->Draw("e1 same");
+				
+				// Slice label
+                TLatex *textSlice = new TLatex();
+                TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[iSlice], 1) + " < " + PlotNameToSliceLabel["True"+PlotNames[iVar]+"Plot"] + " < " + tools.to_string_with_precision(SliceDiscriminators[iSlice + 1], 1);
+                textSlice->DrawLatexNDC(0.4,0.92,SliceLabel);
+
+				leg->Draw();
+				PlotCanvas->SaveAs(dir+"/Figs/CAFAna/WienerSVDOverlay/"+SlicePlotName+".png");
+
+				delete leg;
+			}
+		} else {
+			TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+			leg->SetBorderSize(0);
+			leg->SetNColumns(3);
+			leg->SetTextSize(TextSize*0.8);
+			leg->SetTextFont(FontStyle);
+
+			//////////////////////////
+			// Get error band for data
+			//////////////////////////
+
+			TGraphAsymmErrors* ErrorBand = (TGraphAsymmErrors*)UnfoldedFile->Get(PlotNames[iVar]+"_band");
+
+			//////////////////
+			// Plot everything
+			//////////////////
+
+			SmearedTrueHisto->GetXaxis()->SetTitleFont(FontStyle);
+			SmearedTrueHisto->GetXaxis()->SetLabelFont(FontStyle);
+			SmearedTrueHisto->GetXaxis()->SetLabelSize(TextSize);
+			SmearedTrueHisto->GetXaxis()->SetTitleSize(TextSize);
+			SmearedTrueHisto->GetXaxis()->SetTitleOffset(1.);
+			SmearedTrueHisto->GetXaxis()->CenterTitle();
+
+			SmearedTrueHisto->GetYaxis()->SetTitleFont(FontStyle);
+			SmearedTrueHisto->GetYaxis()->SetLabelFont(FontStyle);
+			SmearedTrueHisto->GetYaxis()->SetLabelSize(TextSize);
+			SmearedTrueHisto->GetYaxis()->SetTitleSize(TextSize);
+			SmearedTrueHisto->GetYaxis()->SetNdivisions(6);
+			SmearedTrueHisto->GetYaxis()->SetTitleOffset(1.);
+			SmearedTrueHisto->GetYaxis()->SetTickSize(0);
+			SmearedTrueHisto->GetYaxis()->CenterTitle();
+
+			double Max = 0;
+			for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
+				Max = std::max(Max, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+			}
+			SmearedTrueHisto->GetYaxis()->SetRangeUser(0., 1.3 * Max);
+
+			TLegendEntry* legSmearedTrue = leg->AddEntry(SmearedTrueHisto,"True","l");
+			SmearedTrueHisto->SetLineColor(kBlue+2);
+			SmearedTrueHisto->SetLineWidth(4);
+			SmearedTrueHisto->Draw("hist");
+
+			for (int iAltGen = 0; iAltGen < NAltGen; ++iAltGen) {
+				TLegendEntry* legRecoTrue = leg->AddEntry(AltGenHistos[iAltGen],AltGenLabels[iAltGen],"l");
+				AltGenHistos[iAltGen]->SetLineColor(Colors[iAltGen]);
+				AltGenHistos[iAltGen]->SetLineWidth(4);
+				AltGenHistos[iAltGen]->Draw("hist same");
+			}
+
+			TLegendEntry* legUnfSpectrum = leg->AddEntry(UnfSpectrum,"Unfolded data","ep");
+			UnfSpectrum->SetLineColor(kBlack);
+			UnfSpectrum->SetMarkerColor(kBlack);
+			UnfSpectrum->SetMarkerStyle(20);
+			UnfSpectrum->SetMarkerSize(1.);
+			UnfSpectrum->Draw("e1x0  same");
+			ErrorBand->Draw("e1 same");
+
+			leg->Draw();
+			PlotCanvas->SaveAs(dir+"/Figs/CAFAna/WienerSVDOverlay/"+PlotNames[iVar]+".png");
+
+			delete leg;
 		}
-		SmearedTrueHisto->GetYaxis()->SetRangeUser(0., 1.3 * Max);
-
-		TLegendEntry* legSmearedTrue = leg->AddEntry(SmearedTrueHisto,"True","l");
-		SmearedTrueHisto->SetLineColor(kBlue+2);
-		SmearedTrueHisto->SetLineWidth(4);
-		SmearedTrueHisto->Draw("hist");
-
-		for (int iAltGen = 0; iAltGen < NAltGen; ++iAltGen) {
-			TLegendEntry* legRecoTrue = leg->AddEntry(AltGenHistos[iAltGen],AltGenLabels[iAltGen],"l");
-			AltGenHistos[iAltGen]->SetLineColor(Colors[iAltGen]);
-			AltGenHistos[iAltGen]->SetLineWidth(4);
-			AltGenHistos[iAltGen]->Draw("hist same");
-		}
-
-		TLegendEntry* legUnfSpectrum = leg->AddEntry(UnfSpectrum,"Unfolded data","ep");
-		UnfSpectrum->SetLineColor(kBlack);
-		UnfSpectrum->SetMarkerColor(kBlack);
-		UnfSpectrum->SetMarkerStyle(20);
-		UnfSpectrum->SetMarkerSize(1.);
-		UnfSpectrum->Draw("e1x0  same");
-		ErrorBand->Draw("e1 same");
-
-		leg->Draw();
-		PlotCanvas->SaveAs(dir+"/Figs/CAFAna/WienerSVDOverlay/"+PlotNames[iVar]+".png");
-
-		delete leg;
 	}
 }
