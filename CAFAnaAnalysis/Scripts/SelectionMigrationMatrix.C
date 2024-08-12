@@ -167,7 +167,23 @@ void SelectionMigrationMatrix() {
         std::cout << "Total reco var events: " << RecoTotalEvents << std::endl;
 
         MigrationMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
+        MigrationMatrix->GetXaxis()->CenterTitle();
+        MigrationMatrix->GetXaxis()->SetTitleOffset(1.1);
+        MigrationMatrix->GetXaxis()->SetTitleFont(FontStyle);
+        MigrationMatrix->GetXaxis()->SetTitleSize(TextSize);
+        MigrationMatrix->GetXaxis()->SetLabelFont(FontStyle);
+        MigrationMatrix->GetXaxis()->SetLabelSize(TextSize);
+        MigrationMatrix->GetXaxis()->SetNdivisions(5);
+
         MigrationMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
+        MigrationMatrix->GetYaxis()->CenterTitle();
+        MigrationMatrix->GetYaxis()->SetTitleOffset(1.1);
+        MigrationMatrix->GetYaxis()->SetTitleFont(FontStyle);
+        MigrationMatrix->GetYaxis()->SetTitleSize(TextSize);
+        MigrationMatrix->GetYaxis()->SetLabelFont(FontStyle);
+        MigrationMatrix->GetYaxis()->SetLabelSize(TextSize);
+        MigrationMatrix->GetYaxis()->SetNdivisions(5);
+
         double MigrationMin = MigrationMatrix->GetMinimum();
         double MigrationMax = MigrationMatrix->GetMaximum();
         MigrationMatrix->GetZaxis()->SetRangeUser(MigrationMin,MigrationMax);
@@ -179,7 +195,23 @@ void SelectionMigrationMatrix() {
         MigrationMatrix->GetZaxis()->SetNdivisions(5);
 
         ResponseMatrix->GetXaxis()->SetTitle(("True " + VarLabels.at(i)).c_str());
+        ResponseMatrix->GetXaxis()->CenterTitle();
+        ResponseMatrix->GetXaxis()->SetTitleOffset(1.1);
+        ResponseMatrix->GetXaxis()->SetTitleFont(FontStyle);
+        ResponseMatrix->GetXaxis()->SetTitleSize(TextSize);
+        ResponseMatrix->GetXaxis()->SetLabelFont(FontStyle);
+        ResponseMatrix->GetXaxis()->SetLabelSize(TextSize);
+        ResponseMatrix->GetXaxis()->SetNdivisions(5);
+
         ResponseMatrix->GetYaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
+        ResponseMatrix->GetYaxis()->CenterTitle();
+        ResponseMatrix->GetYaxis()->SetTitleOffset(1.1);
+        ResponseMatrix->GetYaxis()->SetTitleFont(FontStyle);
+        ResponseMatrix->GetYaxis()->SetTitleSize(TextSize);
+        ResponseMatrix->GetYaxis()->SetLabelFont(FontStyle);
+        ResponseMatrix->GetYaxis()->SetLabelSize(TextSize);
+        ResponseMatrix->GetYaxis()->SetNdivisions(5);
+
         double ResponseMin = ResponseMatrix->GetMinimum();
         double ResponseMax = ResponseMatrix->GetMaximum();
         ResponseMatrix->GetZaxis()->SetRangeUser(ResponseMin,ResponseMax);
