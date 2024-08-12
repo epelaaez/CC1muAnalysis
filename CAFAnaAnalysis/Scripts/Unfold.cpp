@@ -152,6 +152,7 @@ void Unfold() {
         // Get unfolded cross-section
         TH1D* UnfoldedSpectrum = new TH1D("Unfolded"+PlotNames[iPlot],";"+(TString)VarLabels[iPlot]+";"+(TString)YLabels[iPlot], n, edges);
         V2H(unfold, UnfoldedSpectrum); tools.Reweight(UnfoldedSpectrum);
+        SaveFile->WriteObject(UnfoldedSpectrum, PlotNames[iPlot]+"_unf_spectrum");
 
         // Add smear to signal
         TH1D* SmearedSignal = new TH1D("SmearedTrue"+PlotNames[iPlot],";"+(TString)VarLabels[iPlot]+";"+(TString)YLabels[iPlot], n, edges);
@@ -191,6 +192,7 @@ void Unfold() {
         PlotCanvas->cd();
         SmearMatrixHisto->Draw("colz");
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Smear/"+PlotNames[iPlot]+".png");
+        SaveFile->WriteObject(SmearMatrixHisto, PlotNames[iPlot]+"_smear");
 
         ///////////////////////////
         // Bin by bin uncertainties
@@ -513,7 +515,7 @@ void Unfold() {
                     ErrorBand->SetPoint(iBin, xnom, ynom);
                     const double dx = SlicedUnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
                     ErrorBand->SetPointError(
-                        iBin, dx/2, dx/2,
+                        iBin, 0, 0,
                         TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx),
                         TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx)
                     );
@@ -581,6 +583,9 @@ void Unfold() {
 
                 // Save histogram
                 PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+SlicePlotName+".png");	
+
+                // Save error band
+                SaveFile->WriteObject(ErrorBand, SlicePlotName+"_band");
             }
         } else {
             // Create error band
@@ -589,9 +594,8 @@ void Unfold() {
                 const double xnom = UnfoldedSpectrum->GetXaxis()->GetBinCenter(iBin);
                 const double ynom = UnfoldedSpectrum->GetBinContent(iBin);
                 ErrorBand->SetPoint(iBin, xnom, ynom);
-                const double dx = UnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
                 ErrorBand->SetPointError(
-                    iBin, dx/2, dx/2,
+                    iBin, 0, 0,
                     TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin)),
                     TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin))
                 );
@@ -644,7 +648,6 @@ void Unfold() {
             for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
                 maxY = std::max(maxY, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
             }
-            std::cout << maxY << std::endl;
             UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,1.3 * maxY);
             SmearedSignal->GetYaxis()->SetRangeUser(0.,1.3 * maxY);	
 
@@ -656,6 +659,9 @@ void Unfold() {
 
             // Save histogram
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Unfolded/"+PlotNames[iPlot]+".png");
+
+            // Save error band
+            SaveFile->WriteObject(ErrorBand, PlotNames[iPlot]+"_band");
         }
         delete PlotCanvas;
     }
