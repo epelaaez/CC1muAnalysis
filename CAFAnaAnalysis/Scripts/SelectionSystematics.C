@@ -78,7 +78,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = true;
+    const bool ConstructSpectra = false;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -210,6 +210,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
             TH1D* RecoHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco"));
             TH1D* RecoTrueHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco_true"));
             TH1D* RecoBkgHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_reco_bkg"));
+
+            RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+            RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+            RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
             VarHistos.push_back({std::move(RecoHisto), std::move(RecoTrueHisto), std::move(RecoBkgHisto)});
 
             // Var univ plots
@@ -219,6 +224,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
                 TH1D* UnivRecoHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco"));
                 TH1D* UnivRecoTrueHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true"));
                 TH1D* UnivRecoBkgHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg"));
+
+                UnivRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+                UnivRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+                UnivRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
                 VarHistos.push_back({std::move(UnivRecoHisto), std::move(UnivRecoTrueHisto), std::move(UnivRecoBkgHisto)});
 
                 std::vector<TH1D*> ResponseVarBinHistos; TH1D* UnivTruthHisto;
@@ -226,9 +236,11 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
                     for (int j = 0; j < VarBins.at(i).NBins(); j++) {
                         TString BinString = TString(std::to_string(j));
                         TH1D* TruthValuesBinHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_"+BinString));
+                        TruthValuesBinHisto->Scale(Units / (IntegratedFlux * NTargets));
                         ResponseVarBinHistos.push_back(std::move(TruthValuesBinHisto));
                     }
                     UnivTruthHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_true"));
+                    UnivTruthHisto->Scale(Units / (IntegratedFlux * NTargets));
                 }
                 ResponseHistos.push_back({std::move(ResponseVarBinHistos), std::move(UnivTruthHisto)});
             }
@@ -236,6 +248,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
             TH1D* CVTrueSignalHisto;
             if (ModifiedResponse) {
                 CVTrueSignalHisto = (TH1D*)(SaveFile->Get<TH1D>(PlotNames[i]+"_true"));
+                CVTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
             }
             
             // Push all histos for given variable
@@ -258,11 +271,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
             RecoTrueHisto = RecoTrueSpectra->Nominal().ToTH1(TargetPOT);
             RecoBkgHisto = RecoBkgSpectra->Nominal().ToTH1(TargetPOT);
 
-            // Scale histograms
-            RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
-            RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
-            RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
-
             // Manage under/overflow bins
             RecoHisto->SetBinContent(RecoHisto->GetNbinsX(), RecoHisto->GetBinContent(RecoHisto->GetNbinsX()) + RecoHisto->GetBinContent(RecoHisto->GetNbinsX() + 1));
             RecoTrueHisto->SetBinContent(RecoTrueHisto->GetNbinsX(), RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX()) + RecoTrueHisto->GetBinContent(RecoTrueHisto->GetNbinsX() + 1));
@@ -277,12 +285,17 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
             SaveFile->WriteObject(RecoTrueHisto, PlotNames[i]+"_reco_true");
             SaveFile->WriteObject(RecoBkgHisto, PlotNames[i]+"_reco_bkg");
 
+            // Scale histograms
+            RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+            RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+            RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
             // Get central value true signal spectrum
             if (ModifiedResponse) {
                 CVTrueSignalHisto = std::get<1>(ResponseMatrixSpectra[i])->Nominal().ToTH1(TargetPOT);
-                CVTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
                 CVTrueSignalHisto->SetBinContent(CVTrueSignalHisto->GetNbinsX(), CVTrueSignalHisto->GetBinContent(CVTrueSignalHisto->GetNbinsX()) + CVTrueSignalHisto->GetBinContent(CVTrueSignalHisto->GetNbinsX() + 1));
                 SaveFile->WriteObject(CVTrueSignalHisto, PlotNames[i]+"_true");
+                CVTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
             }
         } else {
             RecoHisto = std::get<0>(LoadedHistos.at(i)[0]);
@@ -381,11 +394,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
                 UnivRecoTrueHisto = RecoTrueSpectra->Universe(iUniv).ToTH1(TargetPOT);
                 UnivRecoBkgHisto = RecoBkgSpectra->Universe(iUniv).ToTH1(TargetPOT);
 
-                // Scale histograms
-                UnivRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
-                UnivRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
-                UnivRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
-
                 // Manage under/overflow bins
                 UnivRecoHisto->SetBinContent(UnivRecoHisto->GetNbinsX(), UnivRecoHisto->GetBinContent(UnivRecoHisto->GetNbinsX()) + UnivRecoHisto->GetBinContent(UnivRecoHisto->GetNbinsX() + 1));
                 UnivRecoTrueHisto->SetBinContent(UnivRecoTrueHisto->GetNbinsX(), UnivRecoTrueHisto->GetBinContent(UnivRecoTrueHisto->GetNbinsX()) + UnivRecoTrueHisto->GetBinContent(UnivRecoTrueHisto->GetNbinsX() + 1));
@@ -401,23 +409,29 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
                 SaveFile->WriteObject(UnivRecoTrueHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_true");
                 SaveFile->WriteObject(UnivRecoBkgHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_bkg");
 
+                // Scale histograms
+                UnivRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
+                UnivRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+                UnivRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
                 // Load histograms needed for response matrix if systematic is cross section
                 if (ModifiedResponse) {
                     for (int iBin = 0; iBin < VarBins.at(i).NBins(); ++iBin) {
                         TH1D* TruthValuesBinHisto = std::get<0>(ResponseMatrixSpectra[i])[iBin]->Universe(iUniv).ToTH1(TargetPOT);
-                        TruthValuesBinHisto->Scale(Units / (IntegratedFlux * NTargets));
                         TruthValuesBinHisto->SetBinContent(TruthValuesBinHisto->GetNbinsX(), TruthValuesBinHisto->GetBinContent(TruthValuesBinHisto->GetNbinsX()) + TruthValuesBinHisto->GetBinContent(TruthValuesBinHisto->GetNbinsX() + 1));
 
                         // Save to root file
                         TString BinString = TString(std::to_string(iBin));
                         SaveFile->WriteObject(TruthValuesBinHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_reco_"+BinString);
                         UnivTruthValuesHistos.push_back(TruthValuesBinHisto);
+
+                        // Scale
+                        TruthValuesBinHisto->Scale(Units / (IntegratedFlux * NTargets));
                     }
                     UnivTrueSignalHisto = std::get<1>(ResponseMatrixSpectra[i])->Universe(iUniv).ToTH1(TargetPOT);
-                    UnivTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
                     UnivTrueSignalHisto->SetBinContent(UnivTrueSignalHisto->GetNbinsX(), UnivTrueSignalHisto->GetBinContent(UnivTrueSignalHisto->GetNbinsX()) + UnivTrueSignalHisto->GetBinContent(UnivTrueSignalHisto->GetNbinsX() + 1));
-
                     SaveFile->WriteObject(UnivTrueSignalHisto, PlotNames[i]+"_"+(TString)SystName+"_"+UnivString+"_true");
+                    UnivTrueSignalHisto->Scale(Units / (IntegratedFlux * NTargets));
                 } 
             } else {
                 UnivRecoHisto = std::get<0>(LoadedHistos.at(i)[iUniv + 1]);
@@ -495,7 +509,22 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
         CovMatrix->GetZaxis()->SetNdivisions(5);
 
         CovMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+        CovMatrix->GetXaxis()->CenterTitle();
+        CovMatrix->GetXaxis()->SetTitleOffset(1.1);
+        CovMatrix->GetXaxis()->SetTitleFont(FontStyle);
+        CovMatrix->GetXaxis()->SetTitleSize(TextSize);
+        CovMatrix->GetXaxis()->SetLabelFont(FontStyle);
+        CovMatrix->GetXaxis()->SetLabelSize(TextSize);
+        CovMatrix->GetXaxis()->SetNdivisions(5);
+
         CovMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
+        CovMatrix->GetYaxis()->CenterTitle();
+        CovMatrix->GetYaxis()->SetTitleOffset(1.1);
+        CovMatrix->GetYaxis()->SetTitleFont(FontStyle);
+        CovMatrix->GetYaxis()->SetTitleSize(TextSize);
+        CovMatrix->GetYaxis()->SetLabelFont(FontStyle);
+        CovMatrix->GetYaxis()->SetLabelSize(TextSize);
+        CovMatrix->GetYaxis()->SetNdivisions(5);
 
         PlotCanvas->cd();
 
@@ -519,7 +548,22 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
         FracCovMatrix->GetZaxis()->SetNdivisions(5);
 
         FracCovMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+        FracCovMatrix->GetXaxis()->CenterTitle();
+        FracCovMatrix->GetXaxis()->SetTitleOffset(1.1);
+        FracCovMatrix->GetXaxis()->SetTitleFont(FontStyle);
+        FracCovMatrix->GetXaxis()->SetTitleSize(TextSize);
+        FracCovMatrix->GetXaxis()->SetLabelFont(FontStyle);
+        FracCovMatrix->GetXaxis()->SetLabelSize(TextSize);
+        FracCovMatrix->GetXaxis()->SetNdivisions(5);
+
         FracCovMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
+        FracCovMatrix->GetYaxis()->CenterTitle();
+        FracCovMatrix->GetYaxis()->SetTitleOffset(1.1);
+        FracCovMatrix->GetYaxis()->SetTitleFont(FontStyle);
+        FracCovMatrix->GetYaxis()->SetTitleSize(TextSize);
+        FracCovMatrix->GetYaxis()->SetLabelFont(FontStyle);
+        FracCovMatrix->GetYaxis()->SetLabelSize(TextSize);
+        FracCovMatrix->GetYaxis()->SetNdivisions(5);
 
         PlotCanvas->cd();
 
@@ -541,7 +585,22 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
         CorrMatrix->GetZaxis()->SetNdivisions(5);
 
         CorrMatrix->GetXaxis()->SetTitle(("bin i " + VarLabels.at(i)).c_str());
+        CorrMatrix->GetXaxis()->CenterTitle();
+        CorrMatrix->GetXaxis()->SetTitleOffset(1.1);
+        CorrMatrix->GetXaxis()->SetTitleFont(FontStyle);
+        CorrMatrix->GetXaxis()->SetTitleSize(TextSize);
+        CorrMatrix->GetXaxis()->SetLabelFont(FontStyle);
+        CorrMatrix->GetXaxis()->SetLabelSize(TextSize);
+        CorrMatrix->GetXaxis()->SetNdivisions(5);
+
         CorrMatrix->GetYaxis()->SetTitle(("bin j " + VarLabels.at(i)).c_str());
+        CorrMatrix->GetYaxis()->CenterTitle();
+        CorrMatrix->GetYaxis()->SetTitleOffset(1.1);
+        CorrMatrix->GetYaxis()->SetTitleFont(FontStyle);
+        CorrMatrix->GetYaxis()->SetTitleSize(TextSize);
+        CorrMatrix->GetYaxis()->SetLabelFont(FontStyle);
+        CorrMatrix->GetYaxis()->SetLabelSize(TextSize);
+        CorrMatrix->GetYaxis()->SetNdivisions(5);
 
         PlotCanvas->cd();
 
