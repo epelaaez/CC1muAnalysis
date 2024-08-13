@@ -63,7 +63,7 @@ void SelectionMCStatSystematics() {
     // Create ISyst that computes weight for each event
     class MCStatSyst : public ISyst {
         public:
-            MCStatSyst(int UnivIndex) : ISyst("MCStat", "MCStat"), UnivIndex(UnivIndex) {}
+            MCStatSyst(int UnivIndex) : ISyst("MCStat"+std::to_string(UnivIndex), "MCStat"+std::to_string(UnivIndex)), UnivIndex(UnivIndex) {}
 
             // Use fmatch time to create random seed
             // This might need to be revisited in the future
