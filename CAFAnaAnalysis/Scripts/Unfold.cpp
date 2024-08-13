@@ -178,16 +178,30 @@ void Unfold() {
         double SmearMin = SmearMatrixHisto->GetMinimum();
         double SmearMax = SmearMatrixHisto->GetMaximum();
         SmearMatrixHisto->GetZaxis()->SetRangeUser(SmearMin,SmearMax);
-        TotalCovHist->GetZaxis()->CenterTitle();
+        SmearMatrixHisto->GetZaxis()->CenterTitle();
         SmearMatrixHisto->GetZaxis()->SetTitleFont(FontStyle);
         SmearMatrixHisto->GetZaxis()->SetTitleSize(TextSize);
         SmearMatrixHisto->GetZaxis()->SetLabelFont(FontStyle);
         SmearMatrixHisto->GetZaxis()->SetLabelSize(TextSize);
-        SmearMatrixHisto->GetZaxis()->SetNdivisions(6);
-        SmearMatrixHisto->GetXaxis()->SetTitle(SmearMatrixHisto->GetXaxis()->GetTitle());
-        SmearMatrixHisto->GetYaxis()->SetTitle(SmearMatrixHisto->GetYaxis()->GetTitle());
-        SmearMatrixHisto->GetXaxis()->SetTitle("bin i " + (TString)VarLabels.at(iPlot));
-        SmearMatrixHisto->GetYaxis()->SetTitle("bin j " + (TString)VarLabels.at(iPlot));
+        SmearMatrixHisto->GetZaxis()->SetNdivisions(5);
+
+        SmearMatrixHisto->GetXaxis()->SetTitle("True " + (TString)VarLabels.at(iPlot));
+        SmearMatrixHisto->GetXaxis()->CenterTitle();
+        SmearMatrixHisto->GetXaxis()->SetTitleOffset(1.1);
+        SmearMatrixHisto->GetXaxis()->SetTitleFont(FontStyle);
+        SmearMatrixHisto->GetXaxis()->SetTitleSize(TextSize);
+        SmearMatrixHisto->GetXaxis()->SetLabelFont(FontStyle);
+        SmearMatrixHisto->GetXaxis()->SetLabelSize(TextSize);
+        SmearMatrixHisto->GetXaxis()->SetNdivisions(5);
+
+        SmearMatrixHisto->GetYaxis()->SetTitle("Reco " + (TString)VarLabels.at(iPlot));
+        SmearMatrixHisto->GetYaxis()->CenterTitle();
+        SmearMatrixHisto->GetYaxis()->SetTitleOffset(1.1);
+        SmearMatrixHisto->GetYaxis()->SetTitleFont(FontStyle);
+        SmearMatrixHisto->GetYaxis()->SetTitleSize(TextSize);
+        SmearMatrixHisto->GetYaxis()->SetLabelFont(FontStyle);
+        SmearMatrixHisto->GetYaxis()->SetLabelSize(TextSize);
+        SmearMatrixHisto->GetYaxis()->SetNdivisions(5);
 
         PlotCanvas->cd();
         SmearMatrixHisto->Draw("colz");

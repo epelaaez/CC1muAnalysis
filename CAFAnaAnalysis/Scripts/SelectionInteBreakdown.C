@@ -141,7 +141,9 @@ void SelectionInteBreakdown() {
                     Histos[iSlice][iInt]->GetXaxis()->SetLabelFont(FontStyle);
                     Histos[iSlice][iInt]->GetXaxis()->SetNdivisions(8);
                     Histos[iSlice][iInt]->GetXaxis()->SetLabelSize(TextSize);
-                    Histos[iSlice][iInt]->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
+                    std::string VarLabel = (std::string) VarLabels.at(iVar);
+                    VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
+                    Histos[iSlice][iInt]->GetXaxis()->SetTitle(("Reco " + VarLabel).c_str());
                     Histos[iSlice][iInt]->GetXaxis()->SetTitleSize(TextSize);
                     Histos[iSlice][iInt]->GetXaxis()->SetTitleOffset(1.1);
                     Histos[iSlice][iInt]->GetXaxis()->CenterTitle();

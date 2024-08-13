@@ -141,7 +141,9 @@ void SelectionTopologyBreakdown() {
                     Histos[iSlice][iTop]->GetXaxis()->SetLabelFont(FontStyle);
                     Histos[iSlice][iTop]->GetXaxis()->SetNdivisions(8);
                     Histos[iSlice][iTop]->GetXaxis()->SetLabelSize(TextSize);
-                    Histos[iSlice][iTop]->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
+                    std::string VarLabel = (std::string) VarLabels.at(iVar);
+                    VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
+                    Histos[iSlice][iTop]->GetXaxis()->SetTitle(("Reco " + VarLabel).c_str());
                     Histos[iSlice][iTop]->GetXaxis()->SetTitleSize(TextSize);
                     Histos[iSlice][iTop]->GetXaxis()->SetTitleOffset(1.1);
                     Histos[iSlice][iTop]->GetXaxis()->CenterTitle();
