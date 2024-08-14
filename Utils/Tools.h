@@ -55,6 +55,8 @@ class Tools {
 
 		std::tuple<int, vector<double>, vector<int>, vector<int>, vector<int>> FlattenNDBins(vector<double> SliceDiscriminators, vector<vector<double>> SliceBinning);
 
+		void CalcChiSquared(TH1D* h_model, TH1D* h_data, TH2D* cov, double &chi, int &ndof, double &pval, double &sigma);
+
 		double MuonMass; // MeV
 		double ProtonMass; // MeV
 		int MuonPdg;

@@ -626,4 +626,51 @@ std::tuple<int, vector<double>, vector<int>, vector<int>, vector<int>> Tools::Fl
 	return {NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin};
 }
 
+void Tools::CalcChiSquared(TH1D* h_model, TH1D* h_data, TH2D* cov, double &chi, int &ndof, double &pval, double &sigma) {
+	// Clone them so we can scale them 
+	TH1D* h_model_clone = (TH1D*)h_model->Clone();
+	TH1D* h_data_clone  = (TH1D*)h_data->Clone();
+	TH2D* h_cov_clone   = (TH2D*)cov->Clone();
+	int NBins = h_cov_clone->GetNbinsX();
+
+	// Getting covariance matrix in TMatrix form
+	TMatrixD cov_m;
+	cov_m.Clear();
+	cov_m.ResizeTo(NBins,NBins);
+
+	// loop over rows
+	for (int i = 0; i < NBins; i++) {			
+		// loop over columns
+		for (int j = 0; j < NBins; j++) {
+			cov_m[i][j] = h_cov_clone->GetBinContent(i+1, j+1);
+		}
+	}
+	TMatrixD copy_cov_m = cov_m;
+
+	// Inverting the covariance matrix
+	TMatrixD inverse_cov_m = cov_m.Invert();
+
+	// Calculating the chi2 = Summation_ij{ (x_i - mu_j)*E_ij^(-1)*(x_j - mu_j)  }
+	// x = data, mu = model, E^(-1) = inverted covariance matrix 
+	chi = 0.;
+	
+	for (int i = 0; i < NBins; i++) {
+		//double XWidth = h_data_clone->GetBinWidth(i+1);
+		for (int j = 0; j < NBins; j++) {
+			//double YWidth = h_data_clone->GetBinWidth(i+1);
+			double diffi = h_data_clone->GetBinContent(i+1) - h_model_clone->GetBinContent(i+1);
+			double diffj = h_data_clone->GetBinContent(j+1) - h_model_clone->GetBinContent(j+1);
+			double LocalChi = diffi * inverse_cov_m[i][j] * diffj; 
+			chi += LocalChi;
+		}
+	}
+	ndof = h_data_clone->GetNbinsX();
+	pval = TMath::Prob(chi, ndof);
+	sigma = TMath::Sqrt( TMath::ChisquareQuantile( 1-pval, 1 ) ); 
+
+	delete h_model_clone;
+	delete h_data_clone;
+	delete h_cov_clone;
+}
+
 #endif
