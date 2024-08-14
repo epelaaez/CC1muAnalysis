@@ -1198,6 +1198,33 @@ namespace ana
         bCosOpeningAngleProtonsInMuonCosTheta,
         bCosOpeningAngleMuonTotalProtonInMuonCosTheta
     };
+
+    ////////////////////////////
+    // Weights for our fake data
+    ////////////////////////////
+
+    const Var kDoubleMECWeight([](const caf::SRSliceProxy* slc) -> double {
+        if (slc->truth.genie_mode == 10) return 2;
+        return 1;
+    });
+    const TruthVar kTrueDoubleMECWeight([](const caf::SRTrueInteractionProxy* nu) -> double {
+        if (nu->genie_mode == 10) return 2;
+        return 1;
+    });
+
+    const Var kDoubleQEWeight([](const caf::SRSliceProxy* slc) -> double {
+        if (slc->truth.genie_mode == 0) return 2;
+        return 1;
+    });
+    const TruthVar kTrueDoubleQEWeight([](const caf::SRTrueInteractionProxy* nu) -> double {
+        if (nu->genie_mode == 0) return 2;
+        return 1;
+    });
+
+    static const std::vector<std::tuple<Var, TruthVar>> FakeWeights = {
+        {kDoubleMECWeight, kTrueDoubleMECWeight}
+        // {kDoubleQEWeight, kTrueDoubleQEWeight}
+    };
 }
 
 #endif
