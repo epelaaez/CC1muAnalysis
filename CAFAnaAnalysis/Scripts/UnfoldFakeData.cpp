@@ -172,7 +172,7 @@ void UnfoldFakeData() {
             if (PlotNames[iVar].Contains("Serial")) {
                 auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iVar]+"Plot"];
                 auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
-                int StartIndex = 0;
+                int StartIndex = 0; int MatrixIndex = 0;
 
                 // Get total unfolded cov matrix
                 TMatrixD TotalCovMatrix(n, n); H2M(UnfTotalCovHisto, TotalCovMatrix, kTRUE);
@@ -193,16 +193,16 @@ void UnfoldFakeData() {
 
                     // Get subcov matrix
                     TMatrixD SubCovMatrix(SliceNBins, SliceNBins);
-                    for (int i = StartIndex; i < StartIndex + SliceNBins; ++i) {
-                        for (int j = StartIndex; j < StartIndex + SliceNBins; ++j) {
-                            SubCovMatrix(i - StartIndex, j - StartIndex) = UnfoldCov(i, j);
+                    for (int i = MatrixIndex; i < MatrixIndex + SliceNBins; ++i) {
+                        for (int j = MatrixIndex; j < MatrixIndex + SliceNBins; ++j) {
+                            SubCovMatrix(i - MatrixIndex, j - MatrixIndex) = UnfoldCov(i, j);
                         }
                     }
 
                     // Convert sub cov matrix to histo and reweight
                     TH2D* UnfSubCovHisto = new TH2D("UnfSubCov"+SlicePlotName,"UnfSubCov"+SlicePlotName, SliceNBins, SerialSliceBinning.data(), SliceNBins, SerialSliceBinning.data());
                     M2H(SubCovMatrix, UnfSubCovHisto); 
-                    UnfSubCovHisto->Scale(1 / (SliceWidth * SliceWidth));
+                    UnfSubCovHisto->Scale(1 / (TMath::Power(SliceWidth, 2)));
                     tools.Reweight2D(UnfSubCovHisto);
 
                     ////////////////
@@ -255,8 +255,8 @@ void UnfoldFakeData() {
                         const double dx = SlicedUnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
                         ErrorBand->SetPointError(
                             iBin, 0, 0,
-                            TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx),
-                            TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx)
+                            TMath::Sqrt(UnfTotalCovHisto->GetBinContent(MatrixIndex + iBin, MatrixIndex + iBin)) / (SliceWidth * dx),
+                            TMath::Sqrt(UnfTotalCovHisto->GetBinContent(MatrixIndex + iBin, MatrixIndex + iBin)) / (SliceWidth * dx)
                         );
                     }
 
@@ -297,7 +297,7 @@ void UnfoldFakeData() {
                         ", " + 
                         tools.to_string_with_precision(PValFake, 1) + 
                         ", " + 
-                        tools.to_string_with_precision(SigmaFake, 1) +
+                        tools.to_string_with_precision(SigmaFake, 1) + "#sigma" +
                         ")";
                     TLegendEntry* legSlicedFakeSmear = leg->AddEntry(SlicedSmearedFakeSignal,"Fake true" + ChiFakeLabel,"l");
                     SlicedSmearedFakeSignal->SetLineColor(kRed+1);
@@ -310,7 +310,7 @@ void UnfoldFakeData() {
                         ", " + 
                         tools.to_string_with_precision(PValNom, 1) + 
                         ", " + 
-                        tools.to_string_with_precision(SigmaNom, 1) +
+                        tools.to_string_with_precision(SigmaNom, 1) + "#sigma" +
                         ")";
                     TLegendEntry* legSlicedNomSmeared = leg->AddEntry(SlicedSmearedNomSignal,"Nom true " + ChiNomLabel,"l");
                     SlicedSmearedNomSignal->SetLineColor(kBlue+8);
@@ -342,108 +342,111 @@ void UnfoldFakeData() {
 
                     // Save histogram
                     PlotCanvas->SaveAs(dir+"/Figs/CAFAna/FakeDataStudies/"+FakeDataNames[iData]+"/"+SlicePlotName+".png");
+
+                    StartIndex += (SliceNBins + 1); MatrixIndex += SliceNBins;
                 }
-            } else {
-                ////////////////////////////////////////////
-                // Calculate chi squared, p value, and sigma
-                ////////////////////////////////////////////
+            } 
 
-                double ChiFake; int NDofFake; double PValFake; double SigmaFake;
-                tools.CalcChiSquared(SmearedFakeSignal, UnfoldedSpectrum, UnfTotalCovHisto, ChiFake, NDofFake, PValFake, SigmaFake);
+            ////////////////////////////////////////////
+            // Calculate chi squared, p value, and sigma
+            ////////////////////////////////////////////
 
-                double ChiNom; int NDofNom; double PValNom; double SigmaNom;
-                tools.CalcChiSquared(SmearedNomSignal, UnfoldedSpectrum, UnfTotalCovHisto, ChiNom, NDofNom, PValNom, SigmaNom);
+            double ChiFake; int NDofFake; double PValFake; double SigmaFake;
+            tools.CalcChiSquared(SmearedFakeSignal, UnfoldedSpectrum, UnfTotalCovHisto, ChiFake, NDofFake, PValFake, SigmaFake);
 
-                // Create error band
-                TGraphAsymmErrors* ErrorBand = new TGraphAsymmErrors;
-                for (int iBin = 1; iBin < UnfoldedSpectrum->GetNbinsX() + 1; ++iBin) {
-                    const double xnom = UnfoldedSpectrum->GetXaxis()->GetBinCenter(iBin);
-                    const double ynom = UnfoldedSpectrum->GetBinContent(iBin);
-                    ErrorBand->SetPoint(iBin, xnom, ynom);
-                    ErrorBand->SetPointError(
-                        iBin, 0, 0,
-                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin)),
-                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin))
-                    );
-                }
+            double ChiNom; int NDofNom; double PValNom; double SigmaNom;
+            tools.CalcChiSquared(SmearedNomSignal, UnfoldedSpectrum, UnfTotalCovHisto, ChiNom, NDofNom, PValNom, SigmaNom);
 
-                // Style 
-                SmearedFakeSignal->GetXaxis()->SetNdivisions(5);
-                if (PlotNames[iVar] == "EventCount") {
-                    SmearedFakeSignal->GetXaxis()->SetLabelSize(0);
-                    SmearedFakeSignal->GetXaxis()->SetTitleSize(0);
-                } else {
-                    SmearedFakeSignal->GetXaxis()->SetTitleFont(FontStyle);
-                    SmearedFakeSignal->GetXaxis()->SetLabelFont(FontStyle);
-                    SmearedFakeSignal->GetXaxis()->SetLabelSize(TextSize);
-                    SmearedFakeSignal->GetXaxis()->SetTitleSize(TextSize);
-                    SmearedFakeSignal->GetXaxis()->SetTitleOffset(1.);
-                    SmearedFakeSignal->GetXaxis()->CenterTitle();
-                    SmearedFakeSignal->GetXaxis()->SetTitle(VarLabels.at(iVar).c_str());
-                }
-                SmearedFakeSignal->GetYaxis()->SetTitleFont(FontStyle);
-                SmearedFakeSignal->GetYaxis()->SetLabelFont(FontStyle);
-                SmearedFakeSignal->GetYaxis()->SetLabelSize(TextSize);
-                SmearedFakeSignal->GetYaxis()->SetTitleSize(TextSize);
-                SmearedFakeSignal->GetYaxis()->SetNdivisions(6);
-                SmearedFakeSignal->GetYaxis()->SetTitleOffset(1.);
-                SmearedFakeSignal->GetYaxis()->SetTickSize(0);
-                SmearedFakeSignal->GetYaxis()->CenterTitle();
-
-                TLegend* leg = new TLegend(0.5,0.73,0.9,0.83);
-                leg->SetBorderSize(0);
-                leg->SetNColumns(1);
-                leg->SetTextSize(TextSize*0.8);
-                leg->SetTextFont(FontStyle);
-
-                TString ChiFakeLabel = "(" + 
-                    tools.to_string_with_precision(ChiFake, 1) + 
-                    "/" + 
-                    tools.to_string_with_precision(NDofFake, 0) + 
-                    ", " + 
-                    tools.to_string_with_precision(PValFake, 1) + 
-                    ", " + 
-                    tools.to_string_with_precision(SigmaFake, 1) +
-                    ")";
-                TLegendEntry* legFakeSmeared = leg->AddEntry(SmearedFakeSignal,"Fake true " + ChiFakeLabel,"l");
-                SmearedFakeSignal->SetLineColor(kRed+1);
-                SmearedFakeSignal->SetLineWidth(4);
-
-                TString ChiNomLabel = "(" + 
-                    tools.to_string_with_precision(ChiNom, 1) + 
-                    "/" + 
-                    tools.to_string_with_precision(NDofNom, 0) + 
-                    ", " + 
-                    tools.to_string_with_precision(PValNom, 1) + 
-                    ", " + 
-                    tools.to_string_with_precision(SigmaNom, 1) +
-                    ")";
-                TLegendEntry* legNomSmeared = leg->AddEntry(SmearedNomSignal,"Nom true " + ChiNomLabel,"l");
-                SmearedNomSignal->SetLineColor(kBlue+8);
-                SmearedNomSignal->SetLineWidth(4);
-
-                TLegendEntry* legUnfSpectrum = leg->AddEntry(UnfoldedSpectrum,"Unfolded","ep");
-                UnfoldedSpectrum->SetLineColor(kBlack);
-                UnfoldedSpectrum->SetMarkerColor(kBlack);
-                UnfoldedSpectrum->SetMarkerStyle(20);
-                UnfoldedSpectrum->SetMarkerSize(1.);
-
-                double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(), SmearedFakeSignal->GetMaximum());
-                for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
-                    imax = std::max(imax, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
-                }
-                SmearedFakeSignal->GetYaxis()->SetRangeUser(0., 1.35*imax);
-
-                PlotCanvas->cd();
-                SmearedFakeSignal->Draw("hist");
-                SmearedNomSignal->Draw("hist same");
-                UnfoldedSpectrum->Draw("e1x0 same");
-                ErrorBand->Draw("e1 same");
-                leg->Draw();
-
-                // Save histogram
-                PlotCanvas->SaveAs(dir+"/Figs/CAFAna/FakeDataStudies/"+FakeDataNames[iData]+"/"+PlotNames[iVar]+".png");
+            // Create error band
+            TGraphAsymmErrors* ErrorBand = new TGraphAsymmErrors;
+            for (int iBin = 1; iBin < UnfoldedSpectrum->GetNbinsX() + 1; ++iBin) {
+                const double xnom = UnfoldedSpectrum->GetXaxis()->GetBinCenter(iBin);
+                const double ynom = UnfoldedSpectrum->GetBinContent(iBin);
+                ErrorBand->SetPoint(iBin, xnom, ynom);
+                ErrorBand->SetPointError(
+                    iBin, 0, 0,
+                    TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin)),
+                    TMath::Sqrt(UnfTotalCovHisto->GetBinContent(iBin, iBin))
+                );
             }
+
+            // Style 
+            SmearedFakeSignal->GetXaxis()->SetNdivisions(5);
+            if (PlotNames[iVar] == "EventCount") {
+                SmearedFakeSignal->GetXaxis()->SetLabelSize(0);
+                SmearedFakeSignal->GetXaxis()->SetTitleSize(0);
+            } else {
+                SmearedFakeSignal->GetXaxis()->SetTitleFont(FontStyle);
+                SmearedFakeSignal->GetXaxis()->SetLabelFont(FontStyle);
+                SmearedFakeSignal->GetXaxis()->SetLabelSize(TextSize);
+                SmearedFakeSignal->GetXaxis()->SetTitleSize(TextSize);
+                SmearedFakeSignal->GetXaxis()->SetTitleOffset(1.);
+                SmearedFakeSignal->GetXaxis()->CenterTitle();
+                SmearedFakeSignal->GetXaxis()->SetTitle(VarLabels.at(iVar).c_str());
+            }
+            SmearedFakeSignal->GetYaxis()->SetTitleFont(FontStyle);
+            SmearedFakeSignal->GetYaxis()->SetLabelFont(FontStyle);
+            SmearedFakeSignal->GetYaxis()->SetLabelSize(TextSize);
+            SmearedFakeSignal->GetYaxis()->SetTitleSize(TextSize);
+            SmearedFakeSignal->GetYaxis()->SetNdivisions(6);
+            SmearedFakeSignal->GetYaxis()->SetTitleOffset(1.);
+            SmearedFakeSignal->GetYaxis()->SetTickSize(0);
+            SmearedFakeSignal->GetYaxis()->CenterTitle();
+
+            TLegend* leg = new TLegend(0.5,0.73,0.9,0.83);
+            leg->SetBorderSize(0);
+            leg->SetNColumns(1);
+            leg->SetTextSize(TextSize*0.8);
+            leg->SetTextFont(FontStyle);
+
+            TString ChiFakeLabel = "(" + 
+                tools.to_string_with_precision(ChiFake, 1) + 
+                "/" + 
+                tools.to_string_with_precision(NDofFake, 0) + 
+                ", " + 
+                tools.to_string_with_precision(PValFake, 1) + 
+                ", " + 
+                tools.to_string_with_precision(SigmaFake, 1) + "#sigma" +
+                ")";
+            TLegendEntry* legFakeSmeared = leg->AddEntry(SmearedFakeSignal,"Fake true " + ChiFakeLabel,"l");
+            SmearedFakeSignal->SetLineColor(kRed+1);
+            SmearedFakeSignal->SetLineWidth(4);
+
+            TString ChiNomLabel = "(" + 
+                tools.to_string_with_precision(ChiNom, 1) + 
+                "/" + 
+                tools.to_string_with_precision(NDofNom, 0) + 
+                ", " + 
+                tools.to_string_with_precision(PValNom, 1) + 
+                ", " + 
+                tools.to_string_with_precision(SigmaNom, 1) + "#sigma" +
+                ")";
+            TLegendEntry* legNomSmeared = leg->AddEntry(SmearedNomSignal,"Nom true " + ChiNomLabel,"l");
+            SmearedNomSignal->SetLineColor(kBlue+8);
+            SmearedNomSignal->SetLineWidth(4);
+
+            TLegendEntry* legUnfSpectrum = leg->AddEntry(UnfoldedSpectrum,"Unfolded","ep");
+            UnfoldedSpectrum->SetLineColor(kBlack);
+            UnfoldedSpectrum->SetMarkerColor(kBlack);
+            UnfoldedSpectrum->SetMarkerStyle(20);
+            UnfoldedSpectrum->SetMarkerSize(1.);
+
+            double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(), SmearedFakeSignal->GetMaximum());
+            for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
+                imax = std::max(imax, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+            }
+            SmearedFakeSignal->GetYaxis()->SetRangeUser(0., 1.35*imax);
+
+            PlotCanvas->cd();
+            SmearedFakeSignal->Draw("hist");
+            SmearedNomSignal->Draw("hist same");
+            UnfoldedSpectrum->Draw("e1x0 same");
+            ErrorBand->Draw("e1 same");
+            leg->Draw();
+
+            // Save histogram
+            PlotCanvas->SaveAs(dir+"/Figs/CAFAna/FakeDataStudies/"+FakeDataNames[iData]+"/"+PlotNames[iVar]+".png");
+            
         }
     }
 

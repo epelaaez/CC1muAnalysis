@@ -484,7 +484,7 @@ void Unfold() {
         if (PlotNames[iPlot].Contains("Serial")) {
             auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
             auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
-            int StartIndex = 0;
+            int StartIndex = 0; int MatrixIndex = 0;
 
             // Loop over slices
             for (int iSlice = 0; iSlice < NSlices; iSlice++) {
@@ -530,8 +530,8 @@ void Unfold() {
                     const double dx = SlicedUnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
                     ErrorBand->SetPointError(
                         iBin, 0, 0,
-                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx),
-                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx)
+                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(MatrixIndex + iBin, MatrixIndex + iBin)) / (SliceWidth * dx),
+                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(MatrixIndex + iBin, MatrixIndex + iBin)) / (SliceWidth * dx)
                     );
                 }
 
@@ -598,6 +598,8 @@ void Unfold() {
 
                 // Save error band
                 SaveFile->WriteObject(ErrorBand, SlicePlotName+"_band");
+
+                StartIndex += (SliceNBins + 1); MatrixIndex += SliceNBins;
             }
         } else {
             // Create error band

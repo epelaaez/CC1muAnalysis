@@ -185,6 +185,8 @@ void SelectionTopologyBreakdown() {
                 PlotCanvas->SaveAs(dir+"/Figs/CAFAna/TopologyBreakdown/"+SlicePlotName+".png");
 
                 delete PlotCanvas;
+
+                StartIndex += (SliceNBins + 1);
             }
         } else {
             std::vector<TH1D*> Histos; Histos.resize(Topologies.size() + 1);

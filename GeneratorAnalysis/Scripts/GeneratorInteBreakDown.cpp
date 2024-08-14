@@ -433,6 +433,7 @@ void GeneratorInteBreakDown() {
                     PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+SlicePlotName+".png");
                     delete PlotCanvas;
                 }
+                StartIndex += (SliceNBins + 1);
             }
         }
 

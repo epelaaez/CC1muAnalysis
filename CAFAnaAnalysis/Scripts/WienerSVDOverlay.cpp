@@ -238,6 +238,8 @@ void WienerSVDOverlay() {
 				PlotCanvas->SaveAs(dir+"/Figs/CAFAna/WienerSVDOverlay/"+SlicePlotName+".png");
 
 				delete leg;
+
+            	StartIndex += (SliceNBins + 1);
 			}
 		} else {
 			TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
