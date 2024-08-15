@@ -29,10 +29,12 @@ using namespace std;
 using namespace ana;
 using namespace Constants;
 
-void PowHisto(TH1* hist, double pow) {
+void PowHisto(TH1* hist, double pow, bool abs) {
     for (int i = 0; i < hist->GetNbinsX() + 1; ++i) {
         double content = hist->GetBinContent(i);
+        if (abs == true) content = TMath::Abs(content);
         double powContent = TMath::Power(content, pow);
+        if ((abs == true) && (hist->GetBinContent(i) < 0)) powContent = -powContent; 
         hist->SetBinContent(i, powContent);
     }
 }
@@ -95,7 +97,7 @@ void SelectionFakeData() {
             ////////////////////////
 
             // Make modified plots
-            TH1D* PowRecoHist = (TH1D*) FakeRecoHisto->Clone("hnew"); PowHisto(PowRecoHist, 0.5);
+            TH1D* PowRecoHist = (TH1D*) FakeRecoHisto->Clone("hnew"); PowHisto(PowRecoHist, 0.5, true);
             TH1D* UnivRecoHist = (TH1D*) FakeRecoHisto->Clone("hnew"); UnivRecoHist->Add(PowRecoHist, -1);
 
             // Create covariance matrix

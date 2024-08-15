@@ -362,8 +362,9 @@ namespace Constants {
     ////////////
 
     const std::vector<TString> FakeDataNames = {
-        "TwiceMEC"
-        // "TwiceQE"
+        "TwiceMEC",
+        "TwiceQE",
+        "Combined"
     };
 }
 

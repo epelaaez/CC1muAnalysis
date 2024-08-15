@@ -1221,9 +1221,21 @@ namespace ana
         return 1;
     });
 
+    const Var kCombinedWeight([](const caf::SRSliceProxy* slc) -> double {
+        if (slc->truth.genie_mode == 0) return 0.5;
+        if (slc->truth.genie_mode == 10) return 1.5;
+        return 1;
+    });
+    const TruthVar kTrueCombinedWeight([](const caf::SRTrueInteractionProxy* nu) -> double {
+        if (nu->genie_mode == 0) return 0.5;
+        if (nu->genie_mode == 10) return 1.5;
+        return 1;
+    });
+
     static const std::vector<std::tuple<Var, TruthVar>> FakeWeights = {
-        {kDoubleMECWeight, kTrueDoubleMECWeight}
-        // {kDoubleQEWeight, kTrueDoubleQEWeight}
+        {kDoubleMECWeight, kTrueDoubleMECWeight},
+        {kDoubleQEWeight, kTrueDoubleQEWeight},
+        {kCombinedWeight, kTrueCombinedWeight}
     };
 }
 

@@ -141,7 +141,7 @@ void UnfoldFakeData() {
             );
 
             // Reweight unfolded covariance matrix
-            TH2D* UnfTotalCovHisto = new TH2D("UnfTotalCov"+PlotNames[iVar],"UnfTotalCov" + PlotNames[iVar],n, edges, n, edges);
+            TH2D* UnfTotalCovHisto = new TH2D("UnfTotalCov"+FakeDataNames[iData]+PlotNames[iVar],"UnfTotalCov" + PlotNames[iVar],n, edges, n, edges);
             M2H(UnfoldCov, UnfTotalCovHisto); tools.Reweight2D(UnfTotalCovHisto);
 
             // Get fake data unfolded cross-section
@@ -155,7 +155,7 @@ void UnfoldFakeData() {
             V2H(SmearedFakeVector, SmearedFakeSignal); tools.Reweight(SmearedFakeSignal);
            
             // Add smear to nominal signal
-            TH1D* SmearedNomSignal = new TH1D("SmearedNom"+PlotNames[iVar],";"+(TString)VarLabels[iVar]+";"+(TString)YLabels[iVar], n, edges);
+            TH1D* SmearedNomSignal = new TH1D("SmearedNom"+FakeDataNames[iData]+PlotNames[iVar],";"+(TString)VarLabels[iVar]+";"+(TString)YLabels[iVar], n, edges);
             TVectorD SmearedNomVector = AddSmear * SignalVector;
             V2H(SmearedNomVector, SmearedNomSignal); tools.Reweight(SmearedNomSignal);
 
@@ -200,7 +200,7 @@ void UnfoldFakeData() {
                     }
 
                     // Convert sub cov matrix to histo and reweight
-                    TH2D* UnfSubCovHisto = new TH2D("UnfSubCov"+SlicePlotName,"UnfSubCov"+SlicePlotName, SliceNBins, SerialSliceBinning.data(), SliceNBins, SerialSliceBinning.data());
+                    TH2D* UnfSubCovHisto = new TH2D("UnfSubCov"+FakeDataNames[iData]+SlicePlotName,"UnfSubCov"+SlicePlotName, SliceNBins, SerialSliceBinning.data(), SliceNBins, SerialSliceBinning.data());
                     M2H(SubCovMatrix, UnfSubCovHisto); 
                     UnfSubCovHisto->Scale(1 / (TMath::Power(SliceWidth, 2)));
                     tools.Reweight2D(UnfSubCovHisto);
@@ -272,7 +272,9 @@ void UnfoldFakeData() {
                         SlicedSmearedFakeSignal->GetXaxis()->SetTitleSize(TextSize);
                         SlicedSmearedFakeSignal->GetXaxis()->SetTitleOffset(1.);
                         SlicedSmearedFakeSignal->GetXaxis()->CenterTitle();
-                        SlicedSmearedFakeSignal->GetXaxis()->SetTitle(VarLabels.at(iVar).c_str());
+                        std::string VarLabel = (std::string) VarLabels.at(iVar);
+                        VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
+                        SlicedSmearedFakeSignal->GetXaxis()->SetTitle(VarLabel.c_str());
                     }
                     SlicedSmearedFakeSignal->GetYaxis()->SetTitleFont(FontStyle);
                     SlicedSmearedFakeSignal->GetYaxis()->SetLabelFont(FontStyle);
@@ -446,7 +448,7 @@ void UnfoldFakeData() {
 
             // Save histogram
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/FakeDataStudies/"+FakeDataNames[iData]+"/"+PlotNames[iVar]+".png");
-            
+            delete PlotCanvas;
         }
     }
 
