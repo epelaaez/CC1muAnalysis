@@ -366,6 +366,7 @@ void GeneratorInteBreakDown() {
 
             // Loop over the slices
             for (int iSlice = 0; iSlice < NSlices; iSlice++) {
+                int SliceNBins = SerialVectorBins.at(iSlice);
                 for (int iSample = 0; iSample < NSamples; iSample++) {
                     if (PlotNames[iPlot].Contains("NoFSI") && Labels[iSample] == "GiBUU_NoFSI") {
                         continue;
@@ -373,9 +374,6 @@ void GeneratorInteBreakDown() {
 
                     TString SlicePlotName = Labels[iSample] + "_" + PlotNames[iPlot] + "_" + TString(std::to_string(iSlice));
                     double SliceWidth = SliceDiscriminators[iSlice + 1] - SliceDiscriminators[iSlice]; 
-
-                    // Get number of bins
-                    int SliceNBins = SerialVectorBins.at(iSlice);
                     std::vector<double> SerialSliceBinning;
 
                     for (int iBin = 0; iBin < SliceNBins + 1; iBin++) {
@@ -456,7 +454,9 @@ void GeneratorInteBreakDown() {
                     TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
                     PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+SlicePlotName+".png");
                     delete PlotCanvas;
+
                 }
+                // Update start index for next slice
                 StartIndex += (SliceNBins + 1);
             }
         }
