@@ -126,7 +126,19 @@ void GeneratorInteBreakDown() {
 
     PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
     XAxisLabel.push_back("#delta #alpha_{T}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");    
+
+    PlotNames.push_back("TrueNoFSIInvariantMassPlot");
+    XAxisLabel.push_back("W");
+    YAxisLabel.push_back("#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSICosOpeningAngleLProtonMuonPlot");
+    XAxisLabel.push_back("#theta_{p^{L}, p^{#mu}}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{L}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSICosOpeningAngleRProtonMuonPlot");
+    XAxisLabel.push_back("#theta_{p^{R}, p^{#mu}}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{R}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
@@ -168,6 +180,18 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueDeltaAlphaTPlot");
     XAxisLabel.push_back("#delta #alpha_{T}");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+ 
+    PlotNames.push_back("TrueInvariantMassPlot");
+    XAxisLabel.push_back("W");
+    YAxisLabel.push_back("#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
+    XAxisLabel.push_back("#theta_{p^{L}, p^{#mu}}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{L}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
+    XAxisLabel.push_back("#theta_{p^{R}, p^{#mu}}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{R}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");

@@ -65,6 +65,11 @@ void MECGeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
+    
+    // Additional Post FSI
+    PlotNames.push_back("TrueInvariantMassPlot");
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
+    PlotNames.push_back("TrueCosOpeningAngleRProtonMuonPlot");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");

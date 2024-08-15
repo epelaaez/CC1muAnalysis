@@ -14,7 +14,7 @@
 
 namespace Constants {
     // User to access
-    const std::string UserName = "epelaez";
+    const std::string UserName = "rickyoon";
 
     const double Units = 1E38;
 
@@ -43,6 +43,16 @@ namespace Constants {
 
     static const int NBinsTransverseMomentum = 7;
     static const std::vector<double> ArrayNBinsTransverseMomentum{0.,0.1,0.2,0.3,0.4,0.5,0.6,1.};
+
+    //Additional Binning for single differential
+    static const int NBinsInvariantMass = 20;
+    static const std::vector<double> ArrayNBinsInvariantMass{1., 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2., 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.};
+
+    static const int NBinsCosAngleLPMu = 20;
+    static const std::vector<double> ArrayNBinsCosAngleLPMu = {-1.,-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
+
+    static const int NBinsCosAngleRPMu = 20;
+    static const std::vector<double> ArrayNBinsCosAngleRPMu = {-1.,-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
 
     // 0.183 spacing
     static const int NBinsMuonMomentum = 6;
@@ -98,7 +108,10 @@ namespace Constants {
         { "MuonMomentumPlot",  "All events" },	
         { "CosOpeningAngleProtonsPlot",  "All events" },	
         { "CosOpeningAngleMuonTotalProtonPlot",  "All events" },	
-        { "TransverseMomentumPlot",  "All events" },	
+        { "TransverseMomentumPlot",  "All events" },
+        { "InvariantMassPlot", "All events" },
+        { "CosOpeningAngleLProtonMuonPlot", "All events" },
+	{ "CosOpeningAngleRProtonMuonPlot", "All events" }	
     };
 
     static std::map<TString, std::tuple<vector<double>, vector<vector<double>>>> PlotNameToDiscriminator = {
@@ -134,7 +147,10 @@ namespace Constants {
         "SerialTransverseMomentum_InMuonCosTheta",
         "SerialDeltaAlphaT_InMuonCosTheta",
         "SerialCosOpeningAngleProtons_InMuonCosTheta",
-        "SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta"
+        "SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta",
+        "InvariantMass",
+        "CosOpeningAngleLProtonMuon",
+        "CosOpeningAngleRProtonMuon"
     };
 
     static const std::vector<std::string> VarLabels = {
@@ -152,7 +168,10 @@ namespace Constants {
         "#delta P_{T} (bin #)",
         "#delta #alpha_{T} (bin #)",
         "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)",
-        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)"
+        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)",
+ 	"W",
+ 	"#theta_{p^{L}, p^{#mu}}",
+	"#theta_{p^{R}, p^{#mu}}"
     };
 
     static const std::vector<std::string> YLabels = {
@@ -170,7 +189,10 @@ namespace Constants {
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
-        "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]"
+        "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{d#theta_{p^{L}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{d#theta_{p^{R}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]"
     };
 
     ///////////////

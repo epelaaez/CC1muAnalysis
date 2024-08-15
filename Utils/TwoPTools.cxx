@@ -14,7 +14,7 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     if (RecoilProtonVector.Mag() > LeadingProtonVector.Mag()) std::swap(LeadingProtonVector, RecoilProtonVector); 
 
     // Momenta and theta variables
-    fMuonMomentum = MuonVector.Mag();
+    fMuonMomentum = MuonVector.Mag(); 
     fMuonCosTheta = MuonVector.CosTheta();
     fLeadingProtonMomentum = LeadingProtonVector.Mag();
     fLeadingProtonCosTheta = LeadingProtonVector.CosTheta();
@@ -31,6 +31,18 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     TVector3 TotalProtonVectorTrans(TotalProtonVector.X(), TotalProtonVector.Y(), 0);
     TVector3 DeltaPVectorTrans = MuonVectorTrans + TotalProtonVectorTrans;
 
+    //Energy for proton
+    double ProtonMass = 0.9383; //in Gev/c^2
+    double LProtonEnergy = sqrt(pow(ProtonMass, 2) +  pow(LeadingProtonVector.Mag(),2));
+    double RProtonEnergy = sqrt(pow(ProtonMass, 2) +  pow(LeadingProtonVector.Mag(),2));
+
+    //Calculation of Hadronic Invariant Mass
+    fInvariantMass = sqrt(pow((LProtonEnergy + RProtonEnergy), 2) - pow(TotalProtonVector.Mag(), 2));
+
+    //Opening angle definitions 
+    fCosOpeningAngleLProtonMuon = std::cos(LeadingProtonVector.Angle(MuonVector));
+    fCosOpeningAngleRProtonMuon = std::cos(RecoilProtonVector.Angle(MuonVector));
+
     // Transverse momentum variable
     fTransverseMomentum = DeltaPVectorTrans.Mag();
 
@@ -41,6 +53,7 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     ) * (180. / TMath::Pi()) ;
     if (fDeltaAlphaT > 180.) { fDeltaAlphaT -= 180.; }
 	if (fDeltaAlphaT < 0.) { fDeltaAlphaT += 180.; }
+ 
 }
 
 double TwoPTools::ReturnMuonMomentum() {
@@ -82,5 +95,17 @@ double TwoPTools::ReturnTransverseMomentum() {
 double TwoPTools::ReturnDeltaAlphaT() {
     return fDeltaAlphaT;
 }
+//Added function definitions
 
+double TwoPTools::ReturnInvariantMass(){
+    return fInvariantMass;
+}
+
+double TwoPTools::ReturnCosOpeningAngleLProtonMuon(){
+    return fCosOpeningAngleLProtonMuon;
+}
+
+double TwoPTools::ReturnCosOpeningAngleRProtonMuon(){
+    return fCosOpeningAngleRProtonMuon;
+}
 #endif

@@ -23,6 +23,12 @@ class TwoPTools {
         double fCosOpeningAngleMuonTotalProton;
         double fTransverseMomentum;
         double fDeltaAlphaT;
+        
+ 	//Rick's new added variables
+ 	double fInvariantMass;
+	double fDoubleTransverseMissingMomentum;   //the double-transverse missing momentum/momentum imbalance
+	double fCosOpeningAngleLProtonMuon; //LProton = Leading Proton
+	double fCosOpeningAngleRProtonMuon; //RProton = Recoil Proton
 
     public:
         // Default constructor
@@ -42,6 +48,13 @@ class TwoPTools {
         double ReturnCosOpeningAngleMuonTotalProton();
         double ReturnTransverseMomentum();
         double ReturnDeltaAlphaT();
+	
+	//Additional Getter Functions
+	double ReturnInvariantMass();
+	double ReturnDoubleTransverseMissingMomentum();
+	double ReturnCosOpeningAngleLProtonMuon();
+	double ReturnCosOpeningAngleRProtonMuon();
+
 };
 
 #endif

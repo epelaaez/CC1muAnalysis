@@ -84,6 +84,9 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
     PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
+    PlotNames.push_back("TrueNoFSIInvariantMassPlot");
+    PlotNames.push_back("TrueNoFSICosOpeningAngleLProtonMuonPlot");
+    PlotNames.push_back("TrueNoFSICosOpeningAngleRProtonMuonPlot");
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
@@ -96,6 +99,10 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
+    PlotNames.push_back("TrueInvariantMassPlot");
+    PlotNames.push_back("TrueInvariantMassPlot");
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
+    PlotNames.push_back("TrueCosOpeningAngleRProtonMuonPlot");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
@@ -196,7 +203,7 @@ void GeneratorOverlay() {
         PlotCanvas->cd();
         leg->Draw();
         
-        TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+        TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
         TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
