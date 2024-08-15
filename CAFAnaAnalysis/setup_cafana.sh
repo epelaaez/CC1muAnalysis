@@ -8,8 +8,10 @@ cd srcs
 
 mrb g -t v09_75_03 sbnana
 cd sbnana
-# now pull the feature branch
-git pull origin feature/jskim_TrueVar
+# add your remote; skip if you already have it
+git remote add origin git@github.com:epelaaez/sbnana.git
+# pull your feature branch
+git pull origin feature/epelaez_TrueEnsembleSpectrum
 
 # setup
 mrbsetenv
