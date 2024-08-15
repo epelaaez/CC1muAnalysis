@@ -240,18 +240,18 @@
     }
 }
 
-\newcommand{\PrintAllStatSystsPlots}{
-    \foreach\VarName/\VarLabel in \VarList {
-        \begin{figure}[H]
-            \centering
-                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png}
-                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/FracCovReco\VarName.png}
-                \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/CorrReco\VarName.png}
-            \caption{Statistical variations for~\VarLabel.}
-            \label{fig:Statistical-\VarName}
-        \end{figure}
-    }
-}
+% \newcommand{\PrintAllStatSystsPlots}{
+%     \foreach\VarName/\VarLabel in \VarList {
+%         \begin{figure}[H]
+%             \centering
+%                 \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/CovReco\VarName.png}
+%                 \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/FracCovReco\VarName.png}
+%                 \includegraphics[width=2in]{./../Figs/CAFAna/Uncertainties/Statistical/CorrReco\VarName.png}
+%             \caption{Statistical variations for~\VarLabel.}
+%             \label{fig:Statistical-\VarName}
+%         \end{figure}
+%     }
+% }
 
 \newcommand{\PrintAllSystsPlotsSimple}[1]{
     \foreach\VarName/\VarLabel in \VarList {
@@ -1012,36 +1012,36 @@ Using the truth information about reconstructed events, we can also compute sign
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthMuonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthLeadingProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthLeadingProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthRecoilProtonMomentum.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthRecoilProtonCosTheta.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/RecoilProtonCosTheta.png}} 
     \caption{Signal efficiency plots for single differential vector directions and magnitudes.}
     \label{fig:sbnd-signal-efficiency-vector-plots}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthDeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthTransverseMomentum.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthCosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TruthCosOpeningAngleMuonTotalProton.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/CosOpeningAngleMuonTotalProton.png}}
     \caption{Signal efficiency plots for single differential vector opening angles and transverse momentum.}
     \label{fig:sbnd-signal-efficiency-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
     \centering
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialTransverseMomentum_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Efficiency/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
     \caption{Signal efficiency plots for double differential variables.}
     \label{fig:sbnd-signal-efficiency-double-differential}
 \end{figure}
@@ -1400,6 +1400,82 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
     \label{fig:bin-uncertainties-xsec-double-differential}
 \end{figure}
 
+\clearpage
+
+\section{Fake data studies}
+
+To test our unfolding procedure, we generate fake data by increasing the weight of certain events in 
+our Monte Carlo simulations. We give meson exchange current (MEC) events a weight of 2 in Section~\ref{sec:mec-2x-weight},
+and quasi-elastic (QE) events a weight of 2 in Section~\ref{sec:qe-2x-weight}. We then unfold these fake data
+using the nominal Monte-Carlo predictions from the GENIE AR23 generator. Therefore, the input to the Wiener-SVD 
+unfolding are: the response matrix constructed with the nominal predictions, the true nominal signal, 
+the reconstructed signal from the fake data (this is the only input that changes), and the total covariance matrix, 
+which in this case was the statistical covariance matrix for the fake data added to the MC statistical and cross-section
+covariance matrices obtained with the nominal predictions. 
+
+After unfolding the fake data, we compare the unfolded fake data to the smeared fake signal and the smeared 
+nominal signal, using the additional smearing matrix obtained from the Wiener-SVD unfolding. We then perform 
+a $\chi^2$ test to see if the unfolded fake data agrees with the smeared fake signal. Additionally, we also 
+report the $p$- and $\sigma$-values for the distributions. We expect to see good agreement between the smeared 
+fake signal and the unfolded fake data, while the smeared nominal signal should not agree with the unfolded fake data.
+In other words, we expect below $1\sigma$ agreement between the smeared fake signal and unfolded fake data. 
+
+\subsection{MEC 2x weight}\label{sec:mec-2x-weight}
+
+In this first fake data study, we give MEC events a weight of 2, while keeping all other events with a weight of 1.
+We see that we are under $1\sigma$ agreement between the smeared fake signal and the unfolded fake data for all 
+our variables, while on or above $2.9\sigma$ with the smeared nominal signal, as expected. Therefore, we can 
+conclude that this fake data study was successful. The unfolded fake data along with the two smeared signals 
+is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-data-opening-angles-transverse,fig:unfolded-fake-data-double-differential,fig:unfolded-fake-data-sliced-double-differential}.
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/RecoilProtonCosTheta.png}} 
+    \caption{Unfolded fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
+    \label{fig:unfolded-fake-data-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Unfolded fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
+    \label{fig:unfolded-fake-data-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Unfolded fake data showing agreement with smeared fake signal data for serial double differential variables.}
+    \label{fig:unfolded-fake-data-double-differential}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialTransverseMomentum_InMuonCosTheta_0.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Unfolded fake data showing agreement with smeared fake signal data for sliced double differential variables.}
+    \label{fig:unfolded-fake-data-sliced-double-differential}
+\end{figure}
+
+\subsection{QE 2x weight}\label{sec:qe-2x-weight}
+
 
 \clearpage
 \section{Appendices}
@@ -1424,7 +1500,7 @@ and correlation matrices are plotted for all of the flux systematics and variabl
 In this appendix, the covariance, fractional covariance, and 
 correlation matrices for the statistical systematics are plotted.
 
-\PrintAllStatSystsPlots
+\PrintAllSystsPlotsSimple{Statistical}
 \clearpage
 
 \subsection{POT}\label{sec:pot-systematics}
