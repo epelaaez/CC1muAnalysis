@@ -9,9 +9,9 @@ cd srcs
 mrb g -t v09_75_03 sbnana
 cd sbnana
 # add your remote; skip if you already have it
-git remote add origin git@github.com:epelaaez/sbnana.git
+git remote add upstream git@github.com:epelaaez/sbnana.git
 # pull your feature branch
-git pull origin feature/epelaez_TrueEnsembleSpectrum
+git pull upstream feature/epelaez_TrueEnsembleSpectrum
 
 # setup
 mrbsetenv
@@ -19,8 +19,7 @@ mrbsetenv
 # compile
 mrb i -j4
 
-mrbslp
-
 # go back
+cd ..
 cd ..
 cd ..
