@@ -16,3 +16,5 @@ root -b -q Scripts/StatSystematics.cpp
 root -b -q Scripts/TotalCovMatrices.cpp
 root -b -q Scripts/Unfold.cpp
 root -b -q Scripts/WienerSVDOverlay.cpp
+cafe -bq Scripts/SelectionFakeData.C
+root -b -q Scripts/UnfoldFakeData.cpp
