@@ -58,7 +58,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
-    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
+    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
     
     // Create shift depending on number of universes
     ISyst* syst = new SBNWeightSyst(SystName);
@@ -78,7 +78,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
     // We now have the option to either load all the spectra from a previous run or 
     // run the spectra in this run
-    const bool ConstructSpectra = false;
+    const bool ConstructSpectra = true;
 
     // Where we store spectra if we are going to construct them    
     std::vector<std::tuple<
@@ -109,6 +109,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
     if (ConstructSpectra) {
         // Construct all spectra
         for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
+            printf("Variable #%zu  ", iVar);
             std::unique_ptr<EnsembleSpectrum> RecoSpectra;
             std::unique_ptr<EnsembleSpectrum> RecoTrueSpectra;
             std::unique_ptr<EnsembleSpectrum> RecoBkgSpectra;
