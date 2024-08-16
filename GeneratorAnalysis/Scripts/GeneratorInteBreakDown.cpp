@@ -300,7 +300,7 @@ void GeneratorInteBreakDown() {
 
             gPad->RedrawAxis();
             TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
-            TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
+            TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "PreFSI" : "PostFSI";
             PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;
         } // End of the loop over the samples grabing the plots	
@@ -427,7 +427,7 @@ void GeneratorInteBreakDown() {
 
                     gPad->RedrawAxis();
                     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
-                    TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
+                    TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "PreFSI" : "PostFSI";
                     PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+SlicePlotName+".png");
                     delete PlotCanvas;
 
