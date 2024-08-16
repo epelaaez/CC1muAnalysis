@@ -19,7 +19,8 @@ namespace Constants {
     const double Units = 1E38;
 
     const double TargetPOT = 6.79e20;
-    const double NTargets = 4.6712e31; // Argon nuclei, not nucleons
+    const double NTargets = 1.05E30; // Argon nuclei, not nucleons
+    // const double NTargets = 4.6712e31; // Nucleons
 
     double Nominal_UB_XY_Surface = 175. * 180. * 2. * 2.; // cm2
 	  double POTPerSpill = 5e12;
@@ -415,6 +416,16 @@ namespace Constants {
         {"pionqexsec_Flux", 1000},
         {"piontotxsec_Flux", 1000},
         {"piplus_Flux", 1000}
+    };
+
+    ////////////
+    // Fake data
+    ////////////
+
+    const std::vector<TString> FakeDataNames = {
+        "TwiceMEC",
+        "TwiceQE",
+        "Combined"
     };
 }
 

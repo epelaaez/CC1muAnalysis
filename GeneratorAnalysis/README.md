@@ -4,13 +4,7 @@ Events simulated with different generators (GENIE, GiBUU, etc.) are analyzed and
 
 ### Setup
 
-Assuming the [`BuildEventGenerators`](https://github.com/afropapp13/BuildEventGenerators) repository was used to generate the events, the only setup needed is
-
-```bash
-/exp/sbnd/app/users/${user}/BuildEventGenerators/setup_generators.sh
-```
-
-(or pointed to wherever the `BuildEventGenerators` repository was cloned).
+To setup your workspace to run the scripts in this directory, you have to run `source setup.sh/activate.sh` as indicated [here](https://github.com/epelaaez/CC1muAnalysis/blob/main/README.md).
 
 ### Running scripts
 

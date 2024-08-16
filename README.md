@@ -1,4 +1,4 @@
-# CC1muAnalysis
+# Charged-current $\nu_\mu$ interaction analysis
 
 Analysis of charged-current neutrino interactions. This repository is mainly divided into:
 
@@ -6,3 +6,19 @@ Analysis of charged-current neutrino interactions. This repository is mainly div
 - [`CAFAnaAnalysis/`](https://github.com/epelaaez/CC1muAnalysis/tree/main/CAFAnaAnalysis): contains scripts analysing experiment data using the CAFAna framework.
 
 Plots generated through the scripts in both directories are placed under [`Figs/`](https://github.com/epelaaez/CC1muAnalysis/tree/main/Figs). And code for a LaTeX note summarizing the project is under [`LaTeX/`](https://github.com/epelaaez/CC1muAnalysis/tree/main/LaTeX).
+
+### Setting up
+
+If it is the first time working in this repository, you have to run
+
+```bash
+source setup.sh
+```
+
+to set up the correct feature branch of `sbnana` used in this codebase. Once this is done, you have to run
+
+```bash
+source activate.sh
+```
+
+to activate your local `sbnana` build every time you start a new terminal. This will also setup ROOT, so that you can run scripts in both `GeneratorAnalysis/` and `CAFAnaAnalysis/`. 

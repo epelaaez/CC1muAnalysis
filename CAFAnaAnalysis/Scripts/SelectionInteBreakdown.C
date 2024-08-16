@@ -186,6 +186,8 @@ void SelectionInteBreakdown() {
                 PlotCanvas->SaveAs(dir+"/Figs/CAFAna/InteBreakdown/"+SlicePlotName+".png");
 
                 delete PlotCanvas;
+
+                StartIndex += (SliceNBins + 1);
             }
         } else {
             std::vector<TH1D*> Histos; Histos.resize(IntModes.size() + 1);

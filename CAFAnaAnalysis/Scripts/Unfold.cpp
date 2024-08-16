@@ -484,7 +484,7 @@ void Unfold() {
         if (PlotNames[iPlot].Contains("Serial")) {
             auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator["True"+PlotNames[iPlot]+"Plot"];
             auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
-            int StartIndex = 0;
+            int StartIndex = 0; int MatrixIndex = 0;
 
             // Loop over slices
             for (int iSlice = 0; iSlice < NSlices; iSlice++) {
@@ -530,8 +530,8 @@ void Unfold() {
                     const double dx = SlicedUnfoldedSpectrum->GetXaxis()->GetBinWidth(iBin);
                     ErrorBand->SetPointError(
                         iBin, 0, 0,
-                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx),
-                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(StartIndex + iBin, StartIndex + iBin)) / (SliceWidth * dx)
+                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(MatrixIndex + iBin, MatrixIndex + iBin)) / (SliceWidth * dx),
+                        TMath::Sqrt(UnfTotalCovHisto->GetBinContent(MatrixIndex + iBin, MatrixIndex + iBin)) / (SliceWidth * dx)
                     );
                 }
 
@@ -568,21 +568,19 @@ void Unfold() {
                 leg->SetTextSize(TextSize*0.8);
                 leg->SetTextFont(FontStyle);
 
-                TLegendEntry* legRecoTrue = leg->AddEntry(SlicedSmearedSignal,"True","l");
+                TLegendEntry* legSlicedSmear = leg->AddEntry(SlicedSmearedSignal,"True","l");
                 SlicedSmearedSignal->SetLineColor(kRed+1);
                 SlicedSmearedSignal->SetLineWidth(4);
 
-                TLegendEntry* legRecoBkg = leg->AddEntry(SlicedUnfoldedSpectrum,"Unfolded","l");
-                SlicedUnfoldedSpectrum->SetLineColor(kOrange+7);
-                SlicedUnfoldedSpectrum->SetLineWidth(4);
-                SlicedUnfoldedSpectrum->SetMarkerColor(kOrange+7);
+                TLegendEntry* legSlicedUnf = leg->AddEntry(SlicedUnfoldedSpectrum,"Unfolded","l");
+                SlicedUnfoldedSpectrum->SetLineColor(kBlack);
+                SlicedUnfoldedSpectrum->SetMarkerColor(kBlack);
                 SlicedUnfoldedSpectrum->SetMarkerStyle(20);
                 SlicedUnfoldedSpectrum->SetMarkerSize(1.);
 
                 double imax = TMath::Max(SlicedUnfoldedSpectrum->GetMaximum(),SlicedSmearedSignal->GetMaximum());
-                double YAxisRange = 1.35*imax;
-                SlicedUnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,YAxisRange);
-                SlicedSmearedSignal->GetYaxis()->SetRangeUser(0.,YAxisRange);
+                SlicedUnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,1.35*imax);
+                SlicedSmearedSignal->GetYaxis()->SetRangeUser(0.,1.35*imax);
 
                 PlotCanvas->cd();
                 SlicedSmearedSignal->Draw("hist");
@@ -600,6 +598,8 @@ void Unfold() {
 
                 // Save error band
                 SaveFile->WriteObject(ErrorBand, SlicePlotName+"_band");
+
+                StartIndex += (SliceNBins + 1); MatrixIndex += SliceNBins;
             }
         } else {
             // Create error band
@@ -644,26 +644,23 @@ void Unfold() {
             leg->SetTextSize(TextSize*0.8);
             leg->SetTextFont(FontStyle);
 
-            TLegendEntry* legRecoTrue = leg->AddEntry(SmearedSignal,"True","l");
+            TLegendEntry* legSmeared = leg->AddEntry(SmearedSignal,"True","l");
             SmearedSignal->SetLineColor(kRed+1);
             SmearedSignal->SetLineWidth(4);
 
-            TLegendEntry* legRecoBkg = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
-            UnfoldedSpectrum->SetLineColor(kOrange+7);
+            TLegendEntry* legUnfSpectrum = leg->AddEntry(UnfoldedSpectrum,"Unfolded","l");
+            UnfoldedSpectrum->SetLineColor(kBlack);
             UnfoldedSpectrum->SetLineWidth(4);
-            UnfoldedSpectrum->SetMarkerColor(kOrange+7);
+            UnfoldedSpectrum->SetMarkerColor(kBlack);
 			UnfoldedSpectrum->SetMarkerStyle(20);
 			UnfoldedSpectrum->SetMarkerSize(1.);
 
             double imax = TMath::Max(UnfoldedSpectrum->GetMaximum(),SmearedSignal->GetMaximum());
-            double YAxisRange = 1.35*imax;
-
-            double maxY = 0;
             for(int i = 1; i < ErrorBand->GetN() - 1; ++i){
-                maxY = std::max(maxY, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
+                imax = std::max(imax, ErrorBand->GetY()[i] + ErrorBand->GetErrorYhigh(i));
             }
-            UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,1.3 * maxY);
-            SmearedSignal->GetYaxis()->SetRangeUser(0.,1.3 * maxY);	
+            UnfoldedSpectrum->GetYaxis()->SetRangeUser(0.,1.3 * imax);
+            SmearedSignal->GetYaxis()->SetRangeUser(0.,1.3 * imax);	
 
             PlotCanvas->cd();
             SmearedSignal->Draw("hist");

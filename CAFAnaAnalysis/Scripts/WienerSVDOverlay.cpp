@@ -73,7 +73,7 @@ void WienerSVDOverlay() {
 		// Get unfolded spectrum
 		/////////////////////////
 
-		TH1D* UnfSpectrum = (TH1D*)UnfoldedFile->Get(PlotNames[iVar]+"_unf_spectrum");
+		TH1D* UnfSpectrum = (TH1D*) UnfoldedFile->Get(PlotNames[iVar]+"_unf_spectrum");
         int n = UnfSpectrum->GetNbinsX();
 		double edges[n+1]; for (int i = 0; i < n+1; i++) { edges[i] = UnfSpectrum->GetBinLowEdge(i+1); }
 
@@ -81,14 +81,14 @@ void WienerSVDOverlay() {
 		// Get smearing matrix
 		//////////////////////
 
-		TH2D* SmearingMatrixHisto = (TH2D*)UnfoldedFile->Get(PlotNames[iVar]+"_smear");
+		TH2D* SmearingMatrixHisto = (TH2D*) UnfoldedFile->Get(PlotNames[iVar]+"_smear");
 		TMatrixD SmearingMatrix(n, n); H2M(SmearingMatrixHisto, SmearingMatrix, kTRUE);
 
 		////////////////////
 		// Get true from CAF
 		////////////////////
 
-		TH1D* TrueHisto = (TH1D*)MatrixFile->Get(PlotNames[iVar]+"_true");
+		TH1D* TrueHisto = (TH1D*) MatrixFile->Get(PlotNames[iVar]+"_true");
 		TrueHisto->Scale(Units / (IntegratedFlux * NTargets));
 		TVectorD TrueVector(n); H2V(TrueHisto, TrueVector);
 		TVectorD SmearedTrueVector = SmearingMatrix * TrueVector;
@@ -226,7 +226,7 @@ void WienerSVDOverlay() {
 				SlicedUnfSpectrum->SetMarkerColor(kBlack);
 				SlicedUnfSpectrum->SetMarkerStyle(20);
 				SlicedUnfSpectrum->SetMarkerSize(1.);
-				SlicedUnfSpectrum->Draw("e1x0  same");
+				SlicedUnfSpectrum->Draw("e1x0 same");
 				ErrorBand->Draw("e1 same");
 				
 				// Slice label
@@ -238,6 +238,8 @@ void WienerSVDOverlay() {
 				PlotCanvas->SaveAs(dir+"/Figs/CAFAna/WienerSVDOverlay/"+SlicePlotName+".png");
 
 				delete leg;
+
+            	StartIndex += (SliceNBins + 1);
 			}
 		} else {
 			TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);

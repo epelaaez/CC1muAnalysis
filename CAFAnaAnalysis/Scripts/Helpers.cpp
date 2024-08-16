@@ -203,6 +203,41 @@ namespace SelectionHelpers {
         }
     }
 
+    void GetCovMatrix(
+        TH1* RecoHisto,
+        std::vector<TH1D*> UnivRecoHisto,
+        TH2* CovMatrix,
+        int n
+    ) {
+        int NUniv = UnivRecoHisto.size();
+
+        // Create covariance matrices 
+        for (int iUniv = 0; iUniv < NUniv; ++iUniv) {
+            for (int x = 1; x < n + 1; x++) {
+                double XEventRateCV = RecoHisto->GetBinContent(x);
+                double XEventRateVar = UnivRecoHisto[iUniv]->GetBinContent(x);
+                for (int y = 1; y < n + 1; y++) {
+                    double YEventRateCV = RecoHisto->GetBinContent(y);
+                    double YEventRateVar = UnivRecoHisto[iUniv]->GetBinContent(y);
+
+                    double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
+                    // std::cout << Value << std::endl;
+                    // std::cout << XEventRateVar << "  " << XEventRateCV << "  " << XEventRateVar - XEventRateCV << std::endl;
+                    // std::cout << YEventRateVar << "  " << YEventRateCV << "  " << YEventRateVar - YEventRateCV << std::endl;
+                    if (TMath::Abs(Value) < 1e-14) Value = 1e-14;
+                    // std::cout << Value << std::endl;
+                    // std::cout << std::endl;
+
+                    CovMatrix->Fill(
+                        RecoHisto->GetXaxis()->GetBinCenter(x),
+                        RecoHisto->GetXaxis()->GetBinCenter(y),
+                        Value
+                    );
+                }
+            }
+        }
+    }
+
     void DrawMatrices(
         TH1D* RecoHisto, 
         TH1D* RecoTrueHisto, 
@@ -221,7 +256,6 @@ namespace SelectionHelpers {
         // Make sure univ histos are of the same length
         assert (UnivRecoHisto.size() == UnivRecoTrueHisto.size());
         assert (UnivRecoTrueHisto.size() == UnivRecoBkgHisto.size());
-        int NUniv = UnivRecoHisto.size();
 
         int n = RecoHisto->GetXaxis()->GetNbins();
         double edges[n+1];
@@ -257,31 +291,13 @@ namespace SelectionHelpers {
             n, edges
         );
 
-        // Create covariance matrices 
-        for (int iUniv = 0; iUniv < NUniv; ++iUniv) {
-            for (int x = 1; x < n + 1; x++) {
-                double XEventRateCV = RecoHisto->GetBinContent(x);
-                double XEventRateVar = UnivRecoHisto[iUniv]->GetBinContent(x);
-                for (int y = 1; y < n + 1; y++) {
-                    double YEventRateCV = RecoHisto->GetBinContent(y);
-                    double YEventRateVar = UnivRecoHisto[iUniv]->GetBinContent(y);
-
-                    double Value = ((XEventRateVar - XEventRateCV) * (YEventRateVar - YEventRateCV)) / NUniv;
-                    // std::cout << Value << std::endl;
-                    // std::cout << XEventRateVar << "  " << XEventRateCV << "  " << XEventRateVar - XEventRateCV << std::endl;
-                    // std::cout << YEventRateVar << "  " << YEventRateCV << "  " << YEventRateVar - YEventRateCV << std::endl;
-                    if (TMath::Abs(Value) < 1e-14) Value = 1e-14;
-                    // std::cout << Value << std::endl;
-                    // std::cout << std::endl;
-
-                    CovMatrix->Fill(
-                        RecoHisto->GetXaxis()->GetBinCenter(x),
-                        RecoHisto->GetXaxis()->GetBinCenter(y),
-                        Value
-                    );
-                }
-            }
-        }
+        // Create covariance matrix
+        SelectionHelpers::GetCovMatrix(
+            RecoHisto,
+            UnivRecoHisto,
+            CovMatrix,
+            n
+        );
 
         // Fill in frac cov and corr matrix
         SelectionHelpers::GetFracCovAndCorrMatrix(

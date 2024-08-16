@@ -168,6 +168,8 @@ void SelectionEfficiency() {
 
                 // Save to root file
                 SaveFile->WriteObject(Eff, SlicePlotName+"_eff");
+
+                StartIndex += (SliceNBins + 1);
             }
         } else {
             // Create efficiency plot
