@@ -36,7 +36,7 @@ For the systematics study, in which we produce the covariance matrices and error
 cafe -bq Scripts/RunAllSystematics.C
 ```
 
-There is a `bool ConstructSpectra` flag defined in `Scripts/RunAllSystematics.C`. This is intended to speed up the script after the first time running it. If it is your first time running the systematics study, you will have to set the flag to `true`, and this will store all the histograms needed for the script to run in `.root` files. Then, any time you run the script again (as long as no changes to how the spectra are constructed, e.g., the variables and their binning, are made) you can set the flag to `false` and the runtime of the script will be greatly reduced.
+There is a `bool ConstructSpectra` flag defined in `Scripts/SelectionSystematics.C`. This is intended to speed up the script after the first time running it. If it is your first time running the systematics study, you will have to set the flag to `true`, and this will store all the histograms needed for the script to run in `.root` files. Then, any time you run the script again (as long as no changes to how the spectra are constructed, e.g., the variables and their binning, are made) you can set the flag to `false` and the runtime of the script will be greatly reduced.
 
 ### Available scripts
 

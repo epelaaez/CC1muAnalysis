@@ -26,7 +26,7 @@ namespace Constants {
 	double POTPerSpill = 5e12;
 
     // Integrated flux
-    // TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
+    // TFile* FluxFile = TFile::Open("../Utils/MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
 	// TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
     // double IntegratedFlux = (HistoFlux->Integral() * (TargetPOT / POTPerSpill / Nominal_UB_XY_Surface));
     double IntegratedFlux = 1.65974e13; // from Henry Lay
