@@ -1416,7 +1416,52 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
 \clearpage
 
 \section{Cross-section results}
-Placeholder.
+
+We present the unfolded cross-sections (see note below) using the Wiener-SVD filter, and overlay it with the generators 
+studied in the earlier sections of this document. The generator cross-sections are smeared using the additional smearing matrices,
+and the uncertainties are obtained using the unfolded total covariance matrix. The unfolded cross-sections are shown in
+Figures~\labelcref{fig:cross-section-vector-plots,fig:cross-section-opening-angles-transverse,fig:cross-section-double-differential}.
+
+\textit{Note: the ``results'' shown at the moment labeled as data are unfolded cross-sections of Monte-Carlo data, and will be replaced
+with real data once that is available.}
+
+\begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/RecoilProtonCosTheta.png}}
+    \caption{Cross-section results for momenta and opening angles of individual particles.}
+    \label{fig:cross-section-vector-plots}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Cross-section results for transverse and opening angle variables.}
+    \label{fig:cross-section-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Cross-section results for sliced double differential variables.}
+    \label{fig:cross-section-double-differential}
+\end{figure}
+
+\clearpage
 
 \subsection{Cross-section uncertainties}\label{sec:cross-section-uncertainties}
 
@@ -1472,7 +1517,7 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
 
 To test our unfolding procedure, we generate fake data by increasing the weight of certain events in 
 our Monte Carlo simulations. We give meson exchange current (MEC) events a weight of 2 in Section~\ref{sec:mec-2x-weight},
-and quasi-elastic (QE) events a weight of 2 in Section~\ref{sec:qe-2x-weight}. We then unfold these fake data
+and quasi-elastic (QE) events a weight of 0.5 combined with a MEC weight of 1.5 in Section~\ref{sec:combined-weight}. We then unfold these fake data
 using the nominal Monte-Carlo predictions from the GENIE AR23 generator. Therefore, the input to the Wiener-SVD 
 unfolding are: the response matrix constructed with the nominal predictions, the true nominal signal, 
 the reconstructed signal from the fake data (this is the only input that changes), and the total covariance matrix, 
@@ -1492,7 +1537,7 @@ In this first fake data study, we give MEC events a weight of 2, while keeping a
 We see that we are under $1\sigma$ agreement between the smeared fake signal and the unfolded fake data for all 
 our variables, while on or above $2.9\sigma$ with the smeared nominal signal, as expected. Therefore, we can 
 conclude that this fake data study was successful. The unfolded fake data along with the two smeared signals 
-is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-data-opening-angles-transverse,fig:unfolded-fake-data-double-differential,fig:unfolded-fake-data-sliced-double-differential}.
+is shown in Figures~\labelcref{fig:mec-fake-data-vector,fig:mec-fake-data-opening-angles-transverse,fig:mec-fake-data-double-differential,fig:mec-fake-data-sliced-double-differential}.
 
 \begin{figure}
     \centering
@@ -1502,8 +1547,8 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/LeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/RecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/RecoilProtonCosTheta.png}} 
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
-    \label{fig:unfolded-fake-data-vector}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
+    \label{fig:mec-fake-data-vector}
 \end{figure}
 
 \begin{figure}
@@ -1512,8 +1557,8 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/TransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/CosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
-    \label{fig:unfolded-fake-data-opening-angles-transverse}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
+    \label{fig:mec-fake-data-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
@@ -1522,8 +1567,8 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialTransverseMomentum_InMuonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for serial double differential variables.}
-    \label{fig:unfolded-fake-data-double-differential}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for serial double differential variables.}
+    \label{fig:mec-fake-data-double-differential}
 \end{figure}
 
 \begin{figure}
@@ -1536,11 +1581,64 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for sliced double differential variables.}
-    \label{fig:unfolded-fake-data-sliced-double-differential}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for sliced double differential variables.}
+    \label{fig:mec-fake-data-sliced-double-differential}
 \end{figure}
 
-\subsection{QE 2x weight}\label{sec:qe-2x-weight}
+\clearpage 
+
+\subsection{QE 0.5x and MEC 1.5x weights}\label{sec:combined-weight}
+
+For this fake data study we give QE events a weight of 0.5 and MEC events a weight of 1.5, while keeping all other events with a weight of 1.
+We see that we are under $1\sigma$ agreement between the smeared fake signal and the unfolded fake data for all 
+our variables, but contrary to the first study, we also see agreement with the smeared nominal signal in many of our variables.
+The unfolded fake data for this study along with the two smeared signals is shown in Figures~\labelcref{fig:combined-fake-data-vector,fig:combined-fake-data-opening-angles-transverse,fig:combined-fake-data-double-differential,fig:combined-fake-data-sliced-double-differential}.
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/RecoilProtonCosTheta.png}} 
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
+    \label{fig:combined-fake-data-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
+    \label{fig:combined-fake-data-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for serial double differential variables.}
+    \label{fig:combined-fake-data-double-differential}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialTransverseMomentum_InMuonCosTheta_0.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for sliced double differential variables.}
+    \label{fig:combined-fake-data-sliced-double-differential}
+\end{figure}
+
 
 
 \clearpage
