@@ -63,7 +63,9 @@ namespace ana
     const Binning bMuonMomentumBins = Binning::Custom(ArrayNBinsMuonMomentum);
     const Binning bLeadingProtonMomentumBins = Binning::Custom(ArrayNBinsLeadingProtonMomentum);
     const Binning bRecoilProtonMomentumBins = Binning::Custom(ArrayNBinsRecoilProtonMomentum);
-
+    const Binning bInvariantMassBins = Binning::Custom(ArrayNBinsInvariantMass);
+    const Binning bCosOpeningAngleLProtonMuon = Binning::Custom(ArrayNBinsbCosOpeningAngleLProtonMuon);
+    const Binning bCosOpeningAngleRProtonMuon = Binning::Custom(ArrayNBinsbCosOpeningAngleRProtonMuon
     // Bins for cut plots
     const Binning bNuScore = Binning::Simple(30, 0, 1.0);
     const Binning bFMatchScore = Binning::Simple(40, 0, 40.0);
@@ -351,8 +353,17 @@ namespace ana
 
         double RecoilProtonMomentum = Helper.ReturnRecoilProtonMomentum();
         vars.push_back(RecoilProtonMomentum);
+ 
+	double InvariantMass = Helper.ReturnInvariantMass();
+	vars.push_back(InvariantMass);
+	        
+	double CosOpeningAngleLProtonMuon = Helper.ReturnCosOpeningAngleLProtonMuon();
+	vars.push_back(CosOpeningAngleLProtonMuon);
 
-        return vars;
+	double CosOpeningAngleRProtonMuon = Helper.ReturnCosOpeningAngleRProtonMuon();
+	vars.push_back(CosOpeningAngleRProtonMuon);
+
+	return vars;
     }
 
     ////////////
@@ -714,6 +725,40 @@ namespace ana
     });
     const Var kRecoTruthRecoilProtonMomentum([](const caf::SRSliceProxy* slc) -> double {
         return kTruthRecoilProtonMomentum(&slc->truth);
+    });
+
+   //Invariant Mass 
+   const Var kInvariantMass([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(10);
+    });
+    const TruthVar kTruthInvariantMass([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(10);
+    });
+    const Var kRecoTruthInvariantMass([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthInvariantMass(&slc->truth);
+    });
+
+   
+    //Opening Angle between Leading Proton and Muon
+    const Var kCosOpeningAngleLProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(11);
+    });
+    const TruthVar kTruthCosOpeningAngleLProtonMuon([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(11);
+    });
+    const Var kRecoTruthCosOpeningAngleLProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthCosOpeningAngleLProtonMuon(&slc->truth);
+    });
+
+    //Opening Angle between Recoil Proton and Muon 
+    const Var kCosOpeningAngleRProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(12);
+    });
+    const TruthVar kTruthCosOpeningAngleRProtonMuon([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(12);
+    });
+    const Var kRecoTruthCosOpeningAngleRProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthCosOpeningAngleRProtonMuon(&slc->truth);
     });
 
     ////////////////////////////////
@@ -1178,7 +1223,10 @@ namespace ana
         {kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta, kTruthTransverseMomentumInMuonCosTheta},
         {kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta, kTruthDeltaAlphaTInMuonCosTheta},
         {kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta, kTruthCosOpeningAngleProtonsInMuonCosTheta},
-        {kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta}
+        {kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta},
+	{kInvariantMass, kRecoTruthInvariantMass, kTruthInvariantMass},
+	{kCosOpeningAngleLProtonMuon, kRecoTruthCosOpeningAngleLProtonMuon, kTruthCosOpeningAngleLProtonMuon},
+	{kCosOpeningAngleRProtonMuon, kRecoTruthCosOpeningAngleRProtonMuon, kTruthCosOpeningAngleRProtonMuon}
     };
 
     static const std::vector<Binning> VarBins = {
@@ -1197,8 +1245,11 @@ namespace ana
         bDeltaAlphaTInMuonCosTheta,
         bCosOpeningAngleProtonsInMuonCosTheta,
         bCosOpeningAngleMuonTotalProtonInMuonCosTheta
-    };
+	bInvariantMassBins,
+	bCosOpeningAngleLProtonMuonBins,
+	bCosOpeningAngleRProtonMuonBins
 
+   };
     ////////////////////////////
     // Weights for our fake data
     ////////////////////////////
