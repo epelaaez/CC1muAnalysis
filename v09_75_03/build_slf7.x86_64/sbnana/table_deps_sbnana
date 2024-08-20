@@ -1,0 +1,4 @@
+setupRequired(ifdhc v2_6_20 -q +e20:+p3913:+prof)
+setupRequired(osclib v00.22 -q +e20:+n315:+stanfree:+prof)
+setupRequired(sbnanaobj v09_21_04 -q +e20:+prof)
+setupRequired(sbndata v01_05)

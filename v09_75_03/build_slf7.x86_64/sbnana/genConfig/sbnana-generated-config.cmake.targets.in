@@ -1,0 +1,54 @@
+####################################
+# Exported targets, and package components.
+####################################
+
+##################
+# Automatically-generated runtime targets: sbnana
+##################
+include("${CMAKE_CURRENT_LIST_DIR}/sbnanaTargets.cmake")
+foreach (component IN LISTS sbnana_FIND_COMPONENTS)
+  include("${CMAKE_CURRENT_LIST_DIR}/sbnanaTargets_${component}.cmake")
+endforeach()
+
+##################
+# Manually-generated non-runtime targets.
+##################
+set(_targetsDefined)
+set(_targetsNotDefined)
+set(_expectedTargets)
+foreach (_expectedTarget IN ITEMS
+    sbnana::cafana.py
+    sbnana::rootlogon.C
+    sbnana::cafe
+    sbnana::load_cafana_libs.C)
+  list(APPEND _expectedTargets ${_expectedTarget})
+  if (NOT TARGET ${_expectedTarget})
+    list(APPEND _targetsNotDefined ${_expectedTarget})
+  endif()
+  if (TARGET ${_expectedTarget})
+    list(APPEND _targetsDefined ${_expectedTarget})
+  endif()
+endforeach()
+if ("${_targetsDefined}" STREQUAL "${_expectedTargets}")  # Nothing to do.
+elseif ("${_targetsDefined}" STREQUAL "") # Need to define targets.
+  add_executable(sbnana::cafana.py IMPORTED)
+  set_target_properties(sbnana::cafana.py
+    PROPERTIES IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/slf7.x86_64.e20.prof/bin/cafana.py")
+  add_executable(sbnana::rootlogon.C IMPORTED)
+  set_target_properties(sbnana::rootlogon.C
+    PROPERTIES IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/slf7.x86_64.e20.prof/bin/rootlogon.C")
+  add_executable(sbnana::cafe IMPORTED)
+  set_target_properties(sbnana::cafe
+    PROPERTIES IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/slf7.x86_64.e20.prof/bin/cafe")
+  add_executable(sbnana::load_cafana_libs.C IMPORTED)
+  set_target_properties(sbnana::load_cafana_libs.C
+    PROPERTIES IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/slf7.x86_64.e20.prof/bin/load_cafana_libs.C")
+else()
+  message(FATAL_ERROR "Some (but not all) targets in this export set were already defined.
+Targets Defined: ${_targetsDefined}
+Targets not yet defined: ${_targetsNotDefined}
+")
+endif()
+unset(_targetsDefined)
+unset(_targetsNotDefined)
+unset(_expectedTargets)

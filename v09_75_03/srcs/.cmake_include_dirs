@@ -1,0 +1,4 @@
+# DO NOT DELETE 
+# sbnana package block
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/sbnana)
+include_directories($ENV{MRB_BUILDDIR}/sbnana)

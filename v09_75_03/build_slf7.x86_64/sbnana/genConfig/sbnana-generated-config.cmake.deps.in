@@ -1,0 +1,7 @@
+####################################
+# Transitive dependencies.
+####################################
+set(_sbnana_PACKAGE_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")
+cet_find_library(IFDH NAMES ifdh PATHS ENV IFDHC_LIB NO_DEFAULT_PATH)
+set(PACKAGE_PREFIX_DIR "${_sbnana_PACKAGE_PREFIX_DIR}")
+unset(_sbnana_PACKAGE_PREFIX_DIR)

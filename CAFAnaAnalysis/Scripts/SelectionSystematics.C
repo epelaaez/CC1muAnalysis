@@ -650,6 +650,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
             ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
             leg->Draw();
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
+            printf("HERE");
         }
         delete PlotCanvas;
     }
