@@ -46,7 +46,7 @@ void SelectionMCStatSystematics() {
     Tools tools;
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";

@@ -35,7 +35,7 @@ void SelectionMigrationMatrix() {
     double TextSize = 0.06;	
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // We now create migration matrices for several variables, where these represent the ratio
     // between the events with a reconstructed value in bin i over the total true signal events

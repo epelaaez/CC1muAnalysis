@@ -35,7 +35,7 @@ void Selection() {
     double TextSize = 0.06;	
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // We now create overlaid plots for several reconstructed variables and three lines:
     //     1. all selected reconstructed events

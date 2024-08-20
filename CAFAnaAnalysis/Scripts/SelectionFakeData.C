@@ -48,11 +48,11 @@ void SelectionFakeData() {
     double TextSize = 0.06;	
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionFake.root";
-    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
+    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
 
     // Construct all spectra
     std::vector<std::vector<std::tuple<
