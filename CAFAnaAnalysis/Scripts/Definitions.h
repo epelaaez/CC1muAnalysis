@@ -1251,29 +1251,6 @@ namespace ana
         {kDoubleQEWeight, kTrueDoubleQEWeight},
         {kCombinedWeight, kTrueCombinedWeight}
     };
-
-    ///////////////
-    // Proton stubs
-    ///////////////
-
-    const Var kProtonStub([](const caf::SRSliceProxy* slc) -> double {
-        std::cout << "number of stubs: " << slc->reco.nstub << std::endl;
-        for (auto const& stub : slc->reco.stub) {
-            std::cout << "pfp id: " << stub.pfpid << std::endl;
-
-            for (auto const& pfp : slc->reco.pfp) {
-                if (pfp.id == stub.pfpid) {
-                    std::cout << "pfp found" << std::endl;
-                }
-            }
-
-            std::cout << "nmatches: " << stub.truth.nmatches << std::endl;
-            std::cout << "true pdg: " << stub.truth.p.pdg << std::endl;
-        }
-        std::cout << std::endl;
-        return 0.5;
-    });
-
 }
 
 #endif
