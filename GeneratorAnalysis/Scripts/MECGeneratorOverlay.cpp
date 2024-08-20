@@ -157,7 +157,7 @@ void MECGeneratorOverlay() {
         PlotCanvas->cd();
         leg->Draw();
         
-        TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+        TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay/MEC/Overlay_"+PlotNames[iPlot]+".png");
         delete PlotCanvas;
 

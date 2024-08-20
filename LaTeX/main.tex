@@ -385,7 +385,7 @@ define several variables. First, we define the momenta and opening angle of each
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueLeadingProtonCosThetaPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonMomentumPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/PostFSI/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
-    \caption{Cross sections for momentum and opening angles of individual particles.}
+    \caption{Cross sections for momenta and opening angles of individual particles.}
     \label{fig:momenta-cos-theta}
 \end{figure}
 
@@ -540,8 +540,8 @@ To investigate why the percentage of MEC events for some generators is low, we p
 For both GENIE tunes, NEUT, and NuWro, we got 100\% MEC events pre-FSI. For GiBUU, only 4.1\% MEC versus 76.2\% RES and 16\% DIS events pre-FSI. 
 The interaction breakdown for $|\vm|$ for all the generators are shown in Figure~\ref{fig:pre-fsi-inte-breakdown}. 
 Since GiBUU is the outlier, we checked the specific interaction mode for the resonance events. We got that 10 has 39.3\%, 11 has 34.7\%, 12 has 0.0136\%, 13 has 26 \%, and 27, 22, and 23 all have zero percent of the resonance events. 
-We also checked the event interaction breakdown for GiBUU samples generated without final state interactions, in which we found that 100\% of the events are MEC, shown in Figure~\ref{fig:gibuu-no-fsi}.
 
+We also checked the event interaction breakdown for GiBUU samples generated without final state interactions, in which we found that 100\% of the events are MEC, shown in Figure~\ref{fig:gibuu-no-fsi}.
 Note that the difference between these two GiBUU samples is that in the former, the samples were generated with final state interactions, and then we look at the state before the final state interactions reportedly took place, 
 and in the latter the event generation was done without any final state interactions.
 
@@ -572,13 +572,13 @@ and in the latter the event generation was done without any final state interact
 
 \subsection{Double differential plots}
 
-For our double differential variables, we look at $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
+We define four double differential variables as $\delta P_T$, $\delta \alpha_T$, $\cos\left(\theta_{\vlp,\vrp}\right)$, 
 and $\cos\left(\theta_{\vm,\vtp}\right)$ in $\cos(\theta_{\vec{p}_{\mu}})$. We have two bins for $\cos(\theta_{\vec{p}_{\mu}})$, the first one 
 going from $-1$ to $0.5$ and the second from $0.5$ to $1$. Therefore, these are irregular bins, with the first 
-holding a larger range than the first. These plots are shown in Figure~\ref{fig:double-differential-cos-mu}. Note that, 
+covering a larger range than the first. These plots are shown in Figure~\ref{fig:double-differential-cos-mu}. Note that, 
 in these plots, the horizontal axis is defined by bin number of the double differential measurement, not the value of the
-variable. This is because we are representing two variables in a single axis, but we can slice the plots to get our usual 
-horizontal axis.
+variable. This is because we are representing both variables in a single axis, but we can slice the plots to get our usual 
+horizontal axis in two slices of $\cos(\theta_{\vec{p}_{\mu}})$.
 
 \begin{figure}
     \centering
@@ -592,14 +592,14 @@ horizontal axis.
 
 We slice the double differential plots into two plots each, so that we have the variable of interest in the horizontal axis instead of bin numbers,
 and each slice corresponds to one bin of $\cos(\theta_{\vec{p}_{\mu}})$.
-These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}, and the plots broke down by interaction are in 
+These plots are shown in Figure~\ref{fig:sliced-double-differential-cos-mu}, and the plots broke down by interaction type are in 
 Figures~\labelcref{fig:inte-breakdown-double-alpha-t,fig:inte-breakdown-double-dpt,fig:inte-breakdown-double-cos-opening-angle-protons,fig:inte-breakdown-double-cos-opening-angle-muon-total-proton}.
 In these plots, the bins contents have been reweighted 
-appropriately, by dividing the content of each bin by the width of the bin for the variable in the axis
+appropriately, by dividing the content of each bin in the serial plot by the width of the bin for the variable in the horizontal axis
 multiplied by the width of the $\cos(\theta_{\vec{p}_{\mu}})$ slice.
 Note that the plots for the $0.5 < \cos(\theta_{\vec{p}_{\mu}}) < 1$ slice have more events in general, although they span a smaller phase space 
-of $\cos(\theta_{\vec{p}_{\mu}})$, as it can be seen by the scale of the vertical axis. 
-We performed the same double differential analysis for the events before final state interactions. 
+of $\cos(\theta_{\vec{p}_{\mu}})$, as it can be seen by the scale of the vertical axis.
+We plot the same double differential variables for the events before final state interactions. 
 These are shown in Figure~\ref{fig:sliced-double-differential-cos-mu-no-fsi}, and the corresponding interaction 
 breakdown plots are in Figures~\labelcref{fig:inte-breakdown-double-delta-alpha-t-no-fsi,fig:inte-breakdown-double-dpt-no-fsi,fig:inte-breakdown-double-cos-opening-angle-muon-total-proton-no-fsi,fig:inte-breakdown-double-cos-opening-angle-protons-no-fsi}.
 
@@ -765,22 +765,30 @@ breakdown plots are in Figures~\labelcref{fig:inte-breakdown-double-delta-alpha-
 \subsection{Pure MEC events}
 
 We also generated pure meson exchange current events using different configurations to get the MEC splines. 
-These were all generated using different tunes of GENIE: AR23, G18 with Empirical MEC model, and G18 with Nieves MEC model. 
-The plots for the transverse kinematic variables are shown in Figure~\ref{fig:transverse-k-mec}. 
+These were all generated using different tunes of GENIE:\@AR23, G18 with Empirical MEC model, and G18 with Nieves MEC model. 
+The plots for the transverse kinematic variables are shown in Figures~\labelcref{fig:vec-mec,fig:angles-mec}. 
 The sliced double differential plots are shown in Figure~\ref{fig:sliced-double-mec}.
 
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueMuonMomentumPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueMuonCosThetaPlot.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueLeadingProtonCosThetaPlot.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueRecoilProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueLeadingProtonMomentumPlot.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueLeadingProtonCosThetaPlot.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueRecoilProtonMomentumPlot.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueRecoilProtonCosThetaPlot.png}} 
+    \caption{Momenta and opening angles of single particles for pure MEC events.}
+    \label{fig:vec-mec}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueDeltaAlphaTPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueTransverseMomentumPlot.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleProtonsPlot.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/Overlay/MEC/Overlay_TrueCosOpeningAngleMuonTotalProtonPlot.png}}
-    \caption{Variable plots for pure MEC events.}
-    \label{fig:transverse-k-mec}
+    \caption{Transverse momentum and opening angles for pure MEC events.}
+    \label{fig:angles-mec}
 \end{figure}
 
 \begin{figure}
@@ -802,7 +810,7 @@ The sliced double differential plots are shown in Figure~\ref{fig:sliced-double-
 \section{SBND analysis}
 
 The CAF files used for this analysis are available in the Fermilab gpvms at the 
-path 
+path
 
 \begin{center}
     \verb|/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv/*.flat.caf.root|
@@ -814,8 +822,7 @@ path
 \subsection{Fiducial volume}
 
 To perform the analysis of SBND data, we have to define the fiducial volume of the detector, which represents
-a central part of the detector in which we will accept signals. The fiducial volume is given by the 
-following ranges:
+a central part of the detector in which we will accept signals, as:
 \begin{align}
     5 < |x| < 180 \qquad |y| < 180 \qquad 10 < z < 450
 \end{align}
@@ -823,7 +830,8 @@ where $x$, $y$, and $z$ are the coordinates in the detector frame, all in centim
 
 \subsection{Signal definition}
 
-To perform analysis on experiment data, we will be using the CAFAna framework. This allows us to perform cuts based on the reconstructed and Monte Carlo data (if available, i.e., only in the case of dealing with simulated events), to discriminate events. To discriminate events based on their Monte Carlo data, we perform a simple \verb|TruthCut| that checks the following:
+To perform the analysis, we will be using the CAFAna framework. This allows us to perform cuts based on the reconstructed and Monte Carlo data to discriminate events. 
+To discriminate events based on their Monte Carlo data and define our true signal, we perform a simple \verb|TruthCut| that checks the following:
 \begin{enumerate}[label=(\roman*)]
     \item That the neutrino interaction takes place in the fiducial volume.
     \item That the neutrino is a muon neutrino.
@@ -835,7 +843,7 @@ To perform analysis on experiment data, we will be using the CAFAna framework. T
 
 Using the reconstructed event data, the cut we have to use is not a simple as in the Monte Carlo data case. 
 We now have to use a \verb|Cut| that looks at different variables of the reconstructed event to determine if 
-it is a signal event. We perform the following cuts:
+it is a signal event. We perform the following cuts to define our reconstructed signal:
 \begin{enumerate}[label=(\roman*)]
     \item Cosmic: that the event is not a cosmic event by Pandora's criteria, i.e., requiring \verb|nu_score| $> 0.4$ to 
     check how neutrino-like the event is, and \verb|fmatch.score| $< 7$ with $0 <$ \verb|fmatch.time| $< 1.8$ to check the event comes from the beam.
@@ -846,7 +854,10 @@ it is a signal event. We perform the following cuts:
     \item No charged pions: that there are no other reconstructed tracks with momentum in the allowed range for charged pions inside the fiducial volume.
     \item No neutrial pions: that there are no reconstructed particles with a positive \verb|trackScore| less than 0.5 indicating a shower, so we don't allow any neutral pions.
 \end{enumerate}
-Using these two discriminators on simulated events, the reconstructed events that satisfy the signal definition, and distinguish between true signal events and background events.
+
+Using these two cuts, we can perform a study of Monte Carlo data. Given the events that pass the
+reconstructes signal definition, we can look at the background and true signal events. In later sections, 
+we also look at interaction type and topology breakdowns to get a better sense of the composition of our reconstructed signal.
 To get a better sense of what values the variables chosen to do the cuts take on for each true particle, we plot
 the flash matching score, time, and $\nu$ score in Figures~\ref{fig:cosmic-cut-variables}, and the $\chi^2$ values for muons and protons in Figure~\ref{fig:chi-2-variables}.
 
@@ -867,9 +878,10 @@ the flash matching score, time, and $\nu$ score in Figures~\ref{fig:cosmic-cut-v
     \label{fig:chi-2-variables}
 \end{figure}
 
-We use a one-bin histogram with lower bound $0$ and upper bound of $3$ in the true energy variable to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts described above is applied to the reconstructed events. 
-These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()|. Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
-The numbers reported in this table are POT normalized to $6.6 \times 10^{20}$.
+We use a one-bin histogram to get total counts of generated events, true signal events, all reconstructed events, and efficiency and purity data after each of the cuts described above is applied to the reconstructed events. 
+These results are shown in Table~\ref{table:cut-efficiency-purity}. Counts are obtained using ROOT's command \verb|Histo->Integral()| on the histograms generated. 
+Global efficiency is defined as the ratio between events that pass the cut and reconstructed events, signal efficiency as the ratio between true events that pass the cut and all true signal events, and purity as the ratio between true signal events that pass the cut and all events that pass the cut.
+The numbers reported in this table are POT normalized to $6.79 \times 10^{20}$.
 
 \begin{table}
     \begin{center}
@@ -895,7 +907,12 @@ The numbers reported in this table are POT normalized to $6.6 \times 10^{20}$.
 
 \subsection{Variable plots}
 
-Using all the variable definitions as we did when studying the event generators, and the signal definition based on the cuts described in the previous section, we can generate plots for SBND data. The reconstructed single differential variables corresponding to vector opening angles and magnitudes are shown in Figure~\ref{fig:sbnd-vector-plots}. In these figures, three lines are shown, corresponding to: all reconstructed (all the reconstructed events that pass our signal definition), signal (reconstructed events that pass signal definition and are true signal events as determined by the \verb|TruthCut| from our previous section), and background (reconstructed events that pass signal definition but are not true signal events) events. Similarly, the variables relating multiple vectors are shown in Figure~\ref{fig:sbnd-opening-angles-transverse}, and double differential sliced variables are shown in Figure~\ref{fig:sbnd-double-diff-sliced}.
+Using all the variable definitions as we did when studying the event generators, and the signal definition based on the cuts described in the previous section, 
+we can generate plots for SBND data. The reconstructed single differential variables corresponding to vector opening angles and magnitudes are shown in 
+Figure~\ref{fig:sbnd-vector-plots}. In these figures, three lines are shown, corresponding to: all reconstructed (all the reconstructed events that pass our signal definition), 
+signal (reconstructed events that pass signal definition and are true signal events as determined by the \verb|TruthCut| from our previous section), and background 
+(reconstructed events that pass signal definition but are not true signal events) events. Similarly, the variables relating multiple vectors are shown in Figure~\ref{fig:sbnd-opening-angles-transverse}, 
+and double differential sliced variables are shown in Figure~\ref{fig:sbnd-double-diff-sliced}.
 
 \begin{figure}
     \centering
@@ -905,7 +922,7 @@ Using all the variable definitions as we did when studying the event generators,
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/LeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/RecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/RecoilProtonCosTheta.png}} 
-    \caption{Vector directions and magnitudes for SBND data.}
+    \caption{Momenta and opening angles for individual particles for SBND data.}
     \label{fig:sbnd-vector-plots}
 \end{figure}
 
@@ -915,7 +932,7 @@ Using all the variable definitions as we did when studying the event generators,
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Vector opening angles and transverse momentum for SBND data.}
+    \caption{Transverse momentum and opening angles for SBND data.}
     \label{fig:sbnd-opening-angles-transverse}
 \end{figure}
 
@@ -944,22 +961,32 @@ This helps us get a better idea of what our background signal is composed of. Fo
 interaction breakdown, we look at quasielastic (QE), MEC (meson-exchange current),
 RES (resonance), and DIS (deep inelastic scattering) events. For the topology breakdown,
 we look at the number of protons, pions, and muons in the final state. The topologies 
-we label are CC2p0$pi$ (our signal definition), CC1p0$pi$, CC($N>2$)p0$pi$, CC($N\geq0$)p1$pi$, and CC0p0$pi$.
-Any other topology is labeled as ``Other''.
-These breakdowns are shown in Figures~\labelcref{fig:inte-top-breakdown-vector,fig:inte-top-breakdown-opening-angles-transverse,fig:inte-top-breakdown-double-diff-transverse,fig:inte-top-breakdown-double-diff-opening-angles}.
+we label are CC2p0$\pi$ (our signal definition), CC1p0$\pi$, CC($N>2$)p0$\pi$, CC($N\geq0$)p1$\pi$, and CC0p0$\pi$.
+Any other event topology is labeled as ``Other''.
+These breakdowns are shown in Figures~\labelcref{fig:inte-top-breakdown-momenta,fig:inte-top-angles,fig:inte-top-breakdown-opening-angles-transverse,fig:inte-top-breakdown-double-diff-transverse,fig:inte-top-breakdown-double-diff-opening-angles}.
 
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/MuonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/MuonMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/LeadingProtonMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/RecoilProtonMomentum.png}} 
+    \caption{Interaction and topology breakdown for momenta of individual particles.}
+    \label{fig:inte-top-breakdown-momenta}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/MuonCosTheta.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/MuonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/LeadingProtonCosTheta.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/LeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/InteBreakdown/RecoilProtonCosTheta.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/TopologyBreakdown/RecoilProtonCosTheta.png}}
-    \caption{Interaction and topology breakdown for vector directions and magnitudes.}
-    \label{fig:inte-top-breakdown-vector}
+    \caption{Interaction and topology breakdown for opening angles of individual particles.}
+    \label{fig:inte-top-angles}
 \end{figure}
 
 \begin{figure}
@@ -1008,7 +1035,12 @@ These breakdowns are shown in Figures~\labelcref{fig:inte-top-breakdown-vector,f
 
 \subsection{Signal efficiency}
 
-Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| and reconstructed in any bin over the number of events generated in bin \verb|i|. These plots are shown in Figure~\ref{fig:sbnd-signal-efficiency-vector-plots} and Figure~\ref{fig:sbnd-signal-efficiency-opening-angles-transverse} for single-differential variables and Figure~\ref{fig:sbnd-signal-efficiency-double-differential} for double differential variables.
+Using the truth information about reconstructed events, we can also compute signal efficiency on a bin-by-bin basis. 
+To be precise, signal definition on a bin \verb|i| is defined as the ratio between the number of events generated in bin \verb|i| 
+and reconstructed in any bin over the number of events generated in bin \verb|i|. 
+These plots are shown in Figure~\ref{fig:sbnd-signal-efficiency-vector-plots} and 
+Figure~\ref{fig:sbnd-signal-efficiency-opening-angles-transverse} for single-differential variables and 
+Figure~\ref{fig:sbnd-signal-efficiency-double-differential} for double differential variables.
 
 \begin{figure}
     \centering
@@ -1050,9 +1082,20 @@ Using the truth information about reconstructed events, we can also compute sign
 
 \subsection{Migration and response matrices}
 
-Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. For the migration matrix, we consider true signal events that were reconstructed and satisfy our signal definition in the denominator. Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
+Further, we compute migration matrices which give us a measure of how reliable our reconstructed variables are. A given column 
+in this matrix represents a bin of the truth variable, i.e., the value with which the event was generated. Then, each 
+row corresponds to a reconstructed bin of the same variable, and each cell corresponds to the probability that an event 
+generated with the truth value corresponding to the column gets reconstructed with the value corresponding to the row. For the
+migration matrix, we consider true signal events that were reconstructed and satisfy our signal definition in the denominator. 
+Therefore, the values in each column must add up to $1$. The migration matrices for the single differential variables are presented 
+in Figure~\ref{fig:migration-vector-plots} and Figure~\ref{fig:migration-opening-angles-transverse}. The migration matrices 
+for the double differential variables (given in terms of the bin number) are presented in Figure~\ref{fig:migration-double-differential}.
 
-Response matrices are computed in a similar manner, but using the total number of generated events in the denominator when computing the ratios, i.e., without requiring the events to be successfully reconstructed. Therefore, for these matrices, the columns of the response matrices do not have to add up to $1$. The response matrices for single differential variables are presented in Figure~\ref{fig:response-vector-plots} and Figure~\ref{fig:response-opening-angles-transverse}, and the double differential response matrices are given in Figure~\ref{fig:response-double-differential}.
+Response matrices are computed in a similar manner, but using the total number of generated events in the denominator when 
+computing the ratios, i.e., without requiring the events to be successfully reconstructed. Therefore, for these matrices, 
+the columns of the response matrices do not have to add up to $1$. The response matrices for single differential variables 
+are presented in Figure~\ref{fig:response-vector-plots} and Figure~\ref{fig:response-opening-angles-transverse}, and the double 
+differential response matrices are given in Figure~\ref{fig:response-double-differential}.
 A mathematical definition of the response matrix is given in Equation~\eqref{eq:response-matrix}.
 
 \begin{figure}
@@ -1063,7 +1106,7 @@ A mathematical definition of the response matrix is given in Equation~\eqref{eq:
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationLeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationRecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationRecoilProtonCosTheta.png}}
-    \caption{Migration matrices for signal differential vector directions and magnitudes.}
+    \caption{Migration matrices for single differential momenta and opening angles of individual particles.}
     \label{fig:migration-vector-plots}
 \end{figure}
 
@@ -1073,7 +1116,7 @@ A mathematical definition of the response matrix is given in Equation~\eqref{eq:
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationTransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationCosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/MigrationCosOpeningAngleMuonTotalProton.png}}
-    \caption{Migration matrices for signal differential vector opening angles and transverse momentum.}
+    \caption{Migration matrices for single differential transverse momentum and opening angles.}
     \label{fig:migration-opening-angles-transverse}
 \end{figure}
 
@@ -1095,7 +1138,7 @@ A mathematical definition of the response matrix is given in Equation~\eqref{eq:
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseLeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseRecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseRecoilProtonCosTheta.png}}
-    \caption{Response matrices for signal differential vector directions and magnitudes.}
+    \caption{Response matrices for single differential momenta and opening angles of individual particles.}
     \label{fig:response-vector-plots}
 \end{figure}
 
@@ -1105,7 +1148,7 @@ A mathematical definition of the response matrix is given in Equation~\eqref{eq:
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseTransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseCosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3.25in]{../Figs/CAFAna/Matrices/ResponseCosOpeningAngleMuonTotalProton.png}}
-    \caption{Response matrices for signal differential vector opening angles and transverse momentum.}
+    \caption{Response matrices for single differential transverse momentum and opening angles.}
     \label{fig:response-opening-angles-transverse}
 \end{figure}
 
@@ -1127,8 +1170,9 @@ To include systematic uncertainties in our study, we first consider cross sectio
 These are variations in the cross section models used to generate the events. They can be of two types:
 multisigma and multisim. For the former, we consider a $1\sigma$ variation of the affected parameters, 
 and in the latter we consider some number of universes, each with a random variation picked from a 
-Gaussian distribution between $0\sigma$ and $1\sigma$. From these variations, we compute the covariance matrix 
-as 
+Gaussian distribution between $0\sigma$ and $1\sigma$. These weights are already preloaded in the event data file,
+so we only have to load them into our script and use them to compute the relevant quantities.
+From these variations, we compute the covariance matrix as 
 \begin{align}
     E_{i,j} = \frac{1}{N_{\text{Univ}}} \sum_{s = 1}^{N_{\text{Univ}}} (\tilde{\sigma}_i^{\text{Var}, s} - \tilde{\sigma}_i^\text{CV})(\tilde{\sigma}_j^{\text{Var}, s} - \tilde{\sigma}_j^\text{CV})
 \end{align}
@@ -1161,7 +1205,6 @@ in a given universe as
 \begin{align}
     M_{i,j}^{\text{univ}} = \frac{RS^{\text{true j, reco i univ}}}{S^{\text{true j univ}}}.
 \end{align}
-
 Then, the fractional covariance matrix is defined as 
 \begin{align}
     F_{i,j} = \frac{E_{i,j}}{\tilde{\sigma}_i^\text{CV} \tilde{\sigma}_j^\text{CV}}.
@@ -1185,7 +1228,7 @@ For number of target systematics, we likewise consider a $1\%$ variation in the 
 $1\sigma$ variation. The corresponding plots are shown in Appendix~\ref{sec:number-of-targets-systematics}.
 We consider detector variations of $15\%$ flat for the moment, and these are shown in Appendix~\ref{sec:detector-systematics}.
 We consider reinteraction systematics as a $2\%$ flat variation, and these are shown in Appendix~\ref{sec:reinteraction-systematics}.
-The total covariance matrices for each variable are shown in Figures~\labelcref{fig:total-cov-single-diff,fig:total-cov-double-diff}.
+The total covariance matrices for each variable are shown in Figures~\labelcref{fig:total-cov-vec,fig:total-cov-angles,fig:total-cov-double-diff}.
 
 % There are a few systematics that are currently crashing when trying to produce all plots. This are:
 % \begin{itemize}
@@ -1198,14 +1241,22 @@ The total covariance matrices for each variable are shown in Figures~\labelcref{
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovMuonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovMuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovLeadingProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovRecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovRecoilProtonCosTheta.png}} \\
+    \caption{Total covariance matrices for momenta and opening angles of individual particles.}
+    \label{fig:total-cov-vec}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovDeltaAlphaT.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovTransverseMomentum.png}} \\ 
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovCosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Uncertainties/TotalCovCosOpeningAngleMuonTotalProton.png}}
-    \caption{Total covariance matrices for single differential variables.}
-    \label{fig:total-cov-single-diff}
+    \caption{Total covariance matrices for transverse and opening angle variables.}
+    \label{fig:total-cov-angles}
 \end{figure}
 
 \begin{figure}
@@ -1230,20 +1281,28 @@ covariance matrix.
 The output is the unfolded spectrum, a smearing matrix that can be used to smear 
 true signal histograms, and a covariance rotation matrix to consider uncertainties in the regularized space as 
 opposed to the true space. The additional smearing matrices obtained from the Wiener-SVD unfolding 
-are shown in Figures~\labelcref{fig:smear-single-diff,fig:smear-double-diff}.
+are shown in Figures~\labelcref{fig:smear-vec,fig:smear-angles,fig:smear-double-diff}.
 
 \begin{figure}
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/MuonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/MuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/LeadingProtonCosTheta.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/RecoilProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/RecoilProtonCosTheta.png}} 
+    \caption{Additional smearing matrices for momenta and opening angles of individual vectors.}
+    \label{fig:smear-vec}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/DeltaAlphaT.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/TransverseMomentum.png}} \\ 
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/CosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Smear/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Additional smearing matrices for single differential variables.}
-    \label{fig:smear-single-diff}
+    \caption{Additional smearing matrices for transverse and opening angle variables.}
+    \label{fig:smear-angles}
 \end{figure}
 
 \begin{figure}
@@ -1261,11 +1320,10 @@ are shown in Figures~\labelcref{fig:smear-single-diff,fig:smear-double-diff}.
 \subsection{Closure test}
 
 To ensure that the unfolding techniques implemented work correctly, we use the true signal part of our Monte-Carlo data  
-as our signal, and compare it to the truth level signal prediction to see that they are identical.
-The plots showing they are identical are in Figure~\ref{fig:closure-test-single-diff} and Figure~\ref{fig:closure-test-double-diff}. 
-We also note that the overall shape and magnitude of our histograms match previously reported MicroBooNE analyses. 
+as our signal, and compare it to the unfolded cross-section obtained from our reconstructed signal to see that they are identical.
+The plots showing they are identical are in Figures~\labelcref{fig:closure-test-vec,fig:closure-test-angles,fig:closure-test-double-diff}.
 
-The error bands for the unfolded spectra are given by the cross-section uncertainties, which are shown in a
+The error bands for the unfolded spectra are given by the unfolded total covariance matrices, which are shown in a
 bin-by-bin basis in the Section~\ref{sec:cross-section-uncertainties}. For the sliced double 
 differential measurements, we make sure to divide by the slice and bin widths to obtain the correct error bands.
 In the single differential measurements, we only have to divide by the bin width. 
@@ -1274,14 +1332,22 @@ In the single differential measurements, we only have to divide by the bin width
     \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/MuonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/MuonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/LeadingProtonCosTheta.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/RecoilProtonCosTheta.png}} \\
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleProtons.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/RecoilProtonCosTheta.png}}
+    \caption{Closure test for momenta and opening angles of individual particles.}
+    \label{fig:closure-test-vec}
+\end{figure}
+
+\begin{figure}
+    \centering
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/DeltaAlphaT.png}}
-    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/TransverseMomentum.png}}
-    \caption{Closure test for single differential plots.}
-    \label{fig:closure-test-single-diff}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/Unfolded/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Closure test for transverse and opening angle variables.}
+    \label{fig:closure-test-angles}
 \end{figure}
 
 \begin{figure}
@@ -1311,7 +1377,7 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
 \begin{figure}[H]
     \centering 
     \includegraphics[width=4in]{../Figs/CAFAna/BinUncertainties/EventCount.png}
-    \caption{Fractional contribution for the sources of uncertainty using the event rates.}
+    \caption{Fractional contribution of the sources of uncertainty using the event rates.}
     \label{fig:single-bin-uncertainties-event-rates}
 \end{figure}
 
@@ -1323,7 +1389,7 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/LeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/RecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/RecoilProtonCosTheta.png}} 
-    \caption{Bin by bin event rate uncertainties for single differential vector directions and magnitudes.}
+    \caption{Bin by bin event rate uncertainties for momenta and opening angles of individual particles.}
     \label{fig:bin-uncertainties-rates-vector}
 \end{figure}
 
@@ -1333,7 +1399,7 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/TransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/CosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/BinUncertainties/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Bin by bin event rate uncertainties for single differential vector opening angles and transverse momentum.}
+    \caption{Bin by bin event rate uncertainties for transverse and opening angles variables.}
     \label{fig:bin-uncertainties-rates-opening-angles-transverse}
 \end{figure}
 
@@ -1350,7 +1416,52 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
 \clearpage
 
 \section{Cross-section results}
-Placeholder.
+
+We present the unfolded cross-sections (see note below) using the Wiener-SVD filter, and overlay it with the generators 
+studied in the earlier sections of this document. The generator cross-sections are smeared using the additional smearing matrices,
+and the uncertainties are obtained using the unfolded total covariance matrix. The unfolded cross-sections are shown in
+Figures~\labelcref{fig:cross-section-vector-plots,fig:cross-section-opening-angles-transverse,fig:cross-section-double-differential}.
+
+\textit{Note: the ``results'' shown at the moment labeled as data are unfolded cross-sections of Monte-Carlo data, and will be replaced
+with real data once that is available.}
+
+\begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/RecoilProtonCosTheta.png}}
+    \caption{Cross-section results for momenta and opening angles of individual particles.}
+    \label{fig:cross-section-vector-plots}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Cross-section results for transverse and opening angle variables.}
+    \label{fig:cross-section-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialTransverseMomentum_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/WienerSVDOverlay/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Cross-section results for sliced double differential variables.}
+    \label{fig:cross-section-double-differential}
+\end{figure}
+
+\clearpage
 
 \subsection{Cross-section uncertainties}\label{sec:cross-section-uncertainties}
 
@@ -1376,7 +1487,7 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/LeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/RecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/RecoilProtonCosTheta.png}} 
-    \caption{Bin by bin event cross-section uncertainties for single differential vector directions and magnitudes.}
+    \caption{Bin by bin event cross-section uncertainties for momenta and opening anlges of individual particles.}
     \label{fig:bin-uncertainties-xsec-vector}
 \end{figure}
 
@@ -1386,7 +1497,7 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/TransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/CosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/UnfBinUncertainties/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Bin by bin cross-section uncertainties for single differential vector opening angles and transverse momentum.}
+    \caption{Bin by bin cross-section uncertainties for transverse and opening angles variables.}
     \label{fig:bin-uncertainties-xsec-opening-angles-transverse}
 \end{figure}
 
@@ -1406,7 +1517,7 @@ Figures~\labelcref{fig:bin-uncertainties-xsec-vector,fig:bin-uncertainties-xsec-
 
 To test our unfolding procedure, we generate fake data by increasing the weight of certain events in 
 our Monte Carlo simulations. We give meson exchange current (MEC) events a weight of 2 in Section~\ref{sec:mec-2x-weight},
-and quasi-elastic (QE) events a weight of 2 in Section~\ref{sec:qe-2x-weight}. We then unfold these fake data
+and quasi-elastic (QE) events a weight of 0.5 combined with a MEC weight of 1.5 in Section~\ref{sec:combined-weight}. We then unfold these fake data
 using the nominal Monte-Carlo predictions from the GENIE AR23 generator. Therefore, the input to the Wiener-SVD 
 unfolding are: the response matrix constructed with the nominal predictions, the true nominal signal, 
 the reconstructed signal from the fake data (this is the only input that changes), and the total covariance matrix, 
@@ -1426,7 +1537,7 @@ In this first fake data study, we give MEC events a weight of 2, while keeping a
 We see that we are under $1\sigma$ agreement between the smeared fake signal and the unfolded fake data for all 
 our variables, while on or above $2.9\sigma$ with the smeared nominal signal, as expected. Therefore, we can 
 conclude that this fake data study was successful. The unfolded fake data along with the two smeared signals 
-is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-data-opening-angles-transverse,fig:unfolded-fake-data-double-differential,fig:unfolded-fake-data-sliced-double-differential}.
+is shown in Figures~\labelcref{fig:mec-fake-data-vector,fig:mec-fake-data-opening-angles-transverse,fig:mec-fake-data-double-differential,fig:mec-fake-data-sliced-double-differential}.
 
 \begin{figure}
     \centering
@@ -1436,8 +1547,8 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/LeadingProtonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/RecoilProtonMomentum.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/RecoilProtonCosTheta.png}} 
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
-    \label{fig:unfolded-fake-data-vector}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
+    \label{fig:mec-fake-data-vector}
 \end{figure}
 
 \begin{figure}
@@ -1446,8 +1557,8 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/TransverseMomentum.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/CosOpeningAngleProtons.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/CosOpeningAngleMuonTotalProton.png}}
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
-    \label{fig:unfolded-fake-data-opening-angles-transverse}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
+    \label{fig:mec-fake-data-opening-angles-transverse}
 \end{figure}
 
 \begin{figure}
@@ -1456,8 +1567,8 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialTransverseMomentum_InMuonCosTheta.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for serial double differential variables.}
-    \label{fig:unfolded-fake-data-double-differential}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for serial double differential variables.}
+    \label{fig:mec-fake-data-double-differential}
 \end{figure}
 
 \begin{figure}
@@ -1470,11 +1581,64 @@ is shown in Figures~\labelcref{fig:unfolded-fake-data-vector,fig:unfolded-fake-d
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
     \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/TwiceMEC/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
-    \caption{Unfolded fake data showing agreement with smeared fake signal data for sliced double differential variables.}
-    \label{fig:unfolded-fake-data-sliced-double-differential}
+    \caption{Unfolded 2x MEC fake data showing agreement with smeared fake signal data for sliced double differential variables.}
+    \label{fig:mec-fake-data-sliced-double-differential}
 \end{figure}
 
-\subsection{QE 2x weight}\label{sec:qe-2x-weight}
+\clearpage 
+
+\subsection{QE 0.5x and MEC 1.5x weights}\label{sec:combined-weight}
+
+For this fake data study we give QE events a weight of 0.5 and MEC events a weight of 1.5, while keeping all other events with a weight of 1.
+We see that we are under $1\sigma$ agreement between the smeared fake signal and the unfolded fake data for all 
+our variables, but contrary to the first study, we also see agreement with the smeared nominal signal in many of our variables.
+The unfolded fake data for this study along with the two smeared signals is shown in Figures~\labelcref{fig:combined-fake-data-vector,fig:combined-fake-data-opening-angles-transverse,fig:combined-fake-data-double-differential,fig:combined-fake-data-sliced-double-differential}.
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/RecoilProtonCosTheta.png}} 
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for single differential vector directions and magnitudes.}
+    \label{fig:combined-fake-data-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/CosOpeningAngleMuonTotalProton.png}}
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for single differential vector opening angles and transverse momentum.}
+    \label{fig:combined-fake-data-opening-angles-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for serial double differential variables.}
+    \label{fig:combined-fake-data-double-differential}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialDeltaAlphaT_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialDeltaAlphaT_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialTransverseMomentum_InMuonCosTheta_0.png}} 
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialTransverseMomentum_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleProtons_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleProtons_InMuonCosTheta_1.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_0.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/FakeDataStudies/Combined/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta_1.png}}
+    \caption{Unfolded combined weights fake data showing agreement with smeared fake signal data for sliced double differential variables.}
+    \label{fig:combined-fake-data-sliced-double-differential}
+\end{figure}
+
 
 
 \clearpage
