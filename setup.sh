@@ -26,3 +26,4 @@ cd ..
 
 kx509
 voms-proxy-init -noregen -rfc -voms 'fermilab:/fermilab/sbnd/Role=Analysis'
+export TERM=screen
