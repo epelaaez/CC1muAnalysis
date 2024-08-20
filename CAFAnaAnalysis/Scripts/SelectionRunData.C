@@ -29,7 +29,7 @@ using namespace Constants;
 
 void SelectionRunData() {
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // Open csv file to store data
     std::string FilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/EventData.csv";
