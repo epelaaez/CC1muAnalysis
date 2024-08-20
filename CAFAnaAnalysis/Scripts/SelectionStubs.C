@@ -15,7 +15,6 @@
 // std includes.
 #include <vector>
 #include <memory>
-#include <fstream>
 
 // Definitions for Vars and Cuts.
 #include "Definitions.h"
@@ -27,23 +26,21 @@ using namespace std;
 using namespace ana;
 using namespace Constants;
 
-void SelectionRunData() {
+void SelectionStubs() {
+    // Set defaults and load tools
+    TH1D::SetDefaultSumw2();
+    TH2D::SetDefaultSumw2();
+
+    int FontStyle = 132;
+    double TextSize = 0.06;	
+
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
     SpectrumLoader NuLoader(InputFiles);
 
-    // Open csv file to store data
-    std::string FilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/EventData.csv";
-    fstream file; file.open(FilePath, fstream::out); 
-    file << "fno,run,subrun,evt,subevt" << std::endl;
-    file.close();
+    // Directory to store figs
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
 
-    Spectrum sRecoSignals(
-        "RecoSignals",
-        bEventCount, // does not really matter
-        NuLoader,
-        kSpillData,
-        kNoSpillCut
-    );
+    auto Signals = std::make_unique<Spectrum>("stubs", bEventCount, NuLoader, kProtonStub, kNoSpillCut, kRecoIsSignal); 
 
     NuLoader.Go();
 }

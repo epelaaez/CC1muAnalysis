@@ -37,7 +37,7 @@ void SelectionEfficiency() {
     double TextSize = 0.06;	
     
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // We will create efficiency plots using true variables and definining signal efficiency
     // as the number of reconstructed the events that pass our signal definition and are true

@@ -17,6 +17,9 @@
 #include <algorithm>
 #include <limits>
 #include <tuple>
+#include <string>
+#include <iostream>
+#include <filesystem>
 
 // Utils includes.
 #include "../../Utils/Tools.cxx"
@@ -28,7 +31,18 @@ using namespace Constants;
 namespace ana
 {
     // Files with samples
-    const std::string TargetFile = "/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv/*.flat.caf.root";
+    const std::string TargetPath = "/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv";
+    const std::vector<std::string> GetInputFiles() {
+        std::vector<std::string> Input;
+        for (const auto & entry : std::filesystem::directory_iterator(TargetPath)) {
+            if (entry.path().extension() == ".root") {
+                std::string XRootPath = "root://fndcadoor.fnal.gov:1094/pnfs/fnal.gov/usr/" + entry.path().string().substr(6);
+                Input.push_back(XRootPath);
+            }
+        }
+        return Input;
+    }
+    const std::vector<std::string> InputFiles = GetInputFiles();
 
     // Constants
     const float fFVXMax = 180.f;
@@ -1237,6 +1251,29 @@ namespace ana
         {kDoubleQEWeight, kTrueDoubleQEWeight},
         {kCombinedWeight, kTrueCombinedWeight}
     };
+
+    ///////////////
+    // Proton stubs
+    ///////////////
+
+    const Var kProtonStub([](const caf::SRSliceProxy* slc) -> double {
+        std::cout << "number of stubs: " << slc->reco.nstub << std::endl;
+        for (auto const& stub : slc->reco.stub) {
+            std::cout << "pfp id: " << stub.pfpid << std::endl;
+
+            for (auto const& pfp : slc->reco.pfp) {
+                if (pfp.id == stub.pfpid) {
+                    std::cout << "pfp found" << std::endl;
+                }
+            }
+
+            std::cout << "nmatches: " << stub.truth.nmatches << std::endl;
+            std::cout << "true pdg: " << stub.truth.p.pdg << std::endl;
+        }
+        std::cout << std::endl;
+        return 0.5;
+    });
+
 }
 
 #endif
