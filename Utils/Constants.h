@@ -170,8 +170,8 @@ namespace Constants {
         "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)",
         "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)",
  	"W",
- 	"#theta_{p^{L}, p^{#mu}}",
-	"#theta_{p^{R}, p^{#mu}}"
+ 	"cos(#theta_{p^{L}, p^{#mu}})",
+	"cos(#theta_{p^{R}, p^{#mu}})"
     };
 
     static const std::vector<std::string> YLabels = {
@@ -191,8 +191,8 @@ namespace Constants {
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
 	"#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
-	"#frac{d#sigma}{d#theta_{p^{L}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
-	"#frac{d#sigma}{d#theta_{p^{R}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]"
+	"#frac{d#sigma}{d#cos(#theta_{p^{L}, p^{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{d#cos(#theta_{p^{R}, p^{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]"
     };
 
     ///////////////

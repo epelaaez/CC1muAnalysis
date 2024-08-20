@@ -133,12 +133,13 @@ void GeneratorInteBreakDown() {
     YAxisLabel.push_back("#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueNoFSICosOpeningAngleLProtonMuonPlot");
-    XAxisLabel.push_back("#theta_{p^{L}, p^{#mu}}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{L}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    XAxisLabel.push_back("cos(#theta_{p^{L}, p^{#mu}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{p^{L}, p^{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueNoFSICosOpeningAngleRProtonMuonPlot");
-    XAxisLabel.push_back("#theta_{p^{R}, p^{#mu}}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{R}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    XAxisLabel.push_back("cos(#theta_{p^{R}, p^{#mu}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{p^{R}, p^{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
@@ -186,12 +187,12 @@ void GeneratorInteBreakDown() {
     YAxisLabel.push_back("#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
-    XAxisLabel.push_back("#theta_{p^{L}, p^{#mu}}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{L}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    XAxisLabel.push_back("cos(#theta_{p^{L}, p^{#mu})}");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{p^{L}, p^{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
-    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
-    XAxisLabel.push_back("#theta_{p^{R}, p^{#mu}}");
-    YAxisLabel.push_back("#frac{d#sigma}{d#theta_{p^{R}, p^{#mu}}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+    PlotNames.push_back("TrueCosOpeningAngleRProtonMuonPlot");
+    XAxisLabel.push_back("cos(#theta_{p^{R}, p^{#mu})}");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{p^{R}, p^{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
@@ -323,7 +324,7 @@ void GeneratorInteBreakDown() {
             textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events",""));
 
             gPad->RedrawAxis();
-            TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+            TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
             TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
             PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+Labels[iSample]+"_"+PlotNames[iPlot]+".png");
             delete PlotCanvas;
@@ -450,7 +451,7 @@ void GeneratorInteBreakDown() {
                     textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events","") + SliceLabel);
 
                     gPad->RedrawAxis();
-                    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+                    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
                     TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
                     PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+SlicePlotName+".png");
                     delete PlotCanvas;
