@@ -65,6 +65,21 @@ void SelectionStubs() {
         auto RecoBkgStubs = std::make_unique<Spectrum>("RecoBkg" + (std::string)StubVarNames[i], bStubMult, NuLoader, StubVars[i], kNoSpillCut, kRecoIsBackground);
         Spectra.push_back({std::move(RecoStubs), std::move(RecoSignalStubs), std::move(RecoBkgStubs)});
     }
+    for (std::size_t i = 0; i < Vars.size(); i++) {
+        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsSignal && kRejectStubs); 
+        auto RecoTrueSignals = std::make_unique<Spectrum> (VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsTrueReco && kRejectStubs); 
+        auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsBackground && kRejectStubs); 
+        Spectra.push_back({std::move(RecoSignals), std::move(RecoTrueSignals), std::move(RecoBkgSignals)});
+    }
+    Spectrum sAllTrueEvents("AllTrueEvents", bEventCount, NuLoader, kTrueEventCount, kTruthIsSignal, kNoSpillCut);
+
+    // Save event data to open events in display
+    std::string FilePath = "/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/StubData.csv";
+    fstream file; file.open(FilePath, fstream::out); 
+    file << "fno,run,subrun,evt,subevt,nstub" << std::endl;
+    file.close();
+    Spectrum sStubData("StubData", bEventCount, NuLoader, kSpillStubData, kNoSpillCut);
+
     NuLoader.Go();
 
     TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);  
@@ -187,5 +202,73 @@ void SelectionStubs() {
         leg->Draw();
 
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Stubs/Reco" + StubVarNames[i] + ".png");
+    }
+
+    TH1D* AllTrueEventsHisto = sAllTrueEvents.ToTH1(TargetPOT);
+    double AllTrueEventsInt = AllTrueEventsHisto->Integral();
+
+    for (std::size_t i = 0; i < Vars.size(); ++i) {
+        auto& [RecoSignals, RecoTrueSignals, RecoBkgSignals] = Spectra[i + Cuts.size() + StubVars.size()];
+        
+        TH1D* RecoHisto = RecoSignals->ToTH1(TargetPOT);
+        TH1D* RecoTrueHisto = RecoTrueSignals->ToTH1(TargetPOT);
+        TH1D* RecoBkgHisto = RecoBkgSignals->ToTH1(TargetPOT);  
+
+        TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+        leg->SetBorderSize(0);
+        leg->SetNColumns(3);
+        leg->SetTextSize(TextSize*0.8);
+        leg->SetTextFont(FontStyle);
+
+        TLegendEntry* legReco = leg->AddEntry(RecoHisto,"Reconstructed","l");
+        RecoHisto->SetLineColor(kBlue+2);
+        RecoHisto->SetLineWidth(4);
+
+        // Style histograms
+        RecoHisto->GetXaxis()->SetTitleFont(FontStyle);
+        RecoHisto->GetXaxis()->SetLabelFont(FontStyle);
+        RecoHisto->GetXaxis()->SetNdivisions(8);
+        RecoHisto->GetXaxis()->SetLabelSize(TextSize);
+        RecoHisto->GetXaxis()->SetTitleSize(TextSize);
+        RecoHisto->GetXaxis()->SetTitleOffset(1.1);
+        RecoHisto->GetXaxis()->CenterTitle();
+        RecoHisto->GetXaxis()->SetTitle(("Reco " + VarLabels.at(i)).c_str());
+
+        RecoHisto->GetYaxis()->SetTitleFont(FontStyle);
+        RecoHisto->GetYaxis()->SetLabelFont(FontStyle);
+        RecoHisto->GetYaxis()->SetNdivisions(6);
+        RecoHisto->GetYaxis()->SetLabelSize(TextSize);
+        RecoHisto->GetYaxis()->SetTitleSize(TextSize);
+        RecoHisto->GetYaxis()->SetTitleOffset(1.3);
+        RecoHisto->GetYaxis()->SetTickSize(0);
+        RecoHisto->GetYaxis()->CenterTitle();
+        RecoHisto->GetYaxis()->SetTitle("# events");
+
+        double imax = RecoHisto->GetMaximum();
+        double YAxisRange = 1.3*imax;
+        RecoHisto->GetYaxis()->SetRangeUser(0.,YAxisRange);
+
+        TLegendEntry* legRecoTrue = leg->AddEntry(RecoTrueHisto,"Signal","l");
+        RecoTrueHisto->SetLineColor(kRed+1);
+        RecoTrueHisto->SetLineWidth(4);
+
+        TLegendEntry* legRecoBkg = leg->AddEntry(RecoBkgHisto,"Background","l");
+        RecoBkgHisto->SetLineColor(kOrange+7);
+        RecoBkgHisto->SetLineWidth(4);
+
+        PlotCanvas->cd();
+        RecoHisto->Draw("hist");
+        RecoTrueHisto->Draw("hist same");
+        RecoBkgHisto->Draw("hist same");
+        leg->Draw();
+
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Stubs/" + PlotNames[i] + ".png");
+
+        double RecoInt = RecoHisto->Integral();
+        double RecoTrueInt = RecoTrueHisto->Integral();
+        double RecoBkgInt = RecoBkgHisto->Integral();
+
+        std::cout << "Purity: " << (RecoTrueInt / RecoInt) * 100. << std::endl;
+        std::cout << "Signal efficiency: " << (RecoTrueInt / AllTrueEventsInt) * 100. << std::endl;
     }
 }

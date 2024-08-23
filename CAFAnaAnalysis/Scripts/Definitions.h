@@ -1015,6 +1015,10 @@ namespace ana
         return false;
     });
 
+    const Cut kRejectStubs([](const caf::SRSliceProxy* slc) {
+        return (slc->reco.nstub >= 2);
+    });
+
     // Check reconstructed event is signal
     const Cut kRecoIsSignal([](const caf::SRSliceProxy* slc) {
         std::vector<int> TaggedIDs;
@@ -1301,6 +1305,25 @@ namespace ana
             if (stub.truth.p.pdg == 13) MuonMult++;
         }
         return MuonMult;
+    });
+
+    const SpillVar kSpillStubData([](const caf::StandardRecordProxy* sr) {
+        fstream file;
+        std::string FileName = "/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/StubData.csv";
+        file.open(FileName, fstream::out | fstream::app);
+        for (auto const& slc : sr->slc) {
+            if (kRecoIsSignal(&slc)) {
+                file << sr->hdr.fno << ",";
+                file << sr->hdr.run << ",";
+                file << sr->hdr.subrun << ",";
+                file << sr->hdr.evt << ",";
+                file << sr->hdr.subevt << ",";
+                // file << (bool)kRecoIsTrueReco(slc) << ",";
+                file << slc.reco.nstub << ",";
+                file << std::endl;
+            }
+        }
+        return 0.5;
     });
 
 }
