@@ -88,6 +88,9 @@ namespace ana
     // Resolution bins
     const Binning bActualResolution = Binning::Simple(51, -1., 1.);
 
+    // Stub multiplicity bins
+    const Binning bStubMult = Binning::Simple(15, 0, 15);
+
     // Double differential bins
     Tools tools; // tools for double differential bins
 
@@ -1251,6 +1254,55 @@ namespace ana
         {kDoubleQEWeight, kTrueDoubleQEWeight},
         {kCombinedWeight, kTrueCombinedWeight}
     };
+
+    ///////////////
+    // Proton stubs
+    ///////////////
+
+    const Var kProtonStub([](const caf::SRSliceProxy* slc) -> double {
+        std::cout << "number of stubs: " << slc->reco.nstub << std::endl;
+        for (auto const& stub : slc->reco.stub) {
+            std::cout << "pfp id: " << stub.pfpid << std::endl;
+            double momentum = 0.;
+            for (auto const& plane : stub.planes) {
+                for (auto const& hit : plane.hits) {
+                    momentum += hit.charge;
+                }
+            }
+            std::cout << "momentum from charge: "  << momentum << std::endl;
+            for (auto const& pfp : slc->reco.pfp) {
+                if (pfp.id == stub.pfpid) {
+                    std::cout << "pfp found" << std::endl;
+                    std::cout << "pfp mom: " << pfp.trk.rangeP.p_proton << std::endl;
+                }
+            }
+            std::cout << "nmatches: " << stub.truth.nmatches << std::endl;
+            std::cout << "true pdg: " << stub.truth.p.pdg << std::endl;
+        }
+        std::cout << std::endl;
+        return 0.5;
+    });
+
+    const Var kPStubMult([](const caf::SRSliceProxy* slc) -> int {
+        return slc->reco.nstub;
+    });
+
+    const Var kPStubProtonMult([](const caf::SRSliceProxy* slc) -> int {
+        int ProtonMult = 0;
+        for (auto const& stub : slc->reco.stub) {
+            if (stub.truth.p.pdg == 2212) ProtonMult++;
+        }
+        return ProtonMult;
+    });
+
+    const Var kPStubMuonMult([](const caf::SRSliceProxy* slc) -> int {
+        int MuonMult = 0;
+        for (auto const& stub : slc->reco.stub) {
+            if (stub.truth.p.pdg == 13) MuonMult++;
+        }
+        return MuonMult;
+    });
+
 }
 
 #endif
