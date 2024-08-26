@@ -428,7 +428,7 @@ ROOT_rootmv_CMD:FILEPATH=/cvmfs/larsoft.opensciencegrid.org/products/root/v6_26_
 ROOT_rootrm_CMD:FILEPATH=/cvmfs/larsoft.opensciencegrid.org/products/root/v6_26_06b/Linux64bit+3.10-2.17-e20-p3913-prof/bin/rootrm
 
 //Name of the computer/site where compile is being run
-SITE:STRING=sbndgpvm03.fnal.gov
+SITE:STRING=sbndgpvm01.fnal.gov
 
 //No help, variable specified on the command line.
 UPS_CXX_COMPILER_ID:STRING=GNU

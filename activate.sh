@@ -6,3 +6,7 @@ source localProducts_larsoft_v09_75_03_e20_prof/setup
 
 mrbsetenv
 cd ..
+
+kx509
+voms-proxy-init -noregen -rfc -voms 'fermilab:/fermilab/sbnd/Role=Analysis'
+export TERM=screen

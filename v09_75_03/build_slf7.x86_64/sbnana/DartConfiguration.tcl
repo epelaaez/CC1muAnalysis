@@ -11,7 +11,7 @@ BuildDirectory: /exp/sbnd/app/users/theobal1/CC1muAnalysis/v09_75_03/build_slf7.
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: sbndgpvm03.fnal.gov
+Site: sbndgpvm01.fnal.gov
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: Linux-g++

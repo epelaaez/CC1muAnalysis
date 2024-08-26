@@ -18,7 +18,7 @@ namespace Constants {
 
     const double Units = 1E38;
 
-    const double TargetPOT = 6.79e20;
+    const double TargetPOT = 1e21;
     const double NTargets = 1.05E30; // Argon nuclei, not nucleons
     // const double NTargets = 4.6712e31; // Nucleons
 
@@ -26,10 +26,10 @@ namespace Constants {
 	  double POTPerSpill = 5e12;
 
     // Integrated flux
-    TFile* FluxFile = TFile::Open("MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
-	  TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
-    double IntegratedFlux = (HistoFlux->Integral() * (TargetPOT / POTPerSpill / Nominal_UB_XY_Surface));
-    // double IntegratedFlux = 1.65974e13; // from Henry Lay
+    // TFile* FluxFile = TFile::Open("../Utils/MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
+	// TH1D* HistoFlux = (TH1D*)(FluxFile->Get("hEnumu_cv"));
+    // double IntegratedFlux = (HistoFlux->Integral() * (TargetPOT / POTPerSpill / Nominal_UB_XY_Surface));
+    double IntegratedFlux = 1.65974e13; // from Henry Lay
 
     // Binning for single differential analysis
     static const int NBinsEventCount = 1;
@@ -96,15 +96,15 @@ namespace Constants {
     static const TString LabelXAxisTwoDCosOpeningMuonTotalProtonInMuonCosTheta = ";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) [bin #]";
 
     // Variables for double differential analysis - GKI case
-    static const int TwoDNBinsMissingMomentum = 11;
-    std::vector<double> TwoDArrayMissingMomentum{0.,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2};
+    static const int TwoDNBinsMissingMomentum = 5;
+    std::vector<double> TwoDArrayMissingMomentum{0.,0.2,0.4,0.6,0.8,1.};
 
     static const int TwoDNBinsAlphaThreeD = 9;
     std::vector<double> TwoDArrayAlphaThreeD{0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
 
     std::vector<std::vector<double>> TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices{
-        {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2},
-        {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2},
+        {0.,0.2,0.4,0.6,0.8,1.},
+        {0.,0.2,0.4,0.6,0.8,1.},
     };
     static const TString LabelXAxisTwoDMissingMomentumInMuonCosTheta = ";p_{n} [bin #]";
 

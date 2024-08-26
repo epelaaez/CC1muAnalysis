@@ -8,6 +8,3 @@
 *.pcm
 *.in
 *_ACLiC_*
-
-# flux file 
-MCC9_FluxHist_volTPCActive.root

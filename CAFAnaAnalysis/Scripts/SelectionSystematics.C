@@ -48,7 +48,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
     double TextSize = 0.06;
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(TargetFile);
+    SpectrumLoader NuLoader(InputFiles);
 
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
@@ -109,7 +109,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
     if (ConstructSpectra) {
         // Construct all spectra
         for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-            printf("Variable #%zu  ", iVar);
             std::unique_ptr<EnsembleSpectrum> RecoSpectra;
             std::unique_ptr<EnsembleSpectrum> RecoTrueSpectra;
             std::unique_ptr<EnsembleSpectrum> RecoBkgSpectra;
@@ -650,7 +649,6 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
             ana::DrawErrorBand(RecoBkgHisto, RecoBkgErrorBand);
             leg->Draw();
             PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Uncertainties/"+(TString)SystName+"/"+PlotNames[i]+".png");
-            printf("HERE");
         }
         delete PlotCanvas;
     }
