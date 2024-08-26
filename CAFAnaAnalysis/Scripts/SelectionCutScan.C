@@ -262,7 +262,7 @@ void SelectionCutScan() {
     EfficiencyPurityHisto->GetYaxis()->SetTitleOffset(1.3);
     EfficiencyPurityHisto->GetYaxis()->SetTickSize(0);
     EfficiencyPurityHisto->GetYaxis()->CenterTitle();
-    EfficiencyPurityHisto->GetYaxis()->SetTitle("Purity");
+    EfficiencyPurityHisto->GetYaxis()->SetTitle("Efficiency times purity");
 
     EfficiencyPurityHisto->GetYaxis()->SetRangeUser(0.,EfficiencyPurityHisto->GetMaximum()*1.3);
     
