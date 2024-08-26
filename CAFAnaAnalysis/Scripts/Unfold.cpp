@@ -37,7 +37,7 @@ void Unfold() {
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Unfolded.root";
-    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
+    TFile* SaveFile = new TFile(RootFilePath, "recreate");
 
     // Load root file with histograms
     TString SelectionRootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Selection.root";

@@ -48,7 +48,7 @@ void SelectionEfficiency() {
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionEfficiency.root";
-    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
+    TFile* SaveFile = new TFile(RootFilePath, "recreate");
 
     // Construct all spectra
     std::vector<std::tuple<std::unique_ptr<Spectrum>, std::unique_ptr<Spectrum>>> Spectra;

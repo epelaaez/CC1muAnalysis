@@ -852,7 +852,7 @@ it is a signal event. We perform the following cuts to define our reconstructed 
     there are multiple candidate tracks, the one with the longest track length is chosen.
     \item Two protons: that there are two proton tracks with $\chi^2_p < 100$, full track in the fiducial volume, and that these have momentum in our allowed range.
     \item No charged pions: that there are no other reconstructed tracks with momentum in the allowed range for charged pions inside the fiducial volume.
-    \item No neutrial pions: that there are no reconstructed particles with a positive \verb|trackScore| less than 0.5 indicating a shower, so we don't allow any neutral pions.
+    \item No neutrial pions: that there are no reconstructed particles with a positive \verb|trackScore| less than 0.5 indicating a shower, so we do not allow any neutral pions.
 \end{enumerate}
 
 Using these two cuts, we can perform a study of Monte Carlo data. Given the events that pass the
@@ -902,6 +902,36 @@ The numbers reported in this table are POT normalized to $6.79 \times 10^{20}$.
     \caption{Global efficiency, selection efficiency, and purity for cuts made in signal definition.}
     \label{table:cut-efficiency-purity}
 \end{table}
+
+\clearpage
+
+\subsection{Purity and efficiency studies}
+
+Before performing the cross-section extraction, we performed a study of the purity and efficiency of the slice in the forward 
+direction of the double differential variables. This way, we could ensure that we have the maximal possible signal contribution, 
+while getting rid of most background events. This is achieved by maximizing the product of the efficiency and purity. 
+The purity is defined as 
+\begin{align}
+    \text{Purity} = \frac{\text{MC}^{CC1p0\pi}_{\text{Reco}}}{\text{MC}_{\text{Reco}}}
+\end{align}
+and the efficiency is 
+\begin{align}
+    \text{Efficiency} = \frac{\text{MC}^{CC1p0\pi}_{\text{Reco}}}{\text{MC}^{CC1p0\pi}_{\text{True}}}
+\end{align}
+
+The efficiency, purity, and their product for each cut position in increments of $0.05$ are shown 
+in Figure~\ref{fig:cutscan-eff-purity}. Since we see no major improvement when moving away from $0.5$, we maintain the 
+cut at this position. We do not move the cut to the apparent peak around $0.9$ as this would increase the statistical uncertainties
+in the forward slice due to the low number of events that would remain there.
+
+\begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CutScan/Efficiency.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CutScan/Purity.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/CutScan/EfficiencyPurity.png}} 
+    \caption{Efficiency and purity of the forward slice at different cut positions for double-differential variables.}
+    \label{fig:cutscan-eff-purity}
+\end{figure}
 
 \clearpage
 

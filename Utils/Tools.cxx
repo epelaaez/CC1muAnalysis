@@ -118,6 +118,25 @@ TH1D* Tools::GetHistoBins(TH1D* h,int LowBin,int HighBin,double ScaleFactor,std:
 
 }
 
+TH1D* Tools::GetHistoBinsNoScale(TH1D* h,int LowBin,int HighBin,std::vector<double> Binning, TString Name) {
+	TString PlotName = Name + TString(h->GetName()) + "_"+TString(std::to_string(LowBin)) + "_"+TString(std::to_string(HighBin));
+	TString XaxisTitle = h->GetXaxis()->GetTitle();
+	TString YaxisTitle = h->GetYaxis()->GetTitle();
+	int NBins = HighBin - LowBin + 1;
+
+	TH1D* clone = new TH1D(PlotName,";" + XaxisTitle + ";" + YaxisTitle, NBins, &Binning[0] );
+
+	// Loop over the bin indices, aka starting from 1
+	for (int iBin = 1; iBin <= NBins; iBin++) {
+		double CurrentHistoEntry = h->GetBinContent(LowBin + iBin - 1);		
+		double CurrentHistoError = h->GetBinError(LowBin + iBin - 1);		
+		clone->SetBinContent(iBin,CurrentHistoEntry);
+		clone->SetBinError(iBin,CurrentHistoError);		
+	} // End of the loop over the bin indices
+
+	return clone;
+}
+
 //----------------------------------------//
 
 std::vector<TMatrixD> Tools::MatrixDecomp(int nbins,TVectorD matrix_pred,TMatrixD matrix_syst) {
