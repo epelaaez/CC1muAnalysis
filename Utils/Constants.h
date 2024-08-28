@@ -45,14 +45,14 @@ namespace Constants {
     static const std::vector<double> ArrayNBinsTransverseMomentum{0.,0.1,0.2,0.3,0.4,0.5,0.6,1.};
 
     //Additional Binning for single differential
-    static const int NBinsInvariantMass = 20;
-    static const std::vector<double> ArrayNBinsInvariantMass{1., 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2., 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.};
+    static const int NBinsInvariantMass = 9;
+    static const std::vector<double> ArrayNBinsInvariantMass{1.7, 1.8, 1.9, 2., 2.1, 2.2, 2.3, 2.4, 2.5, 2.6};
 
-    static const int NBinsCosAngleLPMu = 20;
-    static const std::vector<double> ArrayNBinsCosAngleLPMu = {-1.,-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
+    //static const int NBinsCosAngleLPMu = 20;
+    //static const std::vector<double> ArrayNBinsCosAngleLPMu = {-1.,-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
 
-    static const int NBinsCosAngleRPMu = 20;
-    static const std::vector<double> ArrayNBinsCosAngleRPMu = {-1.,-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
+    //static const int NBinsCosAngleRPMu = 20;
+    //static const std::vector<double> ArrayNBinsCosAngleRPMu = {-1.,-0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
 
     // 0.183 spacing
     static const int NBinsMuonMomentum = 6;
@@ -109,9 +109,9 @@ namespace Constants {
         { "CosOpeningAngleProtonsPlot",  "All events" },	
         { "CosOpeningAngleMuonTotalProtonPlot",  "All events" },	
         { "TransverseMomentumPlot",  "All events" },
-        { "InvariantMassPlot", "All events" },
-        { "CosOpeningAngleLProtonMuonPlot", "All events" },
-	{ "CosOpeningAngleRProtonMuonPlot", "All events" }	
+        { "InvariantMassPlot", "All events" }
+        //{ "CosOpeningAngleLProtonMuonPlot", "All events" },
+	//{ "CosOpeningAngleRProtonMuonPlot", "All events" }	
     };
 
     static std::map<TString, std::tuple<vector<double>, vector<vector<double>>>> PlotNameToDiscriminator = {
@@ -148,9 +148,9 @@ namespace Constants {
         "SerialDeltaAlphaT_InMuonCosTheta",
         "SerialCosOpeningAngleProtons_InMuonCosTheta",
         "SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta",
-        "InvariantMass",
-        "CosOpeningAngleLProtonMuon",
-        "CosOpeningAngleRProtonMuon"
+        "InvariantMass"
+        //"CosOpeningAngleLProtonMuon",
+        //"CosOpeningAngleRProtonMuon"
     };
 
     static const std::vector<std::string> VarLabels = {

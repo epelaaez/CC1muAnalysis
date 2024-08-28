@@ -36,7 +36,7 @@ void WienerSVDOverlay() {
     Tools tools;
 
 	// Dir to save plots
-    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
 
 	// File with unfolded spectrum
 	TString UnfoldedFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Unfolded.root";

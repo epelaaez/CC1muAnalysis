@@ -49,7 +49,7 @@ void SelectionMCStatSystematics() {
     SpectrumLoader NuLoader(InputFiles);
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
 
     // Create directory for this sytematic if it does not exist yet
     std::filesystem::create_directory((std::string)dir+"/Figs/CAFAna/Uncertainties/MCStat");

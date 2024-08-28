@@ -31,7 +31,7 @@ void TotalCovMatrices() {
     gStyle->SetPaintTextFormat("4.1f");
 
     // Directory to store figs
-    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
 
     // Vector with all systematic files
     std::vector<std::unique_ptr<TFile>> CovFiles;

@@ -453,13 +453,8 @@ void GeneratorInteBreakDown() {
                     textSlice->DrawLatexNDC(0.2, 0.81, Labels[iSample] + "      " + LatexLabel[ReducedPlotName].ReplaceAll("All events","") + SliceLabel);
 
                     gPad->RedrawAxis();
-<<<<<<< HEAD
                     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
                     TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "/PreFSI" : "/PostFSI";
-=======
-                    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
-                    TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "PreFSI" : "PostFSI";
->>>>>>> origin/main
                     PlotCanvas->SaveAs(dir+"/Figs/InteBreakDown/"+SaveDirectory+"/InteBreakDown_"+SlicePlotName+".png");
                     delete PlotCanvas;
 

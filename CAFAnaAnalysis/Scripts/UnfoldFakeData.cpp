@@ -68,7 +68,7 @@ void UnfoldFakeData() {
     CovFiles.push_back(std::move(MCStatFile));
 
     // Dir to save plots
-    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
 
     for (std::size_t iData = 0; iData < FakeDataNames.size(); ++iData) {
         // Create directory for this fake data if it does not exist yet

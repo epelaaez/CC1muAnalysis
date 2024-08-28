@@ -95,7 +95,7 @@ void Unfold() {
     CovFiles.push_back(std::move(MCStatFile));
 
     // Dir to save plots
-    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
+    TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/BuildEventGenerators/CC1muAnalysis";
 
     const int NPlots = PlotNames.size();
 

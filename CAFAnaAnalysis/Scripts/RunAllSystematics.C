@@ -38,8 +38,8 @@ using namespace Constants;
 void RunAllSystematics() {
     gROOT->ProcessLine(".L ./Scripts/SelectionSystematics.C");
 
-    std::vector<std::tuple<std::string, int>> SystsVector(XSecSystsVector);
-    SystsVector.insert(SystsVector.end(), FluxSystsVector.begin(), FluxSystsVector.end());
+    std::vector<std::tuple<std::string, int>> SystsVector(XSecSystsVector);                         
+    SystsVector.insert(SystsVector.end(),FluxSystsVector.begin(), FluxSystsVector.end());                                                      
 
     int nSysts = SystsVector.size();
     for (int SystIndex = 0; SystIndex < nSysts; SystIndex++) {
