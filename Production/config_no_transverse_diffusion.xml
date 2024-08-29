@@ -9,11 +9,11 @@
 <!ENTITY file_type   "mc">
 <!ENTITY run_type    "physics">
 <!ENTITY scratch_dir "/pnfs/sbnd/scratch/users/&username;">
-<!ENTITY name        "sbnd_detector_variations">
+<!ENTITY name        "sbnd_detector_variations_no_transverse_diffusion">
 <!ENTITY date        "Aug_29_2024">
 <!ENTITY ver         "v1">
 <!ENTITY num_jobs    "100">
-<!ENTITY file_list   "/pnfs/sbnd/persistent/users/&username;/Lists/cv">
+<!ENTITY file_list   "/pnfs/sbnd/persistent/users/&username;/Lists/no_transverse_diffusion">
 ]>
 
 <project name="&name;">
@@ -38,7 +38,7 @@
     <local>/pnfs/sbnd/resilient/users/&username;/&username;_&date;_&release;.tar</local>
   </larsoft>
 
-  <stage name="flatcaf-cv">
+  <stage name="flatcaf-no-transverse-diffusion">
       <fcl>cafmakerjob_sbnd_systtools_and_fluxwgt.fcl</fcl>
       <schema>root</schema>
       <outdir>&scratch_dir;/&name;_&release;/&date;_&ver;</outdir>
