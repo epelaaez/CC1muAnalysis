@@ -14,7 +14,7 @@
 
 namespace Constants {
     // User to access
-    const std::string UserName = "theobal1";
+    const std::string UserName = "epelaez";
 
     const double Units = 1E38;
 
@@ -23,7 +23,7 @@ namespace Constants {
     // const double NTargets = 4.6712e31; // Nucleons
 
     double Nominal_UB_XY_Surface = 175. * 180. * 2. * 2.; // cm2
-	  double POTPerSpill = 5e12;
+    double POTPerSpill = 5e12;
 
     // Integrated flux
     // TFile* FluxFile = TFile::Open("../Utils/MCC9_FluxHist_volTPCActive.root"); // make sure file is in path
@@ -95,7 +95,7 @@ namespace Constants {
     };
     static const TString LabelXAxisTwoDCosOpeningMuonTotalProtonInMuonCosTheta = ";cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) [bin #]";
 
-    // Variables for double differential analysis - GKI case
+    // Variables for double differential analysis - GKI
     static const int TwoDNBinsMissingMomentum = 5;
     std::vector<double> TwoDArrayMissingMomentum{0.,0.2,0.4,0.6,0.8,1.};
 
@@ -119,7 +119,6 @@ namespace Constants {
         {-1.,-0.8,-0.6,-0.4,-0.2,0.,0.2,0.4,0.6,0.8,1.},
     };
     static const TString LabelXAxisTwoDCosOpeningMomentumTransferTotalProtonInMuonCosTheta = ";cos(#theta_{#vec{q},#vec{p}_{sum}}) [bin #]";
-    //
 
     static std::map<TString,TString> LatexLabel = {
         { "MuonCosThetaPlot",  "All events" },
@@ -131,7 +130,7 @@ namespace Constants {
         { "CosOpeningAngleProtonsPlot",  "All events" },	
         { "CosOpeningAngleMuonTotalProtonPlot",  "All events" },	
         { "TransverseMomentumPlot",  "All events" },	
-        //added - GKI
+        // GKI
         { "CosOpeningAngleMomentumTransferTotalProtonPlot",  "All events" },	
         { "MissingMomentumPlot",  "All events" },
     };
@@ -141,7 +140,7 @@ namespace Constants {
         {"TrueSerialDeltaAlphaT_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsDeltaAlphaTInMuonCosThetaSlices}},
         {"TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices}},
         {"TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices}},
-        //added - GKI
+        // GKI
         {"TrueSerialMissingMomentum_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices}},
         {"TrueSerialAlphaThreeD_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsAlphaThreeDInMuonCosThetaSlices}},
         {"TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot", {TwoDArrayNBinsMuonCosTheta, TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices}}
@@ -152,7 +151,7 @@ namespace Constants {
         {"TrueSerialDeltaAlphaT_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"},
         {"TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"},
         {"TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"},
-        //added - GKI
+        // GKI
         {"TrueSerialMissingMomentum_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"},
         {"TrueSerialAlphaThreeD_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"},
         {"TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot", "cos(#theta_{#vec{p}_{#mu}})"}

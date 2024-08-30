@@ -77,7 +77,7 @@ namespace ana
     const Binning bMuonMomentumBins = Binning::Custom(ArrayNBinsMuonMomentum);
     const Binning bLeadingProtonMomentumBins = Binning::Custom(ArrayNBinsLeadingProtonMomentum);
     const Binning bRecoilProtonMomentumBins = Binning::Custom(ArrayNBinsRecoilProtonMomentum);
-    //GKI
+    // GKI
     const Binning bAlphaThreeDBins = Binning::Custom(ArrayNBinsAlphaThreeD);
     const Binning bMissingMomentumBins = Binning::Custom(ArrayNBinsMissingMomentum);
 
@@ -106,7 +106,7 @@ namespace ana
     const Binning bCosOpeningAngleMuonTotalProtonInMuonCosTheta = Binning::Custom(
         tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)
     );
-    //GKI
+    // GKI
     const Binning bMissingMomentumInMuonCosTheta = Binning::Custom(
         tools.Return2DBinIndices(TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices)
     );
@@ -379,7 +379,7 @@ namespace ana
         double RecoilProtonMomentum = Helper.ReturnRecoilProtonMomentum();
         vars.push_back(RecoilProtonMomentum);
 
-        //GKI
+        // GKI
         double CosOpeningAngleMomentumTransferTotalProton = Helper.ReturnCosOpeningAngleMomentumTransferTotalProton();
         vars.push_back(CosOpeningAngleMomentumTransferTotalProton);
 

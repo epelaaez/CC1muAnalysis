@@ -43,7 +43,7 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     //Missing momentum vector
     TVector3 PVectorN = MuonVector + TotalProtonVector - EcalLongVector;
 
-    //GKI opening angle
+    // GKI opening angle
     fCosOpeningAngleMomentumTransferTotalProton = std::cos(QVector.Angle(TotalProtonVector));
 
     // Transverse momentum variable
@@ -60,7 +60,7 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     if (fDeltaAlphaT > 180.) { fDeltaAlphaT -= 180.; }
 	if (fDeltaAlphaT < 0.) { fDeltaAlphaT += 180.; }
 
-  //Angular orientation with respect to momentum transfer vector
+    // Angular orientation with respect to momentum transfer vector
     fAlphaThreeD = TMath::ACos(
         (QVector).Dot(PVectorN) / 
         (QVector.Mag() * PVectorN.Mag())

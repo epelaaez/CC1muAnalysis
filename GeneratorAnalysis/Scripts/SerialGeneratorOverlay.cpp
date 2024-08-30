@@ -96,7 +96,7 @@ void SerialGeneratorOverlay() {
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
-    //Added - GKI
+    // GKI
     PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
     XAxisLabel.push_back("p_{n}");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
@@ -126,7 +126,7 @@ void SerialGeneratorOverlay() {
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
-    //Added - GKI
+    // GKI
     PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
     XAxisLabel.push_back("p_{n}");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");

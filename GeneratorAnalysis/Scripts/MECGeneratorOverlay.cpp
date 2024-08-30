@@ -66,7 +66,7 @@ void MECGeneratorOverlay() {
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
 
-    //Added - GKI
+    // GKI
     PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
     PlotNames.push_back("TrueMissingMomentumPlot");
     PlotNames.push_back("TrueAlphaThreeDPlot");
@@ -77,7 +77,7 @@ void MECGeneratorOverlay() {
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
 
-    //Added - GKI
+    // GKI
     PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");

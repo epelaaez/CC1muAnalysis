@@ -89,7 +89,6 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
     PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
-    //Added
     PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
     PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
     PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
@@ -105,7 +104,6 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
-    //Added
     PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
     PlotNames.push_back("TrueMissingMomentumPlot");
     PlotNames.push_back("TrueAlphaThreeDPlot");
@@ -115,7 +113,6 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
-    //Added
     PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
@@ -125,7 +122,6 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
-    //Added
     PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");

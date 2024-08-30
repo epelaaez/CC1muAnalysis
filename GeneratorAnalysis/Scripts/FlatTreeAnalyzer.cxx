@@ -99,7 +99,7 @@ void FlatTreeAnalyzer::Loop() {
     TH1D* TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot[NInte];
     TH1D* TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[NInte];
 
-    //Double differential - GKI
+    // Double differential - GKI
     TH1D* TrueSerialMissingMomentum_InMuonCosThetaPlot[NInte];
     TH1D* TrueSerialAlphaThreeD_InMuonCosThetaPlot[NInte];
     TH1D* TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot[NInte];
@@ -141,7 +141,7 @@ void FlatTreeAnalyzer::Loop() {
         TrueNoFSITransverseMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSITransverseMomentumPlot",";#delta P_{T}",NBinsTransverseMomentum,ArrayNBinsTransverseMomentum.data());
         TrueNoFSIDeltaAlphaTPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIDeltaAlphaTPlot",";#delta #alpha_{T}",NBinsDeltaAlphaT,ArrayNBinsDeltaAlphaT.data());
 
-        //Before final state - GKI
+        // Before final state - GKI
         TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot",";cos(#theta_{#vec{q},#vec{p}_{sum}})",NBinsAngle,ArrayNBinsAngle.data());
         TrueNoFSIMissingMomentumPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIMissingMomentumPlot",";p_{n}",NBinsMissingMomentum,ArrayNBinsMissingMomentum.data());
         TrueNoFSIAlphaThreeDPlot[inte] = new TH1D(InteractionLabels[inte]+"TrueNoFSIAlphaThreeDPlot",";#alpha_{3D}",NBinsAlphaThreeD,ArrayNBinsAlphaThreeD.data());
@@ -396,7 +396,6 @@ void FlatTreeAnalyzer::Loop() {
             double CosOpeningAngleMuonTotalProton = Helper.ReturnCosOpeningAngleMuonTotalProton();
             double TransverseMomentum = Helper.ReturnTransverseMomentum();
             double DeltaAlphaT = Helper.ReturnDeltaAlphaT();
-            //Added
             double CosOpeningAngleMomentumTransferTotalProton = Helper.ReturnCosOpeningAngleMomentumTransferTotalProton();
             double MissingMomentum = Helper.ReturnMissingMomentum();
             double AlphaThreeD = Helper.ReturnAlphaThreeD();
@@ -447,7 +446,7 @@ void FlatTreeAnalyzer::Loop() {
             if (DeltaAlphaT < TwoDArrayDeltaAlphaT[0]) { DeltaAlphaT = (TwoDArrayDeltaAlphaT[0] + TwoDArrayDeltaAlphaT[1]) / 2.; }
             else if (DeltaAlphaT > TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT]) { DeltaAlphaT = (TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT] + TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT - 1]) / 2.; }
 
-            //GKI
+            // GKI
             if (MissingMomentum < TwoDArrayMissingMomentum[0]) { MissingMomentum = (TwoDArrayMissingMomentum[0] + TwoDArrayMissingMomentum[1]) / 2.; }
             else if (MissingMomentum > TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum]) { MissingMomentum = (TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum] + TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum - 1]) / 2.; }
 
@@ -477,7 +476,7 @@ void FlatTreeAnalyzer::Loop() {
                 CosOpeningAngleMuonTotalProton
             );
 
-            //Double differential indices - GKI
+            // Double differential indices - GKI
             int SerialMissingMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
                 TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices,
                 MuonCosThetaTwoDIndex,
@@ -488,11 +487,6 @@ void FlatTreeAnalyzer::Loop() {
                 MuonCosThetaTwoDIndex,
                 AlphaThreeD
             );
-            /*int SerialCosOpeningAngleProtonsInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
-                TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices,
-                MuonCosThetaTwoDIndex,
-                CosOpeningAngleProtons
-            );*/
             int SerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
                 TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices,
                 MuonCosThetaTwoDIndex,
@@ -510,7 +504,7 @@ void FlatTreeAnalyzer::Loop() {
             TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot[genie_mode]->Fill(SerialCosOpeningAngleProtonsInMuonCosThetaIndex,weight);
             TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[genie_mode]->Fill(SerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex,weight);
 
-            // Added - GKI
+            // GKI
             TrueSerialMissingMomentum_InMuonCosThetaPlot[0]->Fill(SerialMissingMomentumInMuonCosThetaIndex,weight);
             TrueSerialAlphaThreeD_InMuonCosThetaPlot[0]->Fill(SerialAlphaThreeDInMuonCosThetaIndex,weight);
             //TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot[0]->Fill(SerialCosOpeningAngleProtonsInMuonCosThetaIndex,weight);
@@ -564,7 +558,6 @@ void FlatTreeAnalyzer::Loop() {
             double NoFSICosOpeningAngleMuonTotalProton = NoFSIHelper.ReturnCosOpeningAngleMuonTotalProton();
             double NoFSITransverseMomentum = NoFSIHelper.ReturnTransverseMomentum();
             double NoFSIDeltaAlphaT = NoFSIHelper.ReturnDeltaAlphaT();
-            //Added
             double NoFSICosOpeningAngleMomentumTransferTotalProton = NoFSIHelper.ReturnCosOpeningAngleMomentumTransferTotalProton();
             double NoFSIMissingMomentum = NoFSIHelper.ReturnMissingMomentum();
             double NoFSIAlphaThreeD = NoFSIHelper.ReturnAlphaThreeD();
@@ -579,7 +572,6 @@ void FlatTreeAnalyzer::Loop() {
             TrueNoFSICosOpeningAngleMuonTotalProtonPlot[0]->Fill(NoFSICosOpeningAngleMuonTotalProton,weight);
             TrueNoFSITransverseMomentumPlot[0]->Fill(NoFSITransverseMomentum,weight);
             TrueNoFSIDeltaAlphaTPlot[0]->Fill(NoFSIDeltaAlphaT,weight);
-            //Added
             TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot[0]->Fill(NoFSICosOpeningAngleMomentumTransferTotalProton,weight);
             TrueNoFSIMissingMomentumPlot[0]->Fill(NoFSIMissingMomentum,weight);
             TrueNoFSIAlphaThreeDPlot[0]->Fill(NoFSIAlphaThreeD,weight);
@@ -594,7 +586,6 @@ void FlatTreeAnalyzer::Loop() {
             TrueNoFSICosOpeningAngleMuonTotalProtonPlot[NoFSIgenie_mode]->Fill(NoFSICosOpeningAngleMuonTotalProton,weight);
             TrueNoFSITransverseMomentumPlot[NoFSIgenie_mode]->Fill(NoFSITransverseMomentum,weight);
             TrueNoFSIDeltaAlphaTPlot[NoFSIgenie_mode]->Fill(NoFSIDeltaAlphaT,weight);
-            //Added
             TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot[NoFSIgenie_mode]->Fill(NoFSICosOpeningAngleMomentumTransferTotalProton,weight);
             TrueNoFSIMissingMomentumPlot[NoFSIgenie_mode]->Fill(NoFSIMissingMomentum,weight);
             TrueNoFSIAlphaThreeDPlot[NoFSIgenie_mode]->Fill(NoFSIAlphaThreeD,weight);
@@ -605,7 +596,7 @@ void FlatTreeAnalyzer::Loop() {
 
             if (NoFSIDeltaAlphaT < TwoDArrayDeltaAlphaT[0]) { NoFSIDeltaAlphaT = (TwoDArrayDeltaAlphaT[0] + TwoDArrayDeltaAlphaT[1]) / 2.; }
             else if (NoFSIDeltaAlphaT > TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT]) { NoFSIDeltaAlphaT = (TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT] + TwoDArrayDeltaAlphaT[TwoDNBinsDeltaAlphaT - 1]) / 2.; }
-            //Added
+            
             if (NoFSIMissingMomentum < TwoDArrayMissingMomentum[0]) { NoFSIMissingMomentum = (TwoDArrayMissingMomentum[0] + TwoDArrayMissingMomentum[1]) / 2.; }
             else if (NoFSIMissingMomentum > TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum]) { NoFSIMissingMomentum = (TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum] + TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum - 1]) / 2.; }
 
@@ -634,7 +625,7 @@ void FlatTreeAnalyzer::Loop() {
                 NoFSIMuonCosThetaTwoDIndex,
                 NoFSICosOpeningAngleMuonTotalProton
             );
-            //Added - GKI
+            // GKI
             int NoFSIMuonCosThetaThreeDIndex = tools.ReturnIndex(CosLep, TwoDArrayNBinsMuonCosTheta);
             int NoFSISerialMissingMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
                 TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices,
@@ -646,11 +637,6 @@ void FlatTreeAnalyzer::Loop() {
                 NoFSIMuonCosThetaThreeDIndex,
                 NoFSIAlphaThreeD
             );
-            /*int NoFSISerialCosOpeningAngleProtonsInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
-                TwoDArrayNBinsCosOpeningAngleProtonsInMuonCosThetaSlices,
-                NoFSIMuonCosThetaTwoDIndex,
-                NoFSICosOpeningAngleProtons
-            );*/
             int NoFSISerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
                 TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices,
                 NoFSIMuonCosThetaThreeDIndex,
@@ -667,7 +653,6 @@ void FlatTreeAnalyzer::Loop() {
             TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialDeltaAlphaTInMuonCosThetaIndex,weight);
             TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialCosOpeningAngleProtonsInMuonCosThetaIndex,weight);
             TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot[NoFSIgenie_mode]->Fill(NoFSISerialCosOpeningAngleMuonTotalProtonInMuonCosThetaIndex,weight);
-            //Added
             TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot[0]->Fill(NoFSISerialMissingMomentumInMuonCosThetaIndex,weight);
             TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot[0]->Fill(NoFSISerialAlphaThreeDInMuonCosThetaIndex,weight);
             TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot[0]->Fill(NoFSISerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex,weight);
@@ -742,7 +727,7 @@ void FlatTreeAnalyzer::Loop() {
         Reweight(TrueNoFSITransverseMomentumPlot[inte]);
         Reweight(TrueNoFSIDeltaAlphaTPlot[inte]);
 
-        //Added - GKI
+        // GKI
         Reweight(TrueCosOpeningAngleMomentumTransferTotalProtonPlot[inte]);
         Reweight(TrueMissingMomentumPlot[inte]);
         Reweight(TrueAlphaThreeDPlot[inte]);
