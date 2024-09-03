@@ -17,6 +17,7 @@
 // std includes.
 #include <filesystem>
 #include <vector>
+#include <string>
 #include <memory>
 
 // Definitions for Vars and Cuts.
@@ -24,6 +25,7 @@
 #include "Helpers.cpp"
 
 // Utils includes.
+#include "../../Utils/Tools.cxx"
 #include "../../Utils/Constants.h"
 
 using namespace std;
@@ -31,6 +33,8 @@ using namespace ana;
 using namespace Constants;
 
 void SelectionDetectorSystematics() {
+    Tools tools;
+
     // Set defaults and load tools
     TH1D::SetDefaultSumw2();
     TH2D::SetDefaultSumw2();
@@ -38,8 +42,26 @@ void SelectionDetectorSystematics() {
     int FontStyle = 132;
     double TextSize = 0.06;
 
-    // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader(InputFiles);
+    // Target files for each sample
+    const std::string CVPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_cv_v09_88_00_04/Sep_03_2024_v1/14253271_299";
+    const std::vector<std::string> CVInputFiles = tools.GetInputFiles(CVPath);
+    SpectrumLoader CVLoader(CVInputFiles);
+
+    const std::string NoDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_no_diffusion_v09_88_00_04/Sep_03_2024_v1/14253376_149";
+    const std::vector<std::string> NoDifInputFiles = tools.GetInputFiles(NoDifPath);
+    SpectrumLoader NoDifLoader(NoDifInputFiles);
+
+    const std::string NoLonDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_no_longitudinal_diffusion_v09_88_00_04/Sep_03_2024_v1/82230306_149";
+    const std::vector<std::string> NoLonDifInputFiles = tools.GetInputFiles(NoLonDifPath);
+    SpectrumLoader NoLonDifLoader(NoLonDifInputFiles);
+
+    const std::string NoTraDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_no_transverse_diffusion_v09_88_00_04/Sep_03_2024_v1/56548147_149";
+    const std::vector<std::string> NoTraDifInputFiles = tools.GetInputFiles(NoTraDifPath);
+    SpectrumLoader NoTraDifLoader(NoTraDifInputFiles);
+
+    const std::string SCENoDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_with_sce_no_diffusion_v09_88_00_04/Sep_03_2024_v1/14254158_149";
+    const std::vector<std::string> SCENoDifInputFiles = tools.GetInputFiles(SCENoDifPath);
+    SpectrumLoader SCENoDifLoader(SCENoDifInputFiles);
 
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
@@ -57,70 +79,138 @@ void SelectionDetectorSystematics() {
     std::vector<std::tuple<
         std::unique_ptr<Spectrum>,
         std::unique_ptr<Spectrum>,
+        std::unique_ptr<Spectrum>,
+        std::unique_ptr<Spectrum>,
         std::unique_ptr<Spectrum>
     >> Spectra;
     for (int iVar = 0; iVar < NVars; ++iVar) {
-        auto RecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
-        auto RecoTrueSignals = std::make_unique<Spectrum> (VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsTrueReco); 
-        auto RecoBkgSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NuLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsBackground); 
-        Spectra.push_back({std::move(RecoSignals), std::move(RecoTrueSignals), std::move(RecoBkgSignals)});
+        auto CVRecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), CVLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
+        auto NoDifRecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NoDifLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
+        auto NoLonDifRecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NoLonDifLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
+        auto NoTraDifRecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), NoTraDifLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
+        auto SCENoDifRecoSignals = std::make_unique<Spectrum>(VarLabels.at(iVar), VarBins.at(iVar), SCENoDifLoader, std::get<0>(Vars.at(iVar)), kNoSpillCut, kRecoIsSignal); 
+        Spectra.push_back({std::move(CVRecoSignals), std::move(NoDifRecoSignals), std::move(NoLonDifRecoSignals), std::move(NoTraDifRecoSignals), std::move(SCENoDifRecoSignals)});
     }
-    NuLoader.Go();
+    CVLoader.Go(); NoDifLoader.Go(); NoLonDifLoader.Go(); NoTraDifLoader.Go(); SCENoDifLoader.Go();
+
+    TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
+    PlotCanvas->SetTopMargin(0.13);
+    PlotCanvas->SetLeftMargin(0.17);
+    PlotCanvas->SetRightMargin(0.05);
+    PlotCanvas->SetBottomMargin(0.16);
 
     for (int iVar = 0; iVar < NVars; ++iVar) {
-        auto& [RecoSpectra, RecoTrueSpectra, RecoBkgSpectra] = Spectra.at(iVar);
+        auto& [CVSpectra, NoDifSpectra, NoLonDifSpectra, NoTraDifSpectra, SCENoDifSpectra] = Spectra.at(iVar);
 
-        // Get nominal plots
-        TH1D* RecoHisto = RecoSpectra->ToTH1(TargetPOT);
-        TH1D* RecoTrueHisto = RecoTrueSpectra->ToTH1(TargetPOT);
-        TH1D* RecoBkgHisto = RecoBkgSpectra->ToTH1(TargetPOT);
+        // Get plots
+        TH1D* CVHisto = CVSpectra->ToTH1(TargetPOT);
+        TH1D* NoDifHisto = NoDifSpectra->ToTH1(TargetPOT);
+        TH1D* NoLonDifHisto = NoLonDifSpectra->ToTH1(TargetPOT);
+        TH1D* NoTraDifHisto = NoTraDifSpectra->ToTH1(TargetPOT);
+        TH1D* SCENoDifHisto = SCENoDifSpectra->ToTH1(TargetPOT);
 
-        // Get plots with modified POT
-        TH1D* ModifiedRecoHisto = RecoSpectra->ToTH1(TargetPOT);
-        TH1D* ModifiedRecoTrueHisto = RecoTrueSpectra->ToTH1(TargetPOT);
-        TH1D* ModifiedRecoBkgHisto = RecoBkgSpectra->ToTH1(TargetPOT);
+        TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+        leg->SetBorderSize(0);
+        leg->SetNColumns(3);
+        leg->SetTextSize(TextSize*0.8);
+        leg->SetTextFont(FontStyle);
 
-        // Scale 15%
-        ModifiedRecoHisto->Scale(1.15);
-        ModifiedRecoTrueHisto->Scale(1.15);
-        ModifiedRecoBkgHisto->Scale(1.15);
+        TLegendEntry* legCV = leg->AddEntry(CVHisto,"CV","l");
+        CVHisto->SetLineColor(kBlue+2);
+        CVHisto->SetLineWidth(4);
 
-        SelectionHelpers::DrawHistosWithErrorBands(
-            RecoHisto,
-            RecoTrueHisto,
-            RecoBkgHisto,
-            {ModifiedRecoHisto},
-            {ModifiedRecoTrueHisto},
-            {ModifiedRecoBkgHisto},
-            dir,
-            "Detector",
-            PlotNames[iVar]
-        );
+        CVHisto->GetXaxis()->SetTitleFont(FontStyle);
+        CVHisto->GetXaxis()->SetLabelFont(FontStyle);
+        CVHisto->GetXaxis()->SetNdivisions(8);
+        CVHisto->GetXaxis()->SetLabelSize(TextSize);
+        CVHisto->GetXaxis()->SetTitleSize(TextSize);
+        CVHisto->GetXaxis()->SetTitleOffset(1.1);
+        CVHisto->GetXaxis()->CenterTitle();
+        CVHisto->GetXaxis()->SetTitle(("Reco " + VarLabels.at(iVar)).c_str());
 
-        // Scale histograms for cov matrices
-        RecoHisto->Scale(Units / (IntegratedFlux * NTargets));
-        RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
-        RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+        CVHisto->GetYaxis()->SetTitleFont(FontStyle);
+        CVHisto->GetYaxis()->SetLabelFont(FontStyle);
+        CVHisto->GetYaxis()->SetNdivisions(6);
+        CVHisto->GetYaxis()->SetLabelSize(TextSize);
+        CVHisto->GetYaxis()->SetTitleSize(TextSize);
+        CVHisto->GetYaxis()->SetTitleOffset(1.3);
+        CVHisto->GetYaxis()->SetTickSize(0);
+        CVHisto->GetYaxis()->CenterTitle();
 
-        // Scale modified histograms for cov matrices
-        ModifiedRecoHisto->Scale(Units / (IntegratedFlux * NTargets));
-        ModifiedRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
-        ModifiedRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+        TLegendEntry* legNoDif = leg->AddEntry(NoDifHisto,"No diff.","l");
+        NoDifHisto->SetLineColor(kRed+1);
+        NoDifHisto->SetLineWidth(4);
 
-        // Plot cov, frac cov, and corr matrices
-        SelectionHelpers::DrawMatrices(
-            RecoHisto,
-            RecoTrueHisto,
-            RecoBkgHisto,
-            {ModifiedRecoHisto},
-            {ModifiedRecoTrueHisto},
-            {ModifiedRecoBkgHisto},
-            dir,
-            "Detector",
-            VarLabels[iVar],
-            PlotNames[iVar],
-            SaveFile
-        );
+        TLegendEntry* legNoLonDif = leg->AddEntry(NoLonDifHisto,"No lon. diff.","l");
+        NoLonDifHisto->SetLineColor(kOrange+7);
+        NoLonDifHisto->SetLineWidth(4);
+
+        TLegendEntry* legNoTraDif = leg->AddEntry(NoTraDifHisto,"No tran. diff.","l");
+        NoTraDifHisto->SetLineColor(kMagenta);
+        NoTraDifHisto->SetLineWidth(4);
+
+        TLegendEntry* legSCENoDif = leg->AddEntry(SCENoDifHisto,"SCE no diff.","l");
+        SCENoDifHisto->SetLineColor(kGreen);
+        SCENoDifHisto->SetLineWidth(4);
+
+        double Max = CVHisto->GetMaximum();
+        Max = std::max(Max, NoDifHisto->GetMaximum());
+        Max = std::max(Max, NoLonDifHisto->GetMaximum());
+        Max = std::max(Max, NoTraDifHisto->GetMaximum());
+        Max = std::max(Max, SCENoDifHisto->GetMaximum());
+        CVHisto->GetYaxis()->SetRangeUser(0., 1.3*Max);
+
+        PlotCanvas->cd();
+        CVHisto->Draw("hist");
+        NoDifHisto->Draw("hist same");
+        NoLonDifHisto->Draw("hist same");
+        NoTraDifHisto->Draw("hist same");
+        SCENoDifHisto->Draw("hist same");
+        leg->Draw();
+
+        PlotCanvas->SaveAs(dir+"/Figs/CAFAna/Detector/"+PlotNames[iVar]+".png");
+
+        // // Scale 15%
+        // ModifiedCVHisto->Scale(1.15);
+        // ModifiedRecoTrueHisto->Scale(1.15);
+        // ModifiedRecoBkgHisto->Scale(1.15);
+
+        // SelectionHelpers::DrawHistosWithErrorBands(
+        //     CVHisto,
+        //     RecoTrueHisto,
+        //     RecoBkgHisto,
+        //     {ModifiedCVHisto},
+        //     {ModifiedRecoTrueHisto},
+        //     {ModifiedRecoBkgHisto},
+        //     dir,
+        //     "Detector",
+        //     PlotNames[iVar]
+        // );
+
+        // // Scale histograms for cov matrices
+        // CVHisto->Scale(Units / (IntegratedFlux * NTargets));
+        // RecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+        // RecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
+        // // Scale modified histograms for cov matrices
+        // ModifiedCVHisto->Scale(Units / (IntegratedFlux * NTargets));
+        // ModifiedRecoTrueHisto->Scale(Units / (IntegratedFlux * NTargets));
+        // ModifiedRecoBkgHisto->Scale(Units / (IntegratedFlux * NTargets));
+
+        // // Plot cov, frac cov, and corr matrices
+        // SelectionHelpers::DrawMatrices(
+        //     CVHisto,
+        //     RecoTrueHisto,
+        //     RecoBkgHisto,
+        //     {ModifiedCVHisto},
+        //     {ModifiedRecoTrueHisto},
+        //     {ModifiedRecoBkgHisto},
+        //     dir,
+        //     "Detector",
+        //     VarLabels[iVar],
+        //     PlotNames[iVar],
+        //     SaveFile
+        // );
     }
     // Close file
     SaveFile->Close();

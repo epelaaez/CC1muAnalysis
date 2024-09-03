@@ -692,4 +692,15 @@ void Tools::CalcChiSquared(TH1D* h_model, TH1D* h_data, TH2D* cov, double &chi, 
 	delete h_cov_clone;
 }
 
+const std::vector<std::string> Tools::GetInputFiles(const std::string TargetPath) {
+	std::vector<std::string> Input;
+	for (const auto & entry : std::filesystem::directory_iterator(TargetPath)) {
+		if (entry.path().string().find("flat.caf.root") != std::string::npos) {
+			std::string XRootPath = "root://fndcadoor.fnal.gov:1094/pnfs/fnal.gov/usr/" + entry.path().string().substr(6);
+			Input.push_back(XRootPath);
+		}
+	}
+	return Input;
+}
+
 #endif
