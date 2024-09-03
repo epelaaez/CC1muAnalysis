@@ -28,5 +28,7 @@ lar -c cafmakerjob_sbnd_systtools_and_fluxwgt.fcl -s /pnfs/sbnd/persistent/users
 And if this works correctly, you can submit jobs to the grid by doing
 
 ```bash
-project.py --xml config.xml --stage flatcaf-cv --submit
+project.py --xml config_cv.xml --stage flatcaf-cv --submit
 ```
+
+where you can replace `config_cv.xml` with the appropiate `xml` file and `flatcaf-cv` with the corresponding stage for each file.

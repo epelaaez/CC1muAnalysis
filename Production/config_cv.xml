@@ -12,8 +12,8 @@
 <!ENTITY name        "sbnd_detector_variations_cv">
 <!ENTITY date        "Aug_29_2024">
 <!ENTITY ver         "v1">
-<!ENTITY num_jobs    "100">
-<!ENTITY file_list   "/pnfs/sbnd/persistent/users/&username;/Lists/cv">
+<!ENTITY num_jobs    "300">
+<!ENTITY file_list   "/exp/sbnd/app/users/&username;/CC1muAnalysis/Production/Lists/cv">
 ]>
 
 <project name="&name;">
