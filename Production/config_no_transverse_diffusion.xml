@@ -10,7 +10,7 @@
 <!ENTITY run_type    "physics">
 <!ENTITY scratch_dir "/pnfs/sbnd/scratch/users/&username;">
 <!ENTITY name        "sbnd_detector_variations_no_transverse_diffusion">
-<!ENTITY date        "Aug_29_2024">
+<!ENTITY date        "Sep_03_2024">
 <!ENTITY ver         "v1">
 <!ENTITY num_jobs    "150">
 <!ENTITY file_list   "/exp/sbnd/app/users/&username;/CC1muAnalysis/Production/Lists/no_transverse_diffusion">
@@ -35,7 +35,7 @@
   <larsoft>
     <tag>&release;</tag>
     <qual>&releasetag;</qual>
-    <local>/pnfs/sbnd/resilient/users/&username;/&username;_&date;_&release;.tar</local>
+    <local>/pnfs/sbnd/resilient/users/&username;/&username;_&release;.tar</local>
   </larsoft>
 
   <stage name="flatcaf-no-transverse-diffusion">
