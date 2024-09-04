@@ -35,7 +35,8 @@ void SelectionData() {
     double TextSize = 0.06;	
 
     // The SpectrumLoader object handles the loading of CAFs and the creation of Spectrum.
-    SpectrumLoader NuLoader("/exp/sbnd/data/users/munjung/SBND/data/run_14500_14503.flat.caf.root");
+    SpectrumLoader DataLoader("/exp/sbnd/data/users/munjung/SBND/data/run_14500_14503.flat.caf.root");
+    SpectrumLoader MCLoader(InputFiles);
 
     // Directory to store figs
     TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
@@ -44,12 +45,13 @@ void SelectionData() {
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/Data.root";
     TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
 
-    std::vector<std::unique_ptr<Spectrum>> Spectra;
+    std::vector<std::tuple<std::unique_ptr<Spectrum>, std::unique_ptr<Spectrum>>> Spectra;
 
     // Variables after cutting 
     for (std::size_t i = 0; i < Vars.size(); i++) {
-        auto RecoSignal = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), NuLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsSignal);
-        Spectra.push_back(std::move(RecoSignal));
+        auto RecoSignal = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), DataLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsSignal);
+        auto MCSignal = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), MCLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsSignal);
+        Spectra.push_back({std::move(RecoSignal), std::move(MCSignal)});
     }
 
     // Variables without any cut
@@ -58,15 +60,16 @@ void SelectionData() {
     NoCutVars.push_back(kVertexY); NoCutBins.push_back(bVertexY); NoCutLabels.push_back("#vec{v}_{y}"); NoCutNames.push_back("VertexY");
     NoCutVars.push_back(kVertexZ); NoCutBins.push_back(bVertexZ); NoCutLabels.push_back("#vec{v}_{z}"); NoCutNames.push_back("VertexZ");
     for (std::size_t i = 0; i < NoCutVars.size(); i++) {
-        auto RecoSignal = std::make_unique<Spectrum>(NoCutLabels.at(i), NoCutBins.at(i), NuLoader, NoCutVars.at(i), kNoSpillCut, kNoInvalidVariables);
-        Spectra.push_back(std::move(RecoSignal));
+        auto RecoSignal = std::make_unique<Spectrum>(NoCutLabels.at(i), NoCutBins.at(i), DataLoader, NoCutVars.at(i), kNoSpillCut, kNoInvalidVariables);
+        auto MCSignal = std::make_unique<Spectrum>(NoCutLabels.at(i), NoCutBins.at(i), MCLoader, NoCutVars.at(i), kNoSpillCut, kNoInvalidVariables);
+        Spectra.push_back({std::move(RecoSignal), std::move(MCSignal)});
     }
     
-    NuLoader.Go();
+    DataLoader.Go(); MCLoader.Go();
 
     // Variables after cutting
     for (std::size_t iVar = 0; iVar < Vars.size(); iVar++) {
-        auto& RecoSignal = Spectra[iVar];
+        auto& [RecoSignal, MCSignal] = Spectra[iVar];
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         PlotCanvas->SetTopMargin(0.13);
@@ -74,15 +77,34 @@ void SelectionData() {
         PlotCanvas->SetRightMargin(0.05);
         PlotCanvas->SetBottomMargin(0.16);
 
+        TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+        leg->SetBorderSize(0);
+        leg->SetNColumns(3);
+        leg->SetTextSize(TextSize*0.8);
+        leg->SetTextFont(FontStyle);
+
         TH1D* RecoHist = RecoSignal->ToTH1(TargetPOT);
+        TH1D* MCHist = MCSignal->ToTH1(TargetPOT);
 
         RecoHist->SetBinContent(RecoHist->GetNbinsX(), RecoHist->GetBinContent(RecoHist->GetNbinsX()) + RecoHist->GetBinContent(RecoHist->GetNbinsX() + 1));
         RecoHist->SetBinContent(1, RecoHist->GetBinContent(0) + RecoHist->GetBinContent(1));
 
-        double Area = RecoHist->Integral();
-        RecoHist->Scale(1 / Area);
+        MCHist->SetBinContent(MCHist->GetNbinsX(), MCHist->GetBinContent(MCHist->GetNbinsX()) + MCHist->GetBinContent(MCHist->GetNbinsX() + 1));
+        MCHist->SetBinContent(1, MCHist->GetBinContent(0) + MCHist->GetBinContent(1));
+
+        double RecoArea = RecoHist->Integral();
+        RecoHist->Scale(1 / RecoArea);
+
+        double MCArea = MCHist->Integral();
+        MCHist->Scale(1 / MCArea);
+
+        TLegendEntry* legData = leg->AddEntry(RecoHist,"Data","l");
         RecoHist->SetLineColor(kBlue+2);
         RecoHist->SetLineWidth(4);
+
+        TLegendEntry* legMC = leg->AddEntry(MCHist,"MC","l");
+        MCHist->SetLineColor(kRed+1);
+        MCHist->SetLineWidth(4);
 
         RecoHist->GetXaxis()->SetTitleFont(FontStyle);
         RecoHist->GetXaxis()->SetLabelFont(FontStyle);
@@ -101,10 +123,14 @@ void SelectionData() {
         RecoHist->GetYaxis()->SetTitleOffset(1.3);
         RecoHist->GetYaxis()->SetTickSize(0);
         RecoHist->GetYaxis()->CenterTitle();
+        RecoHist->GetYaxis()->SetTitle("Events [area norm.]");
 
-        RecoHist->GetYaxis()->SetRangeUser(0., RecoHist->GetMaximum() * 1.3);
+        double Max = std::max(RecoHist->GetMaximum(), MCHist->GetMaximum());
+        RecoHist->GetYaxis()->SetRangeUser(0., Max * 1.3);
         PlotCanvas->cd();
         RecoHist->Draw("hist");
+        MCHist->Draw("hist same");
+        leg->Draw();
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/DataCounts/"+PlotNames[iVar]+".png");
 
         delete PlotCanvas;
@@ -112,7 +138,7 @@ void SelectionData() {
 
     // Variables without any cutting
     for (std::size_t iVar = Vars.size(); iVar < Vars.size() + NoCutVars.size(); iVar++) {
-        auto& RecoSignal = Spectra[iVar];
+        auto& [RecoSignal, MCSignal] = Spectra[iVar];
 
         TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
         PlotCanvas->SetTopMargin(0.13);
@@ -120,15 +146,34 @@ void SelectionData() {
         PlotCanvas->SetRightMargin(0.05);
         PlotCanvas->SetBottomMargin(0.16);
 
+        TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+        leg->SetBorderSize(0);
+        leg->SetNColumns(3);
+        leg->SetTextSize(TextSize*0.8);
+        leg->SetTextFont(FontStyle);
+
         TH1D* RecoHist = RecoSignal->ToTH1(TargetPOT);
+        TH1D* MCHist = MCSignal->ToTH1(TargetPOT);
 
         RecoHist->SetBinContent(RecoHist->GetNbinsX(), RecoHist->GetBinContent(RecoHist->GetNbinsX()) + RecoHist->GetBinContent(RecoHist->GetNbinsX() + 1));
         RecoHist->SetBinContent(1, RecoHist->GetBinContent(0) + RecoHist->GetBinContent(1));
 
-        double Area = RecoHist->Integral();
-        RecoHist->Scale(1 / Area);
+        MCHist->SetBinContent(MCHist->GetNbinsX(), MCHist->GetBinContent(MCHist->GetNbinsX()) + MCHist->GetBinContent(MCHist->GetNbinsX() + 1));
+        MCHist->SetBinContent(1, MCHist->GetBinContent(0) + MCHist->GetBinContent(1));
+
+        double RecoArea = RecoHist->Integral();
+        RecoHist->Scale(1 / RecoArea);
+
+        double MCArea = MCHist->Integral();
+        MCHist->Scale(1 / MCArea);
+
+        TLegendEntry* legData = leg->AddEntry(RecoHist,"Data","l");
         RecoHist->SetLineColor(kBlue+2);
         RecoHist->SetLineWidth(4);
+
+        TLegendEntry* legMC = leg->AddEntry(MCHist,"MC","l");
+        MCHist->SetLineColor(kRed+1);
+        MCHist->SetLineWidth(4);
 
         RecoHist->GetXaxis()->SetTitleFont(FontStyle);
         RecoHist->GetXaxis()->SetLabelFont(FontStyle);
@@ -147,10 +192,14 @@ void SelectionData() {
         RecoHist->GetYaxis()->SetTitleOffset(1.3);
         RecoHist->GetYaxis()->SetTickSize(0);
         RecoHist->GetYaxis()->CenterTitle();
+        RecoHist->GetYaxis()->SetTitle("Events [area norm.]");
 
-        RecoHist->GetYaxis()->SetRangeUser(0., RecoHist->GetMaximum() * 1.3);
+        double Max = std::max(RecoHist->GetMaximum(), MCHist->GetMaximum());
+        RecoHist->GetYaxis()->SetRangeUser(0., Max * 1.3);
         PlotCanvas->cd();
         RecoHist->Draw("hist");
+        MCHist->Draw("hist same");
+        leg->Draw();
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/DataCounts/NoCut/"+NoCutNames[iVar - Vars.size()]+".png");
 
         delete PlotCanvas;
