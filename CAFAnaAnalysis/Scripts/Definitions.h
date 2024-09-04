@@ -69,6 +69,9 @@ namespace ana
     const Binning bMuonMomentumBins = Binning::Custom(ArrayNBinsMuonMomentum);
     const Binning bLeadingProtonMomentumBins = Binning::Custom(ArrayNBinsLeadingProtonMomentum);
     const Binning bRecoilProtonMomentumBins = Binning::Custom(ArrayNBinsRecoilProtonMomentum);
+    // GKI
+    const Binning bAlphaThreeDBins = Binning::Custom(ArrayNBinsAlphaThreeD);
+    const Binning bMissingMomentumBins = Binning::Custom(ArrayNBinsMissingMomentum);
 
     // Bins for cut plots
     const Binning bNuScore = Binning::Simple(30, 0, 1.0);
@@ -92,6 +95,16 @@ namespace ana
     );
     const Binning bCosOpeningAngleMuonTotalProtonInMuonCosTheta = Binning::Custom(
         tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMuonTotalProtonInMuonCosThetaSlices)
+    );
+    // GKI
+    const Binning bMissingMomentumInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices)
+    );
+    const Binning bAlphaThreeDInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsAlphaThreeDInMuonCosThetaSlices)
+    );
+    const Binning bCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta = Binning::Custom(
+        tools.Return2DBinIndices(TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices)
     );
 
     //////////////
@@ -355,6 +368,16 @@ namespace ana
 
         double RecoilProtonMomentum = Helper.ReturnRecoilProtonMomentum();
         vars.push_back(RecoilProtonMomentum);
+
+        // GKI
+        double CosOpeningAngleMomentumTransferTotalProton = Helper.ReturnCosOpeningAngleMomentumTransferTotalProton();
+        vars.push_back(CosOpeningAngleMomentumTransferTotalProton);
+
+        double AlphaThreeD = Helper.ReturnAlphaThreeD();
+        vars.push_back(AlphaThreeD);
+
+        double MissingMomentum = Helper.ReturnMissingMomentum();
+        vars.push_back(MissingMomentum);
 
         return vars;
     }
@@ -709,7 +732,7 @@ namespace ana
         return kTruthLeadingProtonMomentum(&slc->truth);
     });
 
-    // Muon momentum
+    // Recoil proton momentum
     const Var kRecoilProtonMomentum([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(9);
     });
@@ -718,6 +741,39 @@ namespace ana
     });
     const Var kRecoTruthRecoilProtonMomentum([](const caf::SRSliceProxy* slc) -> double {
         return kTruthRecoilProtonMomentum(&slc->truth);
+    });
+
+   // Opening angle between momentum transfer and total proton
+    const Var kCosOpeningAngleMomentumTransferTotalProton([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(10);
+    });
+    const TruthVar kTruthCosOpeningAngleMomentumTransferTotalProton([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(10);
+    });
+    const Var kRecoTruthCosOpeningAngleMomentumTransferTotalProton([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthCosOpeningAngleMomentumTransferTotalProton(&slc->truth);
+    });
+
+    // Alpha three dimensional
+    const Var kAlphaThreeD([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(11);
+    });
+    const TruthVar kTruthAlphaThreeD([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(11);
+    });
+    const Var kRecoTruthAlphaThreeD([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthAlphaThreeD(&slc->truth);
+    });
+
+    // Missing momentum
+    const Var kMissingMomentum([](const caf::SRSliceProxy* slc) -> double {
+        return kVars(slc).at(12);
+    });
+    const TruthVar kTruthMissingMomentum([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(12);
+    });
+    const Var kRecoTruthMissingMomentum([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthMissingMomentum(&slc->truth);
     });
 
     ////////////////////////////////
@@ -844,6 +900,99 @@ namespace ana
     });
     const Var kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
         return kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta(&slc->truth);
+    });
+
+    // Missing momentum
+    const Var kMissingMomentumInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fMissingMomentum = kMissingMomentum(slc);
+
+        if (fMissingMomentum < TwoDArrayMissingMomentum[0]) { fMissingMomentum = (TwoDArrayMissingMomentum[0] + TwoDArrayMissingMomentum[1]) / 2.; }
+        else if (fMissingMomentum > TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum]) { fMissingMomentum = (TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum] + TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialMissingMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fMissingMomentum
+        );
+        return SerialMissingMomentumInMuonCosThetaIndex;
+    });
+    const TruthVar kTruthMissingMomentumInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fMissingMomentum = kTruthMissingMomentum(nu);
+
+        if (fMissingMomentum < TwoDArrayMissingMomentum[0]) { fMissingMomentum = (TwoDArrayMissingMomentum[0] + TwoDArrayMissingMomentum[1]) / 2.; }
+        else if (fMissingMomentum > TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum]) { fMissingMomentum = (TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum] + TwoDArrayMissingMomentum[TwoDNBinsMissingMomentum - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
+        int SerialMissingMomentumInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsMissingMomentumInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fMissingMomentum
+        );
+        return SerialMissingMomentumInMuonCosThetaIndex;
+    });
+    const Var kRecoTruthMissingMomentumInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthMissingMomentumInMuonCosTheta(&slc->truth);
+    });
+
+    // Alpha three dimenional
+    const Var kAlphaThreeDInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fAlphaThreeD = kAlphaThreeD(slc);
+
+        if (fAlphaThreeD < TwoDArrayAlphaThreeD[0]) { fAlphaThreeD = (TwoDArrayAlphaThreeD[0] + TwoDArrayAlphaThreeD[1]) / 2.; }
+        else if (fAlphaThreeD > TwoDArrayAlphaThreeD[TwoDNBinsAlphaThreeD]) { fAlphaThreeD = (TwoDArrayAlphaThreeD[TwoDNBinsAlphaThreeD] + TwoDArrayAlphaThreeD[TwoDNBinsAlphaThreeD - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialAlphaThreeDInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsAlphaThreeDInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fAlphaThreeD
+        );
+        return SerialAlphaThreeDInMuonCosThetaIndex;
+    });
+    const TruthVar kTruthAlphaThreeDInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fAlphaThreeD = kTruthAlphaThreeD(nu);
+
+        if (fAlphaThreeD < TwoDArrayAlphaThreeD[0]) { fAlphaThreeD = (TwoDArrayAlphaThreeD[0] + TwoDArrayAlphaThreeD[1]) / 2.; }
+        else if (fAlphaThreeD > TwoDArrayAlphaThreeD[TwoDNBinsAlphaThreeD]) { fAlphaThreeD = (TwoDArrayAlphaThreeD[TwoDNBinsAlphaThreeD] + TwoDArrayAlphaThreeD[TwoDNBinsAlphaThreeD - 1]) / 2.; }
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
+        int SerialAlphaThreeDInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsAlphaThreeDInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fAlphaThreeD
+        );
+        return SerialAlphaThreeDInMuonCosThetaIndex;
+    });
+    const Var kRecoTruthAlphaThreeDInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthAlphaThreeDInMuonCosTheta(&slc->truth);
+    });
+
+    // Opening angle betwen momentum transfer vector and total proton
+    const Var kCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        float fCosOpeningAngleMomentumTransferTotalProton = kCosOpeningAngleMomentumTransferTotalProton(slc);
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kMuonCosTheta(slc), TwoDArrayNBinsMuonCosTheta);
+        int SerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fCosOpeningAngleMomentumTransferTotalProton
+        );
+        return SerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex;
+    });
+    const TruthVar kTruthCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta([](const caf::SRTrueInteractionProxy* nu) -> double {
+        float fCosOpeningAngleMomentumTransferTotalProton = kTruthCosOpeningAngleMomentumTransferTotalProton(nu);
+
+        int MuonCosThetaTwoDIndex = tools.ReturnIndex(kTruthMuonCosTheta(nu), TwoDArrayNBinsMuonCosTheta);
+        int SerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex = tools.ReturnIndexIn2DList(
+            TwoDArrayNBinsCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaSlices,
+            MuonCosThetaTwoDIndex,
+            fCosOpeningAngleMomentumTransferTotalProton
+        );
+        return SerialCosOpeningAngleMomentumTransferTotalProtonInMuonCosThetaIndex;
+    });
+    const Var kRecoTruthCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
+        return kTruthCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta(&slc->truth);
     });
 
     //////////////
@@ -1179,10 +1328,16 @@ namespace ana
         {kMuonMomentum, kRecoTruthMuonMomentum, kTruthMuonMomentum},
         {kLeadingProtonMomentum, kRecoTruthLeadingProtonMomentum, kTruthLeadingProtonMomentum},
         {kRecoilProtonMomentum, kRecoTruthRecoilProtonMomentum, kTruthRecoilProtonMomentum},
+        {kCosOpeningAngleMomentumTransferTotalProton, kRecoTruthCosOpeningAngleMomentumTransferTotalProton, kTruthCosOpeningAngleMomentumTransferTotalProton},
+        {kAlphaThreeD, kRecoTruthAlphaThreeD, kTruthAlphaThreeD},
+        {kMissingMomentum, kRecoTruthMissingMomentum, kTruthMissingMomentum},
         {kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta, kTruthTransverseMomentumInMuonCosTheta},
         {kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta, kTruthDeltaAlphaTInMuonCosTheta},
         {kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta, kTruthCosOpeningAngleProtonsInMuonCosTheta},
-        {kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta}
+        {kCosOpeningAngleMuonTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMuonTotalProtonInMuonCosTheta},
+        {kMissingMomentumInMuonCosTheta, kRecoTruthMissingMomentumInMuonCosTheta, kTruthMissingMomentumInMuonCosTheta},
+        {kAlphaThreeDInMuonCosTheta, kRecoTruthAlphaThreeDInMuonCosTheta, kTruthAlphaThreeDInMuonCosTheta},
+        {kCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta, kRecoTruthCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta, kTruthCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta}
     };
 
     static const std::vector<Binning> VarBins = {
@@ -1197,10 +1352,16 @@ namespace ana
         bMuonMomentumBins,
         bLeadingProtonMomentumBins,
         bRecoilProtonMomentumBins,
+        bAngleBins,
+        bAlphaThreeDBins,
+        bMissingMomentumBins,
         bTransverseMomentumInMuonCosTheta,
         bDeltaAlphaTInMuonCosTheta,
         bCosOpeningAngleProtonsInMuonCosTheta,
-        bCosOpeningAngleMuonTotalProtonInMuonCosTheta
+        bCosOpeningAngleMuonTotalProtonInMuonCosTheta,
+        bMissingMomentumInMuonCosTheta,
+        bAlphaThreeDInMuonCosTheta,
+        bCosOpeningAngleMomentumTransferTotalProtonInMuonCosTheta
     };
 
     ////////////////////////////

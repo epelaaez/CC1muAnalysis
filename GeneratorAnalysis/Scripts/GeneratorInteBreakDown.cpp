@@ -128,6 +128,19 @@ void GeneratorInteBreakDown() {
     XAxisLabel.push_back("#delta #alpha_{T}");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    // GKI
+    PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
+    XAxisLabel.push_back("p_{n}");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu}})");
@@ -169,6 +182,19 @@ void GeneratorInteBreakDown() {
     XAxisLabel.push_back("#delta #alpha_{T}");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    // GKI
+    PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueMissingMomentumPlot");
+    XAxisLabel.push_back("p_{n}");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueAlphaThreeDPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     XAxisLabel.push_back("#delta P_{T}");
@@ -186,6 +212,19 @@ void GeneratorInteBreakDown() {
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    // GKI
+    PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("p_{n}");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // Double differential pre FSI
     PlotNames.push_back("TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot");
     XAxisLabel.push_back("#delta P_{T}");
@@ -202,6 +241,19 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
     XAxisLabel.push_back("cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})");
     YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    // GKI
+    PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
+    XAxisLabel.push_back("p_{n}");
+    YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
+    XAxisLabel.push_back("#alpha_{3D}");
+    YAxisLabel.push_back("#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
 
     //------------------------------//
@@ -226,6 +278,9 @@ void GeneratorInteBreakDown() {
     // Loop over the plots to be compared
 
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
+
+        TString PlotNameDuplicate = PlotNames[iPlot];
+        TString GeneralPlotName = PlotNameDuplicate.ReplaceAll("NoFSI","");
 
         for (int iSample = 0; iSample < NSamples; iSample++) {	
             if (PlotNames[iPlot].Contains("NoFSI") && Labels[iSample] == "GiBUU_NoFSI") {
