@@ -99,8 +99,10 @@ void SelectionData() {
         MCHist->Scale(1 / MCArea);
 
         TLegendEntry* legData = leg->AddEntry(RecoHist,"Data","l");
-        RecoHist->SetLineColor(kBlue+2);
-        RecoHist->SetLineWidth(4);
+        RecoHist->SetLineColor(kBlack);
+        RecoHist->SetMarkerColor(kBlack);
+        RecoHist->SetMarkerStyle(20);
+        RecoHist->SetMarkerSize(1.);
 
         TLegendEntry* legMC = leg->AddEntry(MCHist,"MC","l");
         MCHist->SetLineColor(kRed+1);
@@ -128,7 +130,7 @@ void SelectionData() {
         double Max = std::max(RecoHist->GetMaximum(), MCHist->GetMaximum());
         RecoHist->GetYaxis()->SetRangeUser(0., Max * 1.3);
         PlotCanvas->cd();
-        RecoHist->Draw("hist");
+        RecoHist->Draw("e1x0");
         MCHist->Draw("hist same");
         leg->Draw();
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/DataCounts/"+PlotNames[iVar]+".png");
@@ -168,8 +170,10 @@ void SelectionData() {
         MCHist->Scale(1 / MCArea);
 
         TLegendEntry* legData = leg->AddEntry(RecoHist,"Data","l");
-        RecoHist->SetLineColor(kBlue+2);
-        RecoHist->SetLineWidth(4);
+        RecoHist->SetLineColor(kBlack);
+        RecoHist->SetMarkerColor(kBlack);
+        RecoHist->SetMarkerStyle(20);
+        RecoHist->SetMarkerSize(1.);
 
         TLegendEntry* legMC = leg->AddEntry(MCHist,"MC","l");
         MCHist->SetLineColor(kRed+1);
@@ -197,7 +201,7 @@ void SelectionData() {
         double Max = std::max(RecoHist->GetMaximum(), MCHist->GetMaximum());
         RecoHist->GetYaxis()->SetRangeUser(0., Max * 1.3);
         PlotCanvas->cd();
-        RecoHist->Draw("hist");
+        RecoHist->Draw("e1x0");
         MCHist->Draw("hist same");
         leg->Draw();
         PlotCanvas->SaveAs(dir+"/Figs/CAFAna/DataCounts/NoCut/"+NoCutNames[iVar - Vars.size()]+".png");
