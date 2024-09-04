@@ -71,6 +71,9 @@ namespace ana
 
     // Create the binning schemes for the Vars we wish to plot.
     const Binning bEventCount = Binning::Custom(ArrayNBinsEventCount);
+    const Binning bVertexX = Binning::Custom(ArrayNBinsVertexX);
+    const Binning bVertexY = Binning::Custom(ArrayNBinsVertexY);
+    const Binning bVertexZ = Binning::Custom(ArrayNBinsVertexZ);
     const Binning bAngleBins = Binning::Custom(ArrayNBinsAngle);
     const Binning bDeltaAlphaBins = Binning::Custom(ArrayNBinsDeltaAlphaT);
     const Binning bTransverseMomentumBins = Binning::Custom(ArrayNBinsTransverseMomentum);
@@ -643,6 +646,37 @@ namespace ana
     // The difference between 1 and 3 is that the latter can be
     // used in a `Spectrum` that uses a `Cut` instead of a `TruthCut`.
 
+    // Vertex distribution
+    const Var kVertexX([](const caf::SRSliceProxy* slc) -> float {
+        return slc->vertex.x;
+    });
+    const TruthVar kTruthVertexX([](const caf::SRTrueInteractionProxy* nu) -> float {
+        return nu->vtx.x;
+    });
+    const Var kRecoTruthVertexX([](const caf::SRSliceProxy* slc) -> float {
+        return kTruthVertexX(&slc->truth);
+    });
+
+    const Var kVertexY([](const caf::SRSliceProxy* slc) -> float {
+        return slc->vertex.y;
+    });
+    const TruthVar kTruthVertexY([](const caf::SRTrueInteractionProxy* nu) -> float {
+        return nu->vtx.y;
+    });
+    const Var kRecoTruthVertexY([](const caf::SRSliceProxy* slc) -> float {
+        return kTruthVertexY(&slc->truth);
+    });
+
+    const Var kVertexZ([](const caf::SRSliceProxy* slc) -> float {
+        return slc->vertex.z;
+    });
+    const TruthVar kTruthVertexZ([](const caf::SRTrueInteractionProxy* nu) -> float {
+        return nu->vtx.z;
+    });
+    const Var kRecoTruthVertexZ([](const caf::SRSliceProxy* slc) -> float {
+        return kTruthVertexZ(&slc->truth);
+    });
+
     // Muon angle
     const Var kMuonCosTheta([](const caf::SRSliceProxy* slc) -> double {
         return kVars(slc).at(0);
@@ -1113,10 +1147,10 @@ namespace ana
     // Check for cosmics
     const Cut kCosmicCut([](const caf::SRSliceProxy* slc) {
         return (
-            slc->nu_score > 0.4 &&     // check how neutrino like slice is
-            slc->fmatch.score < 7.0 && // check flash match score
-            slc->fmatch.time > 0. &&   // check flash is in beam
-            slc->fmatch.time < 1.8
+            slc->nu_score > 0.4    // check how neutrino like slice is
+            // slc->fmatch.score < 7.0 && // check flash match score
+            // slc->fmatch.time > 0. &&   // check flash is in beam
+            // slc->fmatch.time < 1.8
         );
     });
     const Cut kIsCosmic([](const caf::SRSliceProxy* slc) {
@@ -1200,7 +1234,7 @@ namespace ana
     });
 
     const Cut kNoInvalidVariables([](const caf::SRSliceProxy* slc) {
-        // if (std::isnan(slc->vertex.x) || std::isnan(slc->vertex.y) || std::isnan(slc->vertex.z)) return false;
+        if (std::isnan(slc->vertex.x) || std::isnan(slc->vertex.y) || std::isnan(slc->vertex.z)) return false;
         // for (auto const& pfp : slc -> reco.pfp) {
         //     if (std::isnan(pfp.trk.start.x) || std::isnan(pfp.trk.start.y) || std::isnan(pfp.trk.start.z)) return false;
         //     if (std::isnan(pfp.trk.end.x)   || std::isnan(pfp.trk.end.y)   || std::isnan(pfp.trk.end.z)) return false;
@@ -1328,6 +1362,9 @@ namespace ana
 
     static const std::vector<std::tuple<Var, Var, TruthVar>> Vars = {
         {kEventCount, kEventCount, kTrueEventCount},
+        {kVertexX, kRecoTruthVertexX, kTruthVertexX},
+        {kVertexY, kRecoTruthVertexY, kTruthVertexY},
+        {kVertexZ, kRecoTruthVertexZ, kTruthVertexZ},
         {kMuonCosTheta, kRecoTruthMuonCosTheta, kTruthMuonCosTheta},
         {kLeadingProtonCosTheta, kRecoTruthLeadingProtonCosTheta, kTruthLeadingProtonCosTheta},
         {kRecoilProtonCosTheta, kRecoTruthRecoilProtonCosTheta, kTruthRecoilProtonCosTheta},
@@ -1352,6 +1389,9 @@ namespace ana
 
     static const std::vector<Binning> VarBins = {
         bEventCount,
+        bVertexX,
+        bVertexY,
+        bVertexZ,
         bAngleBins,
         bAngleBins,
         bAngleBins,

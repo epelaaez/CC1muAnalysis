@@ -31,6 +31,16 @@ namespace Constants {
     // double IntegratedFlux = (HistoFlux->Integral() * (TargetPOT / POTPerSpill / Nominal_UB_XY_Surface));
     double IntegratedFlux = 1.65974e13; // from Henry Lay
 
+    // Binning for vertex coordinates
+    static const int NBinsVertexX = 20;
+    static const std::vector<double> ArrayNBinsVertexX{-200.,-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.,200.};
+
+    static const int NBinsVertexY = 20;
+    static const std::vector<double> ArrayNBinsVertexY{-200.,-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.,200.};
+
+    static const int NBinsVertexZ = 20;
+    static const std::vector<double> ArrayNBinsVertexZ{0.,25.,50.,75.,100.,125.,150.,175.,200.,225.,250.,275.,300.,325.,350.,375.,400.,425.,450.,475.,500.};
+
     // Binning for single differential analysis
     static const int NBinsEventCount = 1;
     static const std::vector<double> ArrayNBinsEventCount{0., 1.};
@@ -163,6 +173,9 @@ namespace Constants {
 
     static const std::vector<TString> PlotNames = {
         "EventCount",
+        "VertexX",
+        "VertexY",
+        "VertexZ",
         "MuonCosTheta",
         "LeadingProtonCosTheta",
         "RecoilProtonCosTheta",
@@ -187,6 +200,9 @@ namespace Constants {
 
     static const std::vector<std::string> VarLabels = {
         "single bin",
+        "#vec{v}_{x}",
+        "#vec{v}_{y}",
+        "#vec{v}_{z}",
         "cos(#theta_{#vec{p}_{#mu}})",
         "cos(#theta_{#vec{p}_{L}})",
         "cos(#theta_{#vec{p}_{R}})",
@@ -211,6 +227,9 @@ namespace Constants {
 
     static const std::vector<std::string> YLabels = {
         "#frac{d#sigma}{# events} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d #vec{v}_{x}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d #vec{v}_{y}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d #vec{v}_{z}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dcos(#theta_{#vec{p}_{L}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dcos(#theta_{#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
