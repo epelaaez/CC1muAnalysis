@@ -13,7 +13,7 @@
 <!ENTITY date        "Sep_03_2024">
 <!ENTITY ver         "v1">
 <!ENTITY num_jobs    "150">
-<!ENTITY file_list   "/exp/sbnd/app/users/&username;/CC1muAnalysis/Production/Lists/no_longitudinal_diffusion">
+<!ENTITY file_list   "/pnfs/sbnd/persistent/users/&username;/Lists/no_longitudinal_diffusion">
 ]>
 
 <project name="&name;">

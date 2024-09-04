@@ -43,23 +43,23 @@ void SelectionDetectorSystematics() {
     double TextSize = 0.06;
 
     // Target files for each sample
-    const std::string CVPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_cv_v09_88_00_04/Sep_03_2024_v1/14253271_299";
+    const std::string CVPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/cv";
     const std::vector<std::string> CVInputFiles = tools.GetInputFiles(CVPath);
     SpectrumLoader CVLoader(CVInputFiles);
 
-    const std::string NoDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_no_diffusion_v09_88_00_04/Sep_03_2024_v1/14253376_149";
+    const std::string NoDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/no_diffusion";
     const std::vector<std::string> NoDifInputFiles = tools.GetInputFiles(NoDifPath);
     SpectrumLoader NoDifLoader(NoDifInputFiles);
 
-    const std::string NoLonDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_no_longitudinal_diffusion_v09_88_00_04/Sep_03_2024_v1/82230306_149";
+    const std::string NoLonDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/no_longitudinal_diffusion";
     const std::vector<std::string> NoLonDifInputFiles = tools.GetInputFiles(NoLonDifPath);
     SpectrumLoader NoLonDifLoader(NoLonDifInputFiles);
 
-    const std::string NoTraDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_no_transverse_diffusion_v09_88_00_04/Sep_03_2024_v1/56548147_149";
+    const std::string NoTraDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/no_transverse_diffusion";
     const std::vector<std::string> NoTraDifInputFiles = tools.GetInputFiles(NoTraDifPath);
     SpectrumLoader NoTraDifLoader(NoTraDifInputFiles);
 
-    const std::string SCENoDifPath = "/pnfs/sbnd/scratch/users/epelaez/sbnd_detector_variations_with_sce_no_diffusion_v09_88_00_04/Sep_03_2024_v1/14254158_149";
+    const std::string SCENoDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/with_sce_no_diffusion";
     const std::vector<std::string> SCENoDifInputFiles = tools.GetInputFiles(SCENoDifPath);
     SpectrumLoader SCENoDifLoader(SCENoDifInputFiles);
 
@@ -109,7 +109,7 @@ void SelectionDetectorSystematics() {
         TH1D* NoTraDifHisto = NoTraDifSpectra->ToTH1(TargetPOT);
         TH1D* SCENoDifHisto = SCENoDifSpectra->ToTH1(TargetPOT);
 
-        TLegend* leg = new TLegend(0.2,0.73,0.75,0.83);
+        TLegend* leg = new TLegend(0.2,0.73,0.8,0.83);
         leg->SetBorderSize(0);
         leg->SetNColumns(3);
         leg->SetTextSize(TextSize*0.8);
