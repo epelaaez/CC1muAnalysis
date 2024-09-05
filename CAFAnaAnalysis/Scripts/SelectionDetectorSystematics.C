@@ -150,7 +150,7 @@ void SelectionDetectorSystematics() {
         NoTraDifHisto->SetLineWidth(4);
 
         TLegendEntry* legSCENoDif = leg->AddEntry(SCENoDifHisto,"SCE no diff.","l");
-        SCENoDifHisto->SetLineColor(kGreen);
+        SCENoDifHisto->SetLineColor(kGreen+1);
         SCENoDifHisto->SetLineWidth(4);
 
         double Max = CVHisto->GetMaximum();

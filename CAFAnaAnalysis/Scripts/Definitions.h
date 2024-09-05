@@ -1296,6 +1296,11 @@ namespace ana
     // SpillVar
     ///////////
 
+    const SpillCut kSpillPrintFile([](const caf::StandardRecordProxy* sr) {
+        std::cout << (std::string)sr->hdr.sourceName << std::endl; 
+        return true;
+    });
+
     const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
         fstream file;
         std::string FileName = "/exp/sbnd/data/users/" + UserName + "/CAFAnaOutput/EventData.csv";
