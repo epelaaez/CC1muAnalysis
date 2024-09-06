@@ -2,8 +2,6 @@
 #include <TTree.h>
 #include <TString.h>
 
-using namespace std;
-
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -12,6 +10,9 @@ using namespace std;
 #include <stdlib.h>
 
 #include "../../Utils/Constants.h"
+#include "../../Utils/Tools.cxx"
+
+using namespace std;
 using namespace Constants;
 
 void GeneratorOverlay() {
@@ -26,6 +27,10 @@ void GeneratorOverlay() {
     double TextSize = 0.06;			
 
     TString OutFilePath = "/pnfs/sbnd/persistent/users/" + (TString)UserName + "/HighSamples/FlatTree/";
+
+    //------------------------------//
+
+    Tools tools;
 
     //------------------------------//
 
@@ -84,6 +89,9 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSICosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueNoFSITransverseMomentumPlot");
     PlotNames.push_back("TrueNoFSIDeltaAlphaTPlot");
+    PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
+    PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
+    PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
 
     // Post FSI
     PlotNames.push_back("TrueMuonCosThetaPlot");
@@ -96,18 +104,27 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
+    PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
+    PlotNames.push_back("TrueMissingMomentumPlot");
+    PlotNames.push_back("TrueAlphaThreeDPlot");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialCosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
 
     // Double differential pre FSI
     PlotNames.push_back("TrueSerialNoFSITransverseMomentum_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSIDeltaAlphaT_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleProtons_InMuonCosThetaPlot");
     PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMuonTotalProton_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialNoFSIMissingMomentum_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialNoFSIAlphaThreeD_InMuonCosThetaPlot");
+    PlotNames.push_back("TrueSerialNoFSICosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");
 
     const int NPlots = PlotNames.size();
 
@@ -196,6 +213,20 @@ void GeneratorOverlay() {
         PlotCanvas->cd();
         leg->Draw();
         
+        TLatex *textSlice = new TLatex();
+        textSlice->SetTextFont(FontStyle);
+        textSlice->SetTextSize(TextSize);
+        TString PlotNameDuplicate = PlotNames[iPlot];
+        TString GeneralPlotName = PlotNameDuplicate.ReplaceAll("NoFSI","");
+        TString ReducedPlotName = PlotNameDuplicate.ReplaceAll("True","");
+
+        if (GeneralPlotName.Contains("TrueSerial")) {
+            auto [SliceDiscriminators, SliceBinning] = PlotNameToDiscriminator[GeneralPlotName];
+            auto [NSlices, SerialVectorRanges, SerialVectorBins, SerialVectorLowBin, SerialVectorHighBin] = tools.FlattenNDBins(SliceDiscriminators, SliceBinning);
+            TString SliceLabel = tools.to_string_with_precision(SliceDiscriminators[0], 1) + " < " + PlotNameToSliceLabel[GeneralPlotName] + " < " + tools.to_string_with_precision(SliceDiscriminators[NSlices], 1);
+            textSlice->DrawLatexNDC(0.16, 0.93, SliceLabel);
+        }
+
         TString dir = "/exp/sbnd/app/users/" + (TString)UserName + "/CC1muAnalysis";
         TString SaveDirectory = (PlotNames[iPlot].Contains("NoFSI")) ? "PreFSI" : "PostFSI";
         PlotCanvas->SaveAs(dir+"/Figs/Overlay"+SaveDirectory+"/Overlay_"+PlotNames[iPlot]+".png");

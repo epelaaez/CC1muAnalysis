@@ -40,7 +40,7 @@ void SerialPlotGenerator() {
     const int NSamples = SampleNames.size();
 
     // start at 11 to start with double diff variables
-    for (int iPlot = 11; iPlot < NPlots; iPlot++) {
+    for (int iPlot = 14; iPlot < NPlots; iPlot++) {
         // Load true plots
         std::vector<TH1D*> TruePlots; TruePlots.resize(NSamples);
         for (int iSample = 0; iSample < NSamples; iSample++) {
