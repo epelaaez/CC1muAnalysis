@@ -10,9 +10,9 @@
 <!ENTITY run_type    "physics">
 <!ENTITY scratch_dir "/pnfs/sbnd/scratch/users/&username;">
 <!ENTITY name        "sbnd_detector_variations_cv">
-<!ENTITY date        "Sep_03_2024">
-<!ENTITY ver         "v1">
-<!ENTITY num_jobs    "300">
+<!ENTITY date        "Sep_05_2024">
+<!ENTITY ver         "v3">
+<!ENTITY num_jobs    "1000">
 <!ENTITY file_list   "/pnfs/sbnd/persistent/users/&username;/Lists/cv">
 ]>
 

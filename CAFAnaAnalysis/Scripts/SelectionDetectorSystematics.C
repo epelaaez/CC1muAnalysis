@@ -43,23 +43,23 @@ void SelectionDetectorSystematics() {
     double TextSize = 0.06;
 
     // Target files for each sample
-    const std::string CVPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/cv";
+    const std::string CVPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04_3/cv";
     const std::vector<std::string> CVInputFiles = tools.GetInputFiles(CVPath);
     SpectrumLoader CVLoader(CVInputFiles);
 
-    const std::string NoDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/no_diffusion";
+    const std::string NoDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04_2/no_diffusion";
     const std::vector<std::string> NoDifInputFiles = tools.GetInputFiles(NoDifPath);
     SpectrumLoader NoDifLoader(NoDifInputFiles);
 
-    const std::string NoLonDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/no_longitudinal_diffusion";
+    const std::string NoLonDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04_2/no_longitudinal_diffusion";
     const std::vector<std::string> NoLonDifInputFiles = tools.GetInputFiles(NoLonDifPath);
     SpectrumLoader NoLonDifLoader(NoLonDifInputFiles);
 
-    const std::string NoTraDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/no_transverse_diffusion";
+    const std::string NoTraDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04_2/no_transverse_diffusion";
     const std::vector<std::string> NoTraDifInputFiles = tools.GetInputFiles(NoTraDifPath);
     SpectrumLoader NoTraDifLoader(NoTraDifInputFiles);
 
-    const std::string SCENoDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04/with_sce_no_diffusion";
+    const std::string SCENoDifPath = "/pnfs/sbnd/persistent/users/epelaez/sbnd_detector_variations/v09_88_00_04_2/with_sce_no_diffusion";
     const std::vector<std::string> SCENoDifInputFiles = tools.GetInputFiles(SCENoDifPath);
     SpectrumLoader SCENoDifLoader(SCENoDifInputFiles);
 
@@ -76,6 +76,12 @@ void SelectionDetectorSystematics() {
     const int NVars = Vars.size();
 
     // Construct all spectra
+    auto CVSignal = std::make_unique<Spectrum>("event count", bEventCount, CVLoader, kEventCount, kSpillPrintFile, kNoCut); 
+    auto NoDifSignals = std::make_unique<Spectrum>("event count", bEventCount, NoDifLoader, kEventCount, kNoSpillCut, kNoCut); 
+    auto NoLonDifSignals = std::make_unique<Spectrum>("event count", bEventCount, NoLonDifLoader, kEventCount, kNoSpillCut, kNoCut); 
+    auto NoTraDifSignals = std::make_unique<Spectrum>("event count", bEventCount, NoTraDifLoader, kEventCount, kNoSpillCut, kNoCut); 
+    auto SCENoDifSignals = std::make_unique<Spectrum>("event count", bEventCount, SCENoDifLoader, kEventCount, kNoSpillCut, kNoCut); 
+
     std::vector<std::tuple<
         std::unique_ptr<Spectrum>,
         std::unique_ptr<Spectrum>,
@@ -93,6 +99,18 @@ void SelectionDetectorSystematics() {
     }
     CVLoader.Go(); NoDifLoader.Go(); NoLonDifLoader.Go(); NoTraDifLoader.Go(); SCENoDifLoader.Go();
 
+    TH1D* CVCountHisto = CVSignal->ToTH1(1.23677e17);
+    TH1D* NoDifCountHisto = NoDifSignals->ToTH1(8.78885e16);
+    TH1D* NoLonDifCountHisto = NoLonDifSignals->ToTH1(8.50138e16);
+    TH1D* NoTraDifCountHisto = NoTraDifSignals->ToTH1(8.65587e16);
+    TH1D* SCENoDifCountHisto = SCENoDifSignals->ToTH1(8.50441e16);
+
+    std::cout << CVCountHisto->Integral() << std::endl;
+    std::cout << NoDifCountHisto->Integral() << std::endl;
+    std::cout << NoLonDifCountHisto->Integral() << std::endl;
+    std::cout << NoTraDifCountHisto->Integral() << std::endl;
+    std::cout << SCENoDifCountHisto->Integral() << std::endl;
+
     TCanvas* PlotCanvas = new TCanvas("Selection","Selection",205,34,1124,768);
     PlotCanvas->SetTopMargin(0.13);
     PlotCanvas->SetLeftMargin(0.17);
@@ -103,11 +121,17 @@ void SelectionDetectorSystematics() {
         auto& [CVSpectra, NoDifSpectra, NoLonDifSpectra, NoTraDifSpectra, SCENoDifSpectra] = Spectra.at(iVar);
 
         // Get plots
-        TH1D* CVHisto = CVSpectra->ToTH1(TargetPOT);
-        TH1D* NoDifHisto = NoDifSpectra->ToTH1(TargetPOT);
-        TH1D* NoLonDifHisto = NoLonDifSpectra->ToTH1(TargetPOT);
-        TH1D* NoTraDifHisto = NoTraDifSpectra->ToTH1(TargetPOT);
-        TH1D* SCENoDifHisto = SCENoDifSpectra->ToTH1(TargetPOT);
+        TH1D* CVHisto = CVSpectra->ToTH1(1.23677e17);
+        TH1D* NoDifHisto = NoDifSpectra->ToTH1(8.78885e16);
+        TH1D* NoLonDifHisto = NoLonDifSpectra->ToTH1(8.50138e16);
+        TH1D* NoTraDifHisto = NoTraDifSpectra->ToTH1(8.65587e16);
+        TH1D* SCENoDifHisto = SCENoDifSpectra->ToTH1(8.50441e16);
+
+        std::cout << CVHisto->Integral() << std::endl;
+        std::cout << NoDifHisto->Integral() << std::endl;
+        std::cout << NoLonDifHisto->Integral() << std::endl;
+        std::cout << NoTraDifHisto->Integral() << std::endl;
+        std::cout << SCENoDifHisto->Integral() << std::endl;
 
         TLegend* leg = new TLegend(0.2,0.73,0.8,0.83);
         leg->SetBorderSize(0);

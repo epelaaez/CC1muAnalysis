@@ -10,7 +10,7 @@
 <!ENTITY run_type    "physics">
 <!ENTITY scratch_dir "/pnfs/sbnd/scratch/users/&username;">
 <!ENTITY name        "sbnd_detector_variations_with_sce_no_diffusion">
-<!ENTITY date        "Sep_03_2024">
+<!ENTITY date        "Sep_05_2024">
 <!ENTITY ver         "v1">
 <!ENTITY num_jobs    "150">
 <!ENTITY file_list   "/pnfs/sbnd/persistent/users/&username;/Lists/with_sce_no_diffusion">
@@ -23,7 +23,7 @@
 
   <!-- Project size -->
   <numevents>20000</numevents>
-  <maxfilesperjob>1</maxfilesperjob>
+  <maxfilesperjob>10</maxfilesperjob>
 
   <!-- Operating System -->
   <os>SL7</os>
