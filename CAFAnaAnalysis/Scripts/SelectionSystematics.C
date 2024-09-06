@@ -58,7 +58,7 @@ void SelectionSystematics(std::string SystName, int SystNUniv, bool ModifiedResp
 
     // Root file to store objects in
     TString RootFilePath = "/exp/sbnd/data/users/" + (TString)UserName + "/CAFAnaOutput/SelectionSystematics"+TString(SystName)+".root";
-    TFile* SaveFile = new TFile(RootFilePath, "UPDATE");
+    TFile* SaveFile = new TFile(RootFilePath, "RECREATE");
     
     // Create shift depending on number of universes
     ISyst* syst = new SBNWeightSyst(SystName);
