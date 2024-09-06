@@ -14,7 +14,7 @@
 
 namespace Constants {
     // User to access
-    const std::string UserName = "epelaez";
+    const std::string UserName = getenv("USER");
 
     const double Units = 1E38;
 
