@@ -13,7 +13,6 @@
 #include <tuple>
 
 namespace Constants {
-
     // User to access
     const std::string UserName = getenv("USER");
 
