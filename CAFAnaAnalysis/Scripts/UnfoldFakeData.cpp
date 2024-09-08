@@ -274,7 +274,7 @@ void UnfoldFakeData() {
                         SlicedSmearedFakeSignal->GetXaxis()->CenterTitle();
                         std::string VarLabel = (std::string) VarLabels.at(iVar);
                         VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
-                        SlicedSmearedFakeSignal->GetXaxis()->SetTitle(VarLabel.c_str());
+                        SlicedSmearedFakeSignal->GetXaxis()->SetTitle((TString)VarLabel + SerialNameToUnit[PlotNames[iVar]]);
                     }
                     SlicedSmearedFakeSignal->GetYaxis()->SetTitleFont(FontStyle);
                     SlicedSmearedFakeSignal->GetYaxis()->SetLabelFont(FontStyle);

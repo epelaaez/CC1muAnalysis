@@ -185,6 +185,16 @@ namespace Constants {
         "SerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosTheta"
     };
 
+    static std::map<TString, TString> SerialNameToUnit = {
+        {"SerialTransverseMomentum_InMuonCosTheta", "[GeV/c]"},
+        {"SerialDeltaAlphaT_InMuonCosTheta", "[deg]"},
+        {"SerialCosOpeningAngleProtons_InMuonCosTheta", ""},
+        {"SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta", ""},
+        {"SerialMissingMomentum_InMuonCosTheta", "[GeV/c]"},
+        {"SerialAlphaThreeD_InMuonCosTheta", "[deg]"},
+        {"SerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosTheta", ""}
+    };
+
     static const std::vector<std::string> VarLabels = {
         "single bin",
         "cos(#theta_{#vec{p}_{#mu}})",
@@ -192,14 +202,14 @@ namespace Constants {
         "cos(#theta_{#vec{p}_{R}})",
         "cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",
         "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",
-        "#delta #alpha_{T}",
-        "#delta P_{T}",
-        "|#vec{p}_{#mu}|",
-        "|#vec{p}_{L}|",
-        "|#vec{p}_{R}|",
+        "#delta #alpha_{T} [deg]",
+        "#delta P_{T} [GeV/c]",
+        "|#vec{p}_{#mu}| [GeV/c]",
+        "|#vec{p}_{L}| [GeV/c]",
+        "|#vec{p}_{R}| [GeV/c]",
         "cos(#theta_{#vec{q},#vec{p}_{sum}})",
-        "#alpha_{3D}",
-        "p_{n}",
+        "#alpha_{3D} [deg]",
+        "p_{n} [GeV/c]",
         "#delta P_{T} (bin #)",
         "#delta #alpha_{T} (bin #)",
         "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)",

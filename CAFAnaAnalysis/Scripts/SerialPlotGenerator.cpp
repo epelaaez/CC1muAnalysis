@@ -107,7 +107,7 @@ void SerialPlotGenerator() {
                 Histos[iSlice][iSample]->GetXaxis()->SetLabelSize(TextSize);
                 std::string VarLabel = (std::string) VarLabels.at(iPlot);
                 VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
-                Histos[iSlice][iSample]->GetXaxis()->SetTitle(("Reco " + VarLabel).c_str());
+                Histos[iSlice][iSample]->GetXaxis()->SetTitle("Reco " + (TString)VarLabel + SerialNameToUnit[PlotNames[iPlot]]);
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleSize(TextSize);
                 Histos[iSlice][iSample]->GetXaxis()->SetTitleOffset(1.1);
                 Histos[iSlice][iSample]->GetXaxis()->CenterTitle();

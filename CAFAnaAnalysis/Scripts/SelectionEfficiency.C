@@ -129,7 +129,7 @@ void SelectionEfficiency() {
                 TEfficiency* Eff = new TEfficiency(*SlicedRecoTrueHisto, *SlicedTrueHisto);
                 std::string VarLabel = (std::string) VarLabels.at(i);
                 VarLabel.erase(VarLabel.end() - 7, VarLabel.end()); // get rid of (bin #)
-                Eff->SetTitle((";True " + VarLabel + ";Efficiency").c_str());
+                Eff->SetTitle((";True " + (TString)VarLabel + SerialNameToUnit[PlotNames[iPlot]] + ";Efficiency").c_str());
 
                 PlotCanvas->cd();
                 Eff->SetMarkerStyle(21);
