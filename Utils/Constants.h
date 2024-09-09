@@ -210,9 +210,9 @@ namespace Constants {
 
     static const std::vector<std::string> VarLabels = {
         "single bin",
-        "#vec{v}_{x}",
-        "#vec{v}_{y}",
-        "#vec{v}_{z}",
+        "#vec{v}_{x} [cm]",
+        "#vec{v}_{y} [cm]",
+        "#vec{v}_{z} [cm]",
         "cos(#theta_{#vec{p}_{#mu}})",
         "cos(#theta_{#vec{p}_{L}})",
         "cos(#theta_{#vec{p}_{R}})",
@@ -226,13 +226,13 @@ namespace Constants {
         "cos(#theta_{#vec{q},#vec{p}_{sum}})",
         "#alpha_{3D} [deg]",
         "p_{n} [GeV/c]",
-        "#delta P_{T} (bin #)",
-        "#delta #alpha_{T} (bin #)",
-        "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)",
-        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)",
-        "p_{n} (bin #)",
-        "#alpha_{3D} (bin #)",
-        "cos(#theta_{#vec{q},#vec{p}_{sum}}) (bin #)"
+        "#delta P_{T} [bin #]",
+        "#delta #alpha_{T} [bin #]",
+        "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) [bin #]",
+        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) [bin #]",
+        "p_{n} [bin #]",
+        "#alpha_{3D} [bin #]",
+        "cos(#theta_{#vec{q},#vec{p}_{sum}}) [bin #]"
     };
 
     static const std::vector<std::string> YLabels = {
