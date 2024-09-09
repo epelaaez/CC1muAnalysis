@@ -32,14 +32,14 @@ namespace Constants {
     double IntegratedFlux = 1.65974e13; // from Henry Lay
 
     // Binning for vertex coordinates
-    static const int NBinsVertexX = 20;
-    static const std::vector<double> ArrayNBinsVertexX{-200.,-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.,200.};
+    static const int NBinsVertexX = 18;
+    static const std::vector<double> ArrayNBinsVertexX{-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
 
-    static const int NBinsVertexY = 20;
-    static const std::vector<double> ArrayNBinsVertexY{-200.,-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.,200.};
+    static const int NBinsVertexY = 18;
+    static const std::vector<double> ArrayNBinsVertexY{-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
 
     static const int NBinsVertexZ = 20;
-    static const std::vector<double> ArrayNBinsVertexZ{0.,25.,50.,75.,100.,125.,150.,175.,200.,225.,250.,275.,300.,325.,350.,375.,400.,425.,450.,475.,500.};
+    static const std::vector<double> ArrayNBinsVertexZ{10.,32.,54.,76.,98.,120.,142.,164.,186.,208.,230.,252.,274.,296.,318.,340.,362.,384.,406.,428.,450.};
 
     // Binning for single differential analysis
     static const int NBinsEventCount = 1;

@@ -648,30 +648,36 @@ namespace ana
 
     // Vertex distribution
     const Var kVertexX([](const caf::SRSliceProxy* slc) -> float {
+        if (std::isnan(slc->vertex.x)) return 160.;
         return slc->vertex.x;
     });
     const TruthVar kTruthVertexX([](const caf::SRTrueInteractionProxy* nu) -> float {
-        return nu->vtx.x;
+        if (std::isnan(nu->position.x)) return 160.;
+        return nu->position.x;
     });
     const Var kRecoTruthVertexX([](const caf::SRSliceProxy* slc) -> float {
         return kTruthVertexX(&slc->truth);
     });
 
     const Var kVertexY([](const caf::SRSliceProxy* slc) -> float {
+        if (std::isnan(slc->vertex.y)) return 0.;
         return slc->vertex.y;
     });
     const TruthVar kTruthVertexY([](const caf::SRTrueInteractionProxy* nu) -> float {
-        return nu->vtx.y;
+        if (std::isnan(nu->position.y)) return 0.;
+        return nu->position.y;
     });
     const Var kRecoTruthVertexY([](const caf::SRSliceProxy* slc) -> float {
         return kTruthVertexY(&slc->truth);
     });
 
     const Var kVertexZ([](const caf::SRSliceProxy* slc) -> float {
+        if (std::isnan(slc->vertex.z)) return 230.;
         return slc->vertex.z;
     });
     const TruthVar kTruthVertexZ([](const caf::SRTrueInteractionProxy* nu) -> float {
-        return nu->vtx.z;
+        if (std::isnan(nu->position.z)) return 230.;
+        return nu->position.z;
     });
     const Var kRecoTruthVertexZ([](const caf::SRSliceProxy* slc) -> float {
         return kTruthVertexZ(&slc->truth);
