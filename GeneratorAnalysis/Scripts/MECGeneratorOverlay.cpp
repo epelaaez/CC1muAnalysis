@@ -55,6 +55,9 @@ void MECGeneratorOverlay() {
     std::vector<TString> PlotNames;
 
     // Post FSI
+    PlotNames.push_back("TrueVertexXPlot");
+    PlotNames.push_back("TrueVertexYPlot");
+    PlotNames.push_back("TrueVertexZPlot");
     PlotNames.push_back("TrueMuonCosThetaPlot");
     PlotNames.push_back("TrueLeadingProtonCosThetaPlot");
     PlotNames.push_back("TrueRecoilProtonCosThetaPlot");

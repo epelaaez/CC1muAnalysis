@@ -94,6 +94,9 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
 
     // Post FSI
+    PlotNames.push_back("TrueVertexXPlot");
+    PlotNames.push_back("TrueVertexYPlot");
+    PlotNames.push_back("TrueVertexZPlot");
     PlotNames.push_back("TrueMuonCosThetaPlot");
     PlotNames.push_back("TrueLeadingProtonCosThetaPlot");
     PlotNames.push_back("TrueRecoilProtonCosThetaPlot");
