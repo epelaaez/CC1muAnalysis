@@ -47,6 +47,11 @@ void SelectionData() {
 
     std::vector<std::tuple<std::unique_ptr<Spectrum>, std::unique_ptr<Spectrum>>> Spectra;
 
+    // Redefine cosmic cut because there is no flash match variables in data
+    kCosmicCut = Cut([](const caf::SRSliceProxy* slc) {
+        return (slc->nu_score > 0.4);
+    });
+
     // Variables after cutting 
     for (std::size_t i = 0; i < Vars.size(); i++) {
         auto RecoSignal = std::make_unique<Spectrum>(VarLabels.at(i), VarBins.at(i), DataLoader, std::get<0>(Vars.at(i)), kNoSpillCut, kRecoIsSignal);

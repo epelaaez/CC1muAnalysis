@@ -1150,13 +1150,13 @@ namespace ana
         return ((slc->fmatch.time > 0.) && (slc->fmatch.time < 1.800));
     });
 
-    // Check for cosmics
-    const Cut kCosmicCut([](const caf::SRSliceProxy* slc) {
+    // Check for cosmics (not const for data script)
+    Cut kCosmicCut([](const caf::SRSliceProxy* slc) {
         return (
-            slc->nu_score > 0.4    // check how neutrino like slice is
-            // slc->fmatch.score < 7.0 && // check flash match score
-            // slc->fmatch.time > 0. &&   // check flash is in beam
-            // slc->fmatch.time < 1.8
+            slc->nu_score > 0.4 &&     // check how neutrino like slice is
+            slc->fmatch.score < 7.0 && // check flash match score
+            slc->fmatch.time > 0. &&   // check flash is in beam
+            slc->fmatch.time < 1.8
         );
     });
     const Cut kIsCosmic([](const caf::SRSliceProxy* slc) {
