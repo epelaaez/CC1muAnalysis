@@ -1447,13 +1447,12 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
 
 \section{Cross-section results}
 
-We present the unfolded cross-sections (see note below) using the Wiener-SVD filter, and overlay it with the generators 
+We present the unfolded cross-sections obtained using the Wiener-SVD filter, and overlay it with the generators 
 studied in the earlier sections of this document. The generator cross-sections are smeared using the additional smearing matrices,
 and the uncertainties are obtained using the unfolded total covariance matrix. The unfolded cross-sections are shown in
 Figures~\labelcref{fig:cross-section-vector-plots,fig:cross-section-opening-angles-transverse,fig:cross-section-double-differential}.
-
-\textit{Note: the ``results'' shown at the moment labeled as data are unfolded cross-sections of Monte-Carlo data, and will be replaced
-with real data once that is available.}
+Note that the ``data points'' shown are unfolded cross-sections of Monte-Carlo data from the SBND production, first results on 
+real data are presented in the next section.
 
 \begin{figure}[H]
     \centering
@@ -1669,6 +1668,59 @@ The unfolded fake data for this study along with the two smeared signals is show
     \label{fig:combined-fake-data-sliced-double-differential}
 \end{figure}
 
+\clearpage
+\section{SBND Data}
+
+Using the first available real data, we can perform initial comparisons between data and predictions. 
+Since this first data does not have POT information yet, we only perform shape comparisons, i.e., we divide 
+the event counts by the total number of events in the data. Further, the data does not have flash matching data 
+necessary for our signal cuts. Therefore, we present some data before any cuts are applied (in neither the data 
+nor the predictions), in Figure~\ref{fig:sbnd-no-cut-vertex}, which shows good agreement. 
+
+We show our usual variables in Figures~\labelcref{fig:sbnd-data-vector,fig:sbnd-data-transverse,fig:sbnd-data-double-diff},
+but these do not show the same agreement since we can not apply all the signal cuts, and the data is still 
+low-statistics for signal events. 
+
+\begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/NoCut/VertexX.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/NoCut/VertexY.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/NoCut/VertexZ.png}}
+    \caption{SBND data counts for vertex position before any cuts.}
+    \label{fig:sbnd-no-cut-vertex}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/MuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/MuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/LeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/LeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/RecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/RecoilProtonCosTheta.png}}
+    \caption{SBND data counts for momenta and opening angles of individual particles.}
+    \label{fig:sbnd-data-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/DeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/TransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/CosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/CosOpeningAngleMuonTotalProton.png}}
+    \caption{SBND data counts for transverse momentum and opening angles variables.}
+    \label{fig:sbnd-data-transverse}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/SerialDeltaAlphaT_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/SerialTransverseMomentum_InMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/SerialCosOpeningAngleProtons_InMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs/CAFAna/DataCounts/SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta.png}}
+    \caption{SBND data counts for serial double differential variables.}
+    \label{fig:sbnd-data-double-diff}
+\end{figure}
 
 
 \clearpage
