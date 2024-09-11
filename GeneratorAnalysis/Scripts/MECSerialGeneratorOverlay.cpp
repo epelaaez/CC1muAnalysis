@@ -61,11 +61,11 @@ void MECSerialGeneratorOverlay() {
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
-    XAxisLabel.push_back("#delta P_{T}");
+    XAxisLabel.push_back("#delta P_{T} [GeV/c]");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialDeltaAlphaT_InMuonCosThetaPlot");
-    XAxisLabel.push_back("#delta #alpha_{T}");
+    XAxisLabel.push_back("#delta #alpha_{T} [deg]");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialCosOpeningAngleProtons_InMuonCosThetaPlot");
@@ -78,11 +78,11 @@ void MECSerialGeneratorOverlay() {
 
     // GKI
     PlotNames.push_back("TrueSerialMissingMomentum_InMuonCosThetaPlot");
-    XAxisLabel.push_back("p_{n}");
+    XAxisLabel.push_back("p_{n} [GeV/c]");
     YAxisLabel.push_back("#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialAlphaThreeD_InMuonCosThetaPlot");
-    XAxisLabel.push_back("#alpha_{3D}");
+    XAxisLabel.push_back("#alpha_{3D} [deg]");
     YAxisLabel.push_back("#frac{d#sigma}{#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueSerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosThetaPlot");

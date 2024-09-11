@@ -31,6 +31,16 @@ namespace Constants {
     // double IntegratedFlux = (HistoFlux->Integral() * (TargetPOT / POTPerSpill / Nominal_UB_XY_Surface));
     double IntegratedFlux = 1.65974e13; // from Henry Lay
 
+    // Binning for vertex coordinates
+    static const int NBinsVertexX = 18;
+    static const std::vector<double> ArrayNBinsVertexX{-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
+
+    static const int NBinsVertexY = 18;
+    static const std::vector<double> ArrayNBinsVertexY{-180.,-160.,-140.,-120.,-100.,-80.,-60.,-40.,-20.,0.,20.,40.,60.,80.,100.,120.,140.,160.,180.};
+
+    static const int NBinsVertexZ = 20;
+    static const std::vector<double> ArrayNBinsVertexZ{10.,32.,54.,76.,98.,120.,142.,164.,186.,208.,230.,252.,274.,296.,318.,340.,362.,384.,406.,428.,450.};
+
     // Binning for single differential analysis
     static const int NBinsEventCount = 1;
     static const std::vector<double> ArrayNBinsEventCount{0., 1.};
@@ -163,6 +173,9 @@ namespace Constants {
 
     static const std::vector<TString> PlotNames = {
         "EventCount",
+        "VertexX",
+        "VertexY",
+        "VertexZ",
         "MuonCosTheta",
         "LeadingProtonCosTheta",
         "RecoilProtonCosTheta",
@@ -185,32 +198,48 @@ namespace Constants {
         "SerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosTheta"
     };
 
+    static std::map<TString, TString> SerialNameToUnit = {
+        {"SerialTransverseMomentum_InMuonCosTheta", "[GeV/c]"},
+        {"SerialDeltaAlphaT_InMuonCosTheta", "[deg]"},
+        {"SerialCosOpeningAngleProtons_InMuonCosTheta", ""},
+        {"SerialCosOpeningAngleMuonTotalProton_InMuonCosTheta", ""},
+        {"SerialMissingMomentum_InMuonCosTheta", "[GeV/c]"},
+        {"SerialAlphaThreeD_InMuonCosTheta", "[deg]"},
+        {"SerialCosOpeningAngleMomentumTransferTotalProton_InMuonCosTheta", ""}
+    };
+
     static const std::vector<std::string> VarLabels = {
         "single bin",
+        "#vec{v}_{x} [cm]",
+        "#vec{v}_{y} [cm]",
+        "#vec{v}_{z} [cm]",
         "cos(#theta_{#vec{p}_{#mu}})",
         "cos(#theta_{#vec{p}_{L}})",
         "cos(#theta_{#vec{p}_{R}})",
         "cos(#theta_{#vec{p}_{L},#vec{p}_{R}})",
         "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}})",
-        "#delta #alpha_{T}",
-        "#delta P_{T}",
-        "|#vec{p}_{#mu}|",
-        "|#vec{p}_{L}|",
-        "|#vec{p}_{R}|",
+        "#delta #alpha_{T} [deg]",
+        "#delta P_{T} [GeV/c]",
+        "|#vec{p}_{#mu}| [GeV/c]",
+        "|#vec{p}_{L}| [GeV/c]",
+        "|#vec{p}_{R}| [GeV/c]",
         "cos(#theta_{#vec{q},#vec{p}_{sum}})",
-        "#alpha_{3D}",
-        "p_{n}",
-        "#delta P_{T} (bin #)",
-        "#delta #alpha_{T} (bin #)",
-        "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) (bin #)",
-        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) (bin #)",
-        "p_{n} (bin #)",
-        "#alpha_{3D} (bin #)",
-        "cos(#theta_{#vec{q},#vec{p}_{sum}}) (bin #)"
+        "#alpha_{3D} [deg]",
+        "p_{n} [GeV/c]",
+        "#delta P_{T} [bin #]",
+        "#delta #alpha_{T} [bin #]",
+        "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) [bin #]",
+        "cos(#theta_{#vec{p}_{#mu},#vec{p}_{sum}}) [bin #]",
+        "p_{n} [bin #]",
+        "#alpha_{3D} [bin #]",
+        "cos(#theta_{#vec{q},#vec{p}_{sum}}) [bin #]"
     };
 
     static const std::vector<std::string> YLabels = {
         "#frac{d#sigma}{# events} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d #vec{v}_{x}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d #vec{v}_{y}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+        "#frac{d#sigma}{d #vec{v}_{z}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dcos(#theta_{#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dcos(#theta_{#vec{p}_{L}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dcos(#theta_{#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
