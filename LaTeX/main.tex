@@ -1445,6 +1445,60 @@ Figures~\labelcref{fig:bin-uncertainties-rates-vector,fig:bin-uncertainties-rate
 
 \clearpage
 
+\subsection{Difference and resolution}
+
+As a sanity check, we compute the difference and resolution between the reconstructed and the true values for each of our 
+single-differential variables for events that satisfy our signal definiton. The difference is defined as 
+\begin{align}
+    x_\text{Difference} = x_\text{reco} - x_\text{true},
+\end{align}
+while the resolution is defined as
+\begin{align}
+    x_\text{Resolution} = \frac{x_\text{reco} - x_\text{true}}{x_\text{true}}.
+\end{align}
+We expect both distributions to be centered around zero. The distributions are shown in 
+Figures~\labelcref{fig:resolution-momenta-vector,fig:resolution-angles-vector,fig:resolution-angles-transverse}.
+
+\begin{figure}[H]
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffMuonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResMuonMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffLeadingProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResLeadingProtonMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffRecoilProtonMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResRecoilProtonMomentum.png}}
+    \caption{Difference and resolution plots for momenta of individual particles.}
+    \label{fig:resolution-momenta-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffMuonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResMuonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffLeadingProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResLeadingProtonCosTheta.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffRecoilProtonCosTheta.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResRecoilProtonCosTheta.png}}
+    \caption{Difference and resolution plots for opening angles of individual particles.}
+    \label{fig:resolution-angles-vector}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffDeltaAlphaT.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResDeltaAlphaT.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffTransverseMomentum.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResTransverseMomentum.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffCosOpeningAngleProtons.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResCosOpeningAngleProtons.png}} \\
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/DiffCosOpeningAngleMuonTotalProton.png}}
+    \subfloat{\includegraphics[width=3in]{../Figs//CAFAna/Resolution/ResCosOpeningAngleMuonTotalProton.png}}
+    \caption{Difference and resolution plots for transverse and opening angle variables.}
+    \label{fig:resolution-angles-transverse}
+\end{figure}
+
+\clearpage
+
 \section{Cross-section results}
 
 We present the unfolded cross-sections obtained using the Wiener-SVD filter, and overlay it with the generators 
