@@ -1297,7 +1297,7 @@ namespace ana
     ///////////
 
     const SpillCut kSpillPrintFile([](const caf::StandardRecordProxy* sr) {
-        std::cout << (std::string)sr->hdr.sourceName << std::endl; 
+        std::cout << (std::string)sr->hdr.sourceName << "  " << sr->hdr.sourceIndex << "  " << sr->hdr.fno << std::endl; 
         return true;
     });
 
