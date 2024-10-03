@@ -73,8 +73,8 @@ namespace ana
     const Binning bLeadingProtonMomentumBins = Binning::Custom(ArrayNBinsLeadingProtonMomentum);
     const Binning bRecoilProtonMomentumBins = Binning::Custom(ArrayNBinsRecoilProtonMomentum);
     const Binning bInvariantMassBins = Binning::Custom(ArrayNBinsInvariantMass);
-    //const Binning bCosOpeningAngleLProtonMuonBins = Binning::Custom(ArrayNBinsCosAngleLPMu);
-    //const Binning bCosOpeningAngleRProtonMuonBins = Binning::Custom(ArrayNBinsCosAngleRPMu);
+    const Binning bCosOpeningAngleLProtonMuonBins = Binning::Custom(ArrayNBinsCosAngleLPMu);
+    const Binning bCosOpeningAngleRProtonMuonBins = Binning::Custom(ArrayNBinsCosAngleRPMu);
 
     // GKI
     const Binning bAlphaThreeDBins = Binning::Custom(ArrayNBinsAlphaThreeD);
@@ -376,16 +376,6 @@ namespace ana
         double RecoilProtonMomentum = Helper.ReturnRecoilProtonMomentum();
         vars.push_back(RecoilProtonMomentum);
         
-        double InvariantMass = Helper.ReturnInvariantMass();
-        vars.push_back(InvariantMass);
-
-        //double CosOpeningAngleLProtonMuon = Helper.ReturnCosOpeningAngleLProtonMuon();
-        //        //vars.push_back(CosOpeningAngleLProtonMuon);
-        //
-        //                //double CosOpeningAngleRProtonMuon = Helper.ReturnCosOpeningAngleRProtonMuon();
-        //                        //vars.push_back(CosOpeningAngleRProtonMuon);
-        //                            
-
         // GKI
         double CosOpeningAngleMomentumTransferTotalProton = Helper.ReturnCosOpeningAngleMomentumTransferTotalProton();
         vars.push_back(CosOpeningAngleMomentumTransferTotalProton);
@@ -395,6 +385,16 @@ namespace ana
 
         double MissingMomentum = Helper.ReturnMissingMomentum();
         vars.push_back(MissingMomentum);
+
+	// Additional variables
+        double InvariantMass = Helper.ReturnInvariantMass();
+        vars.push_back(InvariantMass);
+
+        double CosOpeningAngleLProtonMuon = Helper.ReturnCosOpeningAngleLProtonMuon();
+        vars.push_back(CosOpeningAngleLProtonMuon);
+        
+        double CosOpeningAngleRProtonMuon = Helper.ReturnCosOpeningAngleRProtonMuon();
+        vars.push_back(CosOpeningAngleRProtonMuon);
 
         return vars;
     }
@@ -843,28 +843,27 @@ namespace ana
     });
     
     //Opening Angle between Leading Proton and Muon
-    //const Var kCosOpeningAngleLProtonMuon([](const caf::SRSliceProxy* slc) -> double {
-    //   return kVars(slc).at(14);
-    //});
+    const Var kCosOpeningAngleLProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+       return kVars(slc).at(14);
+    });
 
-    //const TruthVar kTruthCosOpeningAngleLProtonMuon([](const caf::SRTrueInteractionProxy* nu) -> double {
-    //   return kTruthVars(nu).at(14);
-    //});
-    //const Var kRecoTruthCosOpeningAngleLProtonMuon([](const caf::SRSliceProxy* slc) -> double {
-    //return kTruthCosOpeningAngleLProtonMuon(&slc->truth);
-    //});
+    const TruthVar kTruthCosOpeningAngleLProtonMuon([](const caf::SRTrueInteractionProxy* nu) -> double {
+       return kTruthVars(nu).at(14);
+    });
+    const Var kRecoTruthCosOpeningAngleLProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+    return kTruthCosOpeningAngleLProtonMuon(&slc->truth);
+    });
     
-    // Opening Angle between Recoil Proton and Muon 
-    //const Var kCosOpeningAngleRProtonMuon([](const caf::SRSliceProxy* slc) -> double {
-    //   return kVars(slc).at(15);
-    //});
-    //const TruthVar kTruthCosOpeningAngleRProtonMuon([](const caf::SRTrueInteractionProxy* nu) -> double {
-    //    return kTruthVars(nu).at(15);
-    //});
-    
-    ///const Var kRecoTruthCosOpeningAngleRProtonMuon([](const caf::SRSliceProxy* slc) -> double {
-    //return kTruthCosOpeningAngleRProtonMuon(&slc->truth);
-    //});
+    //Opening Angle between Recoil Proton and Muon 
+    const Var kCosOpeningAngleRProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+       return kVars(slc).at(15);
+    });
+    const TruthVar kTruthCosOpeningAngleRProtonMuon([](const caf::SRTrueInteractionProxy* nu) -> double {
+        return kTruthVars(nu).at(15);
+    });
+    const Var kRecoTruthCosOpeningAngleRProtonMuon([](const caf::SRSliceProxy* slc) -> double {
+    return kTruthCosOpeningAngleRProtonMuon(&slc->truth);
+    });
 
     ////////////////////////////////
     // Double differential variables
@@ -1430,8 +1429,8 @@ namespace ana
         {kAlphaThreeD, kRecoTruthAlphaThreeD, kTruthAlphaThreeD},
         {kMissingMomentum, kRecoTruthMissingMomentum, kTruthMissingMomentum},
         {kInvariantMass, kRecoTruthInvariantMass, kTruthInvariantMass},
-	//{kCosOpeningAngleLProtonMuon, kRecoTruthCosOpeningAngleLProtonMuon, kTruthCosOpeningAngleLProtonMuon},
-	//{kCosOpeningAngleRProtonMuon, kRecoTruthCosOpeningAngleRProtonMuon, kTruthCosOpeningAngleRProtonMuon},
+	{kCosOpeningAngleLProtonMuon, kRecoTruthCosOpeningAngleLProtonMuon, kTruthCosOpeningAngleLProtonMuon},
+	{kCosOpeningAngleRProtonMuon, kRecoTruthCosOpeningAngleRProtonMuon, kTruthCosOpeningAngleRProtonMuon},
         {kTransverseMomentumInMuonCosTheta, kRecoTruthTransverseMomentumInMuonCosTheta, kTruthTransverseMomentumInMuonCosTheta},
         {kDeltaAlphaTInMuonCosTheta, kRecoTruthDeltaAlphaTInMuonCosTheta, kTruthDeltaAlphaTInMuonCosTheta},
         {kCosOpeningAngleProtonsInMuonCosTheta, kRecoTruthCosOpeningAngleProtonsInMuonCosTheta, kTruthCosOpeningAngleProtonsInMuonCosTheta},
@@ -1460,8 +1459,8 @@ namespace ana
         bAlphaThreeDBins,
         bMissingMomentumBins,
 	bInvariantMassBins,
-	//bCosOpeningAngleLProtonMuonBins,
-	//bCosOpeningAngleRProtonMuonBins,
+	bCosOpeningAngleLProtonMuonBins,
+	bCosOpeningAngleRProtonMuonBins,
         bTransverseMomentumInMuonCosTheta,
         bDeltaAlphaTInMuonCosTheta,
         bCosOpeningAngleProtonsInMuonCosTheta,
