@@ -7,6 +7,7 @@
 
 // STD includes
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -690,6 +691,18 @@ void Tools::CalcChiSquared(TH1D* h_model, TH1D* h_data, TH2D* cov, double &chi, 
 	delete h_model_clone;
 	delete h_data_clone;
 	delete h_cov_clone;
+}
+
+const std::vector<std::string> Tools::GetInputFiles(const std::string TargetPath, bool print) {
+	std::vector<std::string> Input;
+	for (const auto & entry : std::filesystem::directory_iterator(TargetPath)) {
+		if ((entry.path().string().find("flat.caf.root") != std::string::npos) && (entry.path().extension() == ".root")) {
+			std::string XRootPath = "root://fndcadoor.fnal.gov:1094/pnfs/fnal.gov/usr/" + entry.path().string().substr(6);
+			if (print == true) std::cout << entry.path().string().substr(6) << std::endl;
+			Input.push_back(XRootPath);
+		}
+	}
+	return Input;
 }
 
 #endif

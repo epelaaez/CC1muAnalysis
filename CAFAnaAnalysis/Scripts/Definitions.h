@@ -30,19 +30,11 @@ using namespace Constants;
 
 namespace ana
 {
+    Tools tools;
+
     // Files with samples
     const std::string TargetPath = "/pnfs/sbnd/persistent/users/twester/sbnd/v09_78_04/cv";
-    const std::vector<std::string> GetInputFiles() {
-        std::vector<std::string> Input;
-        for (const auto & entry : std::filesystem::directory_iterator(TargetPath)) {
-            if (entry.path().extension() == ".root") {
-                std::string XRootPath = "root://fndcadoor.fnal.gov:1094/pnfs/fnal.gov/usr/" + entry.path().string().substr(6);
-                Input.push_back(XRootPath);
-            }
-        }
-        return Input;
-    }
-    const std::vector<std::string> InputFiles = GetInputFiles();
+    const std::vector<std::string> InputFiles = tools.GetInputFiles(TargetPath);
 
     // Constants
     const float fFVXMax = 180.f;
@@ -99,8 +91,6 @@ namespace ana
     const Binning bActualResolution = Binning::Simple(51, -1., 1.);
 
     // Double differential bins
-    Tools tools; // tools for double differential bins
-
     const Binning bTransverseMomentumInMuonCosTheta = Binning::Custom(
         tools.Return2DBinIndices(TwoDArrayNBinsTransverseMomentumInMuonCosThetaSlices)
     );
@@ -1395,6 +1385,11 @@ namespace ana
     ///////////
     // SpillVar
     ///////////
+
+    const SpillCut kSpillPrintFile([](const caf::StandardRecordProxy* sr) {
+        std::cout << (std::string)sr->hdr.sourceName << "  " << sr->hdr.sourceIndex << "  " << sr->hdr.fno << std::endl; 
+        return true;
+    });
 
     const SpillVar kSpillData([](const caf::StandardRecordProxy* sr) {
         fstream file;
