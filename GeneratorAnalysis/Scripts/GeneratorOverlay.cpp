@@ -92,7 +92,10 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
     PlotNames.push_back("TrueNoFSIMissingMomentumPlot");
     PlotNames.push_back("TrueNoFSIAlphaThreeDPlot");
-
+    PlotNames.push_back("TrueNoFSIInvariantMassPlot");
+    PlotNames.push_back("TrueNoFSICosOpeningAngleLProtonMuonPlot"); 
+    PlotNames.push_back("TrueNoFSICosOpeningAngleRProtonMuonPlot");      
+    
     // Post FSI
     PlotNames.push_back("TrueVertexXPlot");
     PlotNames.push_back("TrueVertexYPlot");
@@ -110,6 +113,9 @@ void GeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
     PlotNames.push_back("TrueMissingMomentumPlot");
     PlotNames.push_back("TrueAlphaThreeDPlot");
+    PlotNames.push_back("TrueInvariantMassPlot");
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");   
+    PlotNames.push_back("TrueCosOpeningAngleRProtonMuonPlot");
 
     // Double differential final state
     PlotNames.push_back("TrueSerialTransverseMomentum_InMuonCosThetaPlot");
