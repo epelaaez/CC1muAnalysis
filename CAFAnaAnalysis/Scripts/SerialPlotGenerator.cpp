@@ -39,9 +39,6 @@ void SerialPlotGenerator() {
 
     const int NSamples = SampleNames.size();
 
-    // start at 11 to start with double diff variables
-    for (int iPlot = 16; iPlot < NPlots; iPlot++) {
-        // Load true plots
     for (int iPlot = 0; iPlot < NPlots; iPlot++) {
         
 	if ( !(PlotNames[iPlot].Contains("Serial")) ) { continue; }
