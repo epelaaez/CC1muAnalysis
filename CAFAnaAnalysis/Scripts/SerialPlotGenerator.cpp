@@ -43,6 +43,7 @@ void SerialPlotGenerator() {
         
 	if ( !(PlotNames[iPlot].Contains("Serial")) ) { continue; }
 	// Load true plots
+	
         std::vector<TH1D*> TruePlots; TruePlots.resize(NSamples);
         for (int iSample = 0; iSample < NSamples; iSample++) {
             TString PlotName = PlotNames[iPlot] + SampleNames[iSample];

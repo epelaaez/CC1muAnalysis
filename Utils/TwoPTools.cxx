@@ -25,7 +25,9 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     TVector3 TotalProtonVector = LeadingProtonVector + RecoilProtonVector;
     fCosOpeningAngleProtons = std::cos(LeadingProtonVector.Angle(RecoilProtonVector));
     fCosOpeningAngleMuonTotalProton = std::cos(MuonVector.Angle(TotalProtonVector));
-
+    fCosOpeningAngleLProtonMuon = std::cos(LeadingProtonVector.Angle(MuonVector));
+    fCosOpeningAngleRProtonMuon = std::cos(RecoilProtonVector.Angle(MuonVector));    
+    
     // Transverse vectors
     TVector3 MuonVectorTrans(MuonVector.X(), MuonVector.Y(), 0);
     TVector3 TotalProtonVectorTrans(TotalProtonVector.X(), TotalProtonVector.Y(), 0);
@@ -34,7 +36,7 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
     // For GKI calculations
     double TotalProtonMomentum = TotalProtonVector.Mag();
     double Ecal = (TMath::Sqrt((fMuonMomentum*fMuonMomentum) + (0.106*0.106)) + 
-        TMath::Sqrt((TotalProtonMomentum*TotalProtonMomentum) + (0.938272*0.938272)) - 0.938272 + 0.0309);
+    TMath::Sqrt((TotalProtonMomentum*TotalProtonMomentum) + (0.938272*0.938272)) - 0.938272 + 0.0309);
     TVector3 EcalLongVector(0, 0, Ecal);
 
     //Momentum transfer vector
@@ -51,6 +53,14 @@ TwoPTools::TwoPTools(TVector3 MuonVector, TVector3 LeadingProtonVector, TVector3
 
     //Missing momentum variable
     fMissingMomentum = PVectorN.Mag();
+
+    //Proton energies
+    double ProtonMass = 0.9383; //in Gev/c^2
+    double LProtonEnergy = sqrt(pow(ProtonMass, 2) +  pow(LeadingProtonVector.Mag(),2));
+    double RProtonEnergy = sqrt(pow(ProtonMass, 2) +  pow(LeadingProtonVector.Mag(),2));
+    
+    //Invariant Mass of the Hadronic System variable
+    fInvariantMass = sqrt(pow((LProtonEnergy + RProtonEnergy), 2) - pow(TotalProtonVector.Mag(), 2));
 
     // Transverse momentum angular orientation with respect to transverse muon
     fDeltaAlphaT = TMath::ACos(
@@ -111,6 +121,18 @@ double TwoPTools::ReturnDeltaAlphaT() {
 
 double TwoPTools::ReturnMissingMomentum() {
     return fMissingMomentum;
+}
+
+double TwoPTools::ReturnInvariantMass(){
+    return fInvariantMass;
+}
+
+double TwoPTools::ReturnCosOpeningAngleLProtonMuon(){
+    return fCosOpeningAngleLProtonMuon;
+}
+
+double TwoPTools::ReturnCosOpeningAngleRProtonMuon(){
+    return fCosOpeningAngleRProtonMuon;
 }
 
 double TwoPTools::ReturnAlphaThreeD() {

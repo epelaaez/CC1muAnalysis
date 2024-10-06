@@ -68,6 +68,9 @@ void MECGeneratorOverlay() {
     PlotNames.push_back("TrueCosOpeningAngleMuonTotalProtonPlot");
     PlotNames.push_back("TrueTransverseMomentumPlot");
     PlotNames.push_back("TrueDeltaAlphaTPlot");
+    PlotNames.push_back("TrueInvariantMassPlot");
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
+    PlotNames.push_back("TrueCosOpeningAngleRProtonMuonPlot");
 
     // GKI
     PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");

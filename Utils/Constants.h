@@ -60,6 +60,14 @@ namespace Constants {
     static const int NBinsMissingMomentum = 5;
     static const std::vector<double> ArrayNBinsMissingMomentum{0.,0.2,0.4,0.6,0.8,1.};
 
+    static const int NBinsInvariantMass = 6;
+    static const std::vector<double> ArrayNBinsInvariantMass{1.9, 2., 2.1, 2.2, 2.3, 2.4, 2.5};
+
+    static const int NBinsCosAngleLPMu = 20;
+    static const std::vector<double> ArrayNBinsCosAngleLPMu{-1., -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
+
+    static const int NBinsCosAngleRPMu = 20;
+    static const std::vector<double> ArrayNBinsCosAngleRPMu{-1., -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
     // 0.183 spacing
     static const int NBinsMuonMomentum = 6;
     static const std::vector<double> ArrayNBinsMuonMomentum{0.1, 0.283, 0.466, 0.649, 0.832, 1.015, 1.2};
@@ -143,6 +151,10 @@ namespace Constants {
         // GKI
         { "CosOpeningAngleMomentumTransferTotalProtonPlot",  "All events" },	
         { "MissingMomentumPlot",  "All events" },
+	// Additional Variables
+	{ "InvariantMassPlot", "All events"},
+	{ "CosOpeningAngleLProtonMuonPlot", "All events"},
+	{ "CosOpeningAngleRProtonMuonPlot", "All events"}
     };
 
     static std::map<TString, std::tuple<vector<double>, vector<vector<double>>>> PlotNameToDiscriminator = {
@@ -189,6 +201,9 @@ namespace Constants {
         "CosOpeningAngleMomentumTransferTotalProton",
         "AlphaThreeD",
         "MissingMomentum",
+	"InvariantMass",
+	"CosOpeningAngleLProtonMuon",
+	"CosOpeningAngleRProtonMuon",
         "SerialTransverseMomentum_InMuonCosTheta",
         "SerialDeltaAlphaT_InMuonCosTheta",
         "SerialCosOpeningAngleProtons_InMuonCosTheta",
@@ -226,6 +241,9 @@ namespace Constants {
         "cos(#theta_{#vec{q},#vec{p}_{sum}})",
         "#alpha_{3D} [deg]",
         "p_{n} [GeV/c]",
+	"W [GeV]",
+	"cos(#theta_{#vec{p}_{L},#vec{p}_{#mu}})",
+	"cos(#theta_{#vec{p}_{R},#vec{p}_{#mu}})",
         "#delta P_{T} [bin #]",
         "#delta #alpha_{T} [bin #]",
         "cos(#theta_{#vec{p}_{L},#vec{p}_{R}}) [bin #]",
@@ -253,6 +271,9 @@ namespace Constants {
         "#frac{d#sigma}{dcos(#theta_{#vec{q},#vec{p}_{sum}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{d#alpha_{3D}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d#sigma}{dp_{n}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
+	"#frac{d#sigma}{dcos(#theta_{#vec{p}_{R},#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]", 
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) d#delta P_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
         "#frac{d^{2}#sigma}{dcos(#theta_{#vec{p}_{#mu}}) dcos(#theta_{#vec{p}_{L},#vec{p}_{R}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]",
