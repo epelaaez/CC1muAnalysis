@@ -129,7 +129,7 @@ void GeneratorInteBreakDown() {
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueNoFSIInvariantMassPlot");
-    XAxisLabel.push_back("delta W [GeV]");
+    XAxisLabel.push_back("W [GeV]");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta W} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
     PlotNames.push_back("TrueNoFSICosOpeningAngleLProtonMuonPlot");
