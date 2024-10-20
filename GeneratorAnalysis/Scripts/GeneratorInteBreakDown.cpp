@@ -128,6 +128,18 @@ void GeneratorInteBreakDown() {
     XAxisLabel.push_back("#delta #alpha_{T} [deg]");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    PlotNames.push_back("TrueNoFSIInvariantMassPlot");
+    XAxisLabel.push_back("W [GeV]");
+    YAxisLabel.push_back("#frac{d#sigma}{d#delta W} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSICosOpeningAngleLProtonMuonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{#mu}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueNoFSICosOpeningAngleRProtonMuonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{R},#vec{p}_{#mu}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{R},#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
     // GKI
     PlotNames.push_back("TrueNoFSICosOpeningAngleMomentumTransferTotalProtonPlot");
     XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");
@@ -193,7 +205,19 @@ void GeneratorInteBreakDown() {
     PlotNames.push_back("TrueDeltaAlphaTPlot");
     XAxisLabel.push_back("#delta #alpha_{T} [deg]");
     YAxisLabel.push_back("#frac{d#sigma}{d#delta #alpha_{T}} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+	
+    PlotNames.push_back("TrueInvariantMassPlot");
+    XAxisLabel.push_back("W [GeV]");
+    YAxisLabel.push_back("#frac{d#sigma}{dW} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
 
+    PlotNames.push_back("TrueCosOpeningAngleLProtonMuonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{L},#vec{p}_{#mu}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{L},#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+
+    PlotNames.push_back("TrueCosOpeningAngleRProtonMuonPlot");
+    XAxisLabel.push_back("cos(#theta_{#vec{p}_{R},#vec{p}_{#mu}})");
+    YAxisLabel.push_back("#frac{d#sigma}{dcos(#theta_{#vec{p}_{R},#vec{p}_{#mu}})} #left[10^{-38} #frac{cm^{2}}{Ar}#right]");
+   
     // GKI
     PlotNames.push_back("TrueCosOpeningAngleMomentumTransferTotalProtonPlot");
     XAxisLabel.push_back("cos(#theta_{#vec{q},#vec{p}_{sum}})");

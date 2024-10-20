@@ -26,6 +26,9 @@ class TwoPTools {
         double fMissingMomentum;
         double fAlphaThreeD;
         double fCosOpeningAngleMomentumTransferTotalProton;
+	double fInvariantMass;
+	double fCosOpeningAngleLProtonMuon;
+	double fCosOpeningAngleRProtonMuon;
 
     public:
         // Default constructor
@@ -48,6 +51,9 @@ class TwoPTools {
         double ReturnMissingMomentum();
         double ReturnAlphaThreeD();
         double ReturnCosOpeningAngleMomentumTransferTotalProton();
+	double ReturnInvariantMass();
+	double ReturnCosOpeningAngleLProtonMuon();
+	double ReturnCosOpeningAngleRProtonMuon();
 };
 
 #endif
